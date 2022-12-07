@@ -18,7 +18,7 @@ npm run build
 npm run serve
 ```
 
-The modeler is then served to `http://localhost:9024`.
+The modeler is then served to `http://localhost:9005`.
 
 When developing, the following can be run to automatically re-bundle on changes:
 ```shell
