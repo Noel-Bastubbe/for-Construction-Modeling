@@ -1,14 +1,22 @@
 ---
-name: Issue template
-about: Template for basic feature issue.
+name: Feature
+about: Create Feature Template
 title: ''
-labels: Implementation, Tool
+labels: in preparation
 assignees: ''
 
 ---
 
-As a user, I want to 
+## User stories
+As a ... I want ... in order to ...
 
-- [ ] 
-- [ ]
-- [ ] pushed to develop
+## Dependencies
+Depends on: 
+ - #[Issues]
+
+## UI Mockup
+[UI Mockup]
+
+## Acceptance Criteria
+- [ ] Todo's
+- [ ] ...
