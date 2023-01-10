@@ -39,6 +39,19 @@ The repository is structured as follows:
         * [/guidelines](app/lib/guidelines) includes all relevant code for guidelines. The list of guidelines is defined in [Guidelines.js](app/lib/guidelines/Guidelines.js).
 * [/resources](resources) contains auxiliary example and default files.
 
+### Branch Naming
+
+Branch names have the following structure: `<type>/<issue-number>-<issue-name>`
+
+- `<type>` gets replaced with feature or fix, depending on the type of changes introduced by the branch 
+
+- `<issue-number>` gets replaced with the number of the issue the branch aims to close 
+
+- `<issue-name>` gets replaced with the name of the issue the branch aims to close, or a shortened form of it 
+
+Experimental branches may use the structure `experimental/<anything>`
+
+
 ### Guideline Interface
 The guidelines are integrated via a unified interface. They can be found in [app/lib/guidelines](app/lib/guidelines). Here the actual guidelines are implemented in [Guidelines.js](app/lib/guidelines/Guidelines.js) while the checking component is located in [Checker.js](app/lib/guidelines/Checker.js). Every guideline consists of the following components:
 
