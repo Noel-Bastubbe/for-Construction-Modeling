@@ -39,7 +39,7 @@ The repository is structured as follows:
         * [/guidelines](app/lib/guidelines) includes all relevant code for guidelines. The list of guidelines is defined in [Guidelines.js](app/lib/guidelines/Guidelines.js).
 * [/resources](resources) contains auxiliary example and default files.
 
-##' Branch Naming
+### Branch Naming
 
 Branch names have the following structure: `<type>/<team>-<issue-number>-<issue-name>`
 
