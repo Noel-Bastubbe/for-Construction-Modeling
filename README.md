@@ -41,11 +41,9 @@ The repository is structured as follows:
 
 ### Branch Naming
 
-Branch names have the following structure: `<type>/<team>-<issue-number>-<issue-name>`
+Branch names have the following structure: `<type>/<issue-number>-<issue-name>`
 
 - `<type>` gets replaced with feature or fix, depending on the type of changes introduced by the branch 
-
-- `<team>` gets replaced with the abbreviation (e.g. BR) of the team that mostly develops on the branch 
 
 - `<issue-number>` gets replaced with the number of the issue the branch aims to close 
 
