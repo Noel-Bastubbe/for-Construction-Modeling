@@ -10,7 +10,7 @@ import DiDescriptors from './resources/odDi.json';
 import DcDescriptors from './resources/dc.json';
 
 var packages = {
-  od: ODDescriptors,
+  gm: ODDescriptors,
   odDi: DiDescriptors,
   dc: DcDescriptors,
 };

@@ -20,17 +20,17 @@ ODFactory.$inject = [ 'moddle' ];
 
 ODFactory.prototype._needsId = function(element) {
   return isAny(element, [
-    'od:BoardElement'
+    'gm:BoardElement'
   ]);
 };
 
 ODFactory.prototype._ensureId = function(element) {
 
   // generate semantic ids for elements
-  // od:Object -> Object_ID
+  // gm:Object -> Object_ID
   var prefix;
 
-  if (is(element, 'od:Object')) {
+  if (is(element, 'gm:Object')) {
     prefix = 'Object';
   } else {
     prefix = (element.$type || '').replace(/^[^:]*:/g, '');
@@ -46,7 +46,7 @@ ODFactory.prototype._ensureId = function(element) {
 
 ODFactory.prototype.create = function(type, attrs) {
   var element = this._model.create(type, attrs || {});
-  if (type === 'od:Object') {
+  if (type === 'gm:Object') {
     element.attributeValues = '';
   }
 

@@ -1,7 +1,7 @@
 {
   "name": "Object diagram",
   "uri": "http://tk/schema/od",
-  "prefix": "od",
+  "prefix": "gm",
   "xml": {
     "tagAlias": "lowerCase"
   },

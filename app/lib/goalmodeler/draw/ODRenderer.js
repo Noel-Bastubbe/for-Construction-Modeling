@@ -347,7 +347,7 @@ ODRenderer.$inject = [
 
 
 ODRenderer.prototype.canRender = function(element) {
-  return is(element, 'od:BoardElement');
+  return is(element, 'gm:BoardElement');
 };
 
 ODRenderer.prototype.drawShape = function(parentGfx, element) {

@@ -9,7 +9,7 @@ export default function SpaceToolBehavior(eventBus) {
         const minDimensions = {};
 
         forEach(shapes, function(shape) {
-            if (is(shape, 'od:Class')) {
+            if (is(shape, 'gm:Class')) {
                 minDimensions[shape.id] = CLASS_MIN_DIMENSIONS;
             }
         })

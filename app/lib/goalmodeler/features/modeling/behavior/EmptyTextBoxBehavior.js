@@ -18,7 +18,7 @@ export default function EmptyTextBoxBehavior(eventBus, modeling, directEditing) 
     var element = context.element,
         newLabel = context.newLabel;
 
-    if (is(element, 'od:TextBox') && isEmpty(newLabel)) {
+    if (is(element, 'gm:TextBox') && isEmpty(newLabel)) {
       modeling.removeElements([ element ]);
     }
   }, true);
@@ -27,7 +27,7 @@ export default function EmptyTextBoxBehavior(eventBus, modeling, directEditing) 
     var active = event.active,
         element = active.element;
 
-    if (is(element, 'od:TextBox') && isEmpty(getBusinessObject(element).name)) {
+    if (is(element, 'gm:TextBox') && isEmpty(getBusinessObject(element).name)) {
       directEditing._active = false;
       modeling.removeElements([ element ]);
     }

@@ -50,7 +50,7 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
       create.start(event, shape);
     }
 
-    var shortType = type.replace(/^od:/, '');
+    var shortType = type.replace(/^gm:/, '');
 
     return {
       group: group,
@@ -99,7 +99,7 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
       separator: true
     },
     'create-object': createAction(
-      'od:Object', 'od-elements', 'bpmn-icon-od-class',
+      'gm:Object', 'od-elements', 'bpmn-icon-od-class',
       translate('Create object')
     ),
     'object-linker': {
@@ -117,7 +117,7 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
       separator: true
     },
     'create.text-box': createAction(
-      'od:TextBox', 'text', 'pjs-text-box',
+      'gm:TextBox', 'text', 'pjs-text-box',
       translate('Create text')
     )
   });

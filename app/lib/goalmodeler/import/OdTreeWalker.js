@@ -33,7 +33,7 @@ function is(element, type) {
  */
 function findDisplayCandidate(definitions) {
   return find(definitions.rootElements, function(e) {
-    return is(e, 'od:OdBoard');
+    return is(e, 'gm:OdBoard');
   });
 }
 
@@ -155,7 +155,7 @@ export default function OdTreeWalker(handler, translate) {
     var rootBoards = definitions.rootBoards;
 
     if (rootBoard && rootBoards.indexOf(rootBoard) === -1) {
-      throw new Error(translate('rootBoard not part of od:Definitions'));
+      throw new Error(translate('rootBoard not part of gm:Definitions'));
     }
 
     if (!rootBoard && rootBoards && rootBoards.length) {
@@ -205,7 +205,7 @@ export default function OdTreeWalker(handler, translate) {
 
     var ctx = visitRoot(rootElement, plane);
 
-    if (is(rootElement, 'od:OdBoard')) {
+    if (is(rootElement, 'gm:OdBoard')) {
       handleOdBoard(rootElement, ctx);
     }
 
@@ -215,7 +215,7 @@ export default function OdTreeWalker(handler, translate) {
 
   function handleBoardElements(boardElements, context) {
     forEach(boardElements, function(element) {
-      if (is(element, 'od:Link')) {
+      if (is(element, 'gm:Link')) {
         deferred.push(function() {
           handleSequenceFlow(element, context);
         });

@@ -113,7 +113,7 @@ export default function ODUpdater(
         children = oldRoot.children;
 
     forEach(children, function(child) {
-      if (is(child, 'od:BoardElement')) {
+      if (is(child, 'gm:BoardElement')) {
         self.updateParent(child);
       }
     });
@@ -127,7 +127,7 @@ export default function ODUpdater(
   function updateBounds(e) {
     var shape = e.context.shape;
 
-    if (!is(shape, 'od:BoardElement')) {
+    if (!is(shape, 'gm:BoardElement')) {
       return;
     }
 
@@ -312,7 +312,7 @@ ODUpdater.prototype.updateSemanticParent = function(businessObject, newParent, v
   }
 
 
-  if (is(businessObject, 'od:BoardElement')) {
+  if (is(businessObject, 'gm:BoardElement')) {
     containment = 'boardElements';
   }
 
@@ -369,7 +369,7 @@ ODUpdater.prototype.updateConnection = function(context) {
       newSource = getBusinessObject(connection.source),
       newTarget = getBusinessObject(connection.target);
 
-  var inverseSet = is(businessObject, 'od:Link');
+  var inverseSet = is(businessObject, 'gm:Link');
 
   if (businessObject.sourceRef !== newSource) {
     if (inverseSet) {
@@ -431,7 +431,7 @@ function ifOd(fn) {
     var context = event.context,
         element = context.shape || context.connection;
 
-    if (is(element, 'od:BoardElement')) {
+    if (is(element, 'gm:BoardElement')) {
       fn(event);
     }
   };

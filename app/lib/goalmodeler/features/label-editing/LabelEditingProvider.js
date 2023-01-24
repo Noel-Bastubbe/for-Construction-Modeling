@@ -107,7 +107,7 @@ export default function LabelEditingProvider(
 
   function activateDirectEdit(element, force) {
     if (force ||
-      isAny(element, [ 'od:TextBox', 'od:Object' ])) {
+      isAny(element, [ 'gm:TextBox', 'gm:Object' ])) {
       directEditing.activate(element);
     }
   }
@@ -153,7 +153,7 @@ LabelEditingProvider.prototype.activate = function(element) {
   var options = {};
 
   // text boxes
-  if (isAny(element, [ 'od:TextBox' ])) {
+  if (isAny(element, [ 'gm:TextBox' ])) {
     assign(options, {
       centerVertically: true
     });
@@ -214,7 +214,7 @@ LabelEditingProvider.prototype.getEditingBBox = function(element) {
   };
 
 
-  if (isAny(element, [ 'od:TextBox', 'od:Object' ])) {
+  if (isAny(element, [ 'gm:TextBox', 'gm:Object' ])) {
 
     assign(bounds, {
       width: bbox.width,
@@ -230,7 +230,7 @@ LabelEditingProvider.prototype.getEditingBBox = function(element) {
       paddingRight: (5 * zoom) + 'px'
     });
 
-    if (isAny(element, [ 'od:Object' ])) {
+    if (isAny(element, [ 'gm:Object' ])) {
 
       // Editing attributes should be different.
       if (element.businessObject.labelAttribute === 'attributeValues') {
