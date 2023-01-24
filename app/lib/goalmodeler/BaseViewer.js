@@ -602,7 +602,7 @@ BaseViewer.prototype._init = function(container, moddle, options) {
       additionalModules = options.additionalModules || [],
       staticModules = [
         {
-          odm: [ 'value', this ],
+          goalModeler: [ 'value', this ],
           moddle: [ 'value', moddle ]
         }
       ];

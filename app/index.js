@@ -55,8 +55,11 @@ var goalModeler = new GoalModeler({
     keyboard: {
         bindTo: document.querySelector('#goalmodel-canvas')
     },
-    }
-);
+    additionalModules: [{
+        __init__ : ['mediator'],
+        mediator : ['type', mediator.GoalModelerHook]
+    }]
+});
 
 var fragmentModeler = new FragmentModeler({
     container: '#fragments-canvas',
