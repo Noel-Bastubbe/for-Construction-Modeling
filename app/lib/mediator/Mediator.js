@@ -361,6 +361,22 @@ Mediator.prototype.DataModelerHook.$inject = [
 
 Mediator.prototype.DataModelerHook.isHook = true;
 
+// === Goal Modeler Hook
+Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
+    CommandInterceptor.call(this, eventBus);
+    AbstractHook.call(this, goalModeler, 'Goal Model' ,'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki');
+    this.mediator.goalModelerHook = this;
+    this.eventBus = eventBus;
+}
+inherits(Mediator.prototype.GoalModelerHook, CommandInterceptor);
+
+Mediator.prototype.GoalModelerHook.$inject = [
+    'eventBus',
+    'goalModeler'
+];
+
+Mediator.prototype.GoalModelerHook.isHook = true;
+
 // === Fragment Modeler Hook
 Mediator.prototype.FragmentModelerHook = function (eventBus, fragmentModeler) {
     CommandInterceptor.call(this, eventBus);
