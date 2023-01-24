@@ -18,9 +18,9 @@ import ConnectionPreviewModule from 'diagram-js/lib/features/connection-preview'
 import ContextPadModule from './features/context-pad';
 import CopyPasteModule from './features/copy-paste';
 import CreateModule from 'diagram-js/lib/features/create';
-import EditorActionsModule from './features/editor-actions';
+import EditorActionsModule from '../common/editor-actions';
 import GridSnappingModule from './features/grid-snapping';
-import KeyboardModule from './features/keyboard';
+import KeyboardModule from '../common/keyboard';
 import AutoplaceModule from './features/auto-place';
 import KeyboardMoveSelectionModule from 'diagram-js/lib/features/keyboard-move-selection';
 import LabelEditingModule from './features/label-editing';
@@ -28,7 +28,9 @@ import ModelingModule from './features/modeling';
 import MoveModule from 'diagram-js/lib/features/move';
 import PaletteModule from './features/palette';
 import ResizeModule from 'diagram-js/lib/features/resize';
+import SpaceToolBehaviorModule from './behavior';
 import SnappingModule from './features/snapping';
+import { nextPosition } from '../util/Util';
 
 var initialDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -107,6 +109,7 @@ Modeler.prototype._modelingModules = [
   PaletteModule,
   ResizeModule,
   SnappingModule,
+  SpaceToolBehaviorModule
 ];
 
 
@@ -121,3 +124,28 @@ Modeler.prototype._modules = [].concat(
   Modeler.prototype._interactionModules,
   Modeler.prototype._modelingModules
 );
+
+Modeler.prototype.createObject = function (name) {
+  const modeling = this.get('modeling');
+  const canvas = this.get('canvas');
+  const diagramRoot = canvas.getRootElement();
+
+  const {x,y} = nextPosition(this, 'od:Object');
+  const shape = modeling.createShape({
+    type: 'od:Object',
+    name: name
+  }, {x,y}, diagramRoot);
+  return shape.businessObject;
+}
+
+Modeler.prototype.renameObject = function (clazz, name) {
+  this.get('modeling').updateLabel(this.get('elementRegistry').get(clazz.id), name);
+}
+
+Modeler.prototype.deleteObject = function (clazz) {
+  this.get('modeling').removeShape(this.get('elementRegistry').get(clazz.id));
+}
+
+Modeler.prototype.updateProperty = function (clazz, property) {
+  this.get('modeling').updateProperties(clazz, property);
+}

@@ -7,13 +7,15 @@ import {
   hasPrimaryModifier
 } from 'diagram-js/lib/util/Mouse';
 
+import { is } from '../../util/ModelUtil';
+
 
 /**
  * A provider for od elements context pad.
  */
 export default function ContextPadProvider(
     config, injector, eventBus, connect, create,
-    elementFactory, contextPad, modeling, rules,
+    elementFactory, elementRegistry, contextPad, modeling, rules,
     translate) {
 
   config = config || {};
@@ -23,6 +25,7 @@ export default function ContextPadProvider(
   this._connect = connect;
   this._create = create;
   this._elementFactory = elementFactory;
+  this._elementRegistry = elementRegistry;
   this._contextPad = contextPad;
 
   this._modeling = modeling;
@@ -57,6 +60,7 @@ ContextPadProvider.$inject = [
   'connect',
   'create',
   'elementFactory',
+  'elementRegistry',
   'contextPad',
   'modeling',
   'rules',
@@ -72,6 +76,7 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
     _translate: translate,
     _connect: connect,
     _elementFactory: elementFactory,
+    _elementRegistry: elementRegistry,
     _autoPlace: autoPlace,
     _create: create
   } = this;
@@ -83,7 +88,8 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
   }
 
   createDeleteEntry(actions);
-  if (element.type === 'od:Object') {
+
+  if (element.type === 'gm:Object') {
     createLinkObjectsEntry(actions);
     createLinkNewObjectEntry(actions);
   }
@@ -140,7 +146,7 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
   function createLinkNewObjectEntry(actions) {
     assign(actions, {
       'append.append-task': appendAction(
-        'od:Object',
+        'gm:Object',
         'bpmn-icon-od-class',
         translate('Link with new object')
       ),
