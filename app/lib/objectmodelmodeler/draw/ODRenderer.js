@@ -138,9 +138,12 @@ export default function ODRenderer(
   }
 
   function renderAttributes(parentGfx, element) {
-    var semantic = getSemantic(element);
+    let semantic = getSemantic(element);
+    let label = "state: "
     if (semantic.attributeValues) {
-      renderLabel(parentGfx, semantic.attributeValues, {
+      label += semantic.attributeValues
+    }
+      renderLabel(parentGfx, label, {
         box: {
           height: element.height + 30,
           width: element.width
@@ -151,7 +154,6 @@ export default function ODRenderer(
           fill: defaultStrokeColor
         }
       });
-    }
   }
 
   function addDivider(parentGfx, element) {
