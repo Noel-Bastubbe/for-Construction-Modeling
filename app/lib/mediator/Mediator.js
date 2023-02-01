@@ -372,7 +372,8 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
         'shape.create'
     ], event => {
         if (is(event.context.shape, 'gm:Object')) {
-            this.mediator.addedClass(event.context.shape.businessObject);
+            console.log("GoalModelerHook executed: " + event);
+            // this.mediator.addedClass(event.context.shape.businessObject);
         }
     });
 
@@ -389,7 +390,8 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
         'shape.delete'
     ], event => {
         if (is(event.context.shape, 'gm:Object')) {
-            this.mediator.deletedClass(event.context.shape.businessObject);
+            console.log(event);
+            // this.mediator.deletedClass(event.context.shape.businessObject);
         }
     });
 
@@ -406,11 +408,13 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
         'elements.delete'
     ], event => {
         event.context.elements = event.context.elements.filter(element => {
-            if (is(element, 'gm:Object')) {
-                return this.mediator.confirmClassDeletion(element.businessObject);
-            } else {
-                return true;
-            }
+            console.log(event);
+
+            // if (is(element, 'gm:Object')) {
+            //     return this.mediator.confirmClassDeletion(element.businessObject);
+            // } else {
+            //     return true;
+            // }
         });
     });
 
