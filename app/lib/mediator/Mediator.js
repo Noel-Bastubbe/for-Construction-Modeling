@@ -361,6 +361,87 @@ Mediator.prototype.DataModelerHook.$inject = [
 
 Mediator.prototype.DataModelerHook.isHook = true;
 
+// === Goal Modeler Hook
+Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
+    CommandInterceptor.call(this, eventBus);
+    AbstractHook.call(this, goalModeler, 'Goal Model' ,'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki');
+    this.mediator.goalModelerHook = this;
+    this.eventBus = eventBus;
+
+    this.executed([
+        'shape.create'
+    ], event => {
+        if (is(event.context.shape, 'gm:Object')) {
+            this.mediator.addedClass(event.context.shape.businessObject);
+        }
+    });
+
+    this.reverted([
+        'shape.create'
+    ], event => {
+        if (is(event.context.shape, 'gm:Object')) {
+            console.log(event);
+            //this.mediator.addedState(event.context.shape.businessObject);
+        }
+    });
+
+    this.executed([
+        'shape.delete'
+    ], event => {
+        if (is(event.context.shape, 'gm:Object')) {
+            this.mediator.deletedClass(event.context.shape.businessObject);
+        }
+    });
+
+    this.reverted([
+        'shape.delete'
+    ], event => {
+        if (is(event.context.shape, 'gm:Object')) {
+            console.log(event);
+            //this.mediator.deletedState(event.context.shape.businessObject);
+        }
+    });
+
+    this.preExecute([
+        'elements.delete'
+    ], event => {
+        event.context.elements = event.context.elements.filter(element => {
+            if (is(element, 'gm:Object')) {
+                return this.mediator.confirmClassDeletion(element.businessObject);
+            } else {
+                return true;
+            }
+        });
+    });
+
+
+    this.executed([
+        'element.updateLabel'
+    ], event => {
+        var changedLabel = event.context.element.businessObject.labelAttribute;
+        if (is(event.context.element, 'gm:Object') && (changedLabel === 'name' || !changedLabel)) {
+            this.mediator.renamedClass(event.context.element.businessObject);
+        }
+    });
+
+    this.reverted([
+        'element.updateLabel'
+    ], event => {
+        var changedLabel = event.context.element.businessObject.labelAttribute;
+        if (is(event.context.element, 'gm:Object') && (changedLabel === 'name' || !changedLabel)) {
+            this.mediator.renamedClass(event.context.element.businessObject);
+        }
+    });
+}
+inherits(Mediator.prototype.GoalModelerHook, CommandInterceptor);
+
+Mediator.prototype.GoalModelerHook.$inject = [
+    'eventBus',
+    'goalModeler'
+];
+
+Mediator.prototype.GoalModelerHook.isHook = true;
+
 // === Fragment Modeler Hook
 Mediator.prototype.FragmentModelerHook = function (eventBus, fragmentModeler) {
     CommandInterceptor.call(this, eventBus);
