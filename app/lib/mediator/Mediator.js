@@ -107,6 +107,7 @@ function wrapCallback(callback, hook) {
 
 Mediator.prototype.addedClass = function (clazz) {
     this.olcModelerHook.modeler.addOlc(clazz);
+    this.goalModelerHook.modeler.addClass(clazz);
 }
 
 Mediator.prototype.confirmClassDeletion = function (clazz) {

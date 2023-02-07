@@ -138,6 +138,20 @@ Modeler.prototype.createObject = function (name) {
   return shape.businessObject;
 }
 
+Modeler.prototype.addClass= function (clazz) {
+  if(this._classRefs)
+    this._classRefs.add(clazz)
+  else
+    this._classRefs = new Set([clazz])
+  console.log(this._classRefs || "none created")
+}
+
+Modeler.prototype.removeClass= function (clazz) {
+  if(this._classRefs)
+    this._classRefs.delete(clazz)
+  console.log(this._classRefs || "none deleted")
+}
+
 Modeler.prototype.renameObject = function (clazz, name) {
   this.get('modeling').updateLabel(this.get('elementRegistry').get(clazz.id), name);
 }
