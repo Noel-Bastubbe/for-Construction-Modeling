@@ -41,10 +41,9 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
     selectedObjectiveSpan.style.userSelect = 'none';
     selectObjectiveComponent.showValue = function (objective) {
         this.value = objective;
-        // selectedObjectiveSpan.innerText = this.value ?
-        //     this.value.classRef.name
-        //     : '<no Objective selected>';
-        selectedObjectiveSpan.innerText = '<no Objective selected>';
+        selectedObjectiveSpan.innerText = this.value ?
+            this.value.name //this.value.classRef.name
+            : '<no Objective selected>';
     }
     var selectObjectiveMenu = getDropdown();
     selectObjectiveComponent.addEventListener('click', event => {
@@ -100,19 +99,17 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
     }
 
     function repopulateDropdown() {
-        var objectives = []; //gmModeler.getOlcs()
+        var objectives = gmModeler.getObjectives(); //gmModeler.getOlcs()
         var valueBefore = selectObjectiveComponent.value;
         selectObjectiveMenu.populate(objectives, objective => {
-            gmModeler.showOlc(objective);
+            gmModeler.open(objective);
             selectObjectiveMenu.hide();
         });
         selectObjectiveMenu.addCreateElementInput(event => {
             var className = selectObjectiveMenu.getInputValue();
-            // if (className && className.length > 0) {
-            //     eventBus.fire(CommonEvents.DATACLASS_CREATION_REQUESTED, {
-            //         name: className
-            //     });
-            // }
+            if (className && className.length > 0) {
+                gmModeler.addObjective(className);
+            }
         });
         deleteObjectiveButton.disabled = objectives.length === 0;
         selectObjectiveComponent.showValue(valueBefore);
@@ -131,7 +128,7 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
 
 
     //eventBus.on([OlcEvents.DEFINITIONS_CHANGED], event => repopulateDropdown());
-    selectObjectiveComponent.showValue();//eventBus.on([OlcEvents.SELECTED_OLC_CHANGED], event => selectOlcComponent.showValue(event.olc));
+    eventBus.on('import.render.complete', event => selectObjectiveComponent.showValue(event.rootBoard));
 }
 
 GmButtonBar.$inject = [

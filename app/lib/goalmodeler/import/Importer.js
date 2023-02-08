@@ -80,7 +80,8 @@ export function importOdDiagram(diagram, definitions, rootBoard) {
 
       eventBus.fire('import.render.complete', {
         error: error,
-        warnings: warnings
+        warnings: warnings,
+        rootBoard: rootBoard
       });
 
       return resolve({ warnings: warnings });

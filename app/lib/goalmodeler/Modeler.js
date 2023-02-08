@@ -32,6 +32,8 @@ import SpaceToolBehaviorModule from './behavior';
 import SnappingModule from './features/snapping';
 import { nextPosition } from '../util/Util';
 import OlcButtonBarModule from './buttonbar';
+import OlcModeler from "../olcmodeler/OlcModeler";
+import OlcEvents from "../olcmodeler/OlcEvents";
 
 
 var initialDiagram =
@@ -49,11 +51,15 @@ var exampleDiagram = '<gm:definitions xmlns:od="http://tk/schema/od" xmlns:odDi=
     '</gm:odBoard>\n' +
     '<gm:odBoard id="Board2">\n' +
     '</gm:odBoard>\n' +
-    '<odDi:odRootBoard id="RootBoard">\n' +
+    '<odDi:odRootBoard id="RootBoard" name="Objective Uno">\n' +
     '<odDi:odPlane id="Plane" boardElement="Board">\n' +
     '<odDi:odShape id="Object_1fr8m0m_di" boardElement="Object_1fr8m0m">\n' +
     '<dc:Bounds x="370" y="110" width="150" height="90"/>\n' +
     '</odDi:odShape>\n' +
+    '</odDi:odPlane>\n' +
+    '</odDi:odRootBoard>\n' +
+    '<odDi:odRootBoard id="RootBoard2" name="Objective Dos">\n' +
+    '<odDi:odPlane id="Plane2" boardElement="Board2">\n' +
     '</odDi:odPlane>\n' +
     '</odDi:odRootBoard>\n' +
     '</gm:definitions>';
@@ -169,4 +175,15 @@ Modeler.prototype.deleteObject = function (clazz) {
 
 Modeler.prototype.updateProperty = function (clazz, property) {
   this.get('modeling').updateProperties(clazz, property);
+}
+
+Modeler.prototype.getObjectives = function() {
+  return this._definitions.get('rootBoards');
+}
+
+Modeler.prototype.addObjective = function (name) {
+  var objective = this.get('elementFactory').createOdElement('odDi:odRootBoard', { type: 'rootBoard' ,name: name || '<TBD>'});
+  this._definitions.get('rootBoards').push(objective);
+  //this._emit(OlcEvents.DEFINITIONS_CHANGED, { definitions: this._definitions });
+  this.open(objective);
 }
