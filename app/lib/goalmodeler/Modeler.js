@@ -43,6 +43,24 @@ var initialDiagram =
     </odDi:odRootBoard>
 </od:definitions>`;
 
+var exampleDiagram = '<gm:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC">\n' +
+    '<gm:odBoard id="Board1">\n' +
+    '<gm:object name="Test" id="Object_1fr8m0m" attributeValues="Teststate"/>\n' +
+    '</gm:odBoard>\n' +
+    '<gm:odBoard id="Board2">\n' +
+    '</gm:odBoard>\n' +
+    '<odDi:odRootBoard id="RootBoard">\n' +
+    '<odDi:odPlane id="Plane" boardElement="Board">\n' +
+    '<odDi:odShape id="Object_1fr8m0m_di" boardElement="Object_1fr8m0m">\n' +
+    '<dc:Bounds x="370" y="110" width="150" height="90"/>\n' +
+    '</odDi:odShape>\n' +
+    '</odDi:odPlane>\n' +
+    '</odDi:odRootBoard>\n' +
+    '</gm:definitions>';
+
+
+
+
 export default function Modeler(options) {
   BaseModeler.call(this, options);
 }
@@ -76,7 +94,7 @@ Modeler.NavigatedViewer = NavigatedViewer;
  *
  */
 Modeler.prototype.createDiagram = function() {
-  return this.importXML(initialDiagram);
+  return this.importXML(exampleDiagram);
 };
 
 
@@ -133,9 +151,9 @@ Modeler.prototype.createObject = function (name) {
   const canvas = this.get('canvas');
   const diagramRoot = canvas.getRootElement();
 
-  const {x,y} = nextPosition(this, 'od:Object');
+  const {x,y} = nextPosition(this, 'gm:Object');
   const shape = modeling.createShape({
-    type: 'od:Object',
+    type: 'gm:Object',
     name: name
   }, {x,y}, diagramRoot);
   return shape.businessObject;

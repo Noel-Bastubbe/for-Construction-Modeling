@@ -96,7 +96,7 @@ async function createNewDiagram() {
       await fragmentModeler.importXML(diagramXML);
       await olcModeler.createNew();
       await dataModeler.importXML(newDatamodel);
-      await goalModeler.importXML(newGoalmodel);
+      await goalModeler.createDiagram();
       goalStateModeler.createNew();
       if (LOAD_DUMMY) {
         await loadDebugData();
