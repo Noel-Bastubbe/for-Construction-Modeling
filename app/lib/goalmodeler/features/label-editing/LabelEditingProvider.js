@@ -32,7 +32,7 @@ export default function LabelEditingProvider(
     var titel_attribute_divider_y_coordinate = (event.element.y + 30 - canvas._cachedViewbox.y) * zoom;
     var click_y_coordinate = event.originalEvent.offsetY;
     if (click_y_coordinate >= titel_attribute_divider_y_coordinate) {
-      event.element.businessObject.labelAttribute = 'attributeValues';
+      event.element.businessObject.labelAttribute = 'state';
     } else {
       event.element.businessObject.labelAttribute = 'name';
     }
@@ -233,7 +233,7 @@ LabelEditingProvider.prototype.getEditingBBox = function(element) {
     if (isAny(element, [ 'gm:Object' ])) {
 
       // Editing attributes should be different.
-      if (element.businessObject.labelAttribute === 'attributeValues') {
+      if (element.businessObject.labelAttribute === 'state') {
         assign(bounds, {
           y: bbox.y + (30 * zoom),
           height: bbox.height - (30 * zoom)

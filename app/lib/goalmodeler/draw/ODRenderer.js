@@ -140,8 +140,8 @@ export default function ODRenderer(
   function renderAttributes(parentGfx, element) {
     let semantic = getSemantic(element);
     let label = "state: "
-    if (semantic.attributeValues) {
-      label += semantic.attributeValues
+    if (semantic.state) {
+      label += semantic.state
     }
       renderLabel(parentGfx, label, {
         box: {
