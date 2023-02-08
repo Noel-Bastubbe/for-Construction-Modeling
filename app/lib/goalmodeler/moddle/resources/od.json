@@ -30,25 +30,6 @@
       ],
       "properties": [
         {
-          "name": "attributeValues",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "links",
-          "isMany": true,
-          "type": "Link",
-          "isReference": true
-        }
-      ]
-    },
-    {
-      "name": "DataObject",
-      "superClass": [
-        "BoardElement"
-      ],
-      "properties": [
-        {
           "name": "state",
           "isAttr": true,
           "type": "String"
