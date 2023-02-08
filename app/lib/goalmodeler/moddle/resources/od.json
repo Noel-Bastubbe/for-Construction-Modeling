@@ -43,6 +43,31 @@
       ]
     },
     {
+      "name": "DataObject",
+      "superClass": [
+        "BoardElement"
+      ],
+      "properties": [
+        {
+          "name": "state",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "links",
+          "isMany": true,
+          "type": "Link",
+          "isReference": true
+        },
+        {
+          "name": "classRef",
+          "isAttr": true,
+          "isReference": true,
+          "type": "od:Class"
+        }
+      ]
+    },
+    {
       "name": "Link",
       "superClass": [
         "BoardElement"
