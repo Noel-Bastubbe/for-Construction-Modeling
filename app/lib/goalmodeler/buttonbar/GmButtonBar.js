@@ -109,6 +109,7 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
             var className = selectObjectiveMenu.getInputValue();
             if (className && className.length > 0) {
                 gmModeler.addObjective(className);
+                repopulateDropdown();
             }
         });
         deleteObjectiveButton.disabled = objectives.length === 0;

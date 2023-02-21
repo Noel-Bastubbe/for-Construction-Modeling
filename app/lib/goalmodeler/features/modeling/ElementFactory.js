@@ -12,6 +12,7 @@ import BaseElementFactory from 'diagram-js/lib/core/ElementFactory';
 import {
   DEFAULT_LABEL_SIZE
 } from '../../util/LabelUtil';
+import OlcElementFactory from "../../../olcmodeler/modeling/OlcElementFactory";
 
 
 /**
@@ -45,6 +46,19 @@ ElementFactory.prototype.create = function(elementType, attrs) {
   }
 
   return this.createOdElement(elementType, attrs);
+};
+
+ElementFactory.prototype.createBusinessObject = function (type, attrs) {
+  const element = this._moddle.create(type, attrs || {});
+  this._odFactory._ensureId(element);
+  return element;
+};
+
+ElementFactory.prototype.createRootBoard = function (name) {
+  var rootBoard = this.createBusinessObject('odDi:OdRootBoard', {name: name});
+  var board = this.createBusinessObject('gm:OdBoard');
+  rootBoard.plane = this.createBusinessObject('odDi:OdPlane', {boardElement: board});
+  return [rootBoard,board];
 };
 
 

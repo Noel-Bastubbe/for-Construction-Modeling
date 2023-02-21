@@ -20,7 +20,7 @@ ODFactory.$inject = [ 'moddle' ];
 
 ODFactory.prototype._needsId = function(element) {
   return isAny(element, [
-    'gm:BoardElement'
+    'gm:BoardElement', 'odDi:OdRootBoard', 'odDi:OdPlane'
   ]);
 };
 

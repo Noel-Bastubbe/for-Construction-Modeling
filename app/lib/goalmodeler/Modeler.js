@@ -182,8 +182,9 @@ Modeler.prototype.getObjectives = function() {
 }
 
 Modeler.prototype.addObjective = function (name) {
-  var objective = this.get('elementFactory').createOdElement('odDi:odRootBoard', { type: 'rootBoard' ,name: name || '<TBD>'});
-  this._definitions.get('rootBoards').push(objective);
+  var rootBoard = this.get('elementFactory').createRootBoard(name || '<TBD>');
+  this._definitions.get('rootBoards').push(rootBoard[0]);
+  this._definitions.get('rootElements').push(rootBoard[1]);
   //this._emit(OlcEvents.DEFINITIONS_CHANGED, { definitions: this._definitions });
-  this.open(objective);
+  this.open(rootBoard[0]);
 }
