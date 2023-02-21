@@ -1,5 +1,5 @@
 import inherits from 'inherits';
-import {without, findIndex } from 'min-dash'
+import {findIndex } from 'min-dash'
 
 import BaseModeler from './BaseModeler';
 
@@ -38,25 +38,17 @@ import GmButtonBarModule from './buttonbar';
 var initialDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
 <od:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
-    <od:odBoard id="Board_debug" />
-    <odDi:odRootBoard id="RootBoard_debug" name="RootBoard_debug">
-        <odDi:odPlane id="Plane_debug" boardElement="Board_debug" />
+    <od:odBoard id="Board" />
+    <odDi:odRootBoard id="RootBoard" name="Objective 1">
+        <odDi:odPlane id="Plane" boardElement="Board" />
     </odDi:odRootBoard>
 </od:definitions>`;
-
-var exampleDiagram = '<gm:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC">\n' +
-    '<gm:odBoard id="Board1">\n' +
-    '</gm:odBoard>\n' +
-    '<odDi:odRootBoard id="RootBoard" name="Objective Uno">\n' +
-    '<odDi:odPlane id="Plane" boardElement="Board">\n' +
-    '</odDi:odPlane>\n' +
-    '</odDi:odRootBoard>\n'
-    '</gm:definitions>';
-
 
 
 export default function Modeler(options) {
   BaseModeler.call(this, options);
+  const container = this.get('canvas').getContainer();
+  container.style.visibility = 'hidden';
 }
 
 inherits(Modeler, BaseModeler);
