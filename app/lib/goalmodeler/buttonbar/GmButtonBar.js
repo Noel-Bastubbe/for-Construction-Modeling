@@ -42,7 +42,7 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
     selectObjectiveComponent.showValue = function (objective) {
         this.value = objective;
         selectedObjectiveSpan.innerText = this.value ?
-            this.value.name //this.value.classRef.name
+            this.value.name
             : '<no Objective selected>';
     }
     var selectObjectiveMenu = getDropdown();
@@ -61,6 +61,9 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
             renameObjectiveInput.value = selectObjectiveComponent.value.name;
             renameObjectiveInput.addEventListener("change", function (event) {
                 renameObjectiveInput.blur();
+                gmModeler.getCurrentObjective().name = renameObjectiveInput.value;
+                selectObjectiveComponent.showValue(gmModeler.getCurrentObjective());
+
                 // eventBus.fire(OlcEvents.OLC_RENAME, {
                 //     olc: selectOlcComponent.value,
                 //     name: renameOlcInput.value
@@ -80,17 +83,15 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
     selectObjectiveComponent.appendChild(selectedObjectiveSpan);
     buttonBar.appendChild(selectObjectiveComponent);
 
-    // Delete olc button
+    // Delete objective button
     var deleteObjectiveButton = document.createElement('button');
     deleteObjectiveButton.innerHTML = '🗑️';
     deleteObjectiveButton.title = 'Delete Current Objective';
     deleteObjectiveButton.addEventListener('click', () => {
         var objectiveToDelete = selectObjectiveComponent.value;
-        //var shouldDelete = eventBus.fire(OlcEvents.OLC_DELETION_REQUESTED, { olc: olcToDelete });
-        if (shouldDelete !== false) {
-            // Deletion was not rejected and not handled somewhere else; should not happen when mediator is involved
-            // gmModeler.deleteOlc(objectiveToDelete.classRef);
-        }
+        gmModeler.deleteObjective(objectiveToDelete);
+        selectObjectiveComponent.showValue(gmModeler.getCurrentObjective());
+        repopulateDropdown();
     });
     buttonBar.appendChild(deleteObjectiveButton);
 
@@ -102,7 +103,7 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
         var objectives = gmModeler.getObjectives(); //gmModeler.getOlcs()
         var valueBefore = selectObjectiveComponent.value;
         selectObjectiveMenu.populate(objectives, objective => {
-            gmModeler.open(objective);
+            gmModeler.showObjective(objective);
             selectObjectiveMenu.hide();
         });
         selectObjectiveMenu.addCreateElementInput(event => {

@@ -1,4 +1,5 @@
 import inherits from 'inherits';
+import {without, findIndex } from 'min-dash'
 
 import BaseModeler from './BaseModeler';
 
@@ -31,39 +32,26 @@ import ResizeModule from 'diagram-js/lib/features/resize';
 import SpaceToolBehaviorModule from './behavior';
 import SnappingModule from './features/snapping';
 import { nextPosition } from '../util/Util';
-import OlcButtonBarModule from './buttonbar';
-import OlcModeler from "../olcmodeler/OlcModeler";
-import OlcEvents from "../olcmodeler/OlcEvents";
+import GmButtonBarModule from './buttonbar';
 
 
 var initialDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
 <od:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
     <od:odBoard id="Board_debug" />
-    <odDi:odRootBoard id="RootBoard_debug">
+    <odDi:odRootBoard id="RootBoard_debug" name="RootBoard_debug">
         <odDi:odPlane id="Plane_debug" boardElement="Board_debug" />
     </odDi:odRootBoard>
 </od:definitions>`;
 
 var exampleDiagram = '<gm:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC">\n' +
     '<gm:odBoard id="Board1">\n' +
-    '<gm:object name="Test" id="Object_1fr8m0m" attributeValues="Teststate"/>\n' +
-    '</gm:odBoard>\n' +
-    '<gm:odBoard id="Board2">\n' +
     '</gm:odBoard>\n' +
     '<odDi:odRootBoard id="RootBoard" name="Objective Uno">\n' +
     '<odDi:odPlane id="Plane" boardElement="Board">\n' +
-    '<odDi:odShape id="Object_1fr8m0m_di" boardElement="Object_1fr8m0m">\n' +
-    '<dc:Bounds x="370" y="110" width="150" height="90"/>\n' +
-    '</odDi:odShape>\n' +
     '</odDi:odPlane>\n' +
-    '</odDi:odRootBoard>\n' +
-    '<odDi:odRootBoard id="RootBoard2" name="Objective Dos">\n' +
-    '<odDi:odPlane id="Plane2" boardElement="Board2">\n' +
-    '</odDi:odPlane>\n' +
-    '</odDi:odRootBoard>\n' +
+    '</odDi:odRootBoard>\n'
     '</gm:definitions>';
-
 
 
 
@@ -100,14 +88,14 @@ Modeler.NavigatedViewer = NavigatedViewer;
  *
  */
 Modeler.prototype.createDiagram = function() {
-  return this.importXML(exampleDiagram);
+  return this.importXML(initialDiagram);
 };
 
 
 Modeler.prototype._interactionModules = [
 
   // non-modeling components
-  OlcButtonBarModule,
+  GmButtonBarModule,
   KeyboardMoveModule,
   MoveCanvasModule,
   TouchModule,
@@ -181,10 +169,38 @@ Modeler.prototype.getObjectives = function() {
   return this._definitions.get('rootBoards');
 }
 
+Modeler.prototype.showObjective = function (objective) {
+  const container = this.get('canvas').getContainer();
+  this._objective = objective;
+  this.clear();
+  if (objective) {
+    container.style.visibility = '';
+    this.open(objective);
+  } else {
+    container.style.visibility = 'hidden';
+  }
+}
+
+Modeler.prototype.getCurrentObjective = function () {
+  return this._objective;
+}
 Modeler.prototype.addObjective = function (name) {
   var rootBoard = this.get('elementFactory').createRootBoard(name || '<TBD>');
   this._definitions.get('rootBoards').push(rootBoard[0]);
   this._definitions.get('rootElements').push(rootBoard[1]);
   //this._emit(OlcEvents.DEFINITIONS_CHANGED, { definitions: this._definitions });
-  this.open(rootBoard[0]);
+  this.showObjective(rootBoard[0]);
+}
+Modeler.prototype.deleteObjective = function (objective) {
+
+  var currentIndex = findIndex(this._definitions.get('rootElements'), objective.plane.boardElement);
+  this._definitions.get('rootElements').splice(currentIndex,1);
+
+  currentIndex = findIndex(this._definitions.get('rootBoards'), objective);
+  var indexAfterRemoval = Math.min(currentIndex, this._definitions.get('rootBoards').length - 2);
+  this._definitions.get('rootBoards').splice(currentIndex,1);
+
+  if (this.getCurrentObjective() === objective) {
+    this.showObjective(this._definitions.get('rootBoards')[indexAfterRemoval]);
+  }
 }
