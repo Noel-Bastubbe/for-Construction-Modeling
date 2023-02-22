@@ -145,12 +145,12 @@ Modeler.prototype.createObject = function (name) {
   return shape.businessObject;
 }
 
-Modeler.prototype.renameObject = function (clazz, name) {
-  this.get('modeling').updateLabel(this.get('elementRegistry').get(clazz.id), name);
+Modeler.prototype.renameObject = function (object, name) {
+  this.get('modeling').updateLabel(this.get('elementRegistry').get(object.id), name);
 }
 
-Modeler.prototype.deleteObject = function (clazz) {
-  this.get('modeling').removeShape(this.get('elementRegistry').get(clazz.id));
+Modeler.prototype.deleteObject = function (object) {
+  this.get('modeling').removeShape(this.get('elementRegistry').get(object.id));
 }
 
 Modeler.prototype.updateProperty = function (clazz, property) {
@@ -180,7 +180,6 @@ Modeler.prototype.addObjective = function (name) {
   var rootBoard = this.get('elementFactory').createRootBoard(name || '<TBD>');
   this._definitions.get('rootBoards').push(rootBoard[0]);
   this._definitions.get('rootElements').push(rootBoard[1]);
-  //this._emit(OlcEvents.DEFINITIONS_CHANGED, { definitions: this._definitions });
   this.showObjective(rootBoard[0]);
 }
 Modeler.prototype.deleteObjective = function (objective) {
