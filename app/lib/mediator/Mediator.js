@@ -372,7 +372,7 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
         'shape.create'
     ], event => {
         if (is(event.context.shape, 'gm:Object')) {
-            this.mediator.addedClass(event.context.shape.businessObject);
+            //this.mediator.addedClass(event.context.shape.businessObject);
         }
     });
 
@@ -389,7 +389,7 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
         'shape.delete'
     ], event => {
         if (is(event.context.shape, 'gm:Object')) {
-            this.mediator.deletedClass(event.context.shape.businessObject);
+            //this.mediator.deletedClass(event.context.shape.businessObject);
         }
     });
 
@@ -407,7 +407,7 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
     ], event => {
         event.context.elements = event.context.elements.filter(element => {
             if (is(element, 'gm:Object')) {
-                return this.mediator.confirmClassDeletion(element.businessObject);
+                return this.modeler.deleteObject(element);
             } else {
                 return true;
             }
@@ -420,7 +420,7 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
     ], event => {
         var changedLabel = event.context.element.businessObject.labelAttribute;
         if (is(event.context.element, 'gm:Object') && (changedLabel === 'name' || !changedLabel)) {
-            this.mediator.renamedClass(event.context.element.businessObject);
+            //this.mediator.renamedClass(event.context.element.businessObject);
         }
     });
 
@@ -429,7 +429,7 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
     ], event => {
         var changedLabel = event.context.element.businessObject.labelAttribute;
         if (is(event.context.element, 'gm:Object') && (changedLabel === 'name' || !changedLabel)) {
-            this.mediator.renamedClass(event.context.element.businessObject);
+            //this.mediator.renamedClass(event.context.element.businessObject);
         }
     });
 }

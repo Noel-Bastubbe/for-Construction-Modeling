@@ -138,14 +138,14 @@ Modeler.prototype.createObject = function (name) {
   return shape.businessObject;
 }
 
-Modeler.prototype.renameObject = function (clazz, name) {
-  this.get('modeling').updateLabel(this.get('elementRegistry').get(clazz.id), name);
+Modeler.prototype.renameObject = function (object, name) {
+  this.get('modeling').updateLabel(this.get('elementRegistry').get(object.id), name);
 }
 
-Modeler.prototype.deleteObject = function (clazz) {
-  this.get('modeling').removeShape(this.get('elementRegistry').get(clazz.id));
+Modeler.prototype.deleteObject = function (object) {
+  this.get('modeling').removeShape(object);
 }
 
-Modeler.prototype.updateProperty = function (clazz, property) {
-  this.get('modeling').updateProperties(clazz, property);
+Modeler.prototype.updateProperty = function (object, property) {
+  this.get('modeling').updateProperties(object, property);
 }
