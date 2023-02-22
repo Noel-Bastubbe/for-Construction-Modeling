@@ -1,6 +1,6 @@
 import GmButtonBar from "./GmButtonBar";
 
 export default {
-  __init__: [ 'olcButtonBar' ],
-  olcButtonBar: [ 'type', GmButtonBar ]
+  __init__: [ 'gmButtonBar' ],
+  gmButtonBar: [ 'type', GmButtonBar ]
 };

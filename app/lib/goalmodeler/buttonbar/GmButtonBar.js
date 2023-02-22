@@ -1,10 +1,6 @@
 import {
-    attr as domAttr,
     classes as domClasses,
-    event as domEvent,
-    query as domQuery
 } from 'min-dom';
-import CommonEvents from '../../common/CommonEvents';
 
 import getDropdown from '../../util/Dropdown';
 import {download, upload} from '../../util/FileUtil';
@@ -34,7 +30,7 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
     });
     // buttonBar.appendChild(importButton);
 
-    // Select olc Menu    
+    // Select objective Menu
     var selectObjectiveComponent = document.createElement('div');
     selectObjectiveComponent.classList.add('olc-select-component');
     var selectedObjectiveSpan = document.createElement('span');
@@ -50,8 +46,6 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
         if (event.target === selectObjectiveComponent || event.target === selectedObjectiveSpan) {
             repopulateDropdown();
             showSelectObjectiveMenu();
-        } else {
-            return;
         }
     });
     selectObjectiveComponent.addEventListener('dblclick', event => {
@@ -59,25 +53,18 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
             selectObjectiveMenu.hide();
             var renameObjectiveInput = document.createElement('input');
             renameObjectiveInput.value = selectObjectiveComponent.value.name;
-            renameObjectiveInput.addEventListener("change", function (event) {
+            renameObjectiveInput.addEventListener("change", function () {
                 renameObjectiveInput.blur();
                 gmModeler.getCurrentObjective().name = renameObjectiveInput.value;
                 selectObjectiveComponent.showValue(gmModeler.getCurrentObjective());
-
-                // eventBus.fire(OlcEvents.OLC_RENAME, {
-                //     olc: selectOlcComponent.value,
-                //     name: renameOlcInput.value
-                // });
             });
-            renameObjectiveInput.addEventListener("focusout", function (event) {
+            renameObjectiveInput.addEventListener("focusout", function () {
                 selectObjectiveComponent.replaceChild(selectedObjectiveSpan, renameObjectiveInput);
             });
 
             selectObjectiveComponent.replaceChild(renameObjectiveInput, selectedObjectiveSpan);
             //Timeout because focus is immediately lost if set immediately
             setTimeout(() => renameObjectiveInput.focus(), 100);
-        } else {
-            return;
         }
     });
     selectObjectiveComponent.appendChild(selectedObjectiveSpan);
@@ -100,16 +87,16 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
     }
 
     function repopulateDropdown() {
-        var objectives = gmModeler.getObjectives(); //gmModeler.getOlcs()
+        var objectives = gmModeler.getObjectives();
         var valueBefore = selectObjectiveComponent.value;
         selectObjectiveMenu.populate(objectives, objective => {
             gmModeler.showObjective(objective);
             selectObjectiveMenu.hide();
         });
-        selectObjectiveMenu.addCreateElementInput(event => {
-            var className = selectObjectiveMenu.getInputValue();
-            if (className && className.length > 0) {
-                gmModeler.addObjective(className);
+        selectObjectiveMenu.addCreateElementInput(() => {
+            var objectiveName = selectObjectiveMenu.getInputValue();
+            if (objectiveName && objectiveName.length > 0) {
+                gmModeler.addObjective(objectiveName);
                 repopulateDropdown();
             }
         });
@@ -129,7 +116,6 @@ export default function GmButtonBar(canvas, eventBus, gmModeler) {
     }
 
 
-    //eventBus.on([OlcEvents.DEFINITIONS_CHANGED], event => repopulateDropdown());
     eventBus.on('import.render.complete', event => selectObjectiveComponent.showValue(event.rootBoard));
 }
 
