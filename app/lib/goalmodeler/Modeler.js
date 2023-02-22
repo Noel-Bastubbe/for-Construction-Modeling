@@ -47,8 +47,6 @@ var initialDiagram =
 
 export default function Modeler(options) {
   BaseModeler.call(this, options);
-  const container = this.get('canvas').getContainer();
-  container.style.visibility = 'hidden';
 }
 
 inherits(Modeler, BaseModeler);
@@ -80,6 +78,8 @@ Modeler.NavigatedViewer = NavigatedViewer;
  *
  */
 Modeler.prototype.createDiagram = function() {
+  const container = this.get('canvas').getContainer();
+  container.style.visibility = 'hidden';
   return this.importXML(initialDiagram);
 };
 
