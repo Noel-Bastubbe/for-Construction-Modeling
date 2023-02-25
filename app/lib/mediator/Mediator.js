@@ -407,7 +407,7 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
     ], event => {
         event.context.elements = event.context.elements.filter(element => {
             if (is(element, 'gm:Object')) {
-                //return this.mediator.confirmClassDeletion(element.businessObject);
+                return this.modeler.deleteObject(element);
             } else {
                 return true;
             }

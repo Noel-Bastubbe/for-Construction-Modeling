@@ -44,7 +44,6 @@ var initialDiagram =
     </odDi:odRootBoard>
 </od:definitions>`;
 
-
 export default function Modeler(options) {
   BaseModeler.call(this, options);
 }
@@ -150,11 +149,11 @@ Modeler.prototype.renameObject = function (object, name) {
 }
 
 Modeler.prototype.deleteObject = function (object) {
-  this.get('modeling').removeShape(this.get('elementRegistry').get(object.id));
+  this.get('modeling').removeShape(object);
 }
 
-Modeler.prototype.updateProperty = function (clazz, property) {
-  this.get('modeling').updateProperties(clazz, property);
+Modeler.prototype.updateProperty = function (object, property) {
+  this.get('modeling').updateProperties(object, property);
 }
 
 Modeler.prototype.getObjectives = function() {
