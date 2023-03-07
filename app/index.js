@@ -7,6 +7,7 @@ import OlcModeler from './lib/olcmodeler/OlcModeler';
 import GoalStateModeler from './lib/goalstatemodeler/GoalStateModeler';
 import DataModelModeler from './lib/datamodelmodeler/Modeler';
 import GoalModeler from './lib/goalmodeler/Modeler';
+import DependencyModeler from './lib/olcmodeler/OlcModeler';
 
 import $ from 'jquery';
 import Mediator from './lib/mediator/Mediator';
@@ -38,6 +39,13 @@ var olcModeler = new OlcModeler({
       mediator : ['type', mediator.OlcModelerHook]
     }]
 });
+
+var dependencyModeler = new OlcModeler({
+    container: document.querySelector('#dependencymodel-canvas'),
+    keyboard: {
+        bindTo: document.querySelector('#dependencymodel-canvas')
+    },
+})
 
 var dataModeler = new DataModelModeler({
     container: '#datamodel-canvas',
@@ -97,6 +105,7 @@ async function createNewDiagram() {
       await olcModeler.createNew();
       await dataModeler.importXML(newDatamodel);
       await goalModeler.createDiagram();
+      await dependencyModeler.createNew();
       goalStateModeler.createNew();
       if (LOAD_DUMMY) {
         await loadDebugData();
