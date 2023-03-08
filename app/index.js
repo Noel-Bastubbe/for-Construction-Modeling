@@ -40,12 +40,18 @@ var olcModeler = new OlcModeler({
     }]
 });
 
-var dependencyModeler = new OlcModeler({
+var dependencyModeler = new DependencyModeler({
     container: document.querySelector('#dependencymodel-canvas'),
     keyboard: {
         bindTo: document.querySelector('#dependencymodel-canvas')
     },
-})
+    /*
+    additionalModules: [{
+        __init__ : ['mediator'],
+        mediator : ['type', mediator.DependencyModelerHook]
+    }]
+     */
+});
 
 var dataModeler = new DataModelModeler({
     container: '#datamodel-canvas',
