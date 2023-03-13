@@ -7,7 +7,7 @@ import OlcModeler from './lib/olcmodeler/OlcModeler';
 import GoalStateModeler from './lib/goalstatemodeler/GoalStateModeler';
 import DataModelModeler from './lib/datamodelmodeler/Modeler';
 import GoalModeler from './lib/goalmodeler/Modeler';
-import DependencyModeler from './lib/olcmodeler/OlcModeler';
+import DependencyModeler from './lib/dependencymodeler/DependencyModeler';
 
 import $ from 'jquery';
 import Mediator from './lib/mediator/Mediator';
