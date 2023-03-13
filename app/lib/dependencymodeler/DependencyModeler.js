@@ -27,7 +27,7 @@ import DepRulesModule from './rules';
 import DepModelingModule from './modeling';
 import DepAutoPlaceModule from './auto-place';
 
-import OlcModdle from './moddle';
+import DepModdle from './moddle';
 //import OlcEvents from './OlcEvents';
 import { nextPosition, root, is } from '../util/Util';
 
