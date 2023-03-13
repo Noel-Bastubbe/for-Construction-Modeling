@@ -35,14 +35,14 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
     connect.start(event, element, autoActivate);
   }
 
-  function appendState(event, element) {
-    const shape = elementFactory.createShape({ type: 'olc:State' });
+  function appendObjective(event, element) {
+    const shape = elementFactory.createShape({ type: 'dep:Objective' });
 
     autoPlace.append(element, shape, { connection: { type: 'dep:Dependency' } });
   }
 
-  function appendStateStart(event) {
-    const shape = elementFactory.createShape({ type: 'olc:State' });
+  function appendObjectiveStart(event) {
+    const shape = elementFactory.createShape({ type: 'dep:Objective' });
 
     create.start(event, shape, { source: element });
   }
@@ -68,14 +68,14 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
     }
   };
 
-  if (is(element, 'olc:State')) {
+  if (is(element, 'dep:Objective')) {
     entries['append'] = {
       group: 'create',
       className: 'bpmn-icon-start-event-none',
       title: 'Append Objective',
       action: {
-        click: appendState,
-        dragstart: appendStateStart
+        click: appendObjective,
+        dragstart: appendObjectiveStart
       }
     }
   }

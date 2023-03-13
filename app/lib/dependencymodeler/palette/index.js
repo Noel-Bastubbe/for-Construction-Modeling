@@ -22,7 +22,7 @@ export default {
     translate
   ],
   __init__: [ 
-    'olcContextPadProvider',
+    'depContextPadProvider',
     'paletteProvider'
   ],
   paletteProvider: [ 'type', PaletteProvider ],

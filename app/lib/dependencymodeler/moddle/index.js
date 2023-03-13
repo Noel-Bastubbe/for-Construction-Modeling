@@ -7,7 +7,7 @@ import {
   import DepDescriptors from './dep.json';
   
   var packages = {
-    olc: OlcDescriptors
+    dep: DepDescriptors
   };
   
   export default function(additionalPackages, options) {

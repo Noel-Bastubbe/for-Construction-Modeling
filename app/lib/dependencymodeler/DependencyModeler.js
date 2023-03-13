@@ -73,14 +73,14 @@ export default function DependencyModeler(options) {
 
   // our own modules, contributing controls, customizations, and more
   const customModules = [
-    OlcPaletteModule,
-    OlcDrawModule,
-    OlcRulesModule,
-    OlcModelingModule,
-    OlcAutoPlaceModule,
+    DepPaletteModule,
+    DepDrawModule,
+    DepRulesModule,
+    DepModelingModule,
+    DepAutoPlaceModule,
     {
-      moddle: ['value', new OlcModdle({})],
-      olcModeler: ['value', this]
+      moddle: ['value', new DepModdle({})],
+      depModeler: ['value', this]
     }
   ];
 
@@ -193,9 +193,9 @@ DependencyModeler.prototype.showOlc = function (olc) {
     var elements = groupBy(olc.get('Elements'), element => element.$type);
     var states = {};
 
-    (elements['olc:State'] || []).forEach(state => {
+    (elements['dep:Objective'] || []).forEach(state => {
       var stateVisual = elementFactory.createShape({
-        type: 'olc:State',
+        type: 'dep:Objective',
         businessObject: state,
         x: parseInt(state.get('x')),
         y: parseInt(state.get('y'))
@@ -212,7 +212,7 @@ DependencyModeler.prototype.showOlc = function (olc) {
         businessObject: transition,
         source: source,
         target: target,
-        waypoints: this.get('olcUpdater').connectionWaypoints(source, target)
+        waypoints: this.get('depUpdater').connectionWaypoints(source, target)
       });
       canvas.addConnection(transitionVisual, diagramRoot);
     });
@@ -223,7 +223,7 @@ DependencyModeler.prototype.showOlc = function (olc) {
 
 DependencyModeler.prototype.showOlcById = function (id) {
   if (id && this._definitions && id !== (this._olc && this._olc.get('id'))) {
-    var olc = this._definitions.get('olcs').filter(olc => olc.get('id') === id)[0];
+    var olc = this._definitions.get('goals').filter(olc => olc.get('id') === id)[0];
     if (olc) {
       this.showOlc(olc);
     } else {
@@ -294,7 +294,7 @@ DependencyModeler.prototype.getOlcByClass = function(clazz) {
  */
 
 DependencyModeler.prototype.getStateById = function(id) {
-  return this.getOlcs().flatMap(olc => olc.get('Elements')).filter(element => is(element, 'olc:State')).filter(state => state.id === id)[0];
+  return this.getOlcs().flatMap(olc => olc.get('Elements')).filter(element => is(element, 'dep:Objective')).filter(state => state.id === id)[0];
 }
 
 /*
@@ -310,9 +310,9 @@ DependencyModeler.prototype.createState = function (name, olc) {
   const canvas = this.get('canvas');
   const diagramRoot = canvas.getRootElement();
 
-  const {x,y} = nextPosition(this, 'olc:State');
+  const {x,y} = nextPosition(this, 'dep:Objective');
   const shape = modeling.createShape({
-    type: 'olc:State',
+    type: 'dep:Objective',
     name: name,
     x: parseInt(x),
     y: parseInt(y)
@@ -327,10 +327,10 @@ DependencyModeler.prototype.createTransition = function (sourceState, targetStat
   const targetVisual = this.get('elementRegistry').get(targetState.id);
 
   const transitionVisual = modeling.connect(sourceVisual, targetVisual, {
-    type: 'olc:Transition',
+    type: 'dep:Dependency',
     source: sourceState,
     target: targetState,
-    waypoints: this.get('olcUpdater').connectionWaypoints(sourceState, targetState)
+    waypoints: this.get('depUpdater').connectionWaypoints(sourceState, targetState)
   });
 
   return transitionVisual.businessObject;

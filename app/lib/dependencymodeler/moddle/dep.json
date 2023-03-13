@@ -1,13 +1,13 @@
 {
   "name": "Dependencies",
   "uri": "http://bptlab/schema/olc",
-  "prefix": "olc",
+  "prefix": "dep",
   "xml": {
     "tagAlias": "lowerCase"
   },
   "types": [
     {
-      "name": "OlcElement",
+      "name": "DepElement",
       "isAbstract": true,
       "properties": [
         {
@@ -24,55 +24,49 @@
       ]
     },
     {
-      "name": "State",
+      "name": "Objective",
       "superClass": [
-        "OlcElement"
+        "DepElement"
       ],
       "properties": []
     },
     {
-      "name": "Transition",
+      "name": "Dependency",
       "superClass": [
-        "OlcElement"
+        "DepElement"
       ],
       "properties": [
         {
-          "name": "sourceState",
+          "name": "sourceObjective",
           "isAttr": true,
           "isReference": true,
-          "type": "State"
+          "type": "Objective"
         },
         {
-          "name": "targetState",
+          "name": "targetObjective",
           "isAttr": true,
           "isReference": true,
-          "type": "State"
+          "type": "Objective"
         }
       ]
     },
     {
-      "name": "Olc",
+      "name": "Goal",
       "superClass": [
-        "OlcElement"
+        "DepElement"
       ],
       "properties": [
         {
           "name": "Elements",
           "isMany": true,
-          "type": "OlcElement"
-        },
-        {
-            "name": "classRef",
-            "isAttr": true,
-            "isReference": true,
-            "type": "od:Class"
+          "type": "DepElement"
         }
       ]
     },
     {
       "name": "Definitions",
       "superClass": [
-        "OlcElement"
+        "DepElement"
       ],
       "properties": [
         {
@@ -93,8 +87,8 @@
           "type": "String"
         },
         {
-          "name": "olcs",
-          "type": "Olc",
+          "name": "goals",
+          "type": "Goal",
           "isMany": true
         },
         {

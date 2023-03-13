@@ -211,7 +211,7 @@ export default function DepRenderer(eventBus, styles,
   }
 
   this.handlers = {
-    'olc:State': function (parentGfx, element) {
+    'dep:Objective': function (parentGfx, element) {
 
       var attrs = {
         fill: 'white',
@@ -234,7 +234,7 @@ export default function DepRenderer(eventBus, styles,
 
       return circle;
     },
-    'olc:Transition' : function(parentGfx, element) {
+    'dep:Dependency' : function(parentGfx, element) {
 
       var pathData = createPathFromConnection(element);
 

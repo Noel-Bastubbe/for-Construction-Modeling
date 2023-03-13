@@ -4,6 +4,6 @@ import DepAutoPlace from './DepAutoPlace';
 
 export default {
     __depends__: [ AutoPlaceModule ],
-    __init__: [ 'olcAutoPlace' ],
-    olcAutoPlace: [ 'type', OlcAutoPlace ]
+    __init__: [ 'depAutoPlace' ],
+    depAutoPlace: [ 'type', DepAutoPlace ]
 };

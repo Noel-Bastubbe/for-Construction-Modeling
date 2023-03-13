@@ -95,8 +95,8 @@ PaletteProvider.prototype.getPaletteEntries = function (element) {
       separator: true
     },
     'create-object': createAction(
-      'olc:State', 'olc-elements', 'bpmn-icon-start-event-none',
-      translate('Create state')
+      'dep:Objective', 'dep-elements', 'bpmn-icon-start-event-none',
+      translate('Create Objective')
     ),
     'object-linker': {
       group: 'dep-elements',

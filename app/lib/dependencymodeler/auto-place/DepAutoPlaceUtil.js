@@ -13,7 +13,7 @@ import {
 } from 'diagram-js/lib/features/auto-place/AutoPlaceUtil';
 
 export function getNewShapePosition(source, element) {
-	if (is(element, 'olc:State')) {
+	if (is(element, 'dep:Objective')) {
 		return getFlowNodePosition(source, element);
 	}
 }
@@ -29,7 +29,7 @@ export function getFlowNodePosition(source, element) {
 
 	const horizontalDistance = getConnectedDistance(source, {
 		filter: function(connection) {
-			return is(connection, 'olc:Transition');
+			return is(connection, 'dep:Dependency');
 		}
 	});
 
