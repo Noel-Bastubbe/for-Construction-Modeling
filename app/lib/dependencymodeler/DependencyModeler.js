@@ -21,11 +21,11 @@ import EditorActionsModule from '../common/editor-actions';
 import CopyPasteModule from 'diagram-js/lib/features/copy-paste';
 import KeyboardModule from '../common/keyboard';
 
-import OlcPaletteModule from './palette';
-import OlcDrawModule from './draw';
-import OlcRulesModule from './rules';
-import OlcModelingModule from './modeling';
-import OlcAutoPlaceModule from './auto-place';
+import DepPaletteModule from './palette';
+import DepDrawModule from './draw';
+import DepRulesModule from './rules';
+import DepModelingModule from './modeling';
+import DepAutoPlaceModule from './auto-place';
 
 import OlcModdle from './moddle';
 //import OlcEvents from './OlcEvents';
@@ -33,23 +33,8 @@ import { nextPosition, root, is } from '../util/Util';
 
 var emptyDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
-<olc:definitions xmlns:olc="http://bptlab/schema/olc" xmlns:olcDi="http://bptlab/schema/olcDi">
-</olc:definitions>`;
-
-var exampleDiagram =
-  `<?xml version="1.0" encoding="UTF-8"?>
-<olc:definitions xmlns:olc="http://bptlab/schema/olc" xmlns:olcDi="http://bptlab/schema/olcDi">
-  <olc:olc id="MainOlc" name="Olc Uno">
-    <olc:state name="Foo" id="State_0" type="olc:State" x="119" y="177" />
-    <olc:state name="Bar" id="State_1" type="olc:State" x="289" y="176" />
-    <olc:transition id="Transition_1" sourceState="State_0" targetState="State_1" type="olc:Transition" />
-  </olc:olc>
-  <olc:olc id="SecondOlc" name="Olc Dos">
-    <olc:state name="Boo" id="State_3" type="olc:State" x="119" y="177" />
-    <olc:state name="Klar" id="State_4" type="olc:State" x="289" y="176" />
-    <olc:transition id="Transition_2" sourceState="State_3" targetState="State_4" type="olc:Transition" />
-  </olc:olc>
-</olc:definitions>`;
+<dep:definitions xmlns:olc="http://bptlab/schema/olc" xmlns:olcDi="http://bptlab/schema/olcDi">
+</dep:definitions>`;
 
 /**
  * Our editor constructor
@@ -201,7 +186,7 @@ DependencyModeler.prototype.showOlc = function (olc) {
   this._olc = olc;
   if (olc) {
     const elementFactory = this.get('elementFactory');
-    var diagramRoot = elementFactory.createRoot({ type: 'olc:Olc', businessObject: olc });
+    var diagramRoot = elementFactory.createRoot({ type: 'dep:Goal', businessObject: olc });
     const canvas = this.get('canvas');
     canvas.setRootElement(diagramRoot);
 
@@ -219,11 +204,11 @@ DependencyModeler.prototype.showOlc = function (olc) {
       canvas.addShape(stateVisual, diagramRoot);
     });
 
-    (elements['olc:Transition'] || []).forEach(transition => {
-      var source = states[transition.get('sourceState').get('id')];
-      var target = states[transition.get('targetState').get('id')];
+    (elements['dep:Dependency'] || []).forEach(transition => {
+      var source = states[transition.get('sourceObjective').get('id')];
+      var target = states[transition.get('targetObjective').get('id')];
       var transitionVisual = elementFactory.createConnection({
-        type: 'olc:Transition',
+        type: 'dep:Dependency',
         businessObject: transition,
         source: source,
         target: target,

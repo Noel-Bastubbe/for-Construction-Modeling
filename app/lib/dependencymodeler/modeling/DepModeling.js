@@ -2,7 +2,7 @@ import inherits from 'inherits';
 
 import BaseModeling from 'diagram-js/lib/features/modeling/Modeling';
 
-export default function OlcModeling(eventBus, elementFactory, commandStack) {
+export default function DepModeling(eventBus, elementFactory, commandStack) {
     BaseModeling.call(this, eventBus, elementFactory, commandStack);
     
     eventBus.on('copyPaste.copyElement', function(context) {
@@ -19,15 +19,15 @@ export default function OlcModeling(eventBus, elementFactory, commandStack) {
     });
 }
 
-inherits(OlcModeling, BaseModeling);
+inherits(DepModeling, BaseModeling);
 
-OlcModeling.$inject = [
+DepModeling.$inject = [
     'eventBus',
     'elementFactory',
     'commandStack',
 ];
 
-OlcModeling.prototype.updateLabel = function (element, newLabel, newBounds, hints) {
+DepModeling.prototype.updateLabel = function (element, newLabel, newBounds, hints) {
     this._commandStack.execute('element.updateLabel', {
         element: element,
         newLabel: newLabel,
@@ -36,7 +36,7 @@ OlcModeling.prototype.updateLabel = function (element, newLabel, newBounds, hint
     });
 };
 
-OlcModeling.prototype.getHandlers = function () {
+DepModeling.prototype.getHandlers = function () {
     var handlers = BaseModeling.prototype.getHandlers.call(this);
     handlers['element.updateLabel'] = UpdateLabelHandler;
 

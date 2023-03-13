@@ -1,11 +1,11 @@
 import RulesModule from 'diagram-js/lib/features/rules';
 
-import OlcRuleProvider from './OlcRuleProvider';
+import DepRuleProvider from './DepRuleProvider';
 
 export default {
   __depends__: [
     RulesModule
   ],
-  __init__: [ 'olcRuleProvider' ],
-  olcRuleProvider: [ 'type', OlcRuleProvider ]
+  __init__: [ 'depRuleProvider' ],
+  depRuleProvider: [ 'type', DepRuleProvider ]
 };

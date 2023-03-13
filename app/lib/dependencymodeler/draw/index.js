@@ -1,6 +1,6 @@
-import OlcRenderer from "./OlcRenderer";
+import DepRenderer from "./DepRenderer";
 
 export default {
-  __init__: [ 'olcRenderer' ],
-  olcRenderer: [ 'type', OlcRenderer ]
+  __init__: [ 'depRenderer' ],
+  depRenderer: [ 'type', DepRenderer ]
 };

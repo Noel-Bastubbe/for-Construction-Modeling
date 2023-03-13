@@ -33,8 +33,8 @@ var DEFAULT_FILL_OPACITY = .95;
 var DEFAULT_TEXT_SIZE = 16;
 var LINE_HEIGHT_RATIO = 1.2;
 
-export default function OlcRenderer(eventBus, styles,
-  canvas, priority) {
+export default function DepRenderer(eventBus, styles,
+                                    canvas, priority) {
 
   BaseRenderer.call(this, eventBus, priority);
   var markers = {};
@@ -252,28 +252,28 @@ export default function OlcRenderer(eventBus, styles,
 }
 
 
-inherits(OlcRenderer, BaseRenderer);
+inherits(DepRenderer, BaseRenderer);
 
-OlcRenderer.$inject = [
+DepRenderer.$inject = [
   'eventBus',
   'styles',
   'canvas'
 ];
 
 
-OlcRenderer.prototype.canRender = function (element) {
-  return is(element, 'olc:State') || is(element, 'olc:Transition');
+DepRenderer.prototype.canRender = function (element) {
+  return is(element, 'dep:Objective') || is(element, 'dep:Dependency');
 };
 
-OlcRenderer.prototype.drawShape = function (parentGfx, element) {
+DepRenderer.prototype.drawShape = function (parentGfx, element) {
   var type = element.type;
   var handler = this.handlers[type];
   return handler(parentGfx, element);
 };
 
-OlcRenderer.prototype.drawConnection = OlcRenderer.prototype.drawShape;
+DepRenderer.prototype.drawConnection = DepRenderer.prototype.drawShape;
 
-OlcRenderer.prototype.getShapePath = function (element) {
+DepRenderer.prototype.getShapePath = function (element) {
   return getCirclePath(element);
 };
 

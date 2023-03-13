@@ -1,6 +1,6 @@
 import { is } from "../../util/Util";
 
-export default function OlcContextPadProvider(connect, contextPad, modeling, elementFactory, create, autoPlace) {
+export default function DepContextPadProvider(connect, contextPad, modeling, elementFactory, create, autoPlace) {
   this._connect = connect;
   this._modeling = modeling;
   this._elementFactory = elementFactory;
@@ -10,7 +10,7 @@ export default function OlcContextPadProvider(connect, contextPad, modeling, ele
   contextPad.registerProvider(this);
 }
 
-OlcContextPadProvider.$inject = [
+DepContextPadProvider.$inject = [
   'connect',
   'contextPad',
   'modeling',
@@ -20,7 +20,7 @@ OlcContextPadProvider.$inject = [
 ];
 
 
-OlcContextPadProvider.prototype.getContextPadEntries = function (element) {
+DepContextPadProvider.prototype.getContextPadEntries = function (element) {
   var connect = this._connect,
     modeling = this._modeling,
     elementFactory = this._elementFactory,
@@ -38,7 +38,7 @@ OlcContextPadProvider.prototype.getContextPadEntries = function (element) {
   function appendState(event, element) {
     const shape = elementFactory.createShape({ type: 'olc:State' });
 
-    autoPlace.append(element, shape, { connection: { type: 'olc:Transition' } });
+    autoPlace.append(element, shape, { connection: { type: 'dep:Dependency' } });
   }
 
   function appendStateStart(event) {
@@ -72,7 +72,7 @@ OlcContextPadProvider.prototype.getContextPadEntries = function (element) {
     entries['append'] = {
       group: 'create',
       className: 'bpmn-icon-start-event-none',
-      title: 'Append State',
+      title: 'Append Objective',
       action: {
         click: appendState,
         dragstart: appendStateStart

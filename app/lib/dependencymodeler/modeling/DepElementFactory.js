@@ -5,21 +5,21 @@ import inherits from 'inherits';
 import BaseElementFactory from 'diagram-js/lib/core/ElementFactory';
 import Ids from 'ids';
 
-export default function OlcElementFactory(moddle, elementRegistry) {
+export default function DepElementFactory(moddle, elementRegistry) {
     BaseElementFactory.call(this);
     this._moddle = moddle;
     this._elementRegistry = elementRegistry;
     this._ids = new Ids();
 }
 
-inherits(OlcElementFactory, BaseElementFactory);
+inherits(DepElementFactory, BaseElementFactory);
 
-OlcElementFactory.$inject = [
+DepElementFactory.$inject = [
     'moddle',
     'elementRegistry'
 ];
 
-OlcElementFactory.prototype.createBusinessObject = function (type, attrs) {
+DepElementFactory.prototype.createBusinessObject = function (type, attrs) {
     const element = this._moddle.create(type, attrs || {});
     if(!element.id) {
         const prefix = (element.$type || '').replace(/^[^:]*:/g, '') + '_';
@@ -30,15 +30,15 @@ OlcElementFactory.prototype.createBusinessObject = function (type, attrs) {
     return element;
 };
 
-OlcElementFactory.prototype.baseCreate = BaseElementFactory.prototype.create;
-OlcElementFactory.prototype.baseCreateShape = BaseElementFactory.prototype.createShape;
+DepElementFactory.prototype.baseCreate = BaseElementFactory.prototype.create;
+DepElementFactory.prototype.baseCreateShape = BaseElementFactory.prototype.createShape;
 
-OlcElementFactory.prototype.createShape = function(attrs) {
+DepElementFactory.prototype.createShape = function(attrs) {
     attrs = assign(this.defaultSizeForType(attrs.type), attrs);
     return this.baseCreateShape(attrs);
 }
 
-OlcElementFactory.prototype.create = function (elementType, attrs) {
+DepElementFactory.prototype.create = function (elementType, attrs) {
 
     attrs = attrs || {};
     attrs = assign(this.defaultSizeForType(attrs.type), attrs);
@@ -63,6 +63,6 @@ OlcElementFactory.prototype.create = function (elementType, attrs) {
     return this.baseCreate(elementType, attrs);
 };
 
-OlcElementFactory.prototype.defaultSizeForType = function (type) {
+DepElementFactory.prototype.defaultSizeForType = function (type) {
     return { width: 100, height: 100 };
 }

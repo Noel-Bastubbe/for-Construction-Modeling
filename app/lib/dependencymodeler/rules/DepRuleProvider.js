@@ -4,20 +4,20 @@ import RuleProvider from 'diagram-js/lib/features/rules/RuleProvider';
 
 import {is} from '../../util/Util';
 
-export default function OlcRuleProvider(eventBus, elementRegistry) {
+export default function DepRuleProvider(eventBus, elementRegistry) {
   this._elementRegistry = elementRegistry;
   RuleProvider.call(this, eventBus);
 }
 
-OlcRuleProvider.$inject = [
+DepRuleProvider.$inject = [
   'eventBus', 
   'elementRegistry'
 ];
 
-inherits(OlcRuleProvider, RuleProvider);
+inherits(DepRuleProvider, RuleProvider);
 
 
-OlcRuleProvider.prototype.init = function () {
+DepRuleProvider.prototype.init = function () {
 
   var self = this;
 
@@ -35,7 +35,7 @@ OlcRuleProvider.prototype.init = function () {
 
   this.addRule('connection.start', function (context) {
     var source = context.source;
-    return is(source, 'olc:State') && { type: 'olc:Transition' };
+    return is(source, 'dep:Objective') && { type: 'dep:Dependency' };
   });
 
   this.addRule('shape.resize', function (context) {

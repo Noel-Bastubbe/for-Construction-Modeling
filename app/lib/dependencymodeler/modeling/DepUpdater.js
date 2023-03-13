@@ -8,7 +8,7 @@ import {
 } from 'diagram-js/lib/util/Collections';
 
 
-export default function OlcUpdater(eventBus, connectionDocking) {
+export default function DepUpdater(eventBus, connectionDocking) {
 
     CommandInterceptor.call(this, eventBus);
     this._connectionDocking = connectionDocking;
@@ -44,7 +44,7 @@ export default function OlcUpdater(eventBus, connectionDocking) {
         var context = event.context,
             element = context.shape || context.connection;
 
-        linkToBusinessObjectParent(element)
+        //linkToBusinessObjectParent(element)
     });
 
     this.executed([
@@ -54,7 +54,7 @@ export default function OlcUpdater(eventBus, connectionDocking) {
         var context = event.context,
             element = context.shape || context.connection;
 
-        removeFromBusinessObjectParent(element);
+        //removeFromBusinessObjectParent(element);
     });
 
     this.executed([
@@ -110,9 +110,9 @@ function removeFromBusinessObjectParent(element) {
     businessObject.$parent = undefined;
 }
 
-inherits(OlcUpdater, CommandInterceptor);
+inherits(DepUpdater, CommandInterceptor);
 
-OlcUpdater.$inject = [
+DepUpdater.$inject = [
     'eventBus',
     'connectionDocking'
 ];
@@ -125,7 +125,7 @@ function center(shape) {
     };
 }
 
-OlcUpdater.prototype.connectionWaypoints = function(source, target) {
+DepUpdater.prototype.connectionWaypoints = function(source, target) {
     var connection = {source, target};
     if (connection.source === connection.target) {
         connection.waypoints = reflectiveEdge(connection.source);

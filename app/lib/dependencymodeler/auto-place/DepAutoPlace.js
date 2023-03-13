@@ -1,4 +1,4 @@
-import { getNewShapePosition } from './OlcAutoPlaceUtil';
+import { getNewShapePosition } from './DepAutoPlaceUtil';
 
 export default function AutoPlace(eventBus) {
     eventBus.on('autoPlace', function(context) {

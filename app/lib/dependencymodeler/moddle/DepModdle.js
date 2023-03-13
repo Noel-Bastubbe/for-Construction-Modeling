@@ -4,14 +4,14 @@ import { Moddle } from 'moddle';
 
 import { Reader, Writer } from 'moddle-xml';
 
-export default function OlcModdle(packages, options) {
+export default function DepModdle(packages, options) {
     Moddle.call(this, packages, options);
 }
 
-OlcModdle.prototype = Object.create(Moddle.prototype);
+DepModdle.prototype = Object.create(Moddle.prototype);
 
-OlcModdle.prototype.fromXML = function (xmlStr, options) {
-    var typeName = 'olc:Definitions';
+DepModdle.prototype.fromXML = function (xmlStr, options) {
+    var typeName = 'dep:Definitions';
     var reader = new Reader(assign({ model: this, lax: false }, options));
     var rootHandler = reader.handler(typeName);
 
@@ -19,7 +19,7 @@ OlcModdle.prototype.fromXML = function (xmlStr, options) {
 };
 
 
-OlcModdle.prototype.toXML = function (element, options) {
+DepModdle.prototype.toXML = function (element, options) {
     var writer = new Writer(options);
 
     return new Promise(function (resolve, reject) {

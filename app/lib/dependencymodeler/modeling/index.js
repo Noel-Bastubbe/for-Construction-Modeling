@@ -2,26 +2,26 @@ import CommandModule from 'diagram-js/lib/command';
 import DirectEditingModule from 'diagram-js-direct-editing';
 import CroppingConnectionDocking from 'diagram-js/lib/layout/CroppingConnectionDocking';
 
-import OlcUpdater from './OlcUpdater';
-import OlcElementFactory from './OlcElementFactory';
-import OlcLabelEditing from './OlcLabelEditing';
-import OlcModeling from './OlcModeling';
+import DepUpdater from './DepUpdater';
+import DepElementFactory from './DepElementFactory';
+import DepLabelEditing from './DepLabelEditing';
+import DepModeling from './DepModeling';
 
 
 export default {
   __init__: [
     'modeling',
-    'olcUpdater',
-    'olcLabelEditing'
+    'depUpdater',
+    'depLabelEditing'
   ],
   __depends__: [
     CommandModule,
     DirectEditingModule
   ],
-  elementFactory: [ 'type', OlcElementFactory ],
-  olcUpdater: [ 'type', OlcUpdater ],
-  olcLabelEditing: ['type', OlcLabelEditing],
-  modeling: ['type', OlcModeling],
+  elementFactory: [ 'type', DepElementFactory ],
+  depUpdater: [ 'type', DepUpdater ],
+  depLabelEditing: ['type', DepLabelEditing],
+  modeling: ['type', DepModeling],
 
   connectionDocking: [ 'type', CroppingConnectionDocking ]
 };

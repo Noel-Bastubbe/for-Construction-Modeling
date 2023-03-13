@@ -2,9 +2,9 @@ import {
     assign
   } from 'min-dash';
   
-  import OlcModdle from './OlcModdle';
+  import DepModdle from './DepModdle';
   
-  import OlcDescriptors from './olc.json';
+  import DepDescriptors from './dep.json';
   
   var packages = {
     olc: OlcDescriptors
@@ -13,5 +13,5 @@ import {
   export default function(additionalPackages, options) {
     var pks = assign({}, packages, additionalPackages);
   
-    return new OlcModdle(pks, options);
+    return new DepModdle(pks, options);
   }

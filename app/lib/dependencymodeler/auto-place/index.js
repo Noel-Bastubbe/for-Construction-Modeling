@@ -1,6 +1,6 @@
 import AutoPlaceModule from 'diagram-js/lib/features/auto-place';
 
-import OlcAutoPlace from './OlcAutoPlace';
+import DepAutoPlace from './DepAutoPlace';
 
 export default {
     __depends__: [ AutoPlaceModule ],

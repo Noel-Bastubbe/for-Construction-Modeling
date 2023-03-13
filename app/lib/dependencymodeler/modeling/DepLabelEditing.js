@@ -1,5 +1,5 @@
 
-export default function OlcLabelEditing(eventBus, canvas, directEditing, commandStack) {
+export default function DepLabelEditing(eventBus, canvas, directEditing, commandStack) {
     directEditing.registerProvider(this);
     this._commandStack = commandStack;
     this._canvas = canvas;
@@ -29,7 +29,7 @@ export default function OlcLabelEditing(eventBus, canvas, directEditing, command
     });
 }
 
-OlcLabelEditing.prototype.activate = function (element) {
+DepLabelEditing.prototype.activate = function (element) {
 
     var text = element.businessObject.name || '';
 
@@ -73,7 +73,7 @@ OlcLabelEditing.prototype.activate = function (element) {
     return context;
 };
 
-OlcLabelEditing.prototype.update = function (element, newLabel) {
+DepLabelEditing.prototype.update = function (element, newLabel) {
     this._commandStack.execute('element.updateLabel', {
         element: element,
         newLabel: newLabel
@@ -82,7 +82,7 @@ OlcLabelEditing.prototype.update = function (element, newLabel) {
 
 
 
-OlcLabelEditing.$inject = [
+DepLabelEditing.$inject = [
     'eventBus',
     'canvas',
     'directEditing',

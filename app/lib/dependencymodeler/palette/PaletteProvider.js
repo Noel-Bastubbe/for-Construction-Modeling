@@ -99,9 +99,9 @@ PaletteProvider.prototype.getPaletteEntries = function (element) {
       translate('Create state')
     ),
     'object-linker': {
-      group: 'olc-elements',
+      group: 'dep-elements',
       className: 'bpmn-icon-connection',
-      title: translate('Create transition'),
+      title: translate('Create Dependency'),
       action: {
         click: function (event) {
           globalConnect.start(event);
