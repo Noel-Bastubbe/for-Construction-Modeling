@@ -14,8 +14,8 @@ As a ... I want ... in order to ...
 Depends on: 
  - #[Issues]
 
-## UI Mockup
-[UI Mockup]
+Needed for:
+- #[Issues]
 
 ## Acceptance Criteria
 - [ ] Todo's
