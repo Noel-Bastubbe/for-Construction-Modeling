@@ -172,7 +172,7 @@ DependencyModeler.prototype.showOlc = function (olc) {
   this._olc = olc;
   if (olc) {
     const elementFactory = this.get('elementFactory');
-    var diagramRoot = elementFactory.createRoot({ type: 'dep:Goal', businessObject: olc });
+    var diagramRoot = elementFactory.createRoot({type: 'dep:Goal', businessObject: olc});
     const canvas = this.get('canvas');
     canvas.setRootElement(diagramRoot);
 
@@ -203,8 +203,6 @@ DependencyModeler.prototype.showOlc = function (olc) {
       canvas.addConnection(transitionVisual, diagramRoot);
     });
   }
-
-  //this._emit(OlcEvents.SELECTED_OLC_CHANGED, { olc: olc });
 }
 
 DependencyModeler.prototype.showOlcById = function (id) {
