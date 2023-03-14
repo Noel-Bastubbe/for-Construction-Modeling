@@ -26,11 +26,23 @@ DepRuleProvider.prototype.init = function () {
     
     // There must not be more than one transition between two states
     var existingConnections = self._elementRegistry.filter(function(element) {
-      return is(element, 'dep:Dependency') && element.source === source && element.target === target;
+      return is(element, 'dep:Dependency') &&
+          ((element.source === source && element.target === target) || (element.source === target && element.target === source)) ;
     });
+
+    var occurencesOfSource  = self._elementRegistry.filter(function(element) {
+      return is(element, 'dep:Dependency') && element.source === source;
+    });
+
+    var occurencesOfTarget  = self._elementRegistry.filter(function(element) {
+      return is(element, 'dep:Dependency') && element.target === target;
+    });
+
     //TODO this leads to reverse connections being created because of diagram-js' Connect.js trying to
 
-    return is(source, 'dep:Objective') && is(target, 'dep:Objective') && existingConnections.length === 0 && { type: 'dep:Dependency' };
+    return is(source, 'dep:Objective') && is(target, 'dep:Objective')
+        && existingConnections.length === 0 && occurencesOfSource.length === 0 && occurencesOfTarget.length === 0
+        && source !== target && { type: 'dep:Dependency' };
   });
 
   this.addRule('connection.start', function (context) {
