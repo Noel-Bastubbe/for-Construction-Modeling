@@ -443,17 +443,17 @@ Mediator.prototype.DataModelerHook.$inject = [
 
 Mediator.prototype.DataModelerHook.isHook = true;
 
-// === Goal Modeler Hook
-Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
+// === Objective Modeler Hook
+Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, goalModeler, 'Goal Model' ,'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki');
-    this.mediator.goalModelerHook = this;
+    AbstractHook.call(this, objectiveModeler, 'Objective Model' ,'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki');
+    this.mediator.objectiveModelerHook = this;
     this.eventBus = eventBus;
 
     this.executed([
         'shape.create'
     ], event => {
-        if (is(event.context.shape, 'gm:Object')) {
+        if (is(event.context.shape, 'om:Object')) {
             //this.mediator.addedClass(event.context.shape.businessObject);
         }
     });
@@ -461,7 +461,7 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
     this.reverted([
         'shape.create'
     ], event => {
-        if (is(event.context.shape, 'gm:Object')) {
+        if (is(event.context.shape, 'om:Object')) {
             console.log(event);
             //this.mediator.addedState(event.context.shape.businessObject);
         }
@@ -470,7 +470,7 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
     this.executed([
         'shape.delete'
     ], event => {
-        if (is(event.context.shape, 'gm:Object')) {
+        if (is(event.context.shape, 'om:Object')) {
             //this.mediator.deletedClass(event.context.shape.businessObject);
         }
     });
@@ -478,7 +478,7 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
     this.reverted([
         'shape.delete'
     ], event => {
-        if (is(event.context.shape, 'gm:Object')) {
+        if (is(event.context.shape, 'om:Object')) {
             console.log(event);
             //this.mediator.deletedState(event.context.shape.businessObject);
         }
@@ -488,7 +488,7 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
         'elements.delete'
     ], event => {
         event.context.elements = event.context.elements.filter(element => {
-            if (is(element, 'gm:Object')) {
+            if (is(element, 'om:Object')) {
                 return this.modeler.deleteObject(element);
             } else {
                 return true;
@@ -501,7 +501,7 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
         'element.updateLabel'
     ], event => {
         var changedLabel = event.context.element.businessObject.labelAttribute;
-        if (is(event.context.element, 'gm:Object') && (changedLabel === 'name' || !changedLabel)) {
+        if (is(event.context.element, 'om:Object') && (changedLabel === 'name' || !changedLabel)) {
             //this.mediator.renamedClass(event.context.element.businessObject);
         }
     });
@@ -510,19 +510,19 @@ Mediator.prototype.GoalModelerHook = function (eventBus, goalModeler) {
         'element.updateLabel'
     ], event => {
         var changedLabel = event.context.element.businessObject.labelAttribute;
-        if (is(event.context.element, 'gm:Object') && (changedLabel === 'name' || !changedLabel)) {
+        if (is(event.context.element, 'om:Object') && (changedLabel === 'name' || !changedLabel)) {
             //this.mediator.renamedClass(event.context.element.businessObject);
         }
     });
 }
-inherits(Mediator.prototype.GoalModelerHook, CommandInterceptor);
+inherits(Mediator.prototype.ObjectiveModelerHook, CommandInterceptor);
 
-Mediator.prototype.GoalModelerHook.$inject = [
+Mediator.prototype.ObjectiveModelerHook.$inject = [
     'eventBus',
-    'goalModeler'
+    'objectiveModeler'
 ];
 
-Mediator.prototype.GoalModelerHook.isHook = true;
+Mediator.prototype.ObjectiveModelerHook.isHook = true;
 
 // === Fragment Modeler Hook
 Mediator.prototype.FragmentModelerHook = function (eventBus, fragmentModeler) {
