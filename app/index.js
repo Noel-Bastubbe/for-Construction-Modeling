@@ -161,7 +161,8 @@ async function importFromZip (zipData) {
       dataModel: zip.file('dataModel.xml'),
       goalModel: zip.file('goalModel.xml'),
       olcs: zip.file('olcs.xml'),
-      goalState: zip.file('goalState.xml')
+      goalState: zip.file('goalState.xml'),
+      dependencyModel: zip.file('dependencyModel.xml')
   };
   Object.keys(files).forEach(key => {
     if (!files[key]) {
@@ -173,6 +174,7 @@ async function importFromZip (zipData) {
   await olcModeler.importXML(await files.olcs.async("string"));
   await fragmentModeler.importXML(await files.fragments.async("string"));
   await goalStateModeler.importXML(await files.goalState.async("string"));
+  await dependencyModeler.importXML(await files.dependencyModel.async("string"));
   checker.activate();
 }
 
