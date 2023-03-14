@@ -1,12 +1,11 @@
 import FragmentModeler from './lib/fragmentmodeler/FragmentModeler';
 import diagramXML from '../resources/newDiagram.bpmn';
-import datamodelXML from '../resources/sampleBoard.bpmn';
 import newDatamodel from '../resources/emptyBoard.bpmn';
-import newGoalmodel from '../resources/emptyBoard.bpmn';
 import OlcModeler from './lib/olcmodeler/OlcModeler';
 import GoalStateModeler from './lib/goalstatemodeler/GoalStateModeler';
 import DataModelModeler from './lib/datamodelmodeler/Modeler';
 import GoalModeler from './lib/goalmodeler/Modeler';
+import DependencyModeler from './lib/dependencymodeler/DependencyModeler';
 
 import $ from 'jquery';
 import Mediator from './lib/mediator/Mediator';
@@ -37,6 +36,19 @@ var olcModeler = new OlcModeler({
       __init__ : ['mediator'],
       mediator : ['type', mediator.OlcModelerHook]
     }]
+});
+
+var dependencyModeler = new DependencyModeler({
+    container: document.querySelector('#dependencymodel-canvas'),
+    keyboard: {
+        bindTo: document.querySelector('#dependencymodel-canvas')
+    },
+    /*
+    additionalModules: [{
+        __init__ : ['mediator'],
+        mediator : ['type', mediator.DependencyModelerHook]
+    }]
+     */
 });
 
 var dataModeler = new DataModelModeler({
@@ -97,6 +109,7 @@ async function createNewDiagram() {
       await olcModeler.createNew();
       await dataModeler.importXML(newDatamodel);
       await goalModeler.createDiagram();
+      await dependencyModeler.createNew();
       goalStateModeler.createNew();
       if (LOAD_DUMMY) {
         await loadDebugData();
@@ -135,6 +148,8 @@ async function exportToZip () {
   zip.file('olcs.xml', olcs);
   const goalState = (await goalStateModeler.saveXML({ format: true })).xml;
   zip.file('goalState.xml', goalState);
+  const dependencyModel = (await dependencyModeler.saveXML({ format: true })).xml;
+  zip.file('dependencyModel.xml', dependencyModel);
   return zip.generateAsync({type : 'base64'});
 }
 
@@ -146,7 +161,8 @@ async function importFromZip (zipData) {
       dataModel: zip.file('dataModel.xml'),
       goalModel: zip.file('goalModel.xml'),
       olcs: zip.file('olcs.xml'),
-      goalState: zip.file('goalState.xml')
+      goalState: zip.file('goalState.xml'),
+      dependencyModel: zip.file('dependencyModel.xml')
   };
   Object.keys(files).forEach(key => {
     if (!files[key]) {
@@ -158,6 +174,7 @@ async function importFromZip (zipData) {
   await olcModeler.importXML(await files.olcs.async("string"));
   await fragmentModeler.importXML(await files.fragments.async("string"));
   await goalStateModeler.importXML(await files.goalState.async("string"));
+  await dependencyModeler.importXML(await files.dependencyModel.async("string"));
   checker.activate();
 }
 

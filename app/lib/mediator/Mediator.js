@@ -273,6 +273,88 @@ Mediator.prototype.OlcModelerHook = function (eventBus, olcModeler) {
 }
 inherits(Mediator.prototype.OlcModelerHook, CommandInterceptor);
 
+// === Dependency Modeler Hook
+Mediator.prototype.DependencyModelerHook = function (eventBus, dependencyModeler) {
+    CommandInterceptor.call(this, eventBus);
+    AbstractHook.call(this, dependencyModeler, 'Dependency Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki');
+    this.mediator.DependencyModelerHook = this;
+    this.eventBus = eventBus;
+
+    this.executed([
+        'shape.create'
+    ], event => {
+        if (is(event.context.shape, 'dm:State')) {
+            // this.mediator.addedState(event.context.shape.businessObject);
+        }
+    });
+    this.executed([
+        'shape.delete'
+    ], event => {
+        if (is(event.context.shape, 'dm:State')) {
+            // this.mediator.deletedState(event.context.shape.businessObject);
+        }
+    });
+
+    this.preExecute([
+        'elements.delete'
+    ], event => {
+        event.context.elements = event.context.elements.filter(element => {
+            if (is(element, 'dm:State')) {
+                return this.mediator.confirmStateDeletion(element.businessObject);
+            } else {
+                return true;
+            }
+        });
+    });
+
+    this.executed([
+        'element.updateLabel'
+    ], event => {
+        if (is(event.context.element, 'dm:State')) {
+            // this.mediator.renamedState(event.context.element.businessObject);
+        }
+    });
+
+    this.reverted([
+        'element.updateLabel'
+    ], event => {
+        if (is(event.context.element, 'dm:State')) {
+            // this.mediator.renamedState(event.context.element.businessObject);
+        }
+    })
+
+    /*
+    eventBus.on(OlcEvents.DEFINITIONS_CHANGED, event => {
+        // this.mediator.olcListChanged(event.definitions.olcs);
+    });
+
+    eventBus.on(OlcEvents.OLC_RENAME, event => {
+        // this.mediator.olcRenamed(event.olc, event.name);
+    });
+
+    eventBus.on(OlcEvents.OLC_DELETION_REQUESTED, event => {
+        // this.mediator.olcDeletionRequested(event.olc);
+        return false; // Deletion should never be directly done in olc modeler, will instead propagate from data modeler
+    });
+
+    eventBus.on('import.parse.complete', ({context}) => {
+        context.warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({property, value, element}) => {
+            if (property === 'olc:classRef') {
+                const dataClass = this.mediator.dataModelerHook.modeler.get('elementRegistry').get(value).businessObject;
+                if (!dataClass) { throw new Error('Could not resolve data class with id '+value); }
+                element.classRef = dataClass;
+            }
+        });
+    });
+
+    this.locationOfElement = function(element) {
+       return 'Dependency Model ' + root(element).name;
+    }
+
+     */
+}
+inherits(Mediator.prototype.DependencyModelerHook, CommandInterceptor);
+
 Mediator.prototype.OlcModelerHook.$inject = [
     'eventBus',
     'olcModeler'
