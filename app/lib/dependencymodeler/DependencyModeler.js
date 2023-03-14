@@ -1,5 +1,5 @@
 import inherits from 'inherits';
-import { groupBy, without, findIndex } from 'min-dash'
+import { groupBy} from 'min-dash'
 
 import Diagram from 'diagram-js';
 
@@ -34,6 +34,8 @@ import { nextPosition, root, is } from '../util/Util';
 var emptyDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
 <dep:definitions xmlns:olc="http://bptlab/schema/olc" xmlns:olcDi="http://bptlab/schema/olcDi">
+  <dep:goal id="MainGoal">
+  </dep:goal>
 </dep:definitions>`;
 
 /**
@@ -177,7 +179,7 @@ DependencyModeler.prototype.importDefinitions = function (definitions) {
   this._definitions = definitions;
   //this._emit(OlcEvents.DEFINITIONS_CHANGED, { definitions: definitions });
   this._emit('import.render.start', { definitions: definitions });
-  //this.showOlc(definitions.olcs[0]);
+  this.showOlc(definitions.get('goals')[0]);
   this._emit('import.render.complete', {});
 }
 

@@ -1,7 +1,6 @@
 import inherits from 'inherits';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
-import DependencyModeler from '../DependencyModeler';
 
 import {
   remove as collectionRemove
@@ -54,7 +53,7 @@ export default function DepUpdater(eventBus, connectionDocking) {
         var context = event.context,
             element = context.shape || context.connection;
 
-        //removeFromBusinessObjectParent(element);
+        removeFromBusinessObjectParent(element);
     });
 
     this.executed([
@@ -63,8 +62,8 @@ export default function DepUpdater(eventBus, connectionDocking) {
         var context = event.context,
             element = context.connection;            
 
-        element.businessObject.sourceState = element.source.businessObject;
-        element.businessObject.targetState = element.target.businessObject;
+        element.businessObject.sourceObjective = element.source.businessObject;
+        element.businessObject.targetObjective = element.target.businessObject;
     });
 
     this.executed([
