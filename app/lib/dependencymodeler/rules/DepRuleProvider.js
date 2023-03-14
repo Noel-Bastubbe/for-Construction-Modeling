@@ -30,7 +30,7 @@ DepRuleProvider.prototype.init = function () {
     });
     //TODO this leads to reverse connections being created because of diagram-js' Connect.js trying to
 
-    return is(source, 'dep:Objective') && is(target, 'olc:Objective') && existingConnections.length === 0 && { type: 'dep:Dependency' };
+    return is(source, 'dep:Objective') && is(target, 'dep:Objective') && existingConnections.length === 0 && { type: 'dep:Dependency' };
   });
 
   this.addRule('connection.start', function (context) {

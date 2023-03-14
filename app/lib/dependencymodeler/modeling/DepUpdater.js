@@ -44,7 +44,7 @@ export default function DepUpdater(eventBus, connectionDocking) {
         var context = event.context,
             element = context.shape || context.connection;
 
-        //linkToBusinessObjectParent(element)
+        linkToBusinessObjectParent(element)
     });
 
     this.executed([
