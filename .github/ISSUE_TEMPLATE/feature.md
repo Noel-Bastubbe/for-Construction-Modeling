@@ -12,10 +12,10 @@ As a ... I want ... in order to ...
 
 ## Dependencies
 Depends on: 
- - #[Issues]
+ - #Issues
 
 Needed for:
-- #[Issues]
+- #Issues
 
 ## Acceptance Criteria
 - [ ] Todo's
