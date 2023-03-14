@@ -14,7 +14,7 @@ In order to prepare the implementation of ... I want to spike these parts of the
 
 ## Dependencies
 Depends on: 
- - #[Issues]
+ - #Issues
 
 ## Acceptance Criteria
 - [ ] Todo's
