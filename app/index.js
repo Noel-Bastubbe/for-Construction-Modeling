@@ -1,8 +1,6 @@
 import FragmentModeler from './lib/fragmentmodeler/FragmentModeler';
 import diagramXML from '../resources/newDiagram.bpmn';
-import datamodelXML from '../resources/sampleBoard.bpmn';
 import newDatamodel from '../resources/emptyBoard.bpmn';
-import newGoalmodel from '../resources/emptyBoard.bpmn';
 import OlcModeler from './lib/olcmodeler/OlcModeler';
 import GoalStateModeler from './lib/goalstatemodeler/GoalStateModeler';
 import DataModelModeler from './lib/datamodelmodeler/Modeler';
@@ -150,6 +148,8 @@ async function exportToZip () {
   zip.file('olcs.xml', olcs);
   const goalState = (await goalStateModeler.saveXML({ format: true })).xml;
   zip.file('goalState.xml', goalState);
+  const dependencyModel = (await dependencyModeler.saveXML({ format: true })).xml;
+  zip.file('dependencyModel.xml', dependencyModel);
   return zip.generateAsync({type : 'base64'});
 }
 

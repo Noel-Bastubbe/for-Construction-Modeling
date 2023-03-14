@@ -28,8 +28,7 @@ import DepModelingModule from './modeling';
 import DepAutoPlaceModule from './auto-place';
 
 import DepModdle from './moddle';
-//import OlcEvents from './OlcEvents';
-import { nextPosition, root, is } from '../util/Util';
+import { nextPosition, root } from '../util/Util';
 
 var emptyDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -101,20 +100,6 @@ export default function DependencyModeler(options) {
   Diagram.call(this, diagramOptions);
   
   this.get('eventBus').fire('attach'); // Needed for key listeners to work
-
-  // Hide canvas when no olc is available
-  /*this.get('eventBus').on(OlcEvents.DEFINITIONS_CHANGED, event => {
-    const container = this.get('canvas').getContainer();
-    const shouldBeVisible = event.definitions.get('olcs').length !== 0;
-    const currentVisibility = container.style.visibility;
-    if (!currentVisibility || (shouldBeVisible !== (currentVisibility !== 'hidden'))) {
-      if (shouldBeVisible) {
-        container.style.visibility = '';
-      } else {
-        container.style.visibility = 'hidden';
-      }
-    }
-  });*/
 }
 
 inherits(DependencyModeler, Diagram);
@@ -177,7 +162,6 @@ DependencyModeler.prototype.importXML = function (xml) {
 DependencyModeler.prototype.importDefinitions = function (definitions) {
   this.get('elementFactory')._ids.clear();
   this._definitions = definitions;
-  //this._emit(OlcEvents.DEFINITIONS_CHANGED, { definitions: definitions });
   this._emit('import.render.start', { definitions: definitions });
   this.showOlc(definitions.get('goals')[0]);
   this._emit('import.render.complete', {});
