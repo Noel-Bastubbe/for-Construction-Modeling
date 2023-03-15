@@ -1,11 +1,13 @@
 import { is } from "../../util/Util";
 
-export default function DepContextPadProvider(connect, contextPad, modeling, elementFactory, create, autoPlace) {
+export default function DepContextPadProvider(connect, contextPad, modeling, elementFactory, create, autoPlace,
+elementRegistry) {
   this._connect = connect;
   this._modeling = modeling;
   this._elementFactory = elementFactory;
   this._create = create;
   this._autoPlace = autoPlace;
+  this._elementRegistry = elementRegistry;
 
   contextPad.registerProvider(this);
 }
@@ -16,7 +18,8 @@ DepContextPadProvider.$inject = [
   'modeling',
   'elementFactory',
   'create',
-  'autoPlace'
+  'autoPlace',
+  'elementRegistry'
 ];
 
 
@@ -25,7 +28,12 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
     modeling = this._modeling,
     elementFactory = this._elementFactory,
     create = this._create,
-    autoPlace = this._autoPlace;
+    autoPlace = this._autoPlace,
+    elementRegistry = this._elementRegistry;
+
+  var occurencesOfSource  = elementRegistry.filter(function(dependency) {
+    return is(dependency, 'dep:Dependency') && dependency.source === element;
+  });
 
   function removeElement() {
     modeling.removeElements([element]);
@@ -37,13 +45,11 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
 
   function appendObjective(event, element) {
     const shape = elementFactory.createShape({ type: 'dep:Objective' });
-
     autoPlace.append(element, shape, { connection: { type: 'dep:Dependency' } });
   }
 
   function appendObjectiveStart(event) {
     const shape = elementFactory.createShape({ type: 'dep:Objective' });
-
     create.start(event, shape, { source: element });
   }
 
@@ -56,19 +62,19 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
         click: removeElement,
         dragstart: removeElement
       }
-    },
-    'connect': {
-      group: 'edit',
-      className: 'bpmn-icon-connection',
-      title: 'Connect',
-      action: {
-        click: startConnect,
-        dragstart: startConnect
-      }
     }
   };
 
-  if (is(element, 'dep:Objective')) {
+  if (is(element, 'dep:Objective') && occurencesOfSource.length === 0) {
+    entries['connect'] = {
+      group: 'edit',
+          className: 'bpmn-icon-connection',
+          title: 'Connect',
+          action: {
+        click: startConnect,
+            dragstart: startConnect
+      }
+    }
     entries['append'] = {
       group: 'create',
       className: 'bpmn-icon-start-event-none',

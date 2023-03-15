@@ -56,8 +56,11 @@ OlcContextPadProvider.prototype.getContextPadEntries = function (element) {
         click: removeElement,
         dragstart: removeElement
       }
-    },
-    'connect': {
+    }
+  };
+
+  if (is(element, 'olc:State')) {
+    entries['connect'] = {
       group: 'edit',
       className: 'bpmn-icon-connection',
       title: 'Connect',
@@ -66,9 +69,6 @@ OlcContextPadProvider.prototype.getContextPadEntries = function (element) {
         dragstart: startConnect
       }
     }
-  };
-
-  if (is(element, 'olc:State')) {
     entries['append'] = {
       group: 'create',
       className: 'bpmn-icon-start-event-none',
