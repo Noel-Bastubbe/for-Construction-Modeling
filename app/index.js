@@ -1,7 +1,6 @@
 import FragmentModeler from './lib/fragmentmodeler/FragmentModeler';
 import diagramXML from '../resources/newDiagram.bpmn';
 import newDatamodel from '../resources/emptyBoard.bpmn';
-import newObjectivemodel from '../resources/emptyBoard.bpmn';
 import OlcModeler from './lib/olcmodeler/OlcModeler';
 import GoalStateModeler from './lib/goalstatemodeler/GoalStateModeler';
 import DataModelModeler from './lib/datamodelmodeler/Modeler';
@@ -37,19 +36,6 @@ var olcModeler = new OlcModeler({
       __init__ : ['mediator'],
       mediator : ['type', mediator.OlcModelerHook]
     }]
-});
-
-var dependencyModeler = new DependencyModeler({
-    container: document.querySelector('#dependencymodel-canvas'),
-    keyboard: {
-        bindTo: document.querySelector('#dependencymodel-canvas')
-    },
-    /*
-    additionalModules: [{
-        __init__ : ['mediator'],
-        mediator : ['type', mediator.DependencyModelerHook]
-    }]
-     */
 });
 
 var dependencyModeler = new DependencyModeler({
@@ -123,7 +109,6 @@ async function createNewDiagram() {
       await olcModeler.createNew();
       await dataModeler.importXML(newDatamodel);
       await objectiveModeler.createDiagram();
-      await dependencyModeler.createNew();
       await dependencyModeler.createNew();
       goalStateModeler.createNew();
       if (LOAD_DUMMY) {

@@ -273,6 +273,13 @@ Mediator.prototype.OlcModelerHook = function (eventBus, olcModeler) {
 }
 inherits(Mediator.prototype.OlcModelerHook, CommandInterceptor);
 
+Mediator.prototype.OlcModelerHook.$inject = [
+    'eventBus',
+    'olcModeler'
+];
+
+Mediator.prototype.OlcModelerHook.isHook = true;
+
 // === Dependency Modeler Hook
 Mediator.prototype.DependencyModelerHook = function (eventBus, dependencyModeler) {
     CommandInterceptor.call(this, eventBus);
@@ -355,12 +362,12 @@ Mediator.prototype.DependencyModelerHook = function (eventBus, dependencyModeler
 }
 inherits(Mediator.prototype.DependencyModelerHook, CommandInterceptor);
 
-Mediator.prototype.OlcModelerHook.$inject = [
+Mediator.prototype.DependencyModelerHook.$inject = [
     'eventBus',
-    'olcModeler'
+    'dependencyModeler'
 ];
 
-Mediator.prototype.OlcModelerHook.isHook = true;
+Mediator.prototype.DependencyModelerHook.isHook = true;
 
 // === Data Modeler Hook
 Mediator.prototype.DataModelerHook = function (eventBus, dataModeler) {
