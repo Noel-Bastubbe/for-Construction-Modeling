@@ -30,6 +30,7 @@ import PaletteModule from './features/palette';
 import ResizeModule from 'diagram-js/lib/features/resize';
 import SpaceToolBehaviorModule from './behavior';
 import SnappingModule from './features/snapping';
+import customModelingModule from './modeling';
 import { nextPosition } from '../util/Util';
 
 var initialDiagram =
@@ -109,7 +110,8 @@ Modeler.prototype._modelingModules = [
   PaletteModule,
   ResizeModule,
   SnappingModule,
-  SpaceToolBehaviorModule
+  SpaceToolBehaviorModule,
+  customModelingModule
 ];
 
 
@@ -130,26 +132,12 @@ Modeler.prototype.createObject = function (name) {
   const canvas = this.get('canvas');
   const diagramRoot = canvas.getRootElement();
 
-  const {x,y} = nextPosition(this, 'od:Object');
+  const {x,y} = nextPosition(this, 'gm:Object');
   const shape = modeling.createShape({
-    type: 'od:Object',
+    type: 'gm:Object',
     name: name
   }, {x,y}, diagramRoot);
   return shape.businessObject;
-}
-
-Modeler.prototype.addClass= function (clazz) {
-  if(this._classRefs)
-    this._classRefs.add(clazz)
-  else
-    this._classRefs = new Set([clazz])
-  console.log(this._classRefs || "none created")
-}
-
-Modeler.prototype.removeClass= function (clazz) {
-  if(this._classRefs)
-    this._classRefs.delete(clazz)
-  console.log(this._classRefs || "none deleted")
 }
 
 Modeler.prototype.renameObject = function (clazz, name) {
