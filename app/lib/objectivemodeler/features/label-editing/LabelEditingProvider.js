@@ -38,11 +38,14 @@ export default function LabelEditingProvider(
     }
   }
 
+  // we do not need this reaction on double click anymore - it throws errors and infinite loops
+  // probably because our dropdown handles everything now
+
   // listen to dblclick on non-root elements
-  eventBus.on('element.dblclick', function(event) {
-    decideIfTitelOrAttributesClicked(event);
-    activateDirectEdit(event.element, true);
-  });
+  // eventBus.on('element.dblclick', function(event) {
+  //   decideIfTitelOrAttributesClicked(event);
+  //   activateDirectEdit(event.element, true);
+  // });
 
   // complete on followup canvas operation
   eventBus.on([
