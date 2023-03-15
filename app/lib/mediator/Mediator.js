@@ -151,6 +151,7 @@ Mediator.prototype.renamedState = function (olcState) {
 Mediator.prototype.olcListChanged = function (olcs) {
     this.goalStateModelerHook.modeler.handleOlcListChanged(olcs);
     this.fragmentModelerHook.modeler.handleOlcListChanged(olcs);
+    this.objectiveModelerHook.modeler.handleOlcListChanged(olcs);
 }
 
 Mediator.prototype.olcRenamed = function (olc, name) {

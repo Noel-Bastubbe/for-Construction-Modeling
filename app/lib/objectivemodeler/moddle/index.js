@@ -5,7 +5,7 @@ import {
 
 import Moddle from './Moddle';
 
-import ODDescriptors from './resources/od.json';
+import ODDescriptors from './resources/om.json';
 import DiDescriptors from './resources/odDi.json';
 import DcDescriptors from './resources/dc.json';
 

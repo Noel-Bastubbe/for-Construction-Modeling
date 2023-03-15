@@ -30,15 +30,22 @@
       ],
       "properties": [
         {
-          "name": "attributeValues",
+          "name": "state",
           "isAttr": true,
-          "type": "String"
+          "isReference": true,
+          "type": "olc:State"
         },
         {
           "name": "links",
           "isMany": true,
           "type": "Link",
           "isReference": true
+        },
+        {
+          "name": "classRef",
+          "isAttr": true,
+          "isReference": true,
+          "type": "od:Class"
         }
       ]
     },

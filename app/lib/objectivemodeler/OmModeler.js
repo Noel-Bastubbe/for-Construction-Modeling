@@ -12,28 +12,28 @@ import TouchModule from 'diagram-js/lib/navigation/touch';
 import ZoomScrollModule from 'diagram-js/lib/navigation/zoomscroll';
 
 import AlignElementsModule from 'diagram-js/lib/features/align-elements';
+import AutoplaceModule from './features/auto-place';
 import AutoScrollModule from 'diagram-js/lib/features/auto-scroll';
 import BendpointsModule from 'diagram-js/lib/features/bendpoints';
-import ConnectModule from 'diagram-js/lib/features/connect';
 import ConnectionPreviewModule from 'diagram-js/lib/features/connection-preview';
+import ConnectModule from 'diagram-js/lib/features/connect';
 import ContextPadModule from './features/context-pad';
 import CopyPasteModule from './features/copy-paste';
 import CreateModule from 'diagram-js/lib/features/create';
 import EditorActionsModule from '../common/editor-actions';
 import GridSnappingModule from './features/grid-snapping';
 import KeyboardModule from '../common/keyboard';
-import AutoplaceModule from './features/auto-place';
 import KeyboardMoveSelectionModule from 'diagram-js/lib/features/keyboard-move-selection';
 import LabelEditingModule from './features/label-editing';
 import ModelingModule from './features/modeling';
 import MoveModule from 'diagram-js/lib/features/move';
+import OmButtonBarModule from './buttonbar';
+import OmObjectDropdown from './omObjectLabelHandling';
 import PaletteModule from './features/palette';
 import ResizeModule from 'diagram-js/lib/features/resize';
-import SpaceToolBehaviorModule from './behavior';
 import SnappingModule from './features/snapping';
+import SpaceToolBehaviorModule from './behavior';
 import { nextPosition } from '../util/Util';
-import OmButtonBarModule from './buttonbar';
-
 
 var initialDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -44,15 +44,15 @@ var initialDiagram =
     </odDi:odRootBoard>
 </od:definitions>`;
 
-export default function Modeler(options) {
+export default function OmModeler(options) {
   BaseModeler.call(this, options);
 }
 
-inherits(Modeler, BaseModeler);
+inherits(OmModeler, BaseModeler);
 
 
-Modeler.Viewer = Viewer;
-Modeler.NavigatedViewer = NavigatedViewer;
+OmModeler.Viewer = Viewer;
+OmModeler.NavigatedViewer = NavigatedViewer;
 
 /**
 * The createDiagram result.
@@ -76,24 +76,24 @@ Modeler.NavigatedViewer = NavigatedViewer;
  * @returns {Promise<CreateDiagramResult, CreateDiagramError>}
  *
  */
-Modeler.prototype.createDiagram = function() {
+OmModeler.prototype.createDiagram = function() {
   const container = this.get('canvas').getContainer();
   container.style.visibility = 'hidden';
   return this.importXML(initialDiagram);
 };
 
 
-Modeler.prototype._interactionModules = [
+OmModeler.prototype._interactionModules = [
 
   // non-modeling components
-  OmButtonBarModule,
   KeyboardMoveModule,
   MoveCanvasModule,
+  OmButtonBarModule,
   TouchModule,
   ZoomScrollModule
 ];
 
-Modeler.prototype._modelingModules = [
+OmModeler.prototype._modelingModules = [
 
   // modeling components
   AutoplaceModule,
@@ -112,6 +112,7 @@ Modeler.prototype._modelingModules = [
   LabelEditingModule,
   ModelingModule,
   MoveModule,
+  OmObjectDropdown,
   PaletteModule,
   ResizeModule,
   SnappingModule,
@@ -125,13 +126,13 @@ Modeler.prototype._modelingModules = [
 // - interaction modules
 // - modeling modules
 
-Modeler.prototype._modules = [].concat(
+OmModeler.prototype._modules = [].concat(
   Viewer.prototype._modules,
-  Modeler.prototype._interactionModules,
-  Modeler.prototype._modelingModules
+  OmModeler.prototype._interactionModules,
+  OmModeler.prototype._modelingModules
 );
 
-Modeler.prototype.createObject = function (name) {
+OmModeler.prototype.createObject = function (name) {
   const modeling = this.get('modeling');
   const canvas = this.get('canvas');
   const diagramRoot = canvas.getRootElement();
@@ -144,23 +145,23 @@ Modeler.prototype.createObject = function (name) {
   return shape.businessObject;
 }
 
-Modeler.prototype.renameObject = function (object, name) {
+OmModeler.prototype.renameObject = function (object, name) {
   this.get('modeling').updateLabel(this.get('elementRegistry').get(object.id), name);
 }
 
-Modeler.prototype.deleteObject = function (object) {
+OmModeler.prototype.deleteObject = function (object) {
   this.get('modeling').removeShape(object);
 }
 
-Modeler.prototype.updateProperty = function (object, property) {
+OmModeler.prototype.updateProperty = function (object, property) {
   this.get('modeling').updateProperties(object, property);
 }
 
-Modeler.prototype.getObjectives = function() {
+OmModeler.prototype.getObjectives = function() {
   return this._definitions.get('rootBoards');
 }
 
-Modeler.prototype.showObjective = function (objective) {
+OmModeler.prototype.showObjective = function (objective) {
   const container = this.get('canvas').getContainer();
   this._objective = objective;
   this.clear();
@@ -172,16 +173,16 @@ Modeler.prototype.showObjective = function (objective) {
   }
 }
 
-Modeler.prototype.getCurrentObjective = function () {
+OmModeler.prototype.getCurrentObjective = function () {
   return this._objective;
 }
-Modeler.prototype.addObjective = function (name) {
+OmModeler.prototype.addObjective = function (name) {
   var rootBoard = this.get('elementFactory').createRootBoard(name || '<TBD>');
   this._definitions.get('rootBoards').push(rootBoard[0]);
   this._definitions.get('rootElements').push(rootBoard[1]);
   this.showObjective(rootBoard[0]);
 }
-Modeler.prototype.deleteObjective = function (objective) {
+OmModeler.prototype.deleteObjective = function (objective) {
 
   var currentIndex = findIndex(this._definitions.get('rootElements'), objective.plane.boardElement);
   this._definitions.get('rootElements').splice(currentIndex,1);
@@ -193,4 +194,8 @@ Modeler.prototype.deleteObjective = function (objective) {
   if (this.getCurrentObjective() === objective) {
     this.showObjective(this._definitions.get('rootBoards')[indexAfterRemoval]);
   }
+}
+
+OmModeler.prototype.handleOlcListChanged = function (olcs, dryRun=false) {
+  this._olcs = olcs;
 }

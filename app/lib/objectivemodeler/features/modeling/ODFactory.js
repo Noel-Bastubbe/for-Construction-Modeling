@@ -47,7 +47,7 @@ ODFactory.prototype._ensureId = function(element) {
 ODFactory.prototype.create = function(type, attrs) {
   var element = this._model.create(type, attrs || {});
   if (type === 'om:Object') {
-    element.attributeValues = '';
+    element.state = null;
   }
 
   this._ensureId(element);
