@@ -39,7 +39,7 @@ var initialDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
 <od:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
     <od:odBoard id="Board" />
-    <odDi:odRootBoard id="RootBoard" name="Objective 1">
+    <odDi:odRootBoard id="RootBoard" name="Start State">
         <odDi:odPlane id="Plane" boardElement="Board" />
     </odDi:odRootBoard>
 </od:definitions>`;
