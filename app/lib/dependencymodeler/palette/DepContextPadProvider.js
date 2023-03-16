@@ -53,8 +53,10 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
     create.start(event, shape, { source: element });
   }
 
-  const entries =  {
-    'delete': {
+  const entries = {};
+
+  if (element.id !== 'start_state') {
+    entries['delete'] = {
       group: 'edit',
       className: 'bpmn-icon-trash',
       title: 'Remove',
@@ -63,7 +65,7 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
         dragstart: removeElement
       }
     }
-  };
+  }
 
   if (is(element, 'dep:Objective') && occurencesOfSource.length === 0) {
     entries['connect'] = {
