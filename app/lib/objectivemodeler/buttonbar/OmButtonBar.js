@@ -49,7 +49,7 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
         }
     });
     selectObjectiveComponent.addEventListener('dblclick', event => {
-        if (omModeler.getCurrentObjective().id !== 'RootBoard' && selectObjectiveComponent.value && (event.target === selectObjectiveComponent || event.target === selectedObjectiveSpan)) {
+        if (omModeler.getCurrentObjective().id !== 'StartBoard' && selectObjectiveComponent.value && (event.target === selectObjectiveComponent || event.target === selectedObjectiveSpan)) {
             selectObjectiveMenu.hide();
             var renameObjectiveInput = document.createElement('input');
             renameObjectiveInput.value = selectObjectiveComponent.value.name;

@@ -39,7 +39,7 @@ var initialDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
 <od:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
     <od:odBoard id="Board" />
-    <odDi:odRootBoard id="RootBoard" name="Start State">
+    <odDi:odRootBoard id="StartBoard" name="Start State">
         <odDi:odPlane id="Plane" boardElement="Board" />
     </odDi:odRootBoard>
 </od:definitions>`;
@@ -182,7 +182,7 @@ Modeler.prototype.addObjective = function (name) {
   this.showObjective(rootBoard[0]);
 }
 Modeler.prototype.deleteObjective = function (objective) {
-  if (this.getCurrentObjective().id !== 'RootBoard' ) {
+  if (this.getCurrentObjective().id !== 'StartBoard' ) {
     var currentIndex = findIndex(this._definitions.get('rootElements'), objective.plane.boardElement);
     this._definitions.get('rootElements').splice(currentIndex, 1);
 
