@@ -182,15 +182,16 @@ Modeler.prototype.addObjective = function (name) {
   this.showObjective(rootBoard[0]);
 }
 Modeler.prototype.deleteObjective = function (objective) {
+  if (this.getCurrentObjective().id !== 'RootBoard' ) {
+    var currentIndex = findIndex(this._definitions.get('rootElements'), objective.plane.boardElement);
+    this._definitions.get('rootElements').splice(currentIndex, 1);
 
-  var currentIndex = findIndex(this._definitions.get('rootElements'), objective.plane.boardElement);
-  this._definitions.get('rootElements').splice(currentIndex,1);
+    currentIndex = findIndex(this._definitions.get('rootBoards'), objective);
+    var indexAfterRemoval = Math.min(currentIndex, this._definitions.get('rootBoards').length - 2);
+    this._definitions.get('rootBoards').splice(currentIndex, 1);
 
-  currentIndex = findIndex(this._definitions.get('rootBoards'), objective);
-  var indexAfterRemoval = Math.min(currentIndex, this._definitions.get('rootBoards').length - 2);
-  this._definitions.get('rootBoards').splice(currentIndex,1);
-
-  if (this.getCurrentObjective() === objective) {
-    this.showObjective(this._definitions.get('rootBoards')[indexAfterRemoval]);
+    if (this.getCurrentObjective() === objective) {
+      this.showObjective(this._definitions.get('rootBoards')[indexAfterRemoval]);
+    }
   }
 }
