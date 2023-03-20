@@ -420,4 +420,23 @@ export default [
         severity : SEVERITY.ERROR,
         link : 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d3---connect-the-case-class-to-every-other-class'
     },
+    {
+        title : 'Connect each Objective at least to one other Objective.',
+        id : 'Dep1',
+        getViolations(mediator) {
+            const dependencyModeler = mediator.dependencyModelerHook.modeler;
+            const objectives = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Objective'));
+            const dependencies = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Dependency'));
+
+            if (objectives.length - dependencies.length > 1) {
+                return [{
+                    element : hook.getRootObject(),
+                    message : 'Please connect all Objectives.',
+                }];
+            }
+
+        },
+        severity : SEVERITY.WARNING,
+        link : 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d3---connect-the-case-class-to-every-other-class'
+    },
 ]
