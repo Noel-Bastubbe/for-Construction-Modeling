@@ -113,19 +113,22 @@ Mediator.prototype.confirmClassDeletion = function (clazz) {
     const affectedLiterals = this.goalStateModelerHook.modeler.getLiteralsWithClassId(clazz.id);
     const affectedStates = this.olcModelerHook.modeler.getOlcByClass(clazz).get('Elements').filter(element => is(element, 'olc:State'));
     const affectedDataObjectReferences = this.fragmentModelerHook.modeler.getDataObjectReferencesOfClass(clazz);
+    const affectedObjects = this.objectiveModelerHook.modeler.getObjectsOfClass(clazz);
     return confirm('Do you really want to delete class \"' + clazz.name + '\" ?'
         + '\n' + affectedLiterals.length + ' literal(s), ' + affectedStates.length + ' olc state(s), and '
-        + affectedDataObjectReferences.length + ' data object reference(s) would be deleted as well.');
+        + affectedDataObjectReferences.length + ' data object reference(s), and ' + affectedObjects.length + ' object(s) would be deleted as well.');
 }
 
 Mediator.prototype.deletedClass = function (clazz) {
-    this.fragmentModelerHook.modeler.handleClassDeleted(clazz);
     this.olcModelerHook.modeler.deleteOlc(clazz);
+    this.fragmentModelerHook.modeler.handleClassDeleted(clazz);
+    this.objectiveModelerHook.modeler.handleClassDeleted(clazz);
 }
 
 Mediator.prototype.renamedClass = function (clazz) {
     this.olcModelerHook.modeler.renameOlc(clazz.name, clazz);
     this.fragmentModelerHook.modeler.handleClassRenamed(clazz);
+    this.objectiveModelerHook.modeler.handleClassRenamed(clazz);
 }
 
 Mediator.prototype.addedState = function (olcState) {
@@ -134,18 +137,21 @@ Mediator.prototype.addedState = function (olcState) {
 Mediator.prototype.confirmStateDeletion = function (olcState) {
     const affectedLiterals = this.goalStateModelerHook.modeler.getLiteralsWithState(olcState);
     const affectedDataObjectReferences = this.fragmentModelerHook.modeler.getDataObjectReferencesInState(olcState);
+    const affectedObjects = this.objectiveModelerHook.modeler.getObjectsInState(olcState);
     return confirm('Do you really want to delete state \"' + olcState.name + '\" ?'
-        + '\n' + 'It would be removed from ' + affectedLiterals.length + ' literal(s) and '+ affectedDataObjectReferences.length + ' data object reference(s).');
+        + '\n' + 'It would be removed from ' + affectedLiterals.length + ' literal(s) and '+ affectedDataObjectReferences.length + ' data object reference(s) and '+ affectedObjects.length + ' object(s).');
 }
 
 Mediator.prototype.deletedState = function (olcState) {
     this.goalStateModelerHook.modeler.handleStateDeleted(olcState);
     this.fragmentModelerHook.modeler.handleStateDeleted(olcState);
+    this.objectiveModelerHook.modeler.handleStateDeleted(olcState);
 }
 
 Mediator.prototype.renamedState = function (olcState) {
     this.goalStateModelerHook.modeler.handleStateRenamed(olcState);
     this.fragmentModelerHook.modeler.handleStateRenamed(olcState);
+    this.objectiveModelerHook.modeler.handleStateRenamed(olcState);
 }
 
 Mediator.prototype.olcListChanged = function (olcs) {

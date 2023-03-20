@@ -34,6 +34,7 @@ import ResizeModule from 'diagram-js/lib/features/resize';
 import SnappingModule from './features/snapping';
 import SpaceToolBehaviorModule from './behavior';
 import { nextPosition } from '../util/Util';
+import {is} from "bpmn-js/lib/util/ModelUtil";
 
 var initialDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -198,4 +199,50 @@ OmModeler.prototype.deleteObjective = function (objective) {
 
 OmModeler.prototype.handleOlcListChanged = function (olcs, dryRun=false) {
   this._olcs = olcs;
+}
+
+OmModeler.prototype.handleStateRenamed = function (olcState) {
+  this.getObjectsInState(olcState).forEach((element, gfx) =>
+      this.get('eventBus').fire('element.changed', {
+        element
+      })
+  );
+}
+
+OmModeler.prototype.handleStateDeleted = function (olcState) {
+  this.getObjectsInState(olcState).forEach((element, gfx) => {
+    element.businessObject.state = undefined;
+    this.get('eventBus').fire('element.changed', {
+      element
+    });
+  });
+}
+
+OmModeler.prototype.handleClassRenamed = function (clazz) {
+  this.getObjectsOfClass(clazz).forEach((element, gfx) =>
+      this.get('eventBus').fire('element.changed', {
+        element
+      })
+  );
+}
+
+OmModeler.prototype.handleClassDeleted = function (clazz) {
+  this.getObjectsOfClass(clazz).forEach((element, gfx) =>
+      this.get('modeling').removeElements([element])
+  );
+}
+
+OmModeler.prototype.getObjectsInState = function (olcState) {
+  return this.get('elementRegistry').filter((element, gfx) =>
+      is(element, 'om:Object') &&
+      element.businessObject.state === olcState
+  );
+}
+
+OmModeler.prototype.getObjectsOfClass = function (clazz) {
+  return this.get('elementRegistry').filter((element, gfx) =>
+      is(element, 'om:Object') &&
+      clazz.id &&
+      element.businessObject.classRef?.id === clazz.id
+  );
 }
