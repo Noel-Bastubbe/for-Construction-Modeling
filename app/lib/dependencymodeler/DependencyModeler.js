@@ -34,7 +34,7 @@ var emptyDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
 <dep:definitions xmlns:olc="http://bptlab/schema/olc" xmlns:olcDi="http://bptlab/schema/olcDi">
   <dep:goal id="MainGoal">
-    <olc:objective id="start_state" type="dep:Objective" name="Start State" x="465" y="293" />
+    <dep:objective id="start_state" type="dep:Objective" name="Start State" x="465" y="293" />
   </dep:goal>
 </dep:definitions>`;
 
@@ -82,7 +82,7 @@ export default function DependencyModeler(options) {
     DepAutoPlaceModule,
     {
       moddle: ['value', new DepModdle({})],
-      depModeler: ['value', this]
+      dependencyModeler: ['value', this]
     }
   ];
 
@@ -217,9 +217,7 @@ DependencyModeler.prototype.showOlcById = function (id) {
   }
 }
 
-DependencyModeler.prototype.createState = function (name, olc) {
-  this.showOlcById(olc.id);
-
+DependencyModeler.prototype.createObjective = function (name) {
   const modeling = this.get('modeling');
   const canvas = this.get('canvas');
   const diagramRoot = canvas.getRootElement();
@@ -232,6 +230,12 @@ DependencyModeler.prototype.createState = function (name, olc) {
     y: parseInt(y)
   }, { x, y }, diagramRoot);
   return shape.businessObject;
+}
+
+DependencyModeler.prototype.deleteObjective = function (objective) {
+  const modeling = this.get('modeling');
+  const objectiveVisual = this.get('elementRegistry').get(objective.id);
+  modeling.removeElements([objectiveVisual]);
 }
 
 DependencyModeler.prototype.createTransition = function (sourceState, targetState) {

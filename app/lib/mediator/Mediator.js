@@ -6,6 +6,7 @@ import OlcEvents from '../olcmodeler/OlcEvents';
 import { namespace, root } from '../util/Util';
 import AbstractHook from './AbstractHook';
 import CommonEvents from '../common/CommonEvents';
+import ObjectiveEvents from "../objectivemodeler/ObjectiveEvents";
 
 const DEFAULT_EVENT_PRIORITY = 1000; //From diagram-js/lib/core/EventBus.DEFAULT_PRIORITY
 
@@ -52,6 +53,10 @@ export default function Mediator() {
 
     this.on(CommonEvents.DATACLASS_CREATION_REQUESTED, event => {
         return this.createDataclass(event.name);
+    });
+
+    this.on(CommonEvents.OBJECTIVE_CREATION_REQUESTED, event => {
+        return this.createObjective(event.name);
     });
 
     this.on(CommonEvents.STATE_CREATION_REQUESTED, event => {
@@ -128,6 +133,22 @@ Mediator.prototype.renamedClass = function (clazz) {
     this.fragmentModelerHook.modeler.handleClassRenamed(clazz);
 }
 
+Mediator.prototype.addedObjective = function (clazz) {
+    this.objectiveModelerHook.modeler.addObjective(clazz);
+}
+
+Mediator.prototype.confirmObjectiveDeletion = function (objective) {
+    return confirm('Do you really want to delete objective \"' + objective.name + '\" ?');
+}
+
+Mediator.prototype.deletedObjective = function (clazz) {
+    this.objectiveModelerHook.modeler.deleteObjective(clazz);
+}
+
+Mediator.prototype.renamedObjective = function (clazz) {
+    this.objectiveModelerHook.modeler.renameObjective(clazz, clazz.name) //clazz is not an objective
+}
+
 Mediator.prototype.addedState = function (olcState) {
 }
 
@@ -164,10 +185,9 @@ Mediator.prototype.olcDeletionRequested = function (olc) {
     }
 }
 
-Mediator.prototype.createState = function (name, olc) {
-    const state = this.olcModelerHook.modeler.createState(name, olc);
-    this.olcModelerHook.focusElement(state);
-    return state;
+Mediator.prototype.objectiveDeletionRequested = function (objective) {
+    const objectiveRef = objective.objectiveRef;
+    this.dependencyModelerHook.modeler.deleteObjective(objectiveRef);
 }
 
 Mediator.prototype.createDataclass = function (name) {
@@ -175,6 +195,19 @@ Mediator.prototype.createDataclass = function (name) {
     this.dataModelerHook.focusElement(clazz);
     return clazz;
 }
+
+Mediator.prototype.createObjective = function (name) {
+    const clazz = this.dependencyModelerHook.modeler.createObjective(name);
+    //this.dependencyModelerHook.focusElement(clazz);
+    return clazz;
+}
+
+Mediator.prototype.createState = function (name, olc) {
+    const state = this.olcModelerHook.modeler.createState(name, olc);
+    this.olcModelerHook.focusElement(state);
+    return state;
+}
+
 
 Mediator.prototype.focusElement = function(element) {
     const hook = this.getHookForElement(element);
@@ -284,21 +317,21 @@ Mediator.prototype.OlcModelerHook.isHook = true;
 Mediator.prototype.DependencyModelerHook = function (eventBus, dependencyModeler) {
     CommandInterceptor.call(this, eventBus);
     AbstractHook.call(this, dependencyModeler, 'Dependency Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki');
-    this.mediator.DependencyModelerHook = this;
+    this.mediator.dependencyModelerHook = this;
     this.eventBus = eventBus;
 
     this.executed([
         'shape.create'
     ], event => {
-        if (is(event.context.shape, 'dm:State')) {
-            // this.mediator.addedState(event.context.shape.businessObject);
+        if (is(event.context.shape, 'dep:Objective')) {
+             this.mediator.addedObjective(event.context.shape.businessObject);
         }
     });
     this.executed([
         'shape.delete'
     ], event => {
-        if (is(event.context.shape, 'dm:State')) {
-            // this.mediator.deletedState(event.context.shape.businessObject);
+        if (is(event.context.shape, 'dep:Objective')) {
+             this.mediator.deletedObjective(event.context.shape.businessObject);
         }
     });
 
@@ -306,8 +339,8 @@ Mediator.prototype.DependencyModelerHook = function (eventBus, dependencyModeler
         'elements.delete'
     ], event => {
         event.context.elements = event.context.elements.filter(element => {
-            if (is(element, 'dm:State')) {
-                return this.mediator.confirmStateDeletion(element.businessObject);
+            if (is(element, 'dep:Objective')) {
+                return this.mediator.confirmObjectiveDeletion(element);
             } else {
                 return true;
             }
@@ -317,48 +350,28 @@ Mediator.prototype.DependencyModelerHook = function (eventBus, dependencyModeler
     this.executed([
         'element.updateLabel'
     ], event => {
-        if (is(event.context.element, 'dm:State')) {
-            // this.mediator.renamedState(event.context.element.businessObject);
+        if (is(event.context.element, 'dep:Objective')) {
+            this.mediator.renamedObjective(event.context.element.businessObject);
         }
     });
 
     this.reverted([
         'element.updateLabel'
     ], event => {
-        if (is(event.context.element, 'dm:State')) {
-            // this.mediator.renamedState(event.context.element.businessObject);
+        if (is(event.context.element, 'dep:Objective')) {
+            this.mediator.renamedObjective(event.context.element.businessObject);
         }
     })
 
-    /*
-    eventBus.on(OlcEvents.DEFINITIONS_CHANGED, event => {
-        // this.mediator.olcListChanged(event.definitions.olcs);
-    });
-
-    eventBus.on(OlcEvents.OLC_RENAME, event => {
-        // this.mediator.olcRenamed(event.olc, event.name);
-    });
-
-    eventBus.on(OlcEvents.OLC_DELETION_REQUESTED, event => {
-        // this.mediator.olcDeletionRequested(event.olc);
-        return false; // Deletion should never be directly done in olc modeler, will instead propagate from data modeler
-    });
-
-    eventBus.on('import.parse.complete', ({context}) => {
-        context.warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({property, value, element}) => {
-            if (property === 'olc:classRef') {
-                const dataClass = this.mediator.dataModelerHook.modeler.get('elementRegistry').get(value).businessObject;
-                if (!dataClass) { throw new Error('Could not resolve data class with id '+value); }
-                element.classRef = dataClass;
-            }
-        });
-    });
-
-    this.locationOfElement = function(element) {
-       return 'Dependency Model ' + root(element).name;
-    }
-
-     */
+    // eventBus.on('import.parse.complete', ({context}) => {
+    //     context.warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({property, value, element}) => {
+    //         if (property === 'dep:objectiveRef') {
+    //             const objective = this.mediator.objectiveModelerHook.modeler.get('elementRegistry').get(value).businessObject;
+    //             if (!objective) { throw new Error('Could not resolve objective with id '+value); }
+    //             element.classRef = objective;
+    //         }
+    //     });
+    // });
 }
 inherits(Mediator.prototype.DependencyModelerHook, CommandInterceptor);
 
@@ -520,6 +533,11 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
         if (is(event.context.element, 'om:Object') && (changedLabel === 'name' || !changedLabel)) {
             //this.mediator.renamedClass(event.context.element.businessObject);
         }
+    });
+
+    eventBus.on(ObjectiveEvents.OBJECTIVE_DELETION_REQUESTED, event => {
+        this.mediator.objectiveDeletionRequested(event.objective);
+        return false; // Deletion should never be directly done in objective modeler, will instead propagate from dependency modeler
     });
 }
 inherits(Mediator.prototype.ObjectiveModelerHook, CommandInterceptor);

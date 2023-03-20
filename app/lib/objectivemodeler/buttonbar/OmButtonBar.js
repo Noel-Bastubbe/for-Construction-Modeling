@@ -5,6 +5,8 @@ import {
 import getDropdown from '../../util/Dropdown';
 import {download, upload} from '../../util/FileUtil';
 import { appendOverlayListeners } from '../../util/HtmlUtil';
+import CommonEvents from "../../common/CommonEvents";
+import ObjectiveEvents from "../ObjectiveEvents";
 
 
 export default function OmButtonBar(canvas, eventBus, omModeler) {
@@ -55,7 +57,7 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
             renameObjectiveInput.value = selectObjectiveComponent.value.name;
             renameObjectiveInput.addEventListener("change", function () {
                 renameObjectiveInput.blur();
-                omModeler.getCurrentObjective().name = renameObjectiveInput.value;
+                omModeler.renameObjective(omModeler.getCurrentObjective(), renameObjectiveInput.value);
                 selectObjectiveComponent.showValue(omModeler.getCurrentObjective());
             });
             renameObjectiveInput.addEventListener("focusout", function () {
@@ -76,7 +78,11 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
     deleteObjectiveButton.title = 'Delete Current Objective';
     deleteObjectiveButton.addEventListener('click', () => {
         var objectiveToDelete = selectObjectiveComponent.value;
-        omModeler.deleteObjective(objectiveToDelete);
+        var shouldDelete = eventBus.fire(ObjectiveEvents.OBJECTIVE_DELETION_REQUESTED, { objective: objectiveToDelete});
+        if (shouldDelete !== false) {
+            // Deletion was not rejected and not handled somewhere else; should not happen when mediator is involved
+            omModeler.deleteObjective(objectiveToDelete);
+        }
         selectObjectiveComponent.showValue(omModeler.getCurrentObjective());
         repopulateDropdown();
     });
@@ -96,7 +102,9 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
         selectObjectiveMenu.addCreateElementInput(() => {
             var objectiveName = selectObjectiveMenu.getInputValue();
             if (objectiveName && objectiveName.length > 0) {
-                omModeler.addObjective(objectiveName);
+                eventBus.fire(CommonEvents.OBJECTIVE_CREATION_REQUESTED, {
+                    name: objectiveName
+                });
                 repopulateDropdown();
             }
         });
