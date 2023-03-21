@@ -1,6 +1,6 @@
 export default {
-    DEFINITIONS_CHANGED : 'olc.definitions.changed',
-    SELECTED_OLC_CHANGED : 'olc.selected.changed',
-    OLC_RENAME : 'olc.renamed',
-    OBJECTIVE_DELETION_REQUESTED : 'objective.delete.requested'
+    DEFINITIONS_CHANGED : 'objective.definitions.changed',
+    OBJECTIVE_RENAME : 'objective.renamed',
+    OBJECTIVE_DELETION_REQUESTED : 'objective.delete.requested',
+    OBJECTIVE_CREATION_REQUESTED : 'objective.create.requested'
 }

@@ -7,6 +7,7 @@ import {download, upload} from '../../util/FileUtil';
 import { appendOverlayListeners } from '../../util/HtmlUtil';
 import CommonEvents from "../../common/CommonEvents";
 import ObjectiveEvents from "../ObjectiveEvents";
+import OlcEvents from "../../olcmodeler/OlcEvents";
 
 
 export default function OmButtonBar(canvas, eventBus, omModeler) {
@@ -57,7 +58,10 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
             renameObjectiveInput.value = selectObjectiveComponent.value.name;
             renameObjectiveInput.addEventListener("change", function () {
                 renameObjectiveInput.blur();
-                omModeler.renameObjective(omModeler.getCurrentObjective(), renameObjectiveInput.value);
+                eventBus.fire(ObjectiveEvents.OBJECTIVE_RENAME, {
+                    objective: selectObjectiveComponent.value,
+                    name: renameObjectiveInput.value
+                });
                 selectObjectiveComponent.showValue(omModeler.getCurrentObjective());
             });
             renameObjectiveInput.addEventListener("focusout", function () {
@@ -84,7 +88,6 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
             omModeler.deleteObjective(objectiveToDelete);
         }
         selectObjectiveComponent.showValue(omModeler.getCurrentObjective());
-        repopulateDropdown();
     });
     buttonBar.appendChild(deleteObjectiveButton);
 
@@ -102,10 +105,9 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
         selectObjectiveMenu.addCreateElementInput(() => {
             var objectiveName = selectObjectiveMenu.getInputValue();
             if (objectiveName && objectiveName.length > 0) {
-                eventBus.fire(CommonEvents.OBJECTIVE_CREATION_REQUESTED, {
+                eventBus.fire(ObjectiveEvents.OBJECTIVE_CREATION_REQUESTED, {
                     name: objectiveName
                 });
-                repopulateDropdown();
             }
         });
         deleteObjectiveButton.disabled = objectives.length === 0;
@@ -123,8 +125,10 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
         selectObjectiveMenu.hide = closeOverlay;
     }
 
-
     eventBus.on('import.render.complete', event => selectObjectiveComponent.showValue(event.rootBoard));
+    eventBus.on([ObjectiveEvents.DEFINITIONS_CHANGED], event => repopulateDropdown());
+    //eventBus.on([ObjectiveEvents.SELECTED_OLC_CHANGED], event => selectObjectiveComponent.showValue(event.objective));
+
 }
 
 OmButtonBar.$inject = [

@@ -33,6 +33,7 @@ import SpaceToolBehaviorModule from './behavior';
 import SnappingModule from './features/snapping';
 import { nextPosition } from '../util/Util';
 import OmButtonBarModule from './buttonbar';
+import ObjectiveEvents from "./ObjectiveEvents";
 
 
 var initialDiagram =
@@ -180,6 +181,7 @@ Modeler.prototype.addObjective = function (objectiveReference) {
   var rootBoard = this.get('elementFactory').createRootBoard(objectiveReference.name || '<TBD>', objectiveReference);
   this._definitions.get('rootBoards').push(rootBoard[0]);
   this._definitions.get('rootElements').push(rootBoard[1]);
+  this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
   this.showObjective(rootBoard[0]);
 }
 
@@ -192,11 +194,18 @@ Modeler.prototype.deleteObjective = function (objectiveReference) {
     currentIndex = findIndex(this._definitions.get('rootBoards'), objective);
     var indexAfterRemoval = Math.min(currentIndex, this._definitions.get('rootBoards').length - 2);
     this._definitions.get('rootBoards').splice(currentIndex, 1);
+    this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
 
     if (this.getCurrentObjective() === objective) {
       this.showObjective(this._definitions.get('rootBoards')[indexAfterRemoval]);
     }
   }
+}
+
+Modeler.prototype.renameObjective = function (objectiveReference, name) {
+  var objective = this.getObjectiveByReference(objectiveReference);
+  objective.name = name;
+  this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
 }
 
 Modeler.prototype.getObjectiveByReference = function(objectiveReference) {

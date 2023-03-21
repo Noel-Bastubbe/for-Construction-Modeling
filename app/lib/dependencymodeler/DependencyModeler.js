@@ -238,6 +238,12 @@ DependencyModeler.prototype.deleteObjective = function (objective) {
   modeling.removeElements([objectiveVisual]);
 }
 
+DependencyModeler.prototype.renameObjective = function (objective, name) {
+    const modeling = this.get('modeling');
+    const objectiveVisual = this.get('elementRegistry').get(objective.id);
+    modeling.update(objectiveVisual, name);
+}
+
 DependencyModeler.prototype.createTransition = function (sourceState, targetState) {
   this.showOlcById(root(sourceState).id);
   const modeling = this.get('modeling');

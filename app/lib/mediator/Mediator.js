@@ -55,10 +55,6 @@ export default function Mediator() {
         return this.createDataclass(event.name);
     });
 
-    this.on(CommonEvents.OBJECTIVE_CREATION_REQUESTED, event => {
-        return this.createObjective(event.name);
-    });
-
     this.on(CommonEvents.STATE_CREATION_REQUESTED, event => {
         return this.createState(event.name, event.olc);
     });
@@ -141,12 +137,12 @@ Mediator.prototype.confirmObjectiveDeletion = function (objective) {
     return confirm('Do you really want to delete objective \"' + objective.name + '\" ?');
 }
 
-Mediator.prototype.deletedObjective = function (clazz) {
-    this.objectiveModelerHook.modeler.deleteObjective(clazz);
+Mediator.prototype.deletedObjective = function (objective) {
+    this.objectiveModelerHook.modeler.deleteObjective(objective);
 }
 
-Mediator.prototype.renamedObjective = function (clazz) {
-    this.objectiveModelerHook.modeler.renameObjective(clazz, clazz.name) //clazz is not an objective
+Mediator.prototype.renamedObjective = function (objective, objectiveName) {
+    this.objectiveModelerHook.modeler.renameObjective(objectiveName, objective);
 }
 
 Mediator.prototype.addedState = function (olcState) {
@@ -185,20 +181,24 @@ Mediator.prototype.olcDeletionRequested = function (olc) {
     }
 }
 
+Mediator.prototype.objectiveCreationRequested = function (name) {
+    const clazz = this.dependencyModelerHook.modeler.createObjective(name);
+    //this.dependencyModelerHook.focusElement(clazz);
+    return clazz;
+}
+
 Mediator.prototype.objectiveDeletionRequested = function (objective) {
     const objectiveRef = objective.objectiveRef;
     this.dependencyModelerHook.modeler.deleteObjective(objectiveRef);
 }
 
+Mediator.prototype.objectiveRenamingRequested = function (objective, objectiveName) {
+    this.dependencyModelerHook.modeler.renameObjective(objective, objectiveName) //clazz is not an objective
+}
+
 Mediator.prototype.createDataclass = function (name) {
     const clazz = this.dataModelerHook.modeler.createDataclass(name);
     this.dataModelerHook.focusElement(clazz);
-    return clazz;
-}
-
-Mediator.prototype.createObjective = function (name) {
-    const clazz = this.dependencyModelerHook.modeler.createObjective(name);
-    //this.dependencyModelerHook.focusElement(clazz);
     return clazz;
 }
 
@@ -504,7 +504,7 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
         }
     });
 
-    this.preExecute([
+    /*this.preExecute([
         'elements.delete'
     ], event => {
         event.context.elements = event.context.elements.filter(element => {
@@ -514,7 +514,7 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
                 return true;
             }
         });
-    });
+    });*/
 
 
     this.executed([
@@ -535,9 +535,17 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
         }
     });
 
+    eventBus.on(ObjectiveEvents.OBJECTIVE_CREATION_REQUESTED, event => {
+        return this.mediator.objectiveCreationRequested(event.name);
+    });
+
     eventBus.on(ObjectiveEvents.OBJECTIVE_DELETION_REQUESTED, event => {
         this.mediator.objectiveDeletionRequested(event.objective);
         return false; // Deletion should never be directly done in objective modeler, will instead propagate from dependency modeler
+    });
+
+    eventBus.on(ObjectiveEvents.OBJECTIVE_RENAME, event => {
+        this.mediator.objectiveRenamingRequested(event.objective, event.name);
     });
 }
 inherits(Mediator.prototype.ObjectiveModelerHook, CommandInterceptor);
