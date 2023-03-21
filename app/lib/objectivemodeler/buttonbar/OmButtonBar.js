@@ -56,7 +56,7 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
             renameObjectiveInput.value = selectObjectiveComponent.value.name;
             renameObjectiveInput.addEventListener("change", function () {
                 renameObjectiveInput.blur();
-                eventBus.fire(ObjectiveEvents.OBJECTIVE_RENAME, {
+                eventBus.fire(ObjectiveEvents.OBJECTIVE_RENAMING_REQUESTED, {
                     objective: selectObjectiveComponent.value.objectiveRef,
                     name: renameObjectiveInput.value
                 });

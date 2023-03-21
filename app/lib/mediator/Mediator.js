@@ -522,7 +522,7 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
         return false; // Deletion should never be directly done in objective modeler, will instead propagate from dependency modeler
     });
 
-    eventBus.on(ObjectiveEvents.OBJECTIVE_RENAME, event => {
+    eventBus.on(ObjectiveEvents.OBJECTIVE_RENAMING_REQUESTED, event => {
         this.mediator.objectiveRenamingRequested(event.objective, event.name);
     });
 }
