@@ -61,6 +61,10 @@ ElementFactory.prototype.createRootBoard = function (name) {
   return [rootBoard,board];
 };
 
+ElementFactory.prototype.createObjectInstance = function (name, clazz) {
+  var objectInstance = this.createBusinessObject('om:ObjectInstance', {name: name, classRef: clazz});
+  return objectInstance;
+};
 
 ElementFactory.prototype.createOdElement = function(elementType, attrs) {
   var size,

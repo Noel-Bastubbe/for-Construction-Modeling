@@ -27,7 +27,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
         eventBus.on('element.changed', function (e) {
             if (is(e.element, 'om:Object') && e.element.parent) {
                 const businessObject = e.element.businessObject;
-                const name = `${businessObject.classRef?.name} : ${businessObject.objectName}`;
+                const name = `${businessObject.classRef?.name} : ${businessObject.instance?.name}`;
                 const state = businessObject.state?.name;
                 if (businessObject.name !== name) {
                     modeling.updateLabel(e.element, name, undefined, {
@@ -56,7 +56,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                 }
 
                 const updateNameSelection = () => {
-                    this._nameDropdown.getEntries().forEach(entry => entry.setSelected(omObject.state === entry.option));
+                    this._nameDropdown.getEntries().forEach(entry => entry.setSelected(omObject.instance === entry.option));
                 }
 
                 const updateClassSelection = () => {
@@ -67,6 +67,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                             currentOlc = olcs.filter(olc => olc.classRef === omObject.classRef)[0];
                             this._classDropdown.getEntries().forEach(entry => entry.setSelected(entry.option === currentOlc));
                             states = currentOlc.get('Elements').filter(element => is(element, 'olc:State'));
+                            names = this._objectiveModeler.getObjectInstancesOfClass(omObject.classRef);
                         }
 
                         this._stateDropdown.populate(states, (state, element) => {
@@ -74,8 +75,8 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                             updateStateSelection();
                         }, element);
 
-                        this._nameDropdown.populate(names, (state, element) => {
-
+                        this._nameDropdown.populate(names, (name, element) => {
+                            this.updateName(name, element);
                             updateNameSelection();
                         }, element);
 
@@ -87,8 +88,8 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                             this.updateState(state, element);
                             updateStateSelection();
                         }, element);
-                        this._nameDropdown.populate([], (state, element) => {
-
+                        this._nameDropdown.populate([], (name, element) => {
+                            this.updateName(name, element);
                             updateNameSelection();
                         }, element);
                     }
@@ -124,8 +125,8 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                         needUpdate = true;
                     }
                     if (newNameInput !== '') {
-                        this.updateName(newNameInput, element);
-                        populateClassDropdown();
+                        const newName = this.createName(newNameInput, currentOlc.classRef);
+                        this.updateName(newName, element);
                         needUpdate = true;
                     }
                     
@@ -201,19 +202,13 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
     updateState(newState, element) {
         const omObject = element.businessObject;
         omObject.state = newState;
-        // if (omObject.get('olcs').includes(newState)) {
-        //     omObject.olcs = without(omObject.get('olcs'), newState);
-        // } else {
-        //     omObject.olcs.push(newState);
-        // }
         this._eventBus.fire('element.changed', {
             element
         });
     }
 
-    updateName(newNameInput, element) {
-        element.businessObject.objectName = newNameInput;
-        element.businessObject.state = null;
+    updateName(newName, element) {
+        element.businessObject.instance = newName;
         this._eventBus.fire('element.changed', {
             element
         });
@@ -223,6 +218,13 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
         return this._eventBus.fire(CommonEvents.STATE_CREATION_REQUESTED, {
             name,
             olc
+        });
+    }
+
+    createName(name, clazz) {
+        return this._eventBus.fire(CommonEvents.NAME_CREATION_REQUESTED, {
+            name,
+            clazz
         });
     }
 

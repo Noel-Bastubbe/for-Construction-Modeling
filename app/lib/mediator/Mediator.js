@@ -6,6 +6,7 @@ import OlcEvents from '../olcmodeler/OlcEvents';
 import { namespace, root } from '../util/Util';
 import AbstractHook from './AbstractHook';
 import CommonEvents from '../common/CommonEvents';
+import ElementFactory from '../objectivemodeler/features/modeling/ElementFactory';
 
 const DEFAULT_EVENT_PRIORITY = 1000; //From diagram-js/lib/core/EventBus.DEFAULT_PRIORITY
 
@@ -56,6 +57,10 @@ export default function Mediator() {
 
     this.on(CommonEvents.STATE_CREATION_REQUESTED, event => {
         return this.createState(event.name, event.olc);
+    });
+
+    this.on(CommonEvents.NAME_CREATION_REQUESTED, event => {
+        return this.createName(event.name, event.clazz);
     });
 }
 
@@ -175,6 +180,11 @@ Mediator.prototype.createState = function (name, olc) {
     const state = this.olcModelerHook.modeler.createState(name, olc);
     this.olcModelerHook.focusElement(state);
     return state;
+}
+
+Mediator.prototype.createName = function (name, clazz) {
+    const instanceName = this.objectiveModelerHook.modeler.createName(name, clazz);
+    return instanceName;
 }
 
 Mediator.prototype.createDataclass = function (name) {

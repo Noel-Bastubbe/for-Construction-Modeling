@@ -35,6 +35,7 @@ import SnappingModule from './features/snapping';
 import SpaceToolBehaviorModule from './behavior';
 import { nextPosition } from '../util/Util';
 import {is} from "bpmn-js/lib/util/ModelUtil";
+import modeling from './features/modeling';
 
 var initialDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -146,6 +147,12 @@ OmModeler.prototype.createObject = function (name) {
   return shape.businessObject;
 }
 
+OmModeler.prototype.createName = function (name, clazz) {
+  const objectInstance = this.get('elementFactory').createObjectInstance(name, clazz);
+  this._definitions.get('objectInstances').push(objectInstance);
+  return objectInstance;
+}
+
 OmModeler.prototype.renameObject = function (object, name) {
   this.get('modeling').updateLabel(this.get('elementRegistry').get(object.id), name);
 }
@@ -245,4 +252,14 @@ OmModeler.prototype.getObjectsOfClass = function (clazz) {
       clazz.id &&
       element.businessObject.classRef?.id === clazz.id
   );
+}
+
+OmModeler.prototype.getObjectInstancesOfClass = function (clazz) {
+  let list2 = this._definitions.get('objectInstances');
+  let list =  list2.filter((instance, gfx) =>
+      is(instance, 'om:ObjectInstance') &&
+      clazz.id &&
+      instance.classRef?.id === clazz.id
+  );
+  return list;
 }
