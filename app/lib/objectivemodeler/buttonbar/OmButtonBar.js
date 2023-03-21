@@ -5,9 +5,7 @@ import {
 import getDropdown from '../../util/Dropdown';
 import {download, upload} from '../../util/FileUtil';
 import { appendOverlayListeners } from '../../util/HtmlUtil';
-import CommonEvents from "../../common/CommonEvents";
 import ObjectiveEvents from "../ObjectiveEvents";
-import OlcEvents from "../../olcmodeler/OlcEvents";
 
 
 export default function OmButtonBar(canvas, eventBus, omModeler) {
@@ -59,7 +57,7 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
             renameObjectiveInput.addEventListener("change", function () {
                 renameObjectiveInput.blur();
                 eventBus.fire(ObjectiveEvents.OBJECTIVE_RENAME, {
-                    objective: selectObjectiveComponent.value,
+                    objective: selectObjectiveComponent.value.objectiveRef,
                     name: renameObjectiveInput.value
                 });
                 selectObjectiveComponent.showValue(omModeler.getCurrentObjective());
@@ -127,7 +125,6 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
 
     eventBus.on('import.render.complete', event => selectObjectiveComponent.showValue(event.rootBoard));
     eventBus.on([ObjectiveEvents.DEFINITIONS_CHANGED], event => repopulateDropdown());
-    //eventBus.on([ObjectiveEvents.SELECTED_OLC_CHANGED], event => selectObjectiveComponent.showValue(event.objective));
 
 }
 

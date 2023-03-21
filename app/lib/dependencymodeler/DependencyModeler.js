@@ -109,6 +109,85 @@ DependencyModeler.prototype.createNew = function () {
   return this.importXML(emptyDiagram);
 }
 
+DependencyModeler.prototype.show = function (goal) {
+  this.clear();
+  if (goal) {
+    const elementFactory = this.get('elementFactory');
+    var diagramRoot = elementFactory.createRoot({type: 'dep:Goal', businessObject: goal});
+    const canvas = this.get('canvas');
+    canvas.setRootElement(diagramRoot);
+
+    var elements = groupBy(goal.get('Elements'), element => element.$type);
+    var states = {};
+
+    (elements['dep:Objective'] || []).forEach(state => {
+      var stateVisual = elementFactory.createShape({
+        type: 'dep:Objective',
+        businessObject: state,
+        x: parseInt(state.get('x')),
+        y: parseInt(state.get('y'))
+      });
+      states[state.get('id')] = stateVisual;
+      canvas.addShape(stateVisual, diagramRoot);
+    });
+
+    (elements['dep:Dependency'] || []).forEach(transition => {
+      var source = states[transition.get('sourceObjective').get('id')];
+      var target = states[transition.get('targetObjective').get('id')];
+      var transitionVisual = elementFactory.createConnection({
+        type: 'dep:Dependency',
+        businessObject: transition,
+        source: source,
+        target: target,
+        waypoints: this.get('depUpdater').connectionWaypoints(source, target)
+      });
+      canvas.addConnection(transitionVisual, diagramRoot);
+    });
+  }
+}
+
+DependencyModeler.prototype.createObjective = function (name) {
+  const modeling = this.get('modeling');
+  const canvas = this.get('canvas');
+  const diagramRoot = canvas.getRootElement();
+
+  const {x,y} = nextPosition(this, 'dep:Objective');
+  const shape = modeling.createShape({
+    type: 'dep:Objective',
+    name: name,
+    x: parseInt(x),
+    y: parseInt(y)
+  }, { x, y }, diagramRoot);
+  return shape.businessObject;
+}
+
+DependencyModeler.prototype.deleteObjective = function (objective) {
+  const modeling = this.get('modeling');
+  const objectiveVisual = this.get('elementRegistry').get(objective.id);
+  modeling.removeElements([objectiveVisual]);
+}
+
+DependencyModeler.prototype.renameObjective = function (objective, name) {
+    const modeling = this.get('modeling');
+    const objectiveVisual = this.get('elementRegistry').get(objective.id);
+    modeling.updateLabel(objectiveVisual, name);
+}
+
+DependencyModeler.prototype.createDependency = function (sourceState, targetState) {
+  const modeling = this.get('modeling');
+  const sourceVisual = this.get('elementRegistry').get(sourceState.id);
+  const targetVisual = this.get('elementRegistry').get(targetState.id);
+
+  const transitionVisual = modeling.connect(sourceVisual, targetVisual, {
+    type: 'dep:Dependency',
+    source: sourceState,
+    target: targetState,
+    waypoints: this.get('depUpdater').connectionWaypoints(sourceState, targetState)
+  });
+
+  return transitionVisual.businessObject;
+}
+
 DependencyModeler.prototype.importXML = function (xml) {
 
   var self = this;
@@ -164,100 +243,9 @@ DependencyModeler.prototype.importDefinitions = function (definitions) {
   this.get('elementFactory')._ids.clear();
   this._definitions = definitions;
   this._emit('import.render.start', { definitions: definitions });
-  this.showOlc(definitions.get('goals')[0]);
+  this._goal = definitions.get('goals')[0];
+  this.show(this._goal);
   this._emit('import.render.complete', {});
-}
-
-DependencyModeler.prototype.showOlc = function (olc) {
-  this.clear();
-  this._olc = olc;
-  if (olc) {
-    const elementFactory = this.get('elementFactory');
-    var diagramRoot = elementFactory.createRoot({type: 'dep:Goal', businessObject: olc});
-    const canvas = this.get('canvas');
-    canvas.setRootElement(diagramRoot);
-
-    var elements = groupBy(olc.get('Elements'), element => element.$type);
-    var states = {};
-
-    (elements['dep:Objective'] || []).forEach(state => {
-      var stateVisual = elementFactory.createShape({
-        type: 'dep:Objective',
-        businessObject: state,
-        x: parseInt(state.get('x')),
-        y: parseInt(state.get('y'))
-      });
-      states[state.get('id')] = stateVisual;
-      canvas.addShape(stateVisual, diagramRoot);
-    });
-
-    (elements['dep:Dependency'] || []).forEach(transition => {
-      var source = states[transition.get('sourceObjective').get('id')];
-      var target = states[transition.get('targetObjective').get('id')];
-      var transitionVisual = elementFactory.createConnection({
-        type: 'dep:Dependency',
-        businessObject: transition,
-        source: source,
-        target: target,
-        waypoints: this.get('depUpdater').connectionWaypoints(source, target)
-      });
-      canvas.addConnection(transitionVisual, diagramRoot);
-    });
-  }
-}
-
-DependencyModeler.prototype.showOlcById = function (id) {
-  if (id && this._definitions && id !== (this._olc && this._olc.get('id'))) {
-    var olc = this._definitions.get('goals').filter(olc => olc.get('id') === id)[0];
-    if (olc) {
-      this.showOlc(olc);
-    } else {
-      throw 'Unknown olc with class id \"'+id+'\"';
-    }
-  }
-}
-
-DependencyModeler.prototype.createObjective = function (name) {
-  const modeling = this.get('modeling');
-  const canvas = this.get('canvas');
-  const diagramRoot = canvas.getRootElement();
-
-  const {x,y} = nextPosition(this, 'dep:Objective');
-  const shape = modeling.createShape({
-    type: 'dep:Objective',
-    name: name,
-    x: parseInt(x),
-    y: parseInt(y)
-  }, { x, y }, diagramRoot);
-  return shape.businessObject;
-}
-
-DependencyModeler.prototype.deleteObjective = function (objective) {
-  const modeling = this.get('modeling');
-  const objectiveVisual = this.get('elementRegistry').get(objective.id);
-  modeling.removeElements([objectiveVisual]);
-}
-
-DependencyModeler.prototype.renameObjective = function (objective, name) {
-    const modeling = this.get('modeling');
-    const objectiveVisual = this.get('elementRegistry').get(objective.id);
-    modeling.update(objectiveVisual, name);
-}
-
-DependencyModeler.prototype.createTransition = function (sourceState, targetState) {
-  this.showOlcById(root(sourceState).id);
-  const modeling = this.get('modeling');
-  const sourceVisual = this.get('elementRegistry').get(sourceState.id);
-  const targetVisual = this.get('elementRegistry').get(targetState.id);
-
-  const transitionVisual = modeling.connect(sourceVisual, targetVisual, {
-    type: 'dep:Dependency',
-    source: sourceState,
-    target: targetState,
-    waypoints: this.get('depUpdater').connectionWaypoints(sourceState, targetState)
-  });
-
-  return transitionVisual.businessObject;
 }
 
 DependencyModeler.prototype.saveXML = function (options) {
@@ -314,10 +302,10 @@ DependencyModeler.prototype._emit = function (type, event) {
 DependencyModeler.prototype.ensureElementIsOnCanvas = function (element) {
   if (!this.get('elementRegistry').get(element.id)) {
     const rootElement = root(element);
-    if (this.getOlcs().includes(rootElement)) {
-      this.showOlc(rootElement);
+    if (this._goal === rootElement) {
+      this.show(rootElement);
     } else {
-      throw 'Cannot display element. Is not part of a known olc';
+      throw 'Cannot display element. Is not part of a known goal.';
     }
   }
 }
