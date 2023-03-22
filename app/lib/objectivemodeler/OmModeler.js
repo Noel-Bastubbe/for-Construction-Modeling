@@ -217,33 +217,40 @@ OmModeler.prototype.handleOlcListChanged = function (olcs, dryRun = false) {
 
 OmModeler.prototype.handleStateRenamed = function (olcState) {
     this.getObjectsInState(olcState).forEach((element, gfx) =>
-        this.get('eventBus').fire('element.changed', {
-            element
-        })
+        element.name = `${element.classRef?.name} : ${element.instance?.name}`
     );
+    // This correctly changes the names of all the logical representations of the objects that have to change the name
     this.showObjective(this.getCurrentObjective());
+    // This is needed to update the visual representation of the objects that are currently loaded. Every other visual representation is
+    // non-existing and will therefore be created with the correct properties.
 }
 
 OmModeler.prototype.handleStateDeleted = function (olcState) {
     this.getObjectsInState(olcState).forEach((element, gfx) => {
-        element.businessObject.state = undefined;
-        this.get('eventBus').fire('element.changed', {
-            element
-        });
+        element.state = undefined;
     });
+    // This correctly deletes the state from all the logical representations of the objects that have to lose their state
+    this.showObjective(this.getCurrentObjective());
+    // This is needed to update the visual representation of the objects that are currently loaded. Every other visual representation is
+    // non-existing and will therefore be created with the correct properties.
 }
 
 OmModeler.prototype.handleClassRenamed = function (clazz) {
     this.getObjectsOfClass(clazz).forEach((element, gfx) => {
         element.name = `${element.classRef?.name} : ${element.instance?.name}`
     });
+    // This correctly changes the names of all the logical representations of the objects that have to change the name
     this.showObjective(this.getCurrentObjective());
+    // This is needed to update the visual representation of the objects that are currently loaded. Every other visual representation is
+    // non-existing and will therefore be created with the correct properties.
 }
 
 OmModeler.prototype.handleClassDeleted = function (clazz) {
     this.getObjectsOfClass(clazz).forEach((element, gfx) =>
         this.get('modeling').removeElements([element])
     );
+    // TODO Make this work...
+    // From my Point of View (not necessarily right): This does currently not work because removeElements operates on the visual representation
 }
 
 OmModeler.prototype.getObjectsInState = function (olcState) {
@@ -253,6 +260,7 @@ OmModeler.prototype.getObjectsInState = function (olcState) {
         olcState.id &&
         element.state?.id === olcState.id);
     return objects;
+    // This correctly collects all the logical representations of the objects that have to change the name
 }
 
 OmModeler.prototype.getObjectsOfClass = function (clazz) {
@@ -262,6 +270,7 @@ OmModeler.prototype.getObjectsOfClass = function (clazz) {
         clazz.id &&
         element.classRef?.id === clazz.id);
     return objects;
+    // This correctly collects all the logical representations of the objects that have to change the name
 }
 
 OmModeler.prototype.getObjectInstancesOfClass = function (clazz) {
