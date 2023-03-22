@@ -43,12 +43,10 @@ var dependencyModeler = new DependencyModeler({
     keyboard: {
         bindTo: document.querySelector('#dependencymodel-canvas')
     },
-    /*
     additionalModules: [{
         __init__ : ['mediator'],
         mediator : ['type', mediator.DependencyModelerHook]
     }]
-     */
 });
 
 var dataModeler = new DataModelModeler({

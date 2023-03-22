@@ -42,7 +42,7 @@ DepRuleProvider.prototype.init = function () {
 
     return is(source, 'dep:Objective') && is(target, 'dep:Objective')
         && existingConnections.length === 0 && occurencesOfSource.length === 0 && occurencesOfTarget.length === 0
-        && source !== target && { type: 'dep:Dependency' };
+        && source !== target && target.id !== 'start_state' && { type: 'dep:Dependency'};
   });
 
   this.addRule('connection.start', function (context) {
