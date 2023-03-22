@@ -255,11 +255,11 @@ OmModeler.prototype.getObjectsOfClass = function (clazz) {
 }
 
 OmModeler.prototype.getObjectInstancesOfClass = function (clazz) {
-  let list2 = this._definitions.get('objectInstances');
-  let list =  list2.filter((instance, gfx) =>
+  let instances = this._definitions.get('objectInstances');
+  let result =  instances.filter((instance, gfx) =>
       is(instance, 'om:ObjectInstance') &&
       clazz.id &&
       instance.classRef?.id === clazz.id
   );
-  return list;
+  return result;
 }
