@@ -403,43 +403,6 @@ Mediator.prototype.FragmentModelerHook.$inject = [
 
 Mediator.prototype.FragmentModelerHook.isHook = true;
 
-// ===  Termination Condition Modeler Hook
-Mediator.prototype.TerminationConditionModelerHook = function (terminationConditionModeler) {
-    AbstractHook.call(this, terminationConditionModeler, 'Termination Condition', 'https://github.com/bptlab/fCM-design-support/wiki/Goal-State');
-    this.mediator.terminationConditionModelerHook = this;
-    this.eventBus = terminationConditionModeler.eventBus;
-
-    this.getRootObject = function() {
-        return this.modeler.getTerminationCondition();
-    }
-
-    this.getNamespace = function () {
-        return this.getRootObject() && namespace(this.getRootObject());
-    }
-
-    this.getGraphics = function (element) {
-        const modeler = this.modeler;
-        return element !== this.getRootObject() ?
-            modeler.getStatements().includes(element) && element.element
-            : modeler._root.closest('.canvas');
-    }
-
-    this.eventBus.on('import.parse.complete', ({warnings}) => {
-        warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({property, value, element}) => {
-            if (property === 'tc:class') {
-                const olcClass = this.mediator.olcModelerHook.modeler.getOlcById(value);
-                if (!olcClass) { throw new Error('Could not resolve data class with id '+value); }
-                element.class = olcClass;
-            } else if (property === 'tc:states') {
-                const state = this.mediator.olcModelerHook.modeler.getStateById(value)
-                if (!state) { throw new Error('Could not resolve olc state with id '+value); }
-                element.get('states').push(state);
-            }
-        });
-    });
-}
-
-Mediator.prototype.TerminationConditionModelerHook.isHook = true;
 
 // === Objective Modeler Hook
 Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) {
@@ -620,3 +583,41 @@ Mediator.prototype.OlcModelerHook.$inject = [
 ];
 
 Mediator.prototype.OlcModelerHook.isHook = true;
+
+// ===  Termination Condition Modeler Hook
+Mediator.prototype.TerminationConditionModelerHook = function (terminationConditionModeler) {
+    AbstractHook.call(this, terminationConditionModeler, 'Termination Condition', 'https://github.com/bptlab/fCM-design-support/wiki/Goal-State');
+    this.mediator.terminationConditionModelerHook = this;
+    this.eventBus = terminationConditionModeler.eventBus;
+
+    this.getRootObject = function() {
+        return this.modeler.getTerminationCondition();
+    }
+
+    this.getNamespace = function () {
+        return this.getRootObject() && namespace(this.getRootObject());
+    }
+
+    this.getGraphics = function (element) {
+        const modeler = this.modeler;
+        return element !== this.getRootObject() ?
+            modeler.getStatements().includes(element) && element.element
+            : modeler._root.closest('.canvas');
+    }
+
+    this.eventBus.on('import.parse.complete', ({warnings}) => {
+        warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({property, value, element}) => {
+            if (property === 'tc:class') {
+                const olcClass = this.mediator.olcModelerHook.modeler.getOlcById(value);
+                if (!olcClass) { throw new Error('Could not resolve data class with id '+value); }
+                element.class = olcClass;
+            } else if (property === 'tc:states') {
+                const state = this.mediator.olcModelerHook.modeler.getStateById(value)
+                if (!state) { throw new Error('Could not resolve olc state with id '+value); }
+                element.get('states').push(state);
+            }
+        });
+    });
+}
+
+Mediator.prototype.TerminationConditionModelerHook.isHook = true;
