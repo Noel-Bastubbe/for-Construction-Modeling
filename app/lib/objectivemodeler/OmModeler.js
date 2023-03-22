@@ -221,6 +221,7 @@ OmModeler.prototype.handleStateRenamed = function (olcState) {
             element
         })
     );
+    this.showObjective(this.getCurrentObjective());
 }
 
 OmModeler.prototype.handleStateDeleted = function (olcState) {
@@ -233,11 +234,10 @@ OmModeler.prototype.handleStateDeleted = function (olcState) {
 }
 
 OmModeler.prototype.handleClassRenamed = function (clazz) {
-    this.getObjectsOfClass(clazz).forEach((element, gfx) =>
-        this.get('eventBus').fire('element.changed', {
-            element
-        })
-    );
+    this.getObjectsOfClass(clazz).forEach((element, gfx) => {
+        element.name = `${element.classRef?.name} : ${element.instance?.name}`
+    });
+    this.showObjective(this.getCurrentObjective());
 }
 
 OmModeler.prototype.handleClassDeleted = function (clazz) {
@@ -247,18 +247,21 @@ OmModeler.prototype.handleClassDeleted = function (clazz) {
 }
 
 OmModeler.prototype.getObjectsInState = function (olcState) {
-    return this.get('elementRegistry').filter((element, gfx) =>
+    let objectives = this._definitions.get('rootElements');
+    let objects = objectives.map(objective => objective.get('boardElements')).flat(1).filter((element) =>
         is(element, 'om:Object') &&
-        element.businessObject.state === olcState
-    );
+        olcState.id &&
+        element.state?.id === olcState.id);
+    return objects;
 }
 
 OmModeler.prototype.getObjectsOfClass = function (clazz) {
-    return this.get('elementRegistry').filter((element, gfx) =>
+    let objectives = this._definitions.get('rootElements');
+    let objects = objectives.map(objective => objective.get('boardElements')).flat(1).filter((element) =>
         is(element, 'om:Object') &&
         clazz.id &&
-        element.businessObject.classRef?.id === clazz.id
-    );
+        element.classRef?.id === clazz.id);
+    return objects;
 }
 
 OmModeler.prototype.getObjectInstancesOfClass = function (clazz) {
