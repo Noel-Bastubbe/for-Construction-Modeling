@@ -1,6 +1,6 @@
 import { is } from '../datamodelmodeler/util/ModelUtil';
 import { type } from '../util/Util';
-import { getClassDependencies, getClassDependents, getConnectedByExistentialAssociation, getConnectedElements, startDoCreation } from './GuidelineUtils';
+import { getClassDependencies, getClassDependents, getConnectedByExistentialAssociation, getConnectedElements } from './GuidelineUtils';
 
 export const SEVERITY = {
     ERROR : {
@@ -422,7 +422,7 @@ export default [
     },
     {
         title : 'Connect each Objective at least to one other Objective.',
-        id : 'Dep1',
+        id : 'DEP1',
         getViolations(mediator) {
             const dependencyModeler = mediator.dependencyModelerHook.modeler;
             const objectives = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Objective'));
@@ -430,13 +430,13 @@ export default [
 
             if (objectives.length - dependencies.length > 1) {
                 return [{
-                    element : hook.getRootObject(),
-                    message : 'Please connect all Objectives.',
+                    element : mediator.dependencyModelerHook.getRootObject(),
+                    message : 'Please connect all Objective to each other.'
                 }];
+            } else {
+                return [];
             }
-
         },
-        severity : SEVERITY.WARNING,
-        link : 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d3---connect-the-case-class-to-every-other-class'
+        severity : SEVERITY.WARNING
     },
 ]
