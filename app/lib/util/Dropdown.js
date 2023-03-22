@@ -29,26 +29,26 @@ export default function getDropdown(name = '') {
             this.appendChild(entry);
 
             // Delete and Edit name button
-            if (name === 'Name'){
+            if (name === 'Name') {
+                var editNameButton = document.createElement('button');
+                editNameButton.innerHTML = '🖋️';
+                editNameButton.title = 'Edit current Name';
+                editNameButton.classList.add('editNameButton');
+                editNameButton.addEventListener('click', () => {
+                    var elem = document.getElementById("dd-dropdown-entry-selected");
+                    elem.remove();
+                    });
+
+                entry.appendChild(editNameButton);
                 var deleteNameButton = document.createElement('button');
                 deleteNameButton.innerHTML = '🗑️';
                 deleteNameButton.title = 'Delete current Name';
-                deleteNameButton.classList.add('button');
+                deleteNameButton.classList.add('deleteNameButton');
                 deleteNameButton.addEventListener('click', () => {
                     var elem = document.getElementById("dd-dropdown-entry-selected");
                     elem.remove();
                     });
                 entry.appendChild(deleteNameButton);
-
-                var editNameButton = document.createElement('button');
-                editNameButton.innerHTML = '🖋️';
-                editNameButton.title = 'Edit current Name';
-                editNameButton.classList.add('button');
-                editNameButton.addEventListener('click', () => {
-                    var elem = document.getElementById("dd-dropdown-entry-selected");
-                    elem.remove();
-                    });
-                entry.appendChild(editNameButton);
             }
         }
     } 
