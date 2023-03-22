@@ -439,4 +439,23 @@ export default [
         },
         severity : SEVERITY.WARNING
     },
+    {
+        title : 'Connect the Start State to one other Objective.',
+        id : 'DEP2',
+        getViolations(mediator) {
+            const dependencyModeler = mediator.dependencyModelerHook.modeler;
+            const dependencies = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Dependency'));
+            const dependenciesFromStartState = dependencies.filter(element => element.source.id === 'start_state');
+
+            if (dependenciesFromStartState.length === 0) {
+                return [{
+                    element : mediator.dependencyModelerHook.getRootObject(),
+                    message : 'Please connect the Start State to one other Objective.'
+                }];
+            } else {
+                return [];
+            }
+        },
+        severity : SEVERITY.ERROR
+    },
 ]
