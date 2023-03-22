@@ -21,7 +21,9 @@ DepElementFactory.$inject = [
 
 DepElementFactory.prototype.createBusinessObject = function (type, attrs) {
     const element = this._moddle.create(type, attrs || {});
-    element.name = 'undefined';
+    if(element.name === undefined){
+        element.name = 'undefined'
+    }
     if(!element.id) {
         const prefix = (element.$type || '').replace(/^[^:]*:/g, '') + '_';
         element.id = this._ids.nextPrefixed(prefix, element);
