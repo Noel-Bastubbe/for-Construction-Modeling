@@ -431,7 +431,7 @@ export default [
             if (objectives.length - dependencies.length > 1) {
                 return [{
                     element : mediator.dependencyModelerHook.getRootObject(),
-                    message : 'Please connect all Objective to each other.'
+                    message : 'Please connect all Objectives to each other.'
                 }];
             } else {
                 return [];
