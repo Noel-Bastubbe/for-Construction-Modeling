@@ -27,6 +27,7 @@ import KeyboardMoveSelectionModule from 'diagram-js/lib/features/keyboard-move-s
 import LabelEditingModule from './features/label-editing';
 import ModelingModule from './features/modeling';
 import MoveModule from 'diagram-js/lib/features/move';
+import ObjectiveEvents from "./ObjectiveEvents";
 import OmButtonBarModule from './buttonbar';
 import OmObjectDropdown from './omObjectLabelHandling';
 import PaletteModule from './features/palette';
@@ -41,7 +42,7 @@ var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
 <od:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
     <od:odBoard id="Board" />
-    <odDi:odRootBoard id="RootBoard" name="Objective 1">
+    <odDi:odRootBoard id="StartBoard" name="Start State" objectiveRef="start_state">
         <odDi:odPlane id="Plane" boardElement="Board" />
     </odDi:odRootBoard>
 </od:definitions>`;
@@ -184,24 +185,30 @@ OmModeler.prototype.showObjective = function (objective) {
 OmModeler.prototype.getCurrentObjective = function () {
     return this._objective;
 }
-OmModeler.prototype.addObjective = function (name) {
-    var rootBoard = this.get('elementFactory').createRootBoard(name || '<TBD>');
-    this._definitions.get('rootBoards').push(rootBoard[0]);
-    this._definitions.get('rootElements').push(rootBoard[1]);
-    this.showObjective(rootBoard[0]);
+
+OmModeler.prototype.addObjective = function (objectiveReference) {
+  var rootBoard = this.get('elementFactory').createRootBoard(objectiveReference.name || '<TBD>', objectiveReference);
+  this._definitions.get('rootBoards').push(rootBoard[0]);
+  this._definitions.get('rootElements').push(rootBoard[1]);
+  this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
+  this.showObjective(rootBoard[0]);
 }
-OmModeler.prototype.deleteObjective = function (objective) {
 
-    var currentIndex = findIndex(this._definitions.get('rootElements'), objective.plane.boardElement);
-    this._definitions.get('rootElements').splice(currentIndex, 1);
+OmModeler.prototype.deleteObjective = function (objectiveReference) {
+  var objective = this.getObjectiveByReference(objectiveReference);
+  if (objective.id !== 'StartBoard' ) {
+      var currentIndex = findIndex(this._definitions.get('rootElements'), objective.plane.boardElement);
+      this._definitions.get('rootElements').splice(currentIndex, 1);
 
-    currentIndex = findIndex(this._definitions.get('rootBoards'), objective);
-    var indexAfterRemoval = Math.min(currentIndex, this._definitions.get('rootBoards').length - 2);
-    this._definitions.get('rootBoards').splice(currentIndex, 1);
+      currentIndex = findIndex(this._definitions.get('rootBoards'), objective);
+      var indexAfterRemoval = Math.min(currentIndex, this._definitions.get('rootBoards').length - 2);
+      this._definitions.get('rootBoards').splice(currentIndex, 1);
+      this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
 
-    if (this.getCurrentObjective() === objective) {
-        this.showObjective(this._definitions.get('rootBoards')[indexAfterRemoval]);
-    }
+      if (this.getCurrentObjective() === objective) {
+          this.showObjective(this._definitions.get('rootBoards')[indexAfterRemoval]);
+      }
+  }
 }
 
 OmModeler.prototype.handleOlcListChanged = function (olcs, dryRun = false) {
@@ -262,4 +269,19 @@ OmModeler.prototype.getObjectInstancesOfClass = function (clazz) {
         instance.classRef?.id === clazz.id
     );
     return result;
+}
+
+OmModeler.prototype.renameObjective = function (objectiveReference, name) {
+    var objective = this.getObjectiveByReference(objectiveReference);
+    objective.name = name;
+    this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
+}
+
+OmModeler.prototype.getObjectiveByReference = function(objectiveReference) {
+    const objective = this.getObjectives().filter(objective => objective.objectiveRef === objectiveReference)[0];
+    if (!objective) {
+        throw 'Unknown rootBoard of objective \"'+objectiveReference.name+'\"';
+    } else {
+        return objective;
+    }
 }
