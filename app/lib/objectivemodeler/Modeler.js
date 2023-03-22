@@ -33,13 +33,14 @@ import SpaceToolBehaviorModule from './behavior';
 import SnappingModule from './features/snapping';
 import { nextPosition } from '../util/Util';
 import OmButtonBarModule from './buttonbar';
+import ObjectiveEvents from "./ObjectiveEvents";
 
 
 var initialDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
 <od:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
     <od:odBoard id="Board" />
-    <odDi:odRootBoard id="StartBoard" name="Start State">
+    <odDi:odRootBoard id="StartBoard" name="Start State" objectiveRef="start_state">
         <odDi:odPlane id="Plane" boardElement="Board" />
     </odDi:odRootBoard>
 </od:definitions>`;
@@ -175,23 +176,43 @@ Modeler.prototype.showObjective = function (objective) {
 Modeler.prototype.getCurrentObjective = function () {
   return this._objective;
 }
-Modeler.prototype.addObjective = function (name) {
-  var rootBoard = this.get('elementFactory').createRootBoard(name || '<TBD>');
+
+Modeler.prototype.addObjective = function (objectiveReference) {
+  var rootBoard = this.get('elementFactory').createRootBoard(objectiveReference.name || '<TBD>', objectiveReference);
   this._definitions.get('rootBoards').push(rootBoard[0]);
   this._definitions.get('rootElements').push(rootBoard[1]);
+  this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
   this.showObjective(rootBoard[0]);
 }
-Modeler.prototype.deleteObjective = function (objective) {
-  if (this.getCurrentObjective().id !== 'StartBoard' ) {
+
+Modeler.prototype.deleteObjective = function (objectiveReference) {
+  var objective = this.getObjectiveByReference(objectiveReference);
+  if (objective.id !== 'StartBoard' ) {
     var currentIndex = findIndex(this._definitions.get('rootElements'), objective.plane.boardElement);
     this._definitions.get('rootElements').splice(currentIndex, 1);
 
     currentIndex = findIndex(this._definitions.get('rootBoards'), objective);
     var indexAfterRemoval = Math.min(currentIndex, this._definitions.get('rootBoards').length - 2);
     this._definitions.get('rootBoards').splice(currentIndex, 1);
+    this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
 
     if (this.getCurrentObjective() === objective) {
       this.showObjective(this._definitions.get('rootBoards')[indexAfterRemoval]);
     }
+  }
+}
+
+Modeler.prototype.renameObjective = function (objectiveReference, name) {
+  var objective = this.getObjectiveByReference(objectiveReference);
+  objective.name = name;
+  this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
+}
+
+Modeler.prototype.getObjectiveByReference = function(objectiveReference) {
+  const objective = this.getObjectives().filter(objective => objective.objectiveRef === objectiveReference)[0];
+  if (!objective) {
+    throw 'Unknown rootBoard of objective \"'+objectiveReference.name+'\"';
+  } else {
+    return objective;
   }
 }

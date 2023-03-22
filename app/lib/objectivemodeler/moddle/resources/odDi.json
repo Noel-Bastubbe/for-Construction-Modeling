@@ -18,6 +18,12 @@
           "name": "labelStyle",
           "type": "OdLabelStyle",
           "isMany": true
+        },
+        {
+          "name": "objectiveRef",
+          "isAttr": true,
+          "isReference": true,
+          "type": "dep:Objective"
         }
       ],
       "superClass": ["Board"]
