@@ -3,20 +3,20 @@ import { without } from 'min-dash';
 import { formatStates, type, is } from '../util/Util';
 import getDropdown from '../util/Dropdown';
 import EventBus from 'diagram-js/lib/core/EventBus'
-import GoalStateEvents from './GoalStateEvents';
-import GoalStateModdle from './GoalStateModdle';
+import TerminationConditionEvents from './TerminationConditionEvents';
+import TerminationConditionModdle from './TerminationConditionModdle';
 import CommonEvents from '../common/CommonEvents';
 
-const NAMESPACE = 'gs';
+const NAMESPACE = 'tc';
 
-export default function GoalStateModeler(container) {
+export default function TerminationConditionModeler(container) {
     container = $(container).get(0);
     var root = document.createElement('div');
-    root.classList.add('gs-root');
+    root.classList.add('tc-root');
     container.appendChild(root);
     this._root = root;
     this.eventBus = new EventBus();
-    this.moddle = new GoalStateModdle();
+    this.moddle = new TerminationConditionModdle();
 
     this._propagateEvent = event => {
         this.eventBus.fire('element.' + event.type, { originalEvent : event, element : {} });
@@ -26,31 +26,31 @@ export default function GoalStateModeler(container) {
     container.addEventListener('mousedown', this._propagateEvent, true);
 }
 
-GoalStateModeler.prototype.showGoalState = function (goalState) {
+TerminationConditionModeler.prototype.showTerminationCondition = function (terminationCondition) {
     this.clear();
-    this._goalState = goalState;
-    if (!goalState) return;
+    this._terminationCondition = terminationCondition;
+    if (!terminationCondition) return;
     this._handlers = {
-        'gs:Disjunction': this.createDisjunctionElement,
-        'gs:Conjunction': this.createConjunctionElement,
-        'gs:Literal': this.createLiteralElement
+        'tc:Disjunction': this.createDisjunctionElement,
+        'tc:Conjunction': this.createConjunctionElement,
+        'tc:Literal': this.createLiteralElement
     }
-    this.handleStatement(this._root, goalState);
+    this.handleStatement(this._root, terminationCondition);
 }
 
-GoalStateModeler.prototype.handleStatement = function (parentElement, statement) {
+TerminationConditionModeler.prototype.handleStatement = function (parentElement, statement) {
     var element = this._handlers[statement.$type].call(this, parentElement, statement);
     statement.element = element;
     element.statement = statement;
     return element;
 }
 
-GoalStateModeler.prototype.createDisjunctionElement = function (parentElement, disjunction) {
+TerminationConditionModeler.prototype.createDisjunctionElement = function (parentElement, disjunction) {
     var element = this.createOperationElement(parentElement, disjunction);
     var addConjunctionButton = document.createElement('button');
     addConjunctionButton.innerHTML = '+';
     addConjunctionButton.addEventListener('click', event => {
-        var newConjunction = this.moddle.create('gs:Conjunction', {operands: [] });
+        var newConjunction = this.moddle.create('tc:Conjunction', {operands: [] });
         disjunction.operands.push(newConjunction);
         element.addOperand(newConjunction);
         this.addLiteral(newConjunction);
@@ -59,7 +59,7 @@ GoalStateModeler.prototype.createDisjunctionElement = function (parentElement, d
     return element;
 }
 
-GoalStateModeler.prototype.createConjunctionElement = function (parentElement, conjunction) {
+TerminationConditionModeler.prototype.createConjunctionElement = function (parentElement, conjunction) {
     var element = this.createOperationElement(parentElement, conjunction);
     var addLiteralButton = document.createElement('button');
     addLiteralButton.innerHTML = '+';
@@ -68,20 +68,20 @@ GoalStateModeler.prototype.createConjunctionElement = function (parentElement, c
     return element;
 }
 
-GoalStateModeler.prototype.addLiteral = function (parentStatement) {
-    var newLiteral = this.moddle.create('gs:Literal', {class: this.getClassList()[0], states: [] });
+TerminationConditionModeler.prototype.addLiteral = function (parentStatement) {
+    var newLiteral = this.moddle.create('tc:Literal', {class: this.getClassList()[0], states: [] });
     parentStatement.operands.push(newLiteral);
     parentStatement.element.addOperand(newLiteral);
 }
 
-GoalStateModeler.prototype.createOperationElement = function (parentElement, operation) {
+TerminationConditionModeler.prototype.createOperationElement = function (parentElement, operation) {
     operation.get('operands');
     var element = document.createElement('div');
-    element.classList.add('gs-operation');
-    element.classList.add('gs-' + type(operation).toLowerCase());
+    element.classList.add('tc-operation');
+    element.classList.add('tc-' + type(operation).toLowerCase());
 
     var operandsElement = document.createElement('div');
-    operandsElement.classList.add('gs-operands');
+    operandsElement.classList.add('tc-operands');
     element.appendChild(operandsElement);
     element.operandsElement = operandsElement;
 
@@ -96,20 +96,20 @@ GoalStateModeler.prototype.createOperationElement = function (parentElement, ope
             this.deleteStatement(operand);
         });
         operandElement.appendChild(deleteButton);
-        this.eventBus.fire(GoalStateEvents.GOALSTATE_CHANGED, {});
+        this.eventBus.fire(TerminationConditionEvents.TERMINATIONCONDITION_CHANGED, {});
     }
     operation.operands.forEach(element.addOperand);
     parentElement.appendChild(element);
     return element;
 }
 
-GoalStateModeler.prototype.createLiteralElement = function (parentElement, literal) {
+TerminationConditionModeler.prototype.createLiteralElement = function (parentElement, literal) {
     var element = document.createElement('div');
-    element.classList.add('gs-literal');
-    var classElement = makeDiv('', 'gs-dataclass');
+    element.classList.add('tc-literal');
+    var classElement = makeDiv('', 'tc-dataclass');
     element.appendChild(classElement);
     element.classElement = classElement;
-    var stateElement = makeDiv('', 'gs-datastate');
+    var stateElement = makeDiv('', 'tc-datastate');
     element.appendChild(stateElement);
     element.stateElement = stateElement;
     parentElement.append(element);
@@ -122,7 +122,7 @@ GoalStateModeler.prototype.createLiteralElement = function (parentElement, liter
     return element;
 }
 
-GoalStateModeler.prototype.populateLiteral = function (literal, element) {
+TerminationConditionModeler.prototype.populateLiteral = function (literal, element) {
     var { classElement, stateElement } = element;
 
     classElement.innerText = literal.class.name;
@@ -180,12 +180,12 @@ GoalStateModeler.prototype.populateLiteral = function (literal, element) {
     stateElement.appendChild(stateElement.dropdown);
 }
 
-GoalStateModeler.prototype.clear = function () {
+TerminationConditionModeler.prototype.clear = function () {
     var root = this._root;
     while (root.firstChild) root.removeChild(root.lastChild);
 }
 
-GoalStateModeler.prototype.changeClass = function (clazz, literal) {
+TerminationConditionModeler.prototype.changeClass = function (clazz, literal) {
     if (literal.class !== clazz) {
         literal.class = clazz;
         literal.states = [];
@@ -193,7 +193,7 @@ GoalStateModeler.prototype.changeClass = function (clazz, literal) {
     }
 }
 
-GoalStateModeler.prototype.toggleState = function (state, literal) {
+TerminationConditionModeler.prototype.toggleState = function (state, literal) {
     if (literal.states.includes(state)) {
         literal.states = without(literal.states, state);
     } else {
@@ -202,30 +202,30 @@ GoalStateModeler.prototype.toggleState = function (state, literal) {
     this.populateLiteral(literal, literal.element);
 }
 
-GoalStateModeler.prototype.deleteStatement = function (statement) {
+TerminationConditionModeler.prototype.deleteStatement = function (statement) {
     var element = statement.element;
     var parentStatement = statement.$parent;
     var parentElement = parentStatement.element;
     parentStatement.operands = without(parentStatement.operands, statement);
     parentElement.operandsElement.removeChild(element);
-    this.eventBus.fire(GoalStateEvents.GOALSTATE_CHANGED, {});
+    this.eventBus.fire(TerminationConditionEvents.TERMINATIONCONDITION_CHANGED, {});
     if (parentStatement.operands.length === 0 && parentStatement.$parent) {
         this.deleteStatement(parentStatement);
     }
 }
 
-GoalStateModeler.prototype.handleStatesChanged = function (clazz, newStates) {
+TerminationConditionModeler.prototype.handleStatesChanged = function (clazz, newStates) {
     //TODO
 }
 
-GoalStateModeler.prototype.handleOlcListChanged = function (classes) {
+TerminationConditionModeler.prototype.handleOlcListChanged = function (classes) {
     this._classList = classes;
     if (classes.length === 0) {
         this._root.classList.add('no-dataclass');
     } else {
         this._root.classList.remove('no-dataclass');
     }
-    if (this._goalState) {
+    if (this._terminationCondition) {
         var literalsToDelete = [];
         this.forEachLiteral(literal => {
             if (!classes.includes(literal.class)) {
@@ -241,7 +241,7 @@ GoalStateModeler.prototype.handleOlcListChanged = function (classes) {
     }
 }
 
-GoalStateModeler.prototype.getLiteralsWithClassId = function (id) {
+TerminationConditionModeler.prototype.getLiteralsWithClassId = function (id) {
     var literalsOfClass = [];
     this.forEachLiteral(literal => {
         if (literal.class.id === id) {
@@ -251,7 +251,7 @@ GoalStateModeler.prototype.getLiteralsWithClassId = function (id) {
     return literalsOfClass;
 }
 
-GoalStateModeler.prototype.getLiteralsWithState = function (state) {
+TerminationConditionModeler.prototype.getLiteralsWithState = function (state) {
     const literalsWithState = [];
     this.forEachLiteral(literal => {
         if (literal.states.includes(state)) {
@@ -261,7 +261,7 @@ GoalStateModeler.prototype.getLiteralsWithState = function (state) {
     return literalsWithState;
 }
 
-GoalStateModeler.prototype.handleStateRenamed = function (state) {
+TerminationConditionModeler.prototype.handleStateRenamed = function (state) {
     this.forEachLiteral(literal => {
         if (literal.states.includes(state)) {
             this.populateLiteral(literal, literal.element);
@@ -269,7 +269,7 @@ GoalStateModeler.prototype.handleStateRenamed = function (state) {
     });
 }
 
-GoalStateModeler.prototype.handleStateDeleted = function (state) {
+TerminationConditionModeler.prototype.handleStateDeleted = function (state) {
     this.forEachLiteral(literal => {
         if (literal.states.includes(state)) {
             literal.states = without(literal.states, state);
@@ -278,14 +278,14 @@ GoalStateModeler.prototype.handleStateDeleted = function (state) {
     });
 }
 
-GoalStateModeler.prototype.getLiterals = function() {
+TerminationConditionModeler.prototype.getLiterals = function() {
     //TODO refactor to use getStatements
-    if (!this._goalState) return undefined;
-    const statementsToVisit = [this._goalState];
+    if (!this._terminationCondition) return undefined;
+    const statementsToVisit = [this._terminationCondition];
     const visitedLiterals = [];
     while (statementsToVisit.length > 0) {
         var nextStatement = statementsToVisit.shift();
-        if (is(nextStatement, 'gs:Literal')) {
+        if (is(nextStatement, 'tc:Literal')) {
             visitedLiterals.push(nextStatement);
         } else {
             statementsToVisit.push(...nextStatement.operands);
@@ -294,46 +294,46 @@ GoalStateModeler.prototype.getLiterals = function() {
     return visitedLiterals;
 }
 
-GoalStateModeler.prototype.getStatements = function() {
-    if (!this._goalState) return undefined;
-    const statementsToVisit = [this._goalState];
+TerminationConditionModeler.prototype.getStatements = function() {
+    if (!this._terminationCondition) return undefined;
+    const statementsToVisit = [this._terminationCondition];
     const visitedStatements = [];
     while (statementsToVisit.length > 0) {
         var nextStatement = statementsToVisit.shift();
         visitedStatements.push(nextStatement);
-        if (is(nextStatement, 'gs:Operation')) {
+        if (is(nextStatement, 'tc:Operation')) {
             statementsToVisit.push(...nextStatement.operands);
         }
     }
     return visitedStatements;
 }
 
-GoalStateModeler.prototype.forEachLiteral = function(consumer) {
+TerminationConditionModeler.prototype.forEachLiteral = function(consumer) {
     return this.getLiterals().forEach(consumer);
 }
 
-GoalStateModeler.prototype.getClassList = function () {
+TerminationConditionModeler.prototype.getClassList = function () {
     return this._classList || [];
 }
 
-GoalStateModeler.prototype.getStateList = function (clazz) {
+TerminationConditionModeler.prototype.getStateList = function (clazz) {
     return clazz.get('Elements').filter(element => is(element, 'olc:State'));
 }
 
-GoalStateModeler.prototype.getGoalState = function () {
-    return this._goalState;
+TerminationConditionModeler.prototype.getTerminationCondition = function () {
+    return this._terminationCondition;
 }
 
-GoalStateModeler.prototype.createNew = function () {
-    this.showGoalState(this.moddle.create(
-        'gs:Disjunction', 
+TerminationConditionModeler.prototype.createNew = function () {
+    this.showTerminationCondition(this.moddle.create(
+        'tc:Disjunction',
         { operands: [] }
     ));
 }
 
-GoalStateModeler.prototype.saveXML = function (options = {}) {
+TerminationConditionModeler.prototype.saveXML = function (options = {}) {
     return new Promise((resolve, reject) => {
-        this.moddle.toXML(this._goalState, options).then(function (result) {
+        this.moddle.toXML(this._terminationCondition, options).then(function (result) {
             return resolve({ xml: result.xml });
         }).catch(function (err) {
             return reject(err);
@@ -341,11 +341,11 @@ GoalStateModeler.prototype.saveXML = function (options = {}) {
     });
 };
 
-GoalStateModeler.prototype.importXML = function (xml) {
+TerminationConditionModeler.prototype.importXML = function (xml) {
     return new Promise((resolve, reject) => {
       this.moddle.fromXML(xml).then((result) => {
         this.eventBus.fire('import.parse.complete', result);
-        this.showGoalState(result.rootElement);
+        this.showTerminationCondition(result.rootElement);
         resolve();
       }).catch(function (err) {  
         return reject(err);

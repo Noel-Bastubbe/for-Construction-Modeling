@@ -27,15 +27,15 @@ SEVERITY.filter = function(lambda) {
 
 export default [
     {
-       title : 'GS2: Include all relevant data objects in the goal',
-       id : 'GS2',
+       title : 'TC2: Include all relevant data objects in the Termination Condition',
+       id : 'TC2',
        getViolations(mediator) {
-           const hook = mediator.goalStateModelerHook;
+           const hook = mediator.terminationConditionModelerHook;
            const literals = hook.modeler.getLiterals();
            if (literals && literals.length === 0) {
                return [{
                    element : hook.getRootObject(),
-                   message : 'Please include at least one data object configuration as literal in the goal state.'
+                   message : 'Please include at least one data object configuration as literal in the termination condition.'
                }];
            } else {
                return [];
