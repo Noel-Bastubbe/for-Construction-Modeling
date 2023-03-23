@@ -458,4 +458,35 @@ export default [
         },
         severity : SEVERITY.ERROR
     },
+    {
+        title : 'Do not create cycles in the Dependency Modeler.',
+        id : 'DEP3',
+        getViolations(mediator) {
+            const dependencyModeler = mediator.dependencyModelerHook.modeler;
+            const objectives = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Objective'));
+            const dependencies = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Dependency'));
+            const startState = objectives.filter(element => element.id === 'start_state');
+
+            let connectedObjectives = 1;
+            let currentObjective = startState[0].id;
+            for (let j = 0; j < objectives.length; j++) {
+                for (let i = 0; i < dependencies.length; i++) {
+                    if (dependencies[i].source.id === currentObjective) {
+                        currentObjective = dependencies[i].target.id;
+                        connectedObjectives++;
+                    }
+                }
+            }
+
+            if (connectedObjectives !== objectives.length && objectives.length - dependencies.length === 1) {
+                return [{
+                    element : mediator.dependencyModelerHook.getRootObject(),
+                    message : 'Please do not create cycles in the Dependency Modeler.'
+                }];
+            } else {
+                return [];
+            }
+        },
+        severity : SEVERITY.ERROR
+    },
 ]
