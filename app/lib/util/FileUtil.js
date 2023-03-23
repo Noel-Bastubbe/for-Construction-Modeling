@@ -12,7 +12,7 @@ export function download(name, data, encoding='charset=UTF-8') {
         'download': name
     });
 
-    link.click();
+    link.click(); 
     document.body.removeChild(link);
 }
 

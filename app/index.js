@@ -181,6 +181,7 @@ async function importFromZip (zipData) {
 // IO Buttons
 document.getElementById('newButton').addEventListener('click', () => {
   createNewDiagram();
+  displayFileName("Unnamed file") 
 });
 
 document.getElementById('openButton').addEventListener('click', () => upload((data, title) => {
