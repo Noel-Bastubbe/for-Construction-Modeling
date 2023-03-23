@@ -174,6 +174,8 @@ async function importFromZip (zipData) {
   await goalStateModeler.importXML(await files.goalState.async("string"));
   await dependencyModeler.importXML(await files.dependencyModel.async("string"));
   checker.activate();
+
+  // displayFileName(zip.data);  
 }
 
 // IO Buttons
@@ -181,17 +183,22 @@ document.getElementById('newButton').addEventListener('click', () => {
   createNewDiagram();
 });
 
-document.getElementById('openButton').addEventListener('click', () => upload(data => {
+document.getElementById('openButton').addEventListener('click', () => upload((data, title) => {
   if (data.startsWith('data:')) {
     data = data.split(',')[1];
   }
-  importFromZip(data);
+  importFromZip(data); 
+  displayFileName(title);  
 }, 'base64'));
 
 document.getElementById('saveButton').addEventListener('click', () => exportToZip().then(zip => {
   download('fcmModel.zip', zip, 'base64');
   //importFromZip(zip);
 }));
+
+async function displayFileName (zipName) {
+  document.getElementById("fileName").innerHTML = zipName; 
+  };
 
 if (SHOW_DEBUG_BUTTONS) {
   const reloadButton = document.createElement('a');

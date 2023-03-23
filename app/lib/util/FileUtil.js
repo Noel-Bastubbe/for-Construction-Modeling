@@ -22,6 +22,7 @@ export function upload(callback, encoding='UTF-8') {
 
     $(fileInput).attr({ 'type': 'file' }).on('change', function (e) {
         var file = e.target.files[0];
+        var title = e.target.files[0].name;
         var reader = new FileReader();
         if (encoding === 'base64') {
             reader.readAsDataURL(file);
@@ -29,9 +30,8 @@ export function upload(callback, encoding='UTF-8') {
             reader.readAsText(file, encoding);
         }
         reader.onload = function (evt) {
-            callback(evt.target.result);
+            callback(evt.target.result, title);
         }
     }).trigger('click');
-
     document.body.removeChild(fileInput);
 }
