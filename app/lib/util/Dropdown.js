@@ -1,3 +1,5 @@
+//import OmObjectLabelHandler from "../objectivemodeler/omObjectLabelHandling/OmObjectLabelHandler"
+
 export default function getDropdown(name = '') {
     const dropdownMenu = document.createElement('div');
     dropdownMenu.classList.add('dd-dropdown-menu');
@@ -28,25 +30,40 @@ export default function getDropdown(name = '') {
             }
             this.appendChild(entry);
 
-            // Delete and Edit name button
+            // Delete and Edit name button in Objective Model
             if (name === 'Name') {
                 var editNameButton = document.createElement('button');
                 editNameButton.innerHTML = '🖋️';
                 editNameButton.title = 'Edit current Name';
                 editNameButton.classList.add('editNameButton');
                 editNameButton.addEventListener('click', () => {
-                    var elem = document.getElementById("dd-dropdown-entry-selected");
-                    elem.remove();
-                    });
-
+                    const newName = prompt('Enter new name:', entry.option.name);
+                    if (newName !== null && newName !== '') {
+                        entry.option.name = newName;
+                        entry.innerHTML = newName;
+                        // entry.appendChild(editNameButton);
+                        // entry.appendChild(deleteNameButton);
+                    }
+                });
                 entry.appendChild(editNameButton);
+                
                 var deleteNameButton = document.createElement('button');
                 deleteNameButton.innerHTML = '🗑️';
                 deleteNameButton.title = 'Delete current Name';
                 deleteNameButton.classList.add('deleteNameButton');
                 deleteNameButton.addEventListener('click', () => {
-                    var elem = document.getElementById("dd-dropdown-entry-selected");
-                    elem.remove();
+                    // const index = options.indexOf(entry.option);
+                    // if (index > -1) {
+                    //     options.splice(index, 1);
+                    // }
+                    // this.populate(options, onChange, element, labelFunc);
+                    var nameToDelete = entry.option;
+                    // nameToDelete.name = undefined; 
+                    console.log(nameToDelete);
+                    // OmObjectLabelHandler.populateClassDropdown();
+                    // delete nameToDelete.name;
+                    // entry.appendChild(editNameButton);
+                    // entry.appendChild(deleteNameButton);
                     });
                 entry.appendChild(deleteNameButton);
             }
