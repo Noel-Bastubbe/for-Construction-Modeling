@@ -32,17 +32,20 @@ export default function LabelEditingProvider(
     var titel_attribute_divider_y_coordinate = (event.element.y + 30 - canvas._cachedViewbox.y) * zoom;
     var click_y_coordinate = event.originalEvent.offsetY;
     if (click_y_coordinate >= titel_attribute_divider_y_coordinate) {
-      event.element.businessObject.labelAttribute = 'attributeValues';
+      event.element.businessObject.labelAttribute = 'state';
     } else {
       event.element.businessObject.labelAttribute = 'name';
     }
   }
 
+  // we do not need this reaction on double click anymore - it throws errors and infinite loops
+  // probably because our dropdown handles everything now
+
   // listen to dblclick on non-root elements
-  eventBus.on('element.dblclick', function(event) {
-    decideIfTitelOrAttributesClicked(event);
-    activateDirectEdit(event.element, true);
-  });
+  // eventBus.on('element.dblclick', function(event) {
+  //   decideIfTitelOrAttributesClicked(event);
+  //   activateDirectEdit(event.element, true);
+  // });
 
   // complete on followup canvas operation
   eventBus.on([
@@ -233,7 +236,7 @@ LabelEditingProvider.prototype.getEditingBBox = function(element) {
     if (isAny(element, [ 'om:Object' ])) {
 
       // Editing attributes should be different.
-      if (element.businessObject.labelAttribute === 'attributeValues') {
+      if (element.businessObject.labelAttribute === 'state') {
         assign(bounds, {
           y: bbox.y + (30 * zoom),
           height: bbox.height - (30 * zoom)

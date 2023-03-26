@@ -4,7 +4,7 @@ import Guidelines from "./Guidelines";
 import { SEVERITY } from "./Guidelines";
 import getDropdown from "../util/Dropdown";
 import OlcEvents from '../olcmodeler/OlcEvents';
-import GoalStateEvents from "../goalstatemodeler/GoalStateEvents";
+import TerminationConditionEvents from "../terminationconditionmodeler/TerminationConditionEvents";
 import { openAsOverlay } from "../util/HtmlUtil";
 import { makeGuidelineLink, makeQuickFixDiv } from "./ErrorBar";
 
@@ -19,7 +19,7 @@ export default class Checker {
         mediator.executed(['shape.create', 'shape.delete', 'element.updateLabel', 'connection.create', 'connection.delete', 'element.updateProperties'], event => {
             this.evaluateAll();
         });
-        mediator.on([OlcEvents.SELECTED_OLC_CHANGED, GoalStateEvents.GOALSTATE_CHANGED], event => {
+        mediator.on([OlcEvents.SELECTED_OLC_CHANGED, TerminationConditionEvents.TERMINATIONCONDITION_CHANGED], event => {
             this.evaluateAll();
         });
         this.errorBar = errorBar;
