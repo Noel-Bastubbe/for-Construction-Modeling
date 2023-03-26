@@ -204,6 +204,7 @@ async function displayFileName (zipName) {
 if (SHOW_DEBUG_BUTTONS) {
   const reloadButton = document.createElement('a');
   reloadButton.classList.add('barButton');
+  reloadButton.classList.add('barContent'); 
   reloadButton.innerHTML = 'reload';
   document.getElementById('saveButton').parentElement.appendChild(reloadButton); 
   reloadButton.addEventListener('click', () => exportToZip().then(zip => {
