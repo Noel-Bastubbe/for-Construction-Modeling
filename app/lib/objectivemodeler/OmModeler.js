@@ -254,7 +254,7 @@ OmModeler.prototype.handleClassDeleted = function (clazz) {
     objectives.forEach(objective => {
         let objects = objective.get('boardElements');
         for (var i = 0; i < objects.length; i++) {
-            if (objects[i].classRef === clazz) {
+            if (is(objects[i], 'om:Object') && objects[i].classRef === clazz) {
                 objects.splice(i, 1);
                 i--;
             }
@@ -262,6 +262,7 @@ OmModeler.prototype.handleClassDeleted = function (clazz) {
     })
     this.showObjective(this.getCurrentObjective());
     // This is needed to update the visual representation of the objective that is currently loaded.
+    // This may need to be adapted once the error of links between deleted objects is resolved
 }
 
 OmModeler.prototype.getVisualsInState = function (olcState) {
@@ -271,7 +272,7 @@ OmModeler.prototype.getVisualsInState = function (olcState) {
 }
 
 OmModeler.prototype.getObjectsInState = function (olcState) {
-    let objectives = this._definitions.get('rootElements');
+    let objectives = this.get('rootElements');
     let objects = objectives.map(objective => objective.get('boardElements')).flat(1).filter((element) =>
         is(element, 'om:Object') &&
         olcState.id &&
