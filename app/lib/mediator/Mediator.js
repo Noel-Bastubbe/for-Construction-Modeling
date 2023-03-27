@@ -141,7 +141,7 @@ Mediator.prototype.addedClass = function (clazz) {
 }
 
 Mediator.prototype.confirmClassDeletion = function (clazz) {
-    const affectedLiterals = this.terminationCondition.modeler.getLiteralsWithClassId(clazz.id);
+    const affectedLiterals = this.terminationConditionModelerHook.modeler.getLiteralsWithClassId(clazz.id);
     const affectedStates = this.olcModelerHook.modeler.getOlcByClass(clazz).get('Elements').filter(element => is(element, 'olc:State'));
     const affectedDataObjectReferences = this.fragmentModelerHook.modeler.getDataObjectReferencesOfClass(clazz);
     const affectedObjects = this.objectiveModelerHook.modeler.getObjectsOfClass(clazz);
