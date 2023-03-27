@@ -203,7 +203,7 @@ BaseViewer.prototype.importDefinitions = function(definitions, rootBoard) {
 
     self._setDefinitions(definitions);
 
-    self.open(this._objective).then(function(result) {
+    self.open(self._objective).then(function(result) {
 
       var warnings = result.warnings;
 
