@@ -1,4 +1,4 @@
-//import OmObjectLabelHandler from "../objectivemodeler/omObjectLabelHandling/OmObjectLabelHandler"
+import OmObjectLabelHandler from "../objectivemodeler/omObjectLabelHandling/OmObjectLabelHandler"
 
 export default function getDropdown(name = '') {
     const dropdownMenu = document.createElement('div');
@@ -40,30 +40,20 @@ export default function getDropdown(name = '') {
                     const newName = prompt('Enter new name:', entry.option.name);
                     if (newName !== null && newName !== '') {
                         entry.option.name = newName;
-                        entry.innerHTML = newName;
-                        // entry.appendChild(editNameButton);
-                        // entry.appendChild(deleteNameButton);
+                        var elementToChange = entry.firstChild;
+                        elementToChange.nodeValue = newName;
                     }
                 });
                 entry.appendChild(editNameButton);
-                
+
                 var deleteNameButton = document.createElement('button');
                 deleteNameButton.innerHTML = '🗑️';
                 deleteNameButton.title = 'Delete current Name';
                 deleteNameButton.classList.add('deleteNameButton');
                 deleteNameButton.addEventListener('click', () => {
-                    // const index = options.indexOf(entry.option);
-                    // if (index > -1) {
-                    //     options.splice(index, 1);
-                    // }
-                    // this.populate(options, onChange, element, labelFunc);
                     var nameToDelete = entry.option;
-                    // nameToDelete.name = undefined; 
+                    nameToDelete.name = undefined; 
                     console.log(nameToDelete);
-                    // OmObjectLabelHandler.populateClassDropdown();
-                    // delete nameToDelete.name;
-                    // entry.appendChild(editNameButton);
-                    // entry.appendChild(deleteNameButton);
                     });
                 entry.appendChild(deleteNameButton);
             }
