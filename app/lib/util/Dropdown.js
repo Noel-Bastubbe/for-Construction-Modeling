@@ -51,8 +51,9 @@ export default function getDropdown(name = '') {
                 deleteNameButton.title = 'Delete current Name';
                 deleteNameButton.classList.add('deleteNameButton');
                 deleteNameButton.addEventListener('click', () => {
-                    var nameToDelete = entry.option;
-                    nameToDelete.name = undefined; 
+                    var nameToDelete = entry;
+                    nameToDelete.option.name = undefined; 
+                    nameToDelete.remove();
                     console.log(nameToDelete);
                     });
                 entry.appendChild(deleteNameButton);
