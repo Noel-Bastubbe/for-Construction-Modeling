@@ -222,27 +222,31 @@ OmModeler.prototype.handleOlcListChanged = function (olcs, dryRun = false) {
 }
 
 OmModeler.prototype.handleStateRenamed = function (olcState) {
-    this.getObjectsInState(olcState).forEach((element, gfx) =>
-        element.name = `${element.classRef?.name} : ${element.instance?.name}`
+    this.getVisualsInState(olcState).forEach(element =>
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
     );
-    this.showObjective(this.getCurrentObjective());
-    // This is needed to update the visual representation of the objects that are currently loaded.
 }
 
 OmModeler.prototype.handleStateDeleted = function (olcState) {
-    this.getObjectsInState(olcState).forEach((element, gfx) => {
+    let changedVisual = this.getVisualsInState(olcState);
+    this.getObjectsInState(olcState).forEach(element => {
         element.state = undefined;
     });
-    this.showObjective(this.getCurrentObjective());
-    // This is needed to update the visual representation of the objects that are currently loaded.
+    changedVisual.forEach(element =>
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
+    );
 }
 
 OmModeler.prototype.handleClassRenamed = function (clazz) {
-    this.getObjectsOfClass(clazz).forEach((element, gfx) => {
-        element.name = `${element.classRef?.name} : ${element.instance?.name}`
+    this.getVisualsOfClass(clazz).forEach(element => {
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
     });
-    this.showObjective(this.getCurrentObjective());
-    // This is needed to update the visual representation of the objects that are currently loaded.
 }
 
 OmModeler.prototype.handleClassDeleted = function (clazz) {
@@ -257,7 +261,13 @@ OmModeler.prototype.handleClassDeleted = function (clazz) {
         }
     })
     this.showObjective(this.getCurrentObjective());
-    // This is needed to update the visual representation of the objects that are currently loaded.
+    // This is needed to update the visual representation of the objective that is currently loaded.
+}
+
+OmModeler.prototype.getVisualsInState = function (olcState) {
+    return this.get('elementRegistry').filter(element =>
+        element.businessObject.state?.id === olcState.id
+    );
 }
 
 OmModeler.prototype.getObjectsInState = function (olcState) {
@@ -267,6 +277,12 @@ OmModeler.prototype.getObjectsInState = function (olcState) {
         olcState.id &&
         element.state?.id === olcState.id);
     return objects;
+}
+
+OmModeler.prototype.getVisualsOfClass = function (clazz) {
+    return this.get('elementRegistry').filter(element =>
+        element.businessObject.classRef?.id === clazz.id
+    );
 }
 
 OmModeler.prototype.getObjectsOfClass = function (clazz) {
@@ -280,7 +296,7 @@ OmModeler.prototype.getObjectsOfClass = function (clazz) {
 
 OmModeler.prototype.getObjectInstancesOfClass = function (clazz) {
     let instances = this._definitions.get('objectInstances');
-    return instances.filter((instance, gfx) =>
+    return instances.filter(instance =>
         is(instance, 'om:ObjectInstance') &&
         clazz.id &&
         instance.classRef?.id === clazz.id
