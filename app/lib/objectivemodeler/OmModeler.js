@@ -187,7 +187,7 @@ OmModeler.prototype.getCurrentObjective = function () {
 }
 
 OmModeler.prototype.addObjective = function (objectiveReference) {
-  var rootBoard = this.get('elementFactory').createRootBoard(objectiveReference.name || '<TBD>', objectiveReference);
+  var rootBoard = this.get('elementFactory').createRootBoard(objectiveReference.name || 'undefined', objectiveReference);
   this._definitions.get('rootBoards').push(rootBoard[0]);
   this._definitions.get('rootElements').push(rootBoard[1]);
   this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
@@ -263,12 +263,11 @@ OmModeler.prototype.getObjectsOfClass = function (clazz) {
 
 OmModeler.prototype.getObjectInstancesOfClass = function (clazz) {
     let instances = this._definitions.get('objectInstances');
-    let result = instances.filter((instance, gfx) =>
+    return instances.filter((instance, gfx) =>
         is(instance, 'om:ObjectInstance') &&
         clazz.id &&
         instance.classRef?.id === clazz.id
     );
-    return result;
 }
 
 OmModeler.prototype.renameObjective = function (objectiveReference, name) {

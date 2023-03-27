@@ -2,7 +2,7 @@ import FragmentModeler from './lib/fragmentmodeler/FragmentModeler';
 import diagramXML from '../resources/newDiagram.bpmn';
 import newDatamodel from '../resources/emptyBoard.bpmn';
 import OlcModeler from './lib/olcmodeler/OlcModeler';
-import GoalStateModeler from './lib/goalstatemodeler/GoalStateModeler';
+import TerminationConditionModeler from './lib/terminationconditionmodeler/TerminationConditionModeler';
 import DataModelModeler from './lib/datamodelmodeler/Modeler';
 import ObjectiveModeler from './lib/objectivemodeler/OmModeler';
 import DependencyModeler from './lib/dependencymodeler/DependencyModeler';
@@ -16,7 +16,7 @@ import { download, upload } from './lib/util/FileUtil';
 import conferenceProcess from '../resources/conferenceModel/process.bpmn';
 import conferenceDataModel from '../resources/conferenceModel/datamodel.xml';
 import conferenceOLC from '../resources/conferenceModel/olc.xml';
-import conferenceGoalState from '../resources/conferenceModel/goalState.xml';
+import conferenceTerminationCondition from '../resources/conferenceModel/terminationCondition.xml';
 
 import Zip from 'jszip';
 
@@ -80,10 +80,10 @@ var fragmentModeler = new FragmentModeler({
     }]
 });
 
-var goalStateModeler = new GoalStateModeler(
-  '#goalstate-canvas'
+var terminationConditionModeler = new TerminationConditionModeler(
+  '#terminationcondition-canvas'
 );
-new mediator.GoalStateModelerHook(goalStateModeler);
+new mediator.TerminationConditionModelerHook(terminationConditionModeler);
 
 
 
@@ -96,7 +96,7 @@ async function loadDebugData() {
   zip.file('fragments.bpmn', conferenceProcess);
   zip.file('dataModel.xml', conferenceDataModel);
   zip.file('olcs.xml', conferenceOLC);
-  zip.file('goalState.xml', conferenceGoalState);
+  zip.file('terminationCondition.xml', conferenceTerminationCondition);
   await importFromZip(zip.generateAsync({type : 'base64'}));
 }
 
@@ -108,7 +108,7 @@ async function createNewDiagram() {
       await dataModeler.importXML(newDatamodel);
       await objectiveModeler.createDiagram();
       await dependencyModeler.createNew();
-      goalStateModeler.createNew();
+      terminationConditionModeler.createNew();
       if (LOAD_DUMMY) {
         await loadDebugData();
       } 
@@ -144,8 +144,8 @@ async function exportToZip () {
   zip.file('objectiveModel.xml', objectiveModel);
   const olcs = (await olcModeler.saveXML({ format: true })).xml;
   zip.file('olcs.xml', olcs);
-  const goalState = (await goalStateModeler.saveXML({ format: true })).xml;
-  zip.file('goalState.xml', goalState);
+  const terminationCondition = (await terminationConditionModeler.saveXML({ format: true })).xml;
+  zip.file('terminationCondition.xml', terminationCondition);
   const dependencyModel = (await dependencyModeler.saveXML({ format: true })).xml;
   zip.file('dependencyModel.xml', dependencyModel);
   return zip.generateAsync({type : 'base64'});
@@ -159,7 +159,7 @@ async function importFromZip (zipData) {
       dataModel: zip.file('dataModel.xml'),
       objectiveModel: zip.file('objectiveModel.xml'),
       olcs: zip.file('olcs.xml'),
-      goalState: zip.file('goalState.xml'),
+      terminationCondition: zip.file('terminationCondition.xml'),
       dependencyModel: zip.file('dependencyModel.xml')
   };
   Object.keys(files).forEach(key => {
@@ -171,7 +171,7 @@ async function importFromZip (zipData) {
   await objectiveModeler.importXML(await files.objectiveModel.async("string"));
   await olcModeler.importXML(await files.olcs.async("string"));
   await fragmentModeler.importXML(await files.fragments.async("string"));
-  await goalStateModeler.importXML(await files.goalState.async("string"));
+  await terminationConditionModeler.importXML(await files.terminationCondition.async("string"));
   await dependencyModeler.importXML(await files.dependencyModel.async("string"));
   checker.activate();
 }
