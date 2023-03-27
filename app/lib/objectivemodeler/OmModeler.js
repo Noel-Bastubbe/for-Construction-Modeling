@@ -80,8 +80,6 @@ OmModeler.NavigatedViewer = NavigatedViewer;
  *
  */
 OmModeler.prototype.createDiagram = function () {
-    const container = this.get('canvas').getContainer();
-    container.style.visibility = 'hidden';
     return this.importXML(initialDiagram);
 };
 
