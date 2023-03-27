@@ -1,6 +1,6 @@
 import { is } from '../datamodelmodeler/util/ModelUtil';
 import { type } from '../util/Util';
-import { getClassDependencies, getClassDependents, getConnectedByExistentialAssociation, getConnectedElements, startDoCreation } from './GuidelineUtils';
+import { getClassDependencies, getClassDependents, getConnectedByExistentialAssociation, getConnectedElements } from './GuidelineUtils';
 
 export const SEVERITY = {
     ERROR : {
@@ -419,5 +419,74 @@ export default [
         },
         severity : SEVERITY.ERROR,
         link : 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d3---connect-the-case-class-to-every-other-class'
+    },
+    {
+        title : 'Connect each Objective at least to one other Objective.',
+        id : 'DEP1',
+        getViolations(mediator) {
+            const dependencyModeler = mediator.dependencyModelerHook.modeler;
+            const objectives = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Objective'));
+            const dependencies = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Dependency'));
+
+            if (objectives.length - dependencies.length > 1) {
+                return [{
+                    element : mediator.dependencyModelerHook.getRootObject(),
+                    message : 'Please connect all Objectives to each other.'
+                }];
+            } else {
+                return [];
+            }
+        },
+        severity : SEVERITY.WARNING
+    },
+    {
+        title : 'Connect the Start State to one other Objective.',
+        id : 'DEP2',
+        getViolations(mediator) {
+            const dependencyModeler = mediator.dependencyModelerHook.modeler;
+            const dependencies = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Dependency'));
+            const dependenciesFromStartState = dependencies.filter(element => element.source.id === 'start_state');
+
+            if (dependenciesFromStartState.length === 0) {
+                return [{
+                    element : mediator.dependencyModelerHook.getRootObject(),
+                    message : 'Please connect the Start State to one other Objective.'
+                }];
+            } else {
+                return [];
+            }
+        },
+        severity : SEVERITY.ERROR
+    },
+    {
+        title : 'Do not create cycles in the Dependency Modeler.',
+        id : 'DEP3',
+        getViolations(mediator) {
+            const dependencyModeler = mediator.dependencyModelerHook.modeler;
+            const objectives = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Objective'));
+            const dependencies = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Dependency'));
+            const startState = objectives.filter(element => element.id === 'start_state');
+
+            let connectedObjectives = 1;
+            let currentObjective = startState[0].id;
+            for (let j = 0; j < objectives.length; j++) {
+                for (let i = 0; i < dependencies.length; i++) {
+                    if (dependencies[i].source.id === currentObjective) {
+                        currentObjective = dependencies[i].target.id;
+                        connectedObjectives++;
+                    }
+                }
+            }
+
+            if (connectedObjectives !== objectives.length && objectives.length - dependencies.length === 1) {
+                return [{
+                    element : mediator.dependencyModelerHook.getRootObject(),
+                    message : 'Please do not create cycles in the Dependency Modeler.'
+                }];
+            } else {
+                return [];
+            }
+        },
+        severity : SEVERITY.ERROR
     },
 ]
