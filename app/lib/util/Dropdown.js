@@ -1,5 +1,3 @@
-import OmObjectLabelHandler from "../objectivemodeler/omObjectLabelHandling/OmObjectLabelHandler"
-
 export default function getDropdown(name = '') {
     const dropdownMenu = document.createElement('div');
     dropdownMenu.classList.add('dd-dropdown-menu');
@@ -40,8 +38,8 @@ export default function getDropdown(name = '') {
                     const newName = prompt('Enter new name:', entry.option.name);
                     if (newName !== null && newName !== '') {
                         entry.option.name = newName;
-                        var elementToChange = entry.firstChild;
-                        elementToChange.nodeValue = newName;
+                        var nameToChange = entry.firstChild;
+                        nameToChange.nodeValue = newName;
                     }
                 });
                 entry.appendChild(editNameButton);
@@ -54,7 +52,7 @@ export default function getDropdown(name = '') {
                     var nameToDelete = entry;
                     nameToDelete.option.name = undefined; 
                     nameToDelete.remove();
-                    console.log(nameToDelete);
+                    console.log(nameToDelete.option);
                     });
                 entry.appendChild(deleteNameButton);
             }
