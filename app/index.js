@@ -174,14 +174,12 @@ async function importFromZip (zipData) {
   await terminationConditionModeler.importXML(await files.terminationCondition.async("string"));
   await dependencyModeler.importXML(await files.dependencyModel.async("string"));
   checker.activate();
-
-  // displayFileName(zip.data);  
 }
 
 // IO Buttons
 document.getElementById('newButton').addEventListener('click', () => {
   createNewDiagram();
-  displayFileName("Unnamed file") 
+  displayFileName("Unnamed file"); 
 });
 
 document.getElementById('openButton').addEventListener('click', () => upload((data, title) => {
@@ -194,7 +192,6 @@ document.getElementById('openButton').addEventListener('click', () => upload((da
 
 document.getElementById('saveButton').addEventListener('click', () => exportToZip().then(zip => {
   download('fcmModel.zip', zip, 'base64');
-  //importFromZip(zip);
 }));
 
 async function displayFileName (zipName) {

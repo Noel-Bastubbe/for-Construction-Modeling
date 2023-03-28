@@ -9,9 +9,8 @@ export function download(name, data, encoding='charset=UTF-8') {
 
     $(link).attr({
         'href': 'data:application/' + fileType + ';' + encoding + ',' + encodedData,
-        'download': name
-    });
-
+        'download': name 
+    }); 
     link.click(); 
     document.body.removeChild(link);
 }
