@@ -185,28 +185,28 @@ OmModeler.prototype.getCurrentObjective = function () {
 }
 
 OmModeler.prototype.addObjective = function (objectiveReference) {
-  var rootBoard = this.get('elementFactory').createRootBoard(objectiveReference.name || 'undefined', objectiveReference);
-  this._definitions.get('rootBoards').push(rootBoard[0]);
-  this._definitions.get('rootElements').push(rootBoard[1]);
-  this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
-  this.showObjective(rootBoard[0]);
+    var rootBoard = this.get('elementFactory').createRootBoard(objectiveReference.name || 'undefined', objectiveReference);
+    this._definitions.get('rootBoards').push(rootBoard[0]);
+    this._definitions.get('rootElements').push(rootBoard[1]);
+    this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
+    this.showObjective(rootBoard[0]);
 }
 
 OmModeler.prototype.deleteObjective = function (objectiveReference) {
-  var objective = this.getObjectiveByReference(objectiveReference);
-  if (objective.id !== 'StartBoard' ) {
-      var currentIndex = findIndex(this._definitions.get('rootElements'), objective.plane.boardElement);
-      this._definitions.get('rootElements').splice(currentIndex, 1);
+    var objective = this.getObjectiveByReference(objectiveReference);
+    if (objective.id !== 'StartBoard') {
+        var currentIndex = findIndex(this._definitions.get('rootElements'), objective.plane.boardElement);
+        this._definitions.get('rootElements').splice(currentIndex, 1);
 
-      currentIndex = findIndex(this._definitions.get('rootBoards'), objective);
-      var indexAfterRemoval = Math.min(currentIndex, this._definitions.get('rootBoards').length - 2);
-      this._definitions.get('rootBoards').splice(currentIndex, 1);
-      this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
+        currentIndex = findIndex(this._definitions.get('rootBoards'), objective);
+        var indexAfterRemoval = Math.min(currentIndex, this._definitions.get('rootBoards').length - 2);
+        this._definitions.get('rootBoards').splice(currentIndex, 1);
+        this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
 
-      if (this.getCurrentObjective() === objective) {
-          this.showObjective(this._definitions.get('rootBoards')[indexAfterRemoval]);
-      }
-  }
+        if (this.getCurrentObjective() === objective) {
+            this.showObjective(this._definitions.get('rootBoards')[indexAfterRemoval]);
+        }
+    }
 }
 
 OmModeler.prototype.renameObjective = function (objectiveReference, name) {
@@ -251,8 +251,8 @@ OmModeler.prototype.handleClassDeleted = function (clazz) {
     let objectives = this._definitions.get('rootElements');
     objectives.forEach(objective => {
         let objects = objective.get('boardElements');
-        for (var i = 0; i < objects.length; i++) {
-            if (is(objects[i], 'om:Object') && objects[i].classRef === clazz) {
+        for (let i = 0; i < objects.length; i++) {
+            if (is(objects[i], 'om:Object') && clazz.id && objects[i].classRef?.id === clazz.id) {
                 objects.splice(i, 1);
                 i--;
             }
@@ -265,6 +265,8 @@ OmModeler.prototype.handleClassDeleted = function (clazz) {
 
 OmModeler.prototype.getVisualsInState = function (olcState) {
     return this.get('elementRegistry').filter(element =>
+        is(element, 'om:Object') &&
+        olcState.id &&
         element.businessObject.state?.id === olcState.id
     );
 }
@@ -280,6 +282,8 @@ OmModeler.prototype.getObjectsInState = function (olcState) {
 
 OmModeler.prototype.getVisualsOfClass = function (clazz) {
     return this.get('elementRegistry').filter(element =>
+        is(element, 'om:Object') &&
+        clazz.id &&
         element.businessObject.classRef?.id === clazz.id
     );
 }
@@ -302,10 +306,10 @@ OmModeler.prototype.getObjectInstancesOfClass = function (clazz) {
     );
 }
 
-OmModeler.prototype.getObjectiveByReference = function(objectiveReference) {
+OmModeler.prototype.getObjectiveByReference = function (objectiveReference) {
     const objective = this.getObjectives().filter(objective => objective.objectiveRef === objectiveReference)[0];
     if (!objective) {
-        throw 'Unknown rootBoard of objective \"'+objectiveReference.name+'\"';
+        throw 'Unknown rootBoard of objective \"' + objectiveReference.name + '\"';
     } else {
         return objective;
     }

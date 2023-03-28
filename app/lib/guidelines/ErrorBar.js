@@ -65,6 +65,7 @@ export default class ErrorBar {
         const display = document.createElement('span');
         display.innerHTML = severity.label + ': ' + number;
         display.classList.add('barButton');
+        display.classList.add('barContent');
         this.numberOfViolations.appendChild(display);
         return display;
     }
