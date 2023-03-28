@@ -270,7 +270,7 @@ OmModeler.prototype.getVisualsInState = function (olcState) {
 }
 
 OmModeler.prototype.getObjectsInState = function (olcState) {
-    let objectives = this.get('rootElements');
+    let objectives = this._definitions.get('rootElements');
     let objects = objectives.map(objective => objective.get('boardElements')).flat(1).filter((element) =>
         is(element, 'om:Object') &&
         olcState.id &&
