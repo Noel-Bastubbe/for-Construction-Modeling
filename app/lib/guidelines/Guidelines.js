@@ -422,7 +422,7 @@ export default [
     },
     {
         title : 'Connect each Objective at least to one other Objective.',
-        id : 'DEP1',
+        id : 'DEP2',
         getViolations(mediator) {
             const dependencyModeler = mediator.dependencyModelerHook.modeler;
             const objectives = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Objective'));
@@ -437,11 +437,12 @@ export default [
                 return [];
             }
         },
-        severity : SEVERITY.WARNING
+        severity : SEVERITY.WARNING,
+        link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep2---link-every-objectives-to-at-least-one-other-objective'
     },
     {
         title : 'Connect the Start State to one other Objective.',
-        id : 'DEP2',
+        id : 'DEP3',
         getViolations(mediator) {
             const dependencyModeler = mediator.dependencyModelerHook.modeler;
             const dependencies = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Dependency'));
@@ -456,11 +457,12 @@ export default [
                 return [];
             }
         },
-        severity : SEVERITY.ERROR
+        severity : SEVERITY.ERROR,
+        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep3---include-the-start-state-into-the-dependency-graph'
     },
     {
         title : 'Do not create cycles in the Dependency Modeler.',
-        id : 'DEP3',
+        id : 'DEP4',
         getViolations(mediator) {
             const dependencyModeler = mediator.dependencyModelerHook.modeler;
             const objectives = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Objective'));
@@ -487,6 +489,7 @@ export default [
                 return [];
             }
         },
-        severity : SEVERITY.ERROR
+        severity : SEVERITY.ERROR,
+        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep4---mind-cyclic-dependencies'
     },
 ]
