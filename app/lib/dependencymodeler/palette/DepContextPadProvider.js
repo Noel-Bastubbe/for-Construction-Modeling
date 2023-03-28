@@ -55,7 +55,7 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
 
   const entries = {};
 
-  if (element.id !== 'start_state') {
+  if (element.id !== 'start_state' && element.id !== 'final_state') {
     entries['delete'] = {
       group: 'edit',
       className: 'bpmn-icon-trash',
