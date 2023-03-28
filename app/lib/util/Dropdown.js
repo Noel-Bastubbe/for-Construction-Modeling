@@ -1,10 +1,10 @@
 export default function getDropdown(name = '') {
     const dropdownMenu = document.createElement('div');
     dropdownMenu.classList.add('dd-dropdown-menu');
-    
-    dropdownMenu.populate = function (options, onChange, element, labelFunc = x => x.name || x) {
+
+    dropdownMenu.populate = function (options, onChange, element, labelFunc = x => x.name || x, onEdit = {}, onDelete = {}, allowEdit = true, allowDelete = true) {
         this.innerHTML = '';
-        
+
         if (name != '') {
             const dropdownTitle = document.createElement('div');
             dropdownTitle.classList.add('dd-dropdown-title');
@@ -19,7 +19,7 @@ export default function getDropdown(name = '') {
             entry.addEventListener('click', event => {
                 onChange(option, element, event)
             });
-            entry.setSelected = function(isSelected) {
+            entry.setSelected = function (isSelected) {
                 if (isSelected) {
                     this.classList.add('dd-dropdown-entry-selected');
                 } else {
@@ -29,41 +29,43 @@ export default function getDropdown(name = '') {
             this.appendChild(entry);
 
             // Delete and Edit name button in Objective Model
-            if (name === 'Name') {
-                var editNameButton = document.createElement('button');
-                editNameButton.innerHTML = '🖋️';
-                editNameButton.title = 'Edit current Name';
-                editNameButton.classList.add('editNameButton');
-                editNameButton.addEventListener('click', () => {
-                    const newName = prompt('Enter new name:', entry.option.name);
-                    if (newName !== null && newName !== '') {
-                        entry.option.name = newName;
-                        var nameToChange = entry.firstChild;
-                        nameToChange.nodeValue = newName;
-                    }
+            if (allowDelete && allowEdit) {
+                var editButton = document.createElement('button');
+                editButton.innerHTML = '🖋️';
+                editButton.title = 'Edit Entry';
+                editButton.classList.add('editButton');
+                editButton.addEventListener('click', event => {
+                    onEdit(option, element, event);
+                    // const newName = prompt('Enter new name:', entry.option.name);
+                    // if (newName) {
+                    //     entry.option.name = newName;
+                    //     var nameToChange = entry.firstChild;
+                    //     nameToChange.nodeValue = newName;
+                    // }
                 });
-                entry.appendChild(editNameButton);
+                entry.appendChild(editButton);
 
-                var deleteNameButton = document.createElement('button');
-                deleteNameButton.innerHTML = '🗑️';
-                deleteNameButton.title = 'Delete current Name';
-                deleteNameButton.classList.add('deleteNameButton');
-                deleteNameButton.addEventListener('click', () => {
-                    var nameToDelete = entry;
-                    nameToDelete.option.name = undefined; 
-                    nameToDelete.remove();
-                    console.log(nameToDelete.option);
-                    });
-                entry.appendChild(deleteNameButton);
+                var deleteButton = document.createElement('button');
+                deleteButton.innerHTML = '🗑️';
+                deleteButton.title = 'Delete Entry';
+                deleteButton.classList.add('deleteButton');
+                deleteButton.addEventListener('click', event => {
+                    onDelete(option, element, event);
+                    // this.removeEntry(entry);
+                    // entry.option.name = undefined;
+                    // entry.remove();
+                    // console.log(entry.option);
+                });
+                entry.appendChild(deleteButton);
             }
         }
-    } 
+    }
 
-    dropdownMenu.getEntries = function() {
+    dropdownMenu.getEntries = function () {
         return Array.from(this.children).filter(child => child.classList.contains('dd-dropdown-entry'));
     }
 
-    dropdownMenu.getEntry = function(option) {
+    dropdownMenu.getEntry = function (option) {
         return this.getEntries().filter(entry => entry.option === option)[0];
     }
 
