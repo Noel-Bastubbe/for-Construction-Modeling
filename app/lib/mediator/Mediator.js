@@ -195,12 +195,35 @@ Mediator.prototype.objectiveRenamingRequested = function (objective, objectiveNa
     this.dependencyModelerHook.modeler.renameObjective(objective, objectiveName)
 }
 
+Mediator.prototype.instanceDeletionRequested = function (instance) {
+    const instanceRef = instance.instanceRef;
+    this.objectiveModelerHook.modeler.deleteInstance(instanceRef);
+}
+
 Mediator.prototype.instanceRenamingRequested = function (instance, instanceName) {
     this.objectiveModelerHook.modeler.renameInstance(instance, instanceName)
 }
 
+Mediator.prototype.classDeletionRequested = function (clazz) {
+    const clazz = olc.classRef;
+    if (this.confirmClassDeletion(clazz)) {
+        this.dataModelerHook.modeler.deleteClass(clazz);
+        const classRef = clazz.classRef;
+        this.objectiveModelerHook.modeler.deleteClass(classRef);
+    }
+}
+
 Mediator.prototype.classRenamingRequested = function (clazz, clazzName) {
     this.dataModelerHook.modeler.renameClass(clazz, clazzName)
+}
+
+Mediator.prototype.stateDeletionRequested = function (state) {
+        const stateRef = state.stateRef;
+        this.objectiveModelerHook.modeler.deleteState(stateRef);
+}
+
+Mediator.prototype.stateRenamingRequested = function (state, stateName) {
+    this.objectiveModelerHook.modeler.renameState(state, stateName)
 }
 
 Mediator.prototype.createName = function (name, clazz) {

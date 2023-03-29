@@ -285,14 +285,32 @@ OmModeler.prototype.getObjectiveByReference = function(objectiveReference) {
     }
 }
 
+OmModeler.prototype.deleteInstance = function (instance) {
+    const modeling = this.get('modeling');
+    const instanceVisual = this.get('elementRegistry').get(instance.id);
+    modeling.removeElements([instanceVisual]);
+}
+
 OmModeler.prototype.renameInstance = function (instance, name) {
     const modeling = this.get('modeling');
     const instanceVisual = this.get('elementRegistry').get(instance.id);
     modeling.updateLabel(instanceVisual, name);
 }
 
-OmModeler.prototype.renameClass = function (instance, name) {
+OmModeler.prototype.deleteState = function (state) {
     const modeling = this.get('modeling');
-    const instanceVisual = this.get('elementRegistry').get(instance.id);
-    modeling.updateLabel(instanceVisual, name);
+    const stateVisual = this.get('elementRegistry').get(state.id);
+    modeling.removeElements([stateVisual]);
+}
+
+OmModeler.prototype.renameState = function (state, name) {
+    const modeling = this.get('modeling');
+    const stateVisual = this.get('elementRegistry').get(state.id);
+    modeling.updateLabel(stateVisual, name);
+}
+
+OmModeler.prototype.renameClass = function (clazz, name) {
+    const modeling = this.get('modeling');
+    const classVisual = this.get('elementRegistry').get(clazz.id);
+    modeling.updateLabel(classVisual, name);
 }
