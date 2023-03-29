@@ -536,6 +536,26 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
     eventBus.on(ObjectiveEvents.INSTANCE_RENAMING_REQUESTED, event => {
         this.mediator.instanceRenamingRequested(event.instance, event.name);
     });
+
+    eventBus.on(ObjectiveEvents.INSTANCE_DELETION_REQUESTED, event => {
+        this.mediator.instanceDeletionRequested(event.instance, event.name);
+    });
+
+    eventBus.on(ObjectiveEvents.CLASS_RENAMING_REQUESTED, event => {
+        this.mediator.classRenamingRequested(event.class, event.name);
+    });
+
+    eventBus.on(ObjectiveEvents.CLASS_DELETION_REQUESTED, event => {
+        this.mediator.classDeletionRequested(event.class, event.name);
+    });
+
+    eventBus.on(ObjectiveEvents.STATE_RENAMING_REQUESTED, event => {
+        this.mediator.stateRenamingRequested(event.state, event.name);
+    });
+
+    eventBus.on(ObjectiveEvents.STATE_DELETION_REQUESTED, event => {
+        this.mediator.stateDeletionRequested(event.state, event.name);
+    });
 }
 inherits(Mediator.prototype.ObjectiveModelerHook, CommandInterceptor);
 
