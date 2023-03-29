@@ -45,6 +45,9 @@ var initialDiagram =
     <odDi:odRootBoard id="StartBoard" name="Start State" objectiveRef="start_state">
         <odDi:odPlane id="Plane" boardElement="Board" />
     </odDi:odRootBoard>
+    <odDi:odRootBoard id="FinalBoard" name="Final State" objectiveRef="final_state">
+        <odDi:odPlane id="Plane2" boardElement="Board" />
+    </odDi:odRootBoard>
 </od:definitions>`;
 
 export default function OmModeler(options) {
