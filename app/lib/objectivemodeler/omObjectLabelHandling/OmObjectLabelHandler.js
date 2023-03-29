@@ -2,8 +2,9 @@ import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
 // import { without } from 'min-dash';
 import CommonEvents from "../../common/CommonEvents";
 import getDropdown from "../../util/Dropdown";
-import { appendOverlayListeners } from "../../util/HtmlUtil";
-import { formatStates, is } from "../../util/Util";
+import {appendOverlayListeners} from "../../util/HtmlUtil";
+import {formatStates, is} from "../../util/Util";
+import ObjectiveEvents from "../ObjectiveEvents";
 
 export default class OmObjectLabelHandler extends CommandInterceptor {
     constructor(eventBus, modeling, directEditing, overlays, objectiveModeler) {
@@ -59,6 +60,39 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                     this._nameDropdown.getEntries().forEach(entry => entry.setSelected(omObject.instance === entry.option));
                 }
 
+                const populateStateDropdown = (states) => {
+                    this._stateDropdown.populate(
+                        states,
+                        (state, element) => {
+                            this.updateState(state, element);
+                            updateStateSelection();
+                        },
+                        element
+                        );
+                }
+
+                const populateNameDropdown = (names) => {
+                    this._nameDropdown.populate(
+                        names,
+                        (name, element) => {
+                            this.updateName(name, element);
+                            updateNameSelection();
+                        },
+                        element,
+                        (entry, newValue) => {
+                            this.requestInstanceRenaming(entry.option, newValue);
+                            populateNameDropdown();
+                            updateNameSelection();
+                        },
+                        (entry) => {
+                            this.requestInstanceDeletion(entry.option);
+                            updateNameSelection();
+                        },
+                        true,
+                        true
+                    );
+                }
+
                 const updateClassSelection = () => {
                     if (olcs.length > 0) {
                         let states = [];
@@ -70,41 +104,27 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                             names = this._objectiveModeler.getObjectInstancesOfClass(omObject.classRef);
                         }
 
-                        this._stateDropdown.populate(states, (state, element) => {
-                            this.updateState(state, element);
-                            updateStateSelection();
-                        }, element);
-
-                        this._nameDropdown.populate(
-                             names, 
-                             (name, element) => {
-                            this.updateName(name, element);
-                            updateNameSelection();
-                            }, 
-                             element, 
-                             (newName) => {this.updateName(newName, element);}
-                            );
+                        populateStateDropdown(states);
+                        populateNameDropdown(names);
 
                         // Prevent adding new states if no dataclass is selected
                         omObject.classRef && this._stateDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
                         omObject.classRef && this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
                     } else {
-                        this._stateDropdown.populate([], (state, element) => {
-                            this.updateState(state, element);
-                            updateStateSelection();
-                        }, element);
-                        this._nameDropdown.populate([], (name, element) => {
-                            this.updateName(name, element);
-                            updateNameSelection();
-                        }, element);
+                        populateStateDropdown([]);
+                        populateNameDropdown([])
                     }
                 }
 
                 const populateClassDropdown = () => {
-                    this._classDropdown.populate(olcs, (olc, element) => {
+                    this._classDropdown.populate(
+                        olcs,
+                        (olc, element) => {
                         this.updateClass(olc.classRef, element);
                         updateClassSelection();
-                    }, element);
+                    },
+                        element
+                    );
                     this._classDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
                     updateClassSelection();
                     updateStateSelection();
@@ -134,7 +154,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                         this.updateName(newName, element);
                         needUpdate = true;
                     }
-                    
+
                     if (needUpdate) {
                         updateClassSelection();
                         updateStateSelection();
@@ -206,7 +226,11 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
 
     updateState(newState, element) {
         const omObject = element.businessObject;
-        omObject.state = newState;
+        if (omObject.state === newState) {
+            omObject.state = undefined;
+        } else {
+            omObject.state = newState;
+        }
         this._eventBus.fire('element.changed', {
             element
         });
@@ -218,7 +242,20 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
             element
         });
     }
-    
+
+    requestInstanceRenaming(instance, name) {
+        this._eventBus.fire(ObjectiveEvents.INSTANCE_RENAMING_REQUESTED, {
+            instance,
+            name
+        });
+    }
+
+    requestInstanceDeletion(instance) {
+        this._eventBus.fire(ObjectiveEvents.INSTANCE_DELETION_REQUESTED, {
+            instance
+        });
+    }
+
     createState(name, olc) {
         return this._eventBus.fire(CommonEvents.STATE_CREATION_REQUESTED, {
             name,

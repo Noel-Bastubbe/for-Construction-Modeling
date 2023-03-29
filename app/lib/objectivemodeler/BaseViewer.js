@@ -203,7 +203,7 @@ BaseViewer.prototype.importDefinitions = function(definitions, rootBoard) {
 
     self._setDefinitions(definitions);
 
-    self.open(rootBoard).then(function(result) {
+    self.open(self._objective).then(function(result) {
 
       var warnings = result.warnings;
 
@@ -477,6 +477,7 @@ BaseViewer.prototype.saveSVG = function(options) {
 
 BaseViewer.prototype._setDefinitions = function(definitions) {
   this._definitions = definitions;
+  this._objective = definitions.get('rootBoards')[0];
 };
 
 BaseViewer.prototype.getModules = function() {

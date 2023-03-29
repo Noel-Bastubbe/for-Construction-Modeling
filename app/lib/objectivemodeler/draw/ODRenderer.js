@@ -179,11 +179,7 @@ export default function ODRenderer(
 
   function renderTitelLabel(parentGfx, element) {
     let semantic = getSemantic(element);
-    let text = '';
-    if (semantic.name) {
-      text = semantic.name;
-
-    }
+    let text = `${semantic.classRef?.name} : ${semantic.instance?.name}`;
     renderLabel(parentGfx, text, {
       box: {
         height: 30,

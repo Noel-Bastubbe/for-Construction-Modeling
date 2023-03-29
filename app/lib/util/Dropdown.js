@@ -6,10 +6,10 @@ export default function getDropdown(name = "") {
     options,
     onChange,
     element,
-    onEdit = (newValue) => {},
-    onDelete = () => {},
-    allowEdit = true,
-    allowDelete = true,
+    onEdit = (entry,newValue) => {},
+    onDelete = (entry) => {},
+    allowEdit = false,
+    allowDelete = false,
     labelFunc = (x) => x.name || x
   ) {
     this.innerHTML = "";
@@ -35,7 +35,7 @@ export default function getDropdown(name = "") {
         editButton.classList.add("editButton");
         editButton.addEventListener("click", (event) => {
             let newValue = prompt('Enter new value:', entry.option.name);
-            onEdit(newValue);
+            onEdit(entry, newValue);
         });
         entry.appendChild(editButton);
         editButton.style.visibility = "hidden";
@@ -45,7 +45,7 @@ export default function getDropdown(name = "") {
         deleteButton.title = "Delete Entry";
         deleteButton.classList.add("deleteButton");
         deleteButton.addEventListener("click", (event) => {
-          onDelete(option, element, event);
+          onDelete(entry);
           // this.removeEntry(entry);
           // entry.option.name = undefined;
           // entry.remove();
@@ -57,12 +57,16 @@ export default function getDropdown(name = "") {
       entry.setSelected = function (isSelected) {
         if (isSelected) {
           this.classList.add("dd-dropdown-entry-selected");
-          this.children[0].style.visibility = "visible";
-          this.children[1].style.visibility = "visible";
+          if (allowDelete && allowEdit) {
+            this.children[0].style.visibility = "visible";
+            this.children[1].style.visibility = "visible";
+          }
         } else {
           this.classList.remove("dd-dropdown-entry-selected");
-          this.children[0].style.visibility = "hidden";
-          this.children[1].style.visibility = "hidden";
+          if (allowDelete && allowEdit) {
+            this.children[0].style.visibility = "hidden";
+            this.children[1].style.visibility = "hidden";
+          }
         }
       };
       this.appendChild(entry);

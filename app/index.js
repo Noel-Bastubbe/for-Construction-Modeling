@@ -179,23 +179,29 @@ async function importFromZip (zipData) {
 // IO Buttons
 document.getElementById('newButton').addEventListener('click', () => {
   createNewDiagram();
+  displayFileName("Unnamed file"); 
 });
 
-document.getElementById('openButton').addEventListener('click', () => upload(data => {
+document.getElementById('openButton').addEventListener('click', () => upload((data, title) => {
   if (data.startsWith('data:')) {
     data = data.split(',')[1];
   }
-  importFromZip(data);
+  importFromZip(data); 
+  displayFileName(title);  
 }, 'base64'));
 
 document.getElementById('saveButton').addEventListener('click', () => exportToZip().then(zip => {
   download('fcmModel.zip', zip, 'base64');
-  //importFromZip(zip);
 }));
+
+async function displayFileName (zipName) {
+  document.getElementById("fileName").innerHTML = zipName; 
+  };
 
 if (SHOW_DEBUG_BUTTONS) {
   const reloadButton = document.createElement('a');
   reloadButton.classList.add('barButton');
+  reloadButton.classList.add('barContent'); 
   reloadButton.innerHTML = 'reload';
   document.getElementById('saveButton').parentElement.appendChild(reloadButton); 
   reloadButton.addEventListener('click', () => exportToZip().then(zip => {

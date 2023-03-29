@@ -18,11 +18,12 @@
 
 <body>
     <div class="topBar">
-        <a id="newButton" class="barButton"> New </a>
-        <a id="openButton" class="barButton"> Open </a>
-        <a id="saveButton" class="barButton"> Save </a>
-        <a id="noteAreaToggleButton" class="barButton"> Toggle Note Area </a>
-        <a class="barButton" href="https://github.com/bptlab/fCM-design-support/wiki" target="_blank"> Guideline Help </a>
+        <a id="newButton" class="barButton barContent"> New </a>
+        <a id="openButton" class="barButton barContent"> Open </a>
+        <a id="saveButton" class="barButton barContent"> Save </a>
+        <a id="noteAreaToggleButton" class="barButton barContent"> Toggle Note Area </a>
+        <a class="barButton barContent" href="https://github.com/bptlab/fCM-design-support/wiki" target="_blank"> Guideline Help </a>
+        <h3 id="fileName" class="barContent">Unnamed file</h3>
     </div>
     <div id="note-area-wrapper" class="hidden">
         <div id="note-area-drag" style="display:inline"><i class="material-icons">crop</i></div>
@@ -116,7 +117,7 @@
         </table>
         <div class="errorBarControls">
             <div>
-                <a id="toggleErrorTable" class="barButton"></a>
+                <a id="toggleErrorTable" class="barButton barContent"></a>
             </div>
             <div id="numberOfViolations">
                 
