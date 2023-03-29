@@ -286,12 +286,15 @@ OmModeler.prototype.getObjectiveByReference = function(objectiveReference) {
 }
 
 OmModeler.prototype.deleteInstance = function (instance) {
+    //alle Objects den instanceRef auf undefined setzen
     const modeling = this.get('modeling');
     const instanceVisual = this.get('elementRegistry').get(instance.id);
     modeling.removeElements([instanceVisual]);
 }
 
 OmModeler.prototype.renameInstance = function (instance, name) {
+    //instance umbenennen, visuals aktualisieren
+    instance.name = name;
     const modeling = this.get('modeling');
     const instanceVisual = this.get('elementRegistry').get(instance.id);
     modeling.updateLabel(instanceVisual, name);

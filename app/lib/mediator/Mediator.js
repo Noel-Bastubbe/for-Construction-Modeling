@@ -196,8 +196,7 @@ Mediator.prototype.objectiveRenamingRequested = function (objective, objectiveNa
 }
 
 Mediator.prototype.instanceDeletionRequested = function (instance) {
-    const instanceRef = instance.instanceRef;
-    this.objectiveModelerHook.modeler.deleteInstance(instanceRef);
+    this.objectiveModelerHook.modeler.deleteInstance(instance);
 }
 
 Mediator.prototype.instanceRenamingRequested = function (instance, instanceName) {
@@ -215,8 +214,9 @@ Mediator.prototype.classRenamingRequested = function (clazz, clazzName) {
 }
 
 Mediator.prototype.stateDeletionRequested = function (state) {
-        const stateRef = state.stateRef;
-        this.objectiveModelerHook.modeler.deleteState(stateRef);
+    if (this.confirmClassDeletion(state)) {
+        this.objectiveModelerHook.modeler.deleteState(state);
+    }
 }
 
 Mediator.prototype.stateRenamingRequested = function (state, stateName) {
@@ -538,15 +538,15 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
     });
 
     eventBus.on(ObjectiveEvents.INSTANCE_DELETION_REQUESTED, event => {
-        this.mediator.instanceDeletionRequested(event.instance, event.name);
+        this.mediator.instanceDeletionRequested(event.instance);
     });
 
     eventBus.on(ObjectiveEvents.CLASS_RENAMING_REQUESTED, event => {
-        this.mediator.classRenamingRequested(event.class, event.name);
+        this.mediator.classRenamingRequested(event.clazz, event.name);
     });
 
     eventBus.on(ObjectiveEvents.CLASS_DELETION_REQUESTED, event => {
-        this.mediator.classDeletionRequested(event.class, event.name);
+        this.mediator.classDeletionRequested(event.clazz);
     });
 
     eventBus.on(ObjectiveEvents.STATE_RENAMING_REQUESTED, event => {
@@ -554,7 +554,7 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
     });
 
     eventBus.on(ObjectiveEvents.STATE_DELETION_REQUESTED, event => {
-        this.mediator.stateDeletionRequested(event.state, event.name);
+        this.mediator.stateDeletionRequested(event.state);
     });
 }
 inherits(Mediator.prototype.ObjectiveModelerHook, CommandInterceptor);
