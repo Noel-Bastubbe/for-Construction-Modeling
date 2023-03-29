@@ -205,11 +205,8 @@ Mediator.prototype.instanceRenamingRequested = function (instance, instanceName)
 }
 
 Mediator.prototype.classDeletionRequested = function (clazz) {
-    const clazz = olc.classRef;
     if (this.confirmClassDeletion(clazz)) {
         this.dataModelerHook.modeler.deleteClass(clazz);
-        const classRef = clazz.classRef;
-        this.objectiveModelerHook.modeler.deleteClass(classRef);
     }
 }
 
