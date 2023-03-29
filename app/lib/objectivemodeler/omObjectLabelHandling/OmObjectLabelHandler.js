@@ -201,7 +201,11 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
 
     updateState(newState, element) {
         const omObject = element.businessObject;
-        omObject.state = newState;
+        if (omObject.state === newState) {
+            omObject.state = undefined;
+        } else {
+            omObject.state = newState;
+        }
         this._eventBus.fire('element.changed', {
             element
         });
