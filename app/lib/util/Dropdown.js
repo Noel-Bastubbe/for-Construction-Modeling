@@ -6,11 +6,11 @@ export default function getDropdown(name = "") {
     options,
     onChange,
     element,
-    labelFunc = (x) => x.name || x,
-    onEdit = () => {},
+    onEdit = (newValue) => {},
     onDelete = () => {},
     allowEdit = true,
-    allowDelete = true
+    allowDelete = true,
+    labelFunc = (x) => x.name || x
   ) {
     this.innerHTML = "";
 
@@ -34,13 +34,8 @@ export default function getDropdown(name = "") {
         editButton.title = "Edit Entry";
         editButton.classList.add("editButton");
         editButton.addEventListener("click", (event) => {
-          onEdit(option, element, event);
-          // const newName = prompt('Enter new name:', entry.option.name);
-          // if (newName) {
-          //     entry.option.name = newName;
-          //     var nameToChange = entry.firstChild;
-          //     nameToChange.nodeValue = newName;
-          // }
+            let newValue = prompt('Enter new value:', entry.option.name);
+            onEdit(newValue);
         });
         entry.appendChild(editButton);
         editButton.style.visibility = "hidden";

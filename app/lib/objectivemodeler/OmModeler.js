@@ -284,3 +284,15 @@ OmModeler.prototype.getObjectiveByReference = function(objectiveReference) {
         return objective;
     }
 }
+
+OmModeler.prototype.renameInstance = function (instance, name) {
+    const modeling = this.get('modeling');
+    const instanceVisual = this.get('elementRegistry').get(instance.id);
+    modeling.updateLabel(instanceVisual, name);
+}
+
+OmModeler.prototype.renameClass = function (instance, name) {
+    const modeling = this.get('modeling');
+    const instanceVisual = this.get('elementRegistry').get(instance.id);
+    modeling.updateLabel(instanceVisual, name);
+}

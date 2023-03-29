@@ -75,10 +75,15 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                             updateStateSelection();
                         }, element);
 
-                        this._nameDropdown.populate(names, (name, element) => {
+                        this._nameDropdown.populate(
+                             names, 
+                             (name, element) => {
                             this.updateName(name, element);
                             updateNameSelection();
-                        }, element);
+                            }, 
+                             element, 
+                             (newName) => {this.updateName(newName, element);}
+                            );
 
                         // Prevent adding new states if no dataclass is selected
                         omObject.classRef && this._stateDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());

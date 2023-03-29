@@ -195,6 +195,14 @@ Mediator.prototype.objectiveRenamingRequested = function (objective, objectiveNa
     this.dependencyModelerHook.modeler.renameObjective(objective, objectiveName)
 }
 
+Mediator.prototype.instanceRenamingRequested = function (instance, instanceName) {
+    this.objectiveModelerHook.modeler.renameInstance(instance, instanceName)
+}
+
+Mediator.prototype.classRenamingRequested = function (clazz, clazzName) {
+    this.dataModelerHook.modeler.renameClass(clazz, clazzName)
+}
+
 Mediator.prototype.createName = function (name, clazz) {
     const instanceName = this.objectiveModelerHook.modeler.createName(name, clazz);
     return instanceName;
@@ -503,6 +511,10 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
 
     eventBus.on(ObjectiveEvents.OBJECTIVE_RENAMING_REQUESTED, event => {
         this.mediator.objectiveRenamingRequested(event.objective, event.name);
+    });
+
+    eventBus.on(ObjectiveEvents.INSTANCE_RENAMING_REQUESTED, event => {
+        this.mediator.instanceRenamingRequested(event.instance, event.name);
     });
 }
 inherits(Mediator.prototype.ObjectiveModelerHook, CommandInterceptor);
