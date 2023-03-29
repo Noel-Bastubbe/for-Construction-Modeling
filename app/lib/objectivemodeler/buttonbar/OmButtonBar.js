@@ -80,7 +80,7 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
     deleteObjectiveButton.title = 'Delete Current Objective';
     deleteObjectiveButton.addEventListener('click', () => {
         var objectiveToDelete = selectObjectiveComponent.value;
-        if( objectiveToDelete.id !== 'StartBoard') {
+        if( objectiveToDelete.id !== 'StartBoard' && objectiveToDelete.id !== 'FinalBoard') {
             var shouldDelete = eventBus.fire(ObjectiveEvents.OBJECTIVE_DELETION_REQUESTED, {objective: objectiveToDelete});
             if (shouldDelete !== false) {
                 // Deletion was not rejected and not handled somewhere else; should not happen when mediator is involved
