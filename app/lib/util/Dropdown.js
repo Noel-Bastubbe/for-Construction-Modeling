@@ -45,7 +45,7 @@ export default function getDropdown(name = "") {
                     }
                 });
                 box.appendChild(editButton);
-                editButton.style.visibility = "gone";
+                editButton.style.display = "none";
 
                 var deleteButton = document.createElement("button");
                 deleteButton.innerHTML = "🗑️";
@@ -55,20 +55,20 @@ export default function getDropdown(name = "") {
                     onDelete(entry);
                 });
                 box.appendChild(deleteButton);
-                deleteButton.style.visibility = "gone";
+                deleteButton.style.display = "none";
             }
             entry.setSelected = function (isSelected) {
                 if (isSelected) {
                     this.classList.add("dd-dropdown-entry-selected");
                     if (allowDelete && allowEdit) {
-                        this.parentElement.children[1].style.visibility = "visible";
-                        this.parentElement.children[2].style.visibility = "visible";
+                        this.parentElement.children[1].style.display = "inline-block";
+                        this.parentElement.children[2].style.display = "inline-block";
                     }
                 } else {
                     this.classList.remove("dd-dropdown-entry-selected");
                     if (allowDelete && allowEdit) {
-                        this.parentElement.children[1].style.visibility = "gone";
-                        this.parentElement.children[2].style.visibility = "gone";
+                        this.parentElement.children[1].style.display = "none";
+                        this.parentElement.children[2].style.display = "none";
                     }
                 }
             };
