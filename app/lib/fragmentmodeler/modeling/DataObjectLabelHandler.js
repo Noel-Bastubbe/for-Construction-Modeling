@@ -36,7 +36,7 @@ export default class DataObjectLabelHandler extends CommandInterceptor {
 
         eventBus.on('directEditing.activate', function (e) {
             if (is(e.active.element, 'bpmn:DataObjectReference')) {
-                directEditing.cancel();
+                this._directEditing.cancel();
             }
         });
 

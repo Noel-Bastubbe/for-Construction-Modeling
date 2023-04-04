@@ -25,19 +25,6 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
         this._overlays = overlays;
         this._objectiveModeler = objectiveModeler;
 
-        eventBus.on('element.changed', function (e) {
-            if (is(e.element, 'om:Object') && e.element.parent) {
-                const businessObject = e.element.businessObject;
-                const name = `${businessObject.classRef?.name} : ${businessObject.instance?.name}`;
-                const state = businessObject.state?.name;
-                if (businessObject.name !== name) {
-                    modeling.updateLabel(e.element, name, undefined, {
-                        omObjectLabelUpdate: true
-                    });
-                }
-            }
-        });
-
         eventBus.on('directEditing.activate', function (e) {
             if (is(e.active.element, 'om:Object')) {
                 directEditing.cancel();
