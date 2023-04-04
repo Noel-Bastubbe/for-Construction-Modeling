@@ -13,9 +13,23 @@
 .dd-dropdown-entry, .dd-dropdown-create-input, .dd-dropdown-title {
     color: #ffffff;
     font-size: 14px;
-    padding: 12px 16px;
+    //padding: 12px 16px;
+    padding: 12px 2px 12px 16px;
+    text-overflow: clip;
     text-decoration: none;
-    display: block;
+    display: inline-block;
+}
+
+.dd-dropdown-entry {
+    color: inherit;
+}
+
+.dd-dropdown-box {
+    color: #ffffff;
+}
+
+.dd-dropdown-create-input {
+    padding-right: 16px;
 }
 
 .dd-dropdown-title {
@@ -23,6 +37,7 @@
     border-bottom-color: white;
     border-bottom-width: 2px;
     border-bottom-style: solid;
+    display: block;
 }
 
 .editButton, .deleteButton {
@@ -32,13 +47,14 @@
     border-style: initial;
     border-color: initial;
     border-image: initial;
+    display: inline-block;
 }
 
 .dd-dropdown-create-input > input {
     width: 100%;
 }
 
-.dd-dropdown-entry:not(.unclickable):hover  {
+.dd-dropdown-box:not(.unclickable):hover  {
     color: #29487D;
     background-color: white;
 }

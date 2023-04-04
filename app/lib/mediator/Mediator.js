@@ -199,10 +199,6 @@ Mediator.prototype.instanceDeletionRequested = function (instance) {
     this.objectiveModelerHook.modeler.deleteInstance(instance);
 }
 
-Mediator.prototype.instanceRenamingRequested = function (instance, instanceName) {
-    this.objectiveModelerHook.modeler.renameInstance(instance, instanceName)
-}
-
 Mediator.prototype.classDeletionRequested = function (clazz) {
     if (this.confirmClassDeletion(clazz)) {
         this.dataModelerHook.modeler.deleteClass(clazz);
@@ -531,10 +527,6 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
 
     eventBus.on(ObjectiveEvents.OBJECTIVE_RENAMING_REQUESTED, event => {
         this.mediator.objectiveRenamingRequested(event.objective, event.name);
-    });
-
-    eventBus.on(ObjectiveEvents.INSTANCE_RENAMING_REQUESTED, event => {
-        this.mediator.instanceRenamingRequested(event.instance, event.name);
     });
 
     eventBus.on(ObjectiveEvents.INSTANCE_DELETION_REQUESTED, event => {

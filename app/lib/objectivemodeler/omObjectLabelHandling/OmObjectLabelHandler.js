@@ -80,12 +80,15 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                         },
                         element,
                         (entry, newValue) => {
-                            this.requestInstanceRenaming(entry.option, newValue);
-                            populateNameDropdown();
+                            this._objectiveModeler.renameInstance(entry.option, newValue)
+                            populateNameDropdown(this._objectiveModeler.getObjectInstancesOfClass(omObject.classRef));
+                            omObject.classRef && this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
                             updateNameSelection();
                         },
                         (entry) => {
-                            this.requestInstanceDeletion(entry.option);
+                            this._objectiveModeler.deleteInstance(entry.option);
+                            populateNameDropdown(this._objectiveModeler.getObjectInstancesOfClass(omObject.classRef));
+                            omObject.classRef && this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
                             updateNameSelection();
                         },
                         true,
@@ -240,13 +243,6 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
         element.businessObject.instance = newName;
         this._eventBus.fire('element.changed', {
             element
-        });
-    }
-
-    requestInstanceRenaming(instance, name) {
-        this._eventBus.fire(ObjectiveEvents.INSTANCE_RENAMING_REQUESTED, {
-            instance,
-            name
         });
     }
 

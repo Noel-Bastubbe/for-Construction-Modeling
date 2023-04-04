@@ -1,125 +1,131 @@
 export default function getDropdown(name = "") {
-  const dropdownMenu = document.createElement("div");
-  dropdownMenu.classList.add("dd-dropdown-menu");
+    const dropdownMenu = document.createElement("div");
+    dropdownMenu.classList.add("dd-dropdown-menu");
 
-  dropdownMenu.populate = function (
-    options,
-    onChange,
-    element,
-    onEdit = (entry,newValue) => {},
-    onDelete = (entry) => {},
-    allowEdit = false,
-    allowDelete = false,
-    labelFunc = (x) => x.name || x
-  ) {
-    this.innerHTML = "";
+    dropdownMenu.populate = function (
+        options,
+        onChange,
+        element,
+        onEdit = (entry, newValue) => {
+        },
+        onDelete = (entry) => {
+        },
+        allowEdit = false,
+        allowDelete = false,
+        labelFunc = (x) => x.name || x
+    ) {
+        this.innerHTML = "";
 
-    if (name != "") {
-      const dropdownTitle = document.createElement("div");
-      dropdownTitle.classList.add("dd-dropdown-title");
-      dropdownTitle.innerHTML = name;
-      this.appendChild(dropdownTitle);
-    }
-    for (const option of options) {
-      const entry = document.createElement("div");
-      entry.option = option;
-      entry.classList.add("dd-dropdown-entry");
-      entry.innerHTML = labelFunc(option);
-      entry.addEventListener("click", (event) => {
-        onChange(option, element, event);
-      });
-      if (allowDelete && allowEdit) {
-        var editButton = document.createElement("button");
-        editButton.innerHTML = "🖋️";
-        editButton.title = "Edit Entry";
-        editButton.classList.add("editButton");
-        editButton.addEventListener("click", (event) => {
-            let newValue = prompt('Enter new value:', entry.option.name);
-            onEdit(entry, newValue);
-        });
-        entry.appendChild(editButton);
-        editButton.style.visibility = "hidden";
-
-        var deleteButton = document.createElement("button");
-        deleteButton.innerHTML = "🗑️";
-        deleteButton.title = "Delete Entry";
-        deleteButton.classList.add("deleteButton");
-        deleteButton.addEventListener("click", (event) => {
-          onDelete(entry);
-          // this.removeEntry(entry);
-          // entry.option.name = undefined;
-          // entry.remove();
-          // console.log(entry.option);
-        });
-        entry.appendChild(deleteButton);
-        deleteButton.style.visibility = "hidden";
-      }
-      entry.setSelected = function (isSelected) {
-        if (isSelected) {
-          this.classList.add("dd-dropdown-entry-selected");
-          if (allowDelete && allowEdit) {
-            this.children[0].style.visibility = "visible";
-            this.children[1].style.visibility = "visible";
-          }
-        } else {
-          this.classList.remove("dd-dropdown-entry-selected");
-          if (allowDelete && allowEdit) {
-            this.children[0].style.visibility = "hidden";
-            this.children[1].style.visibility = "hidden";
-          }
+        if (name != "") {
+            const dropdownTitle = document.createElement("div");
+            dropdownTitle.classList.add("dd-dropdown-title");
+            dropdownTitle.innerHTML = name;
+            this.appendChild(dropdownTitle);
         }
-      };
-      this.appendChild(entry);
+        for (const option of options) {
+            const box = document.createElement("div");
+            box.classList.add("dd-dropdown-box");
+            const entry = document.createElement("div");
+            entry.option = option;
+            entry.classList.add("dd-dropdown-entry");
+            entry.innerHTML = labelFunc(option);
+            entry.addEventListener("click", (event) => {
+                onChange(option, element, event);
+            });
+            box.appendChild(entry);
+            if (allowDelete && allowEdit) {
+                var editButton = document.createElement("button");
+                editButton.innerHTML = "🖋️";
+                editButton.title = "Edit Entry";
+                editButton.classList.add("editButton");
+                editButton.addEventListener("click", (event) => {
+                    let newValue = prompt('Enter new value:', entry.option.name);
+                    if (newValue) {
+                        onEdit(entry, newValue);
+                    }
+                });
+                box.appendChild(editButton);
+                editButton.style.visibility = "hidden";
 
-      // Delete and Edit name button in Objective Model
-      //display none
-    }
-  };
+                var deleteButton = document.createElement("button");
+                deleteButton.innerHTML = "🗑️";
+                deleteButton.title = "Delete Entry";
+                deleteButton.classList.add("deleteButton");
+                deleteButton.addEventListener("click", (event) => {
+                    onDelete(entry);
+                });
+                box.appendChild(deleteButton);
+                deleteButton.style.visibility = "hidden";
+            }
+            entry.setSelected = function (isSelected) {
+                if (isSelected) {
+                    this.classList.add("dd-dropdown-entry-selected");
+                    if (allowDelete && allowEdit) {
+                        this.parentElement.children[1].style.visibility = "visible";
+                        this.parentElement.children[2].style.visibility = "visible";
+                    }
+                } else {
+                    this.classList.remove("dd-dropdown-entry-selected");
+                    if (allowDelete && allowEdit) {
+                        this.parentElement.children[1].style.visibility = "hidden";
+                        this.parentElement.children[2].style.visibility = "hidden";
+                    }
+                }
+            };
+            this.appendChild(box);
 
-  dropdownMenu.getEntries = function () {
-    return Array.from(this.children).filter((child) =>
-      child.classList.contains("dd-dropdown-entry")
-    );
-  };
+            // Delete and Edit name button in Objective Model
+            //display none
+        }
+    };
 
-  dropdownMenu.getEntry = function (option) {
-    return this.getEntries().filter((entry) => entry.option === option)[0];
-  };
+    dropdownMenu.getEntries = function () {
+        let boxList = Array.from(this.children).filter((child) =>
+            child.classList.contains("dd-dropdown-box")
+        );
+        return boxList.map((box) =>
+            box.firstChild
+        );
+    };
 
-  dropdownMenu.addCreateElementInput = function (onConfirm) {
-    const createNewElementEditorContainer = document.createElement("div");
-    createNewElementEditorContainer.classList.add("dd-dropdown-create-input");
-    const createNewElementEditor = document.createElement("input");
-    createNewElementEditor.type = "text";
-    createNewElementEditor.placeholder = "Create new";
-    this.confirm = (event) => onConfirm(event);
-    createNewElementEditor.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        this.confirm(event);
-      }
-    });
-    createNewElementEditorContainer.appendChild(createNewElementEditor);
-    this.appendChild(createNewElementEditorContainer);
-  };
+    dropdownMenu.getEntry = function (option) {
+        return this.getEntries().filter((entry) => entry.option === option)[0];
+    };
 
-  dropdownMenu.getInputValue = function () {
-    const inputElements = dropdownMenu.getElementsByTagName("input");
-    return inputElements[0] ? inputElements[0].value : "";
-  };
+    dropdownMenu.addCreateElementInput = function (onConfirm) {
+        const createNewElementEditorContainer = document.createElement("div");
+        createNewElementEditorContainer.classList.add("dd-dropdown-create-input");
+        const createNewElementEditor = document.createElement("input");
+        createNewElementEditor.type = "text";
+        createNewElementEditor.placeholder = "Create new";
+        this.confirm = (event) => onConfirm(event);
+        createNewElementEditor.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                this.confirm(event);
+            }
+        });
+        createNewElementEditorContainer.appendChild(createNewElementEditor);
+        this.appendChild(createNewElementEditorContainer);
+    };
 
-  dropdownMenu.clearInput = function () {
-    const inputElements = dropdownMenu.getElementsByTagName("input");
-    if (inputElements[0]) {
-      inputElements[0].value = "";
-    }
-  };
+    dropdownMenu.getInputValue = function () {
+        const inputElements = dropdownMenu.getElementsByTagName("input");
+        return inputElements[0] ? inputElements[0].value : "";
+    };
 
-  dropdownMenu.focusInput = function () {
-    const inputElements = dropdownMenu.getElementsByTagName("input");
-    if (inputElements[0]) {
-      inputElements[0].focus();
-    }
-  };
+    dropdownMenu.clearInput = function () {
+        const inputElements = dropdownMenu.getElementsByTagName("input");
+        if (inputElements[0]) {
+            inputElements[0].value = "";
+        }
+    };
 
-  return dropdownMenu;
+    dropdownMenu.focusInput = function () {
+        const inputElements = dropdownMenu.getElementsByTagName("input");
+        if (inputElements[0]) {
+            inputElements[0].focus();
+        }
+    };
+
+    return dropdownMenu;
 }

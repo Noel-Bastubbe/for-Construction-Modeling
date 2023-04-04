@@ -342,11 +342,11 @@ OmModeler.prototype.getObjectiveByReference = function (objectiveReference) {
 
 
 OmModeler.prototype.deleteInstance = function (instance) {
-    let changedVisual = this.getVisualsWithInstance(instance);
+    let changedVisuals = this.getVisualsWithInstance(instance);
     this.getObjectsWithInstance(instance).forEach(element => {
         element.instance = undefined;
     });
-    changedVisual.forEach(element =>
+    changedVisuals.forEach(element =>
         this.get('eventBus').fire('element.changed', {
             element
         })
