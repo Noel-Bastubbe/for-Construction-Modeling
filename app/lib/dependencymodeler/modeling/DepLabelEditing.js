@@ -76,7 +76,7 @@ DepLabelEditing.prototype.activate = function (element) {
 };
 
 DepLabelEditing.prototype.update = function (element, newLabel) {
-    if (element.id !== 'start_state' && event.element.id !== 'final_state') {
+    if (element.id !== 'start_state' && element.id !== 'final_state') {
         this._commandStack.execute('element.updateLabel', {
             element: element,
             newLabel: newLabel
