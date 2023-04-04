@@ -59,9 +59,6 @@ export default function Mediator() {
         return this.createState(event.name, event.olc);
     });
 
-    this.on(CommonEvents.NAME_CREATION_REQUESTED, event => {
-        return this.createName(event.name, event.clazz);
-    });
 }
 
 Mediator.prototype.getHooks = function () {
@@ -192,36 +189,12 @@ Mediator.prototype.objectiveDeletionRequested = function (objective) {
 }
 
 Mediator.prototype.objectiveRenamingRequested = function (objective, objectiveName) {
-    this.dependencyModelerHook.modeler.renameObjective(objective, objectiveName)
+    this.dependencyModelerHook.modeler.renameObjective(objective, objectiveName);
 }
 
-Mediator.prototype.instanceDeletionRequested = function (instance) {
-    this.objectiveModelerHook.modeler.deleteInstance(instance);
-}
-
-Mediator.prototype.classDeletionRequested = function (clazz) {
-    if (this.confirmClassDeletion(clazz)) {
-        this.dataModelerHook.modeler.deleteClass(clazz);
-    }
-}
-
-Mediator.prototype.classRenamingRequested = function (clazz, clazzName) {
-    this.dataModelerHook.modeler.renameClass(clazz, clazzName)
-}
-
-Mediator.prototype.stateDeletionRequested = function (state) {
-    if (this.confirmClassDeletion(state)) {
-        this.objectiveModelerHook.modeler.deleteState(state);
-    }
-}
-
-Mediator.prototype.stateRenamingRequested = function (state, stateName) {
-    this.objectiveModelerHook.modeler.renameState(state, stateName)
-}
-
-Mediator.prototype.createName = function (name, clazz) {
-    const instanceName = this.objectiveModelerHook.modeler.createName(name, clazz);
-    return instanceName;
+Mediator.prototype.createInstance = function (name, clazz) {
+    const instance = this.objectiveModelerHook.modeler.createInstance(name, clazz);
+    return instance;
 }
 
 // === OLC helpers
@@ -527,26 +500,6 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
 
     eventBus.on(ObjectiveEvents.OBJECTIVE_RENAMING_REQUESTED, event => {
         this.mediator.objectiveRenamingRequested(event.objective, event.name);
-    });
-
-    eventBus.on(ObjectiveEvents.INSTANCE_DELETION_REQUESTED, event => {
-        this.mediator.instanceDeletionRequested(event.instance);
-    });
-
-    eventBus.on(ObjectiveEvents.CLASS_RENAMING_REQUESTED, event => {
-        this.mediator.classRenamingRequested(event.clazz, event.name);
-    });
-
-    eventBus.on(ObjectiveEvents.CLASS_DELETION_REQUESTED, event => {
-        this.mediator.classDeletionRequested(event.clazz);
-    });
-
-    eventBus.on(ObjectiveEvents.STATE_RENAMING_REQUESTED, event => {
-        this.mediator.stateRenamingRequested(event.state, event.name);
-    });
-
-    eventBus.on(ObjectiveEvents.STATE_DELETION_REQUESTED, event => {
-        this.mediator.stateDeletionRequested(event.state);
     });
 }
 inherits(Mediator.prototype.ObjectiveModelerHook, CommandInterceptor);

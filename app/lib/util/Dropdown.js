@@ -45,7 +45,7 @@ export default function getDropdown(name = "") {
                     }
                 });
                 box.appendChild(editButton);
-                editButton.style.visibility = "hidden";
+                editButton.style.visibility = "gone";
 
                 var deleteButton = document.createElement("button");
                 deleteButton.innerHTML = "🗑️";
@@ -55,7 +55,7 @@ export default function getDropdown(name = "") {
                     onDelete(entry);
                 });
                 box.appendChild(deleteButton);
-                deleteButton.style.visibility = "hidden";
+                deleteButton.style.visibility = "gone";
             }
             entry.setSelected = function (isSelected) {
                 if (isSelected) {
@@ -67,8 +67,8 @@ export default function getDropdown(name = "") {
                 } else {
                     this.classList.remove("dd-dropdown-entry-selected");
                     if (allowDelete && allowEdit) {
-                        this.parentElement.children[1].style.visibility = "hidden";
-                        this.parentElement.children[2].style.visibility = "hidden";
+                        this.parentElement.children[1].style.visibility = "gone";
+                        this.parentElement.children[2].style.visibility = "gone";
                     }
                 }
             };

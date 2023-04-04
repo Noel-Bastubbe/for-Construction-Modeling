@@ -146,12 +146,6 @@ OmModeler.prototype.createObject = function (name) {
     return shape.businessObject;
 }
 
-OmModeler.prototype.createName = function (name, clazz) {
-    const objectInstance = this.get('elementFactory').createObjectInstance(name, clazz);
-    this._definitions.get('objectInstances').push(objectInstance);
-    return objectInstance;
-}
-
 OmModeler.prototype.renameObject = function (object, name) {
     this.get('modeling').updateLabel(this.get('elementRegistry').get(object.id), name);
 }
@@ -213,6 +207,38 @@ OmModeler.prototype.renameObjective = function (objectiveReference, name) {
     var objective = this.getObjectiveByReference(objectiveReference);
     objective.name = name;
     this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
+}
+
+OmModeler.prototype.createInstance = function (name, clazz) {
+    const objectInstance = this.get('elementFactory').createObjectInstance(name, clazz);
+    this._definitions.get('objectInstances').push(objectInstance);
+    return objectInstance;
+}
+
+OmModeler.prototype.renameInstance = function (instance, name) {
+    instance.name = name;
+    this.getVisualsWithInstance(instance).forEach(element => {
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
+    });
+}
+
+OmModeler.prototype.deleteInstance = function (instance) {
+    let changedVisuals = this.getVisualsWithInstance(instance);
+    this.getObjectsWithInstance(instance).forEach(element => {
+        element.instance = undefined;
+    });
+    changedVisuals.forEach(element =>
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
+    );
+    let instances = this._definitions.get('objectInstances');
+    let index = instances.indexOf(instance);
+    if (index > -1) {
+        instances.splice(index, 1);
+    }
 }
 
 OmModeler.prototype.handleOlcListChanged = function (olcs, dryRun = false) {
@@ -338,31 +364,4 @@ OmModeler.prototype.getObjectiveByReference = function (objectiveReference) {
     } else {
         return objective;
     }
-}
-
-
-OmModeler.prototype.deleteInstance = function (instance) {
-    let changedVisuals = this.getVisualsWithInstance(instance);
-    this.getObjectsWithInstance(instance).forEach(element => {
-        element.instance = undefined;
-    });
-    changedVisuals.forEach(element =>
-        this.get('eventBus').fire('element.changed', {
-            element
-        })
-    );
-    let instances = this._definitions.get('objectInstances');
-    let index = instances.indexOf(instance);
-    if (index > -1) {
-        instances.splice(index, 1);
-    }
-}
-
-OmModeler.prototype.renameInstance = function (instance, name) {
-    instance.name = name;
-    this.getVisualsWithInstance(instance).forEach(element => {
-        this.get('eventBus').fire('element.changed', {
-            element
-        })
-    });
 }
