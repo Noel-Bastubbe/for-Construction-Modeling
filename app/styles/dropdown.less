@@ -15,17 +15,21 @@
     font-size: 14px;
     //padding: 12px 16px;
     padding: 12px 2px 12px 16px;
-    text-overflow: clip;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-decoration: none;
     display: inline-block;
 }
 
 .dd-dropdown-entry {
     color: inherit;
+    width: 100%;
 }
 
 .dd-dropdown-box {
     color: #ffffff;
+    max-width: 180px;
+    display: flex;
 }
 
 .dd-dropdown-create-input {
@@ -47,7 +51,8 @@
     border-style: initial;
     border-color: initial;
     border-image: initial;
-    display: inline-block;
+    float: right;
+    width: 15%;
 }
 
 .dd-dropdown-create-input > input {
@@ -59,8 +64,16 @@
     background-color: white;
 }
 
-.dd-dropdown-entry-selected::after {
-  content: "✔️";
+.dd-dropdown-entry-selected-buttons {
+    float: left;
+    width: 70%;
+}
+
+
+.dd-dropdown-entry-selected::before {
+    content: "✔ ";
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .dd-dropdown-multicontainer {

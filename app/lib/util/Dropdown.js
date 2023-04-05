@@ -61,12 +61,14 @@ export default function getDropdown(name = "") {
                 if (isSelected) {
                     this.classList.add("dd-dropdown-entry-selected");
                     if (allowDelete && allowEdit) {
+                        this.classList.add("dd-dropdown-entry-selected-buttons");
                         this.parentElement.children[1].style.display = "inline-block";
                         this.parentElement.children[2].style.display = "inline-block";
                     }
                 } else {
                     this.classList.remove("dd-dropdown-entry-selected");
                     if (allowDelete && allowEdit) {
+                        this.classList.remove("dd-dropdown-entry-selected-buttons");
                         this.parentElement.children[1].style.display = "none";
                         this.parentElement.children[2].style.display = "none";
                     }
