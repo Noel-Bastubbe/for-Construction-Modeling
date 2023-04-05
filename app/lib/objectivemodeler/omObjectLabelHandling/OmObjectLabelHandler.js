@@ -161,9 +161,6 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                         this._overlays.remove(this._overlayId);
                         this._overlayId = undefined;
                     }
-                    if (this._currentDropdownTarget?.classRef === undefined) {
-                        this._modeling.removeElements([this._dropdownContainer.currentElement]);
-                    }
                     this._dropdownContainer.currentElement = undefined;
                     this._currentDropdownTarget = undefined;
                 }

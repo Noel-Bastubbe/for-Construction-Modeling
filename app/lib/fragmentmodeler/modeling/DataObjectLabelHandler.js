@@ -131,9 +131,6 @@ export default class DataObjectLabelHandler extends CommandInterceptor {
                         this._overlays.remove(this._overlayId);
                         this._overlayId = undefined;
                     }
-                    if (this._currentDropdownTarget?.dataclass === undefined) {
-                        this._modeling.removeElements([this._dropdownContainer.currentElement]);
-                    }
                     this._dropdownContainer.currentElement = undefined;
                     this._currentDropdownTarget = undefined;
                 }
