@@ -325,5 +325,5 @@ OmModeler.prototype.isObjectOfDeletedClass = function (clazz, element) {
 }
 
 OmModeler.prototype.isLinkConnectedToObjectOfDeletedClass = function (clazz, element) {
-    return is(element, 'om:Link') && clazz.id && ((element.sourceRef?.classRef.id === clazz.id) || (element.targetRef?.classRef.id === clazz.id));
+    return is(element, 'om:Link') && clazz.id && ((element.sourceRef?.classRef?.id === clazz.id) || (element.targetRef?.classRef?.id === clazz.id));
 }
