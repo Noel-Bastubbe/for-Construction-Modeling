@@ -1,10 +1,8 @@
 import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
-// import { without } from 'min-dash';
 import CommonEvents from "../../common/CommonEvents";
 import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
-import {formatStates, is} from "../../util/Util";
-import ObjectiveEvents from "../ObjectiveEvents";
+import {is} from "../../util/Util";
 
 export default class OmObjectLabelHandler extends CommandInterceptor {
     constructor(eventBus, modeling, directEditing, overlays, objectiveModeler) {
@@ -176,8 +174,6 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                         this._overlays.remove(this._overlayId);
                         this._overlayId = undefined;
                     }
-                    //todo: Pierre Noel Absprache PO
-                    // deleting following 3 lines fixes Bug 98
                     if (this._currentDropdownTarget?.classRef === undefined) {
                         this._modeling.removeElements([this._dropdownContainer.currentElement]);
                     }
