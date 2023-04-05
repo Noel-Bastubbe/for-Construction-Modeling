@@ -50,7 +50,7 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
         }
     });
     selectObjectiveComponent.addEventListener('dblclick', event => {
-        if (omModeler.getCurrentObjective().id !== 'StartBoard' && selectObjectiveComponent.value && (event.target === selectObjectiveComponent || event.target === selectedObjectiveSpan)) {
+        if (omModeler.getCurrentObjective().id !== 'StartBoard' && omModeler.getCurrentObjective().id !== 'FinalBoard' && selectObjectiveComponent.value && (event.target === selectObjectiveComponent || event.target === selectedObjectiveSpan)) {
             selectObjectiveMenu.hide();
             var renameObjectiveInput = document.createElement('input');
             renameObjectiveInput.value = selectObjectiveComponent.value.name;
@@ -80,7 +80,7 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
     deleteObjectiveButton.title = 'Delete Current Objective';
     deleteObjectiveButton.addEventListener('click', () => {
         var objectiveToDelete = selectObjectiveComponent.value;
-        if( objectiveToDelete.id !== 'StartBoard') {
+        if( objectiveToDelete.id !== 'StartBoard' && objectiveToDelete.id !== 'FinalBoard') {
             var shouldDelete = eventBus.fire(ObjectiveEvents.OBJECTIVE_DELETION_REQUESTED, {objective: objectiveToDelete});
             if (shouldDelete !== false) {
                 // Deletion was not rejected and not handled somewhere else; should not happen when mediator is involved

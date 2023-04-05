@@ -5,7 +5,7 @@ export default function DepLabelEditing(eventBus, canvas, directEditing, command
     this._canvas = canvas;
 
     eventBus.on('element.dblclick', function (event) {
-        if (event.element.id !== 'start_state') {
+        if (event.element.id !== 'start_state' && event.element.id !== 'final_state') {
             directEditing.activate(event.element);
         }
     });
@@ -76,7 +76,7 @@ DepLabelEditing.prototype.activate = function (element) {
 };
 
 DepLabelEditing.prototype.update = function (element, newLabel) {
-    if (element.id !== 'start_state') {
+    if (element.id !== 'start_state' && element.id !== 'final_state') {
         this._commandStack.execute('element.updateLabel', {
             element: element,
             newLabel: newLabel
