@@ -16,7 +16,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
         this._dropdownContainer.appendChild(this._classDropdown);
         this._instanceDropdown = getDropdown("Instance");
         this._dropdownContainer.appendChild(this._instanceDropdown);
-        this._stateDropdown = getDropdown("States");
+        this._stateDropdown = getDropdown("State");
         this._dropdownContainer.appendChild(this._stateDropdown);
         this._currentDropdownTarget = undefined;
         this._overlayId = undefined;
