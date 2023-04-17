@@ -280,10 +280,11 @@ OmModeler.prototype.handleClassRenamed = function (clazz) {
 OmModeler.prototype.handleClassDeleted = function (clazz) {
     let objectives = this._definitions.get('rootElements');
     objectives.forEach(objective => {
-        let objects = objective.get('boardElements');
-        for (let i = 0; i < objects.length; i++) {
-            if (is(objects[i], 'om:Object') && clazz.id && objects[i].classRef?.id === clazz.id) {
-                objects.splice(i, 1);
+        let elements = objective.get('boardElements');
+
+        for (let i = 0; i < elements.length; i++) {
+            if (this.isObjectOfDeletedClass(clazz, elements[i]) || this.isLinkConnectedToObjectOfDeletedClass(clazz, elements[i])) {
+                elements.splice(i, 1);
                 i--;
             }
         }
@@ -368,4 +369,12 @@ OmModeler.prototype.getObjectiveByReference = function (objectiveReference) {
     } else {
         return objective;
     }
+}
+
+OmModeler.prototype.isObjectOfDeletedClass = function (clazz, element) {
+    return is(element, 'om:Object') && clazz.id && element.classRef?.id === clazz.id;
+}
+
+OmModeler.prototype.isLinkConnectedToObjectOfDeletedClass = function (clazz, element) {
+    return is(element, 'om:Link') && clazz.id && ((element.sourceRef?.classRef?.id === clazz.id) || (element.targetRef?.classRef?.id === clazz.id));
 }
