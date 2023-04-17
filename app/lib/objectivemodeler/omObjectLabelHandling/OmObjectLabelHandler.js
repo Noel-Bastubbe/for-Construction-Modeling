@@ -203,7 +203,8 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
 
     updateClass(newClass, element) {
         element.businessObject.classRef = newClass;
-        element.businessObject.state = null;
+        element.businessObject.instance = undefined;
+        element.businessObject.state = undefined;
         this._eventBus.fire('element.changed', {
             element
         });
