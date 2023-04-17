@@ -33,7 +33,8 @@ export default function getDropdown(name = "") {
                 onChange(option, element, event);
             });
             box.appendChild(entry);
-            if (allowDelete && allowEdit) {
+
+            if (allowEdit) {
                 var editButton = document.createElement("button");
                 editButton.innerHTML = "🖋️";
                 editButton.title = "Edit Entry";
@@ -46,7 +47,9 @@ export default function getDropdown(name = "") {
                 });
                 box.appendChild(editButton);
                 editButton.style.display = "none";
+            }
 
+            if (allowDelete) {
                 var deleteButton = document.createElement("button");
                 deleteButton.innerHTML = "🗑️";
                 deleteButton.title = "Delete Entry";
@@ -57,20 +60,33 @@ export default function getDropdown(name = "") {
                 box.appendChild(deleteButton);
                 deleteButton.style.display = "none";
             }
+
             entry.setSelected = function (isSelected) {
                 if (isSelected) {
                     this.classList.add("dd-dropdown-entry-selected");
-                    if (allowDelete && allowEdit) {
+                    if (allowDelete || allowEdit) {
                         this.classList.add("dd-dropdown-entry-selected-buttons");
-                        this.parentElement.children[1].style.display = "inline-block";
-                        this.parentElement.children[2].style.display = "inline-block";
+                        let childNum = 1;
+                        if (allowEdit) {
+                            this.parentElement.children[childNum].style.display = "inline-block";
+                            childNum++;
+                        }
+                        if (allowDelete) {
+                            this.parentElement.children[childNum].style.display = "inline-block";
+                        }
                     }
                 } else {
                     this.classList.remove("dd-dropdown-entry-selected");
-                    if (allowDelete && allowEdit) {
+                    if (allowDelete || allowEdit) {
                         this.classList.remove("dd-dropdown-entry-selected-buttons");
-                        this.parentElement.children[1].style.display = "none";
-                        this.parentElement.children[2].style.display = "none";
+                        let childNum = 1;
+                        if (allowEdit) {
+                            this.parentElement.children[childNum].style.display = "none";
+                            childNum++;
+                        }
+                        if (allowDelete) {
+                            this.parentElement.children[childNum].style.display = "none";
+                        }
                     }
                 }
             };
