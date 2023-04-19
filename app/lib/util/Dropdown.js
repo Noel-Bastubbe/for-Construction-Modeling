@@ -6,13 +6,13 @@ export default function getDropdown(name = "") {
         options,
         onChange,
         element,
+        labelFunc = (x) => x.name || x,
         onEdit = (entry, newValue) => {
         },
         onDelete = (entry) => {
         },
         allowEdit = false,
-        allowDelete = false,
-        labelFunc = (x) => x.name || x
+        allowDelete = false
     ) {
         this.innerHTML = "";
 
