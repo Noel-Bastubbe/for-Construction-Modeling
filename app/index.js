@@ -90,15 +90,14 @@ new mediator.TerminationConditionModelerHook(terminationConditionModeler);
 const errorBar = new ErrorBar(document.getElementById("errorBar"), mediator);
 const checker = new Checker(mediator, errorBar);
 
-// construction Mode for User Study, set to false for normal mode
+// construction Mode for User Study, to enable set constructionMode to true
 const constructionMode = false;
 
 const titleObjectiveModel = document.getElementById("titleObjectiveModel");
-titleObjectiveModel.innerHTML = constructionMode ? "Milestone" : "Objective Model";
+if (constructionMode) {titleObjectiveModel.innerHTML = "Milestone"} else titleObjectiveModel.innerHTML = "Objective Model";
 
 const titleDependencyModel = document.getElementById("titleDependencyModel");
-titleDependencyModel.innerHTML = constructionMode ? "Timeline" : "Dependency Model";
-
+if (constructionMode) {titleDependencyModel.innerHTML = "Timeline"} else titleDependencyModel.innerHTML = "Dependency Model";
 
 async function loadDebugData() {
   const zip = new Zip();
