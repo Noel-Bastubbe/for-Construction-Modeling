@@ -31,6 +31,7 @@ import OlcAutoPlaceModule from './auto-place';
 import OlcModdle from './moddle';
 import OlcEvents from './OlcEvents';
 import { nextPosition, root, is } from '../util/Util';
+import OmModeler from "../objectivemodeler/OmModeler";
 
 var emptyDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -133,6 +134,8 @@ export default function OlcModeler(options) {
 }
 
 inherits(OlcModeler, Diagram);
+
+OlcModeler.prototype.name = "OLCs";
 
 OlcModeler.prototype.createNew = function () {
   return this.importXML(emptyDiagram);

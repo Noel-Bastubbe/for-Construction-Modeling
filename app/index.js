@@ -10,8 +10,15 @@ import DependencyModeler from './lib/dependencymodeler/DependencyModeler';
 import $ from 'jquery';
 import Mediator from './lib/mediator/Mediator';
 import Checker from './lib/guidelines/Checker';
-import ErrorBar from './lib/guidelines/ErrorBar';
+import ErrorBar, {makeGuidelineLink, makeQuickFixDiv} from './lib/guidelines/ErrorBar';
 import { download, upload } from './lib/util/FileUtil';
+import getDropdown from "./lib/util/Dropdown";
+import {
+    attr as domAttr,
+    classes as domClasses,
+    event as domEvent,
+    query as domQuery
+} from 'min-dom';
 
 import conferenceProcess from '../resources/conferenceModel/process.bpmn';
 import conferenceDataModel from '../resources/conferenceModel/datamodel.xml';
@@ -19,6 +26,9 @@ import conferenceOLC from '../resources/conferenceModel/olc.xml';
 import conferenceTerminationCondition from '../resources/conferenceModel/terminationCondition.xml';
 
 import Zip from 'jszip';
+import OlcEvents from "./lib/olcmodeler/OlcEvents";
+import CommonEvents from "./lib/common/CommonEvents";
+import {appendOverlayListeners} from "./lib/util/HtmlUtil";
 
 const LOAD_DUMMY = false; // Set to true to load conference example data
 const SHOW_DEBUG_BUTTONS = false; // Set to true to show additional buttons for debugging
@@ -89,6 +99,7 @@ new mediator.TerminationConditionModelerHook(terminationConditionModeler);
 
 const errorBar = new ErrorBar(document.getElementById("errorBar"), mediator);
 const checker = new Checker(mediator, errorBar);
+var currentModeler = fragmentModeler;
 
 // construction Mode for User Study, to enable set constructionMode to true
 const constructionMode = false;
@@ -99,7 +110,7 @@ if (constructionMode) {titleObjectiveModel.innerHTML = "Milestone"} else titleOb
 const titleDependencyModel = document.getElementById("titleDependencyModel");
 if (constructionMode) {titleDependencyModel.innerHTML = "Timeline"} else titleDependencyModel.innerHTML = "Dependency Model";
 
-async function loadDebugData() {
+    async function loadDebugData() {
   const zip = new Zip();
   zip.file('fragments.bpmn', conferenceProcess);
   zip.file('dataModel.xml', conferenceDataModel);
@@ -187,7 +198,7 @@ async function importFromZip (zipData) {
 // IO Buttons
 document.getElementById('newButton').addEventListener('click', () => {
   createNewDiagram();
-  displayFileName("Unnamed file"); 
+  displayFileName("Unnamed file");
 });
 
 document.getElementById('openButton').addEventListener('click', () => upload((data, title) => {
@@ -204,7 +215,71 @@ document.getElementById('saveButton').addEventListener('click', () => exportToZi
 
 async function displayFileName (zipName) {
   document.getElementById("fileName").innerHTML = zipName; 
-  };
+};
+
+async function navigationDropdown () {
+    var container = document.getElementById("navigationBar");
+    var buttonBar = document.createElement('div');
+    domClasses(buttonBar).add('olc-buttonbar');
+    domClasses(buttonBar).add('barContent');
+    container.appendChild(buttonBar);
+
+    // Select olc Menu
+    var selectOlcComponent = document.createElement('div');
+    selectOlcComponent.classList.add('olc-select-component');
+    var selectedOlcSpan = document.createElement('span');
+    selectedOlcSpan.style.userSelect = 'none';
+    selectOlcComponent.showValue = function (modeler) {
+        this.value = modeler;
+        selectedOlcSpan.innerText = this.value ?
+            this.value.name
+            : 'buggy';
+    }
+    var selectOlcMenu = getDropdown();
+    selectOlcComponent.addEventListener('click', event => {
+        if (event.target === selectOlcComponent || event.target === selectedOlcSpan) {
+            repopulateDropdown();
+            showSelectOlcMenu();
+        } else {
+            return;
+        }
+    });
+
+    selectOlcMenu.handleClick = (event) => {
+        return selectOlcMenu.contains(event.target);
+    }
+
+    function repopulateDropdown() {
+        var modelers = mediator.getModelers();
+        var valueBefore = selectOlcComponent.value;
+        selectOlcMenu.populate(modelers, modeler => {
+            showModeler(modeler);
+            selectOlcComponent.showValue(modeler);
+            selectOlcMenu.hide();
+        });
+        selectOlcComponent.showValue(valueBefore);
+    }
+
+    function showModeler(modeler) {
+        if(modeler === terminationConditionModeler) {
+            focus(modeler._root.closest('.canvas'));
+        } else {
+            focus(modeler.get('canvas')._container.closest('.canvas'));
+        }
+    }
+
+    function showSelectOlcMenu() {
+        const closeOverlay = appendOverlayListeners(selectOlcMenu);
+        selectOlcMenu.style.display = 'block';
+        selectOlcComponent.appendChild(selectOlcMenu);
+        selectOlcMenu.hide = closeOverlay;
+    }
+    selectOlcComponent.showValue(currentModeler);
+    selectOlcComponent.appendChild(selectedOlcSpan);
+    buttonBar.appendChild(selectOlcComponent);
+};
+
+navigationDropdown();
 
 if (SHOW_DEBUG_BUTTONS) {
   const reloadButton = document.createElement('a');
@@ -287,19 +362,13 @@ function focus(element) {
 
   if (element !== currentlyFocussedElement) {
     // canvas on right side add class focus
+
+      element.classList.remove("hidden");
     element.classList.add("focus");
 
     // remove focus from canvas on left side
     currentlyFocussedElement.classList.remove("focus");
-  
-    // switch wrappers
-    var left_node_to_insert = currentlyFocussedElement.parentElement;
-  
-    var right_node_to_insert = element.parentElement;
-  
-    left_node_to_insert.appendChild(element);
-  
-    right_node_to_insert.appendChild(currentlyFocussedElement);
+    currentlyFocussedElement.classList.add("hidden");
   }
 }
 
