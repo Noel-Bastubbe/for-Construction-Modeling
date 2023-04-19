@@ -137,6 +137,8 @@ OmModeler.prototype._modules = [].concat(
     OmModeler.prototype._modelingModules
 );
 
+OmModeler.prototype.name = "Objective Model";
+
 OmModeler.prototype.createObject = function (name) {
     const modeling = this.get('modeling');
     const canvas = this.get('canvas');

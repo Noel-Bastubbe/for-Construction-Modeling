@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <div class="topBar">
+    <div id="navigationBar" class="topBar">
         <a id="newButton" class="barButton barContent"> New </a>
         <a id="openButton" class="barButton barContent"> Open </a>
         <a id="saveButton" class="barButton barContent"> Save </a>
@@ -30,80 +30,43 @@
         <textarea class="note-area"></textarea>
     </div>
     <div id="main" class="mainContent">
-        <div class="content left">
             <div id="fragments-canvas" class="canvas focus">
                 <div class="canvasHeader">
                     <h3 class="focusHeader">Fragments <i class="material-icons focusHeaderIcon">photo_size_select_small</i></h3>
                     <a class="questionButton" href="https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragments" target="_blank">?</a>
                 </div>
             </div>
-        </div>
-
-        <div class="divider vertical"></div>
-
-        <div class="content right">
-            <div class="content top">
-                <div class="content top">
-                    <div id="datamodel-canvas" class="canvas">
+                    <div id="datamodel-canvas" class="canvas hidden">
                         <div class="canvasHeader">
                             <h3 class="focusHeader">Data Model <i class="material-icons focusHeaderIcon">photo_size_select_small</i></h3>
                             <a class="questionButton" href="https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Model" target="_blank">?</a>
                         </div>
                     </div>
-                </div>
-
-                <div class="divider horizontal"></div>
-
-                <div class="content bottom">
-                    <div id="objectivemodel-canvas" class="canvas">
+                    <div id="objectivemodel-canvas" class="canvas hidden">
                         <div class="canvasHeader">
                             <h3 class="focusHeader">Objective Model <i class="material-icons focusHeaderIcon">photo_size_select_small</i></h3>
                             <a class="questionButton" href="https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Objective-Model" target="_blank">?</a>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="divider horizontal"></div>
-
-            <div class="content bottom">
-                <div class="content top">
-                    <div class="content top">
-                        <div id="terminationcondition-canvas" class="canvas">
+                        <div id="terminationcondition-canvas" class="canvas hidden">
                             <div class="canvasHeader" style="position:relative">
                                 <h3 class="focusHeader">Termination Condition <i class="material-icons focusHeaderIcon">photo_size_select_small</i></h3>
                                 <a class="questionButton" href="https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Termination-Condition" target="_blank">?</a>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="divider horizontal"></div>
-
-                    <div class="content bottom">
-                        <div id="dependencymodel-canvas" class="canvas">
+                        <div id="dependencymodel-canvas" class="canvas hidden">
                             <div class="canvasHeader">
                                 <h3 class="focusHeader"> Dependency Model <i class="material-icons focusHeaderIcon">photo_size_select_small</i></h3>
                                 <a class="questionButton" href="https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model" target="_blank">?</a>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="divider horizontal"></div>
-
-                <div class="content bottom">
-                    <div id="olc-canvas" class="canvas">
+                    <div id="olc-canvas" class="canvas hidden">
                         <div class="canvasHeader">
                             <h3 class="focusHeader">OLCs <i class="material-icons focusHeaderIcon">photo_size_select_small</i></h3>
                             <a class="questionButton" href="https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Object-Lifecycle-(OLC)" target="_blank">?</a>
                         </div>
                     </div>
                 </div>
-
-            </div>
-        </div>
-    </div>
-
     <div id="errorBar" class="hidingTable">
         <table id="errorTable" class="errorTable">
             <tr>

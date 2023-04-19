@@ -5,6 +5,7 @@ import customModelingModule from './modeling';
 import bpmnExtension from './moddle/bpmnextension.json';
 import { is } from 'bpmn-js/lib/util/ModelUtil';
 import { without } from 'min-dash';
+import DependencyModeler from "../dependencymodeler/DependencyModeler";
 
 
 export default function FragmentModeler(options) {
@@ -36,6 +37,8 @@ export default function FragmentModeler(options) {
     });
 }
 inherits(FragmentModeler, BpmnModeler);
+
+FragmentModeler.prototype.name = "Fragments";
 
 FragmentModeler.prototype.handleOlcListChanged = function (olcs, dryRun=false) {
     this._olcs = olcs;

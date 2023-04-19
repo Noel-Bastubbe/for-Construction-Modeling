@@ -29,6 +29,7 @@ import DepAutoPlaceModule from './auto-place';
 
 import DepModdle from './moddle';
 import { nextPosition, root } from '../util/Util';
+import OmModeler from "../objectivemodeler/OmModeler";
 
 var emptyDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -105,6 +106,8 @@ export default function DependencyModeler(options) {
 }
 
 inherits(DependencyModeler, Diagram);
+
+DependencyModeler.prototype.name = "Dependency Model";
 
 DependencyModeler.prototype.createNew = function () {
   return this.importXML(emptyDiagram);
