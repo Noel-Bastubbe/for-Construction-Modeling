@@ -28,8 +28,8 @@ export function nextPosition(modeler, type) {
     const rightBorder = Math.max(... existingStates.map(element => element.x + element.width * 3 / 2));
     const topBorder = Math.min(... existingStates.map(element => element.y + element.height / 2));
 
-    const x = (isFinite(rightBorder) ? rightBorder : 100) + 50;
-    const y = isFinite(topBorder) ? topBorder : 100;
+    const x = (isFinite(rightBorder) ? rightBorder : 0) + 50;
+    const y = isFinite(topBorder) ? topBorder : 0;
 
     return {x, y};
 }

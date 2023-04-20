@@ -6,6 +6,7 @@ import EventBus from 'diagram-js/lib/core/EventBus'
 import TerminationConditionEvents from './TerminationConditionEvents';
 import TerminationConditionModdle from './TerminationConditionModdle';
 import CommonEvents from '../common/CommonEvents';
+import OlcModeler from "../olcmodeler/OlcModeler";
 
 const NAMESPACE = 'tc';
 
@@ -25,6 +26,16 @@ export default function TerminationConditionModeler(container) {
     container.addEventListener('mouseup', this._propagateEvent, true);
     container.addEventListener('mousedown', this._propagateEvent, true);
 }
+
+TerminationConditionModeler.prototype.id = "TC";
+
+TerminationConditionModeler.prototype.name = function (constructionMode) {
+    if (constructionMode) {
+        return "Termination Condition";
+    } else {
+        return "Termination Condition";
+    }
+};
 
 TerminationConditionModeler.prototype.showTerminationCondition = function (terminationCondition) {
     this.clear();

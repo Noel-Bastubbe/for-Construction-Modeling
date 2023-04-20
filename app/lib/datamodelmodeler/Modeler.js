@@ -31,6 +31,7 @@ import ResizeModule from 'diagram-js/lib/features/resize';
 import SpaceToolBehaviorModule from './behavior';
 import SnappingModule from './features/snapping';
 import { nextPosition } from '../util/Util';
+import OmModeler from "../objectivemodeler/OmModeler";
 
 var initialDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -124,6 +125,16 @@ Modeler.prototype._modules = [].concat(
   Modeler.prototype._interactionModules,
   Modeler.prototype._modelingModules
 );
+
+Modeler.prototype.id = "DM";
+
+Modeler.prototype.name = function (constructionMode) {
+  if (constructionMode) {
+    return "Data Model";
+  } else {
+    return "Data Model";
+  }
+}
 
 Modeler.prototype.createDataclass = function (name) {
   const modeling = this.get('modeling');
