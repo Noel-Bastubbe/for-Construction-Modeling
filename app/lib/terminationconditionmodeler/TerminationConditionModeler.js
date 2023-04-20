@@ -27,7 +27,13 @@ export default function TerminationConditionModeler(container) {
     container.addEventListener('mousedown', this._propagateEvent, true);
 }
 
-TerminationConditionModeler.prototype.name = "Termination Condition";
+TerminationConditionModeler.prototype.name = function (constructionMode) {
+    if (constructionMode) {
+        return "Termination Condition";
+    } else {
+        return "Termination Condition";
+    }
+};
 
 TerminationConditionModeler.prototype.showTerminationCondition = function (terminationCondition) {
     this.clear();

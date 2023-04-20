@@ -135,7 +135,13 @@ export default function OlcModeler(options) {
 
 inherits(OlcModeler, Diagram);
 
-OlcModeler.prototype.name = "OLCs";
+OlcModeler.prototype.name = function (constructionMode) {
+  if (constructionMode) {
+    return "OLCs";
+  } else {
+    return "OLCs";
+  }
+};
 
 OlcModeler.prototype.createNew = function () {
   return this.importXML(emptyDiagram);

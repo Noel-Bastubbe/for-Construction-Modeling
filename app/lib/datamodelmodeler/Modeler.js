@@ -125,7 +125,14 @@ Modeler.prototype._modules = [].concat(
   Modeler.prototype._interactionModules,
   Modeler.prototype._modelingModules
 );
-Modeler.prototype.name = "Data Model";
+
+Modeler.prototype.name = function (constructionMode) {
+  if (constructionMode) {
+    return "Data Model";
+  } else {
+    return "Data Model";
+  }
+}
 
 Modeler.prototype.createDataclass = function (name) {
   const modeling = this.get('modeling');

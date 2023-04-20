@@ -37,6 +37,7 @@ import SpaceToolBehaviorModule from './behavior';
 import {nextPosition} from '../util/Util';
 import {is} from "bpmn-js/lib/util/ModelUtil";
 import modeling from './features/modeling';
+import Modeler from "../datamodelmodeler/Modeler";
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -137,7 +138,13 @@ OmModeler.prototype._modules = [].concat(
     OmModeler.prototype._modelingModules
 );
 
-OmModeler.prototype.name = "Objective Model";
+OmModeler.prototype.name = function (constructionMode) {
+    if (constructionMode) {
+        return "Milestones";
+    } else {
+        return "Objective Model";
+    }
+}
 
 OmModeler.prototype.createObject = function (name) {
     const modeling = this.get('modeling');

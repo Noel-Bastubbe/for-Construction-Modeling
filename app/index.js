@@ -105,7 +105,7 @@ var currentModeler = fragmentModeler;
 const constructionMode = false;
 
 const titleObjectiveModel = document.getElementById("titleObjectiveModel");
-if (constructionMode) {titleObjectiveModel.innerHTML = "Milestone"} else titleObjectiveModel.innerHTML = "Objective Model";
+if (constructionMode) {titleObjectiveModel.innerHTML = "Milestones"} else titleObjectiveModel.innerHTML = "Objective Model";
 
 const titleDependencyModel = document.getElementById("titleDependencyModel");
 if (constructionMode) {titleDependencyModel.innerHTML = "Timeline"} else titleDependencyModel.innerHTML = "Dependency Model";
@@ -231,8 +231,8 @@ async function navigationDropdown () {
     selectedOlcSpan.style.userSelect = 'none';
     selectOlcComponent.showValue = function (modeler) {
         this.value = modeler;
-        selectedOlcSpan.innerText = this.value ?
-            this.value.name
+        selectedOlcSpan.innerText = this.value.name(constructionMode) ?
+            this.value.name(constructionMode)
             : 'buggy';
     }
     var selectOlcMenu = getDropdown();
@@ -251,12 +251,15 @@ async function navigationDropdown () {
 
     function repopulateDropdown() {
         var modelers = mediator.getModelers();
+        if (constructionMode) {
+            modelers = modelers.filter(object => object !== terminationConditionModeler);
+        }
         var valueBefore = selectOlcComponent.value;
         selectOlcMenu.populate(modelers, modeler => {
             showModeler(modeler);
             selectOlcComponent.showValue(modeler);
             selectOlcMenu.hide();
-        });
+        }, undefined, modeler => modeler.name(constructionMode));
         selectOlcComponent.showValue(valueBefore);
     }
 
