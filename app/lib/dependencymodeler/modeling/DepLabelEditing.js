@@ -4,11 +4,11 @@ export default function DepLabelEditing(eventBus, canvas, directEditing, command
     this._commandStack = commandStack;
     this._canvas = canvas;
 
-    eventBus.on('element.dblclick', function (event) {
-        if (event.element.id !== 'start_state' && event.element.id !== 'final_state') {
-            directEditing.activate(event.element);
-        }
-    });
+    // eventBus.on('element.dblclick', function (event) {
+    //     if (event.element.id !== 'start_state' && event.element.id !== 'final_state') {
+    //         directEditing.activate(event.element);
+    //     }
+    // });
 
     // complete on followup canvas operation
     eventBus.on([

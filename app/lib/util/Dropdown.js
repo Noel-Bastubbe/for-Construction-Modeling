@@ -110,12 +110,17 @@ export default function getDropdown(name = "") {
         return this.getEntries().filter((entry) => entry.option === option)[0];
     };
 
-    dropdownMenu.addCreateElementInput = function (onConfirm) {
+    dropdownMenu.addCreateElementInput = function (onConfirm, type = "text", value) {
         const createNewElementEditorContainer = document.createElement("div");
         createNewElementEditorContainer.classList.add("dd-dropdown-create-input");
         const createNewElementEditor = document.createElement("input");
-        createNewElementEditor.type = "text";
-        createNewElementEditor.placeholder = "Create new";
+        createNewElementEditor.type = type;
+        createNewElementEditor.min = 1;
+        if (value) {
+            createNewElementEditor.value = value;
+        } else {
+            createNewElementEditor.placeholder = "Create new";
+        }
         this.confirm = (event) => onConfirm(event);
         createNewElementEditor.addEventListener("keydown", (event) => {
             if (event.key === "Enter") {
