@@ -20,11 +20,6 @@
           "isAttr": true,
           "type": "String",
           "isId": true
-        },
-        {
-          "name": "date",
-          "isAttr": true,
-          "type": "String"
         }
       ]
     },
