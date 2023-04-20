@@ -135,6 +135,8 @@ export default function OlcModeler(options) {
 
 inherits(OlcModeler, Diagram);
 
+OlcModeler.prototype.id = "OLC";
+
 OlcModeler.prototype.name = function (constructionMode) {
   if (constructionMode) {
     return "OLCs";

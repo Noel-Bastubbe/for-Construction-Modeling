@@ -103,12 +103,11 @@ var currentModeler = fragmentModeler;
 
 // construction Mode for User Study, to enable set constructionMode to true
 const constructionMode = false;
-
-const titleObjectiveModel = document.getElementById("titleObjectiveModel");
-if (constructionMode) {titleObjectiveModel.innerHTML = "Milestones"} else titleObjectiveModel.innerHTML = "Objective Model";
-
-const titleDependencyModel = document.getElementById("titleDependencyModel");
-if (constructionMode) {titleDependencyModel.innerHTML = "Timeline"} else titleDependencyModel.innerHTML = "Dependency Model";
+mediator.getModelers().forEach ( modeler => {
+        var header = document.getElementById("title" + modeler.id);
+        header.innerHTML = modeler.name(constructionMode);
+    }
+)
 
     async function loadDebugData() {
   const zip = new Zip();

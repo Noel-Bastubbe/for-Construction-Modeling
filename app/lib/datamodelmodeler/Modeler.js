@@ -126,6 +126,8 @@ Modeler.prototype._modules = [].concat(
   Modeler.prototype._modelingModules
 );
 
+Modeler.prototype.id = "DM";
+
 Modeler.prototype.name = function (constructionMode) {
   if (constructionMode) {
     return "Data Model";

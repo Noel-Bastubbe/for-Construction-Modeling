@@ -138,6 +138,8 @@ OmModeler.prototype._modules = [].concat(
     OmModeler.prototype._modelingModules
 );
 
+OmModeler.prototype.id = "OM";
+
 OmModeler.prototype.name = function (constructionMode) {
     if (constructionMode) {
         return "Milestones";

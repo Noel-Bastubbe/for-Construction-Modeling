@@ -108,7 +108,9 @@ export default function DependencyModeler(options) {
 
 inherits(DependencyModeler, Diagram);
 
-DependencyModeler.prototype.name = function (constructionMode) {
+DependencyModeler.prototype.id = "DEP";
+
+    DependencyModeler.prototype.name = function (constructionMode) {
   if (constructionMode) {
     return "Timeline";
   } else {
