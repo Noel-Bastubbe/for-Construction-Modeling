@@ -7,6 +7,7 @@ import ConnectModule from 'diagram-js/lib/features/connect';
 import ConnectionPreviewModule from 'diagram-js/lib/features/connection-preview';
 import ContextPadModule from 'diagram-js/lib/features/context-pad';
 import CreateModule from 'diagram-js/lib/features/create';
+import DepLabelHandling from "./depLabelHandling";
 import LassoToolModule from 'diagram-js/lib/features/lasso-tool';
 import ModelingModule from 'diagram-js/lib/features/modeling';
 import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas';
@@ -80,6 +81,7 @@ export default function DependencyModeler(options) {
     DepDrawModule,
     DepRulesModule,
     DepModelingModule,
+    DepLabelHandling,
     DepAutoPlaceModule,
     {
       moddle: ['value', new DepModdle({})],

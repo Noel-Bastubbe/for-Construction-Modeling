@@ -33,7 +33,13 @@
       "superClass": [
         "DepElement"
       ],
-      "properties": []
+      "properties": [
+        {
+          "name": "date",
+          "isAttr": true,
+          "type": "int"
+        }
+      ]
     },
     {
       "name": "Dependency",

@@ -63,7 +63,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                             this.updateInstance(instance, element);
                             updateInstanceSelection();
                         },
-                        element,
+                        element, undefined,
                         (entry, newValue) => {
                             this._objectiveModeler.renameInstance(entry.option, newValue)
                             populateInstanceDropdown(this._objectiveModeler.getObjectInstancesOfClass(omObject.classRef));

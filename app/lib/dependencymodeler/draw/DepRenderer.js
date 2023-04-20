@@ -222,7 +222,12 @@ export default function DepRenderer(eventBus, styles,
       var circle = drawCircle(parentGfx, element.width, element.height, attrs);
 
       var semantic = element.businessObject || {name: '< unknown >'};
-      renderLabel(parentGfx, semantic.name, {
+      if (semantic.date) {
+        var date = "\n" + "🕒:" + semantic.date ;
+      } else {
+        var date = "";
+      }
+      renderLabel(parentGfx, semantic.name + date, {
         box: element,
         align: 'center-middle',
         padding: 5,

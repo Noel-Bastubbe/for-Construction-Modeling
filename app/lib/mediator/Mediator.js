@@ -375,7 +375,12 @@ Mediator.prototype.DependencyModelerHook = function (eventBus, dependencyModeler
             const objective = event.context.element.businessObject;
             this.mediator.renamedObjective(objective, objective.name);
         }
-    })
+    });
+
+    eventBus.on(CommonEvents.OBJECTIVE_RENAMED, event => {
+        const objective = event.objective.businessObject;
+        this.mediator.renamedObjective(objective,objective.name);
+    });
 }
 inherits(Mediator.prototype.DependencyModelerHook, CommandInterceptor);
 
