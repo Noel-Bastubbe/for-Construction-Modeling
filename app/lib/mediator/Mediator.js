@@ -502,7 +502,7 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
                 element.classRef = dataClass;
             }
             if (property === 'om:state') {
-                const state = this.mediator.olcModelerHook.modeler.get('elementRegistry').get(value).businessObject;
+                const state = this.mediator.olcModelerHook.modeler.getStateById(value);
                 if (!state) { throw new Error('Could not resolve state with id '+value); }
                 element.state = state;
             }
