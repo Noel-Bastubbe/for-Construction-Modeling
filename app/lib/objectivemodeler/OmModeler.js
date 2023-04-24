@@ -37,20 +37,19 @@ import SpaceToolBehaviorModule from './behavior';
 import {nextPosition} from '../util/Util';
 import {is} from "bpmn-js/lib/util/ModelUtil";
 import modeling from './features/modeling';
-import Modeler from "../datamodelmodeler/Modeler";
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
-<od:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
-    <od:odBoard id="Board" />
+<om:definitions xmlns:om="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
+    <om:odBoard id="Board" />
     <odDi:odRootBoard id="StartBoard" name="Start State" objectiveRef="start_state">
         <odDi:odPlane id="Plane" boardElement="Board" />
     </odDi:odRootBoard>
-    <od:odBoard id="Board2" />
+    <om:odBoard id="Board2" />
     <odDi:odRootBoard id="FinalBoard" name="Final State" objectiveRef="final_state">
-        <odDi:odPlane id="Plane2" boardElement="Board" />
+        <odDi:odPlane id="Plane2" boardElement="Board2" />
     </odDi:odRootBoard>
-</od:definitions>`;
+</om:definitions>`;
 
 export default function OmModeler(options) {
     BaseModeler.call(this, options);

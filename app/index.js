@@ -10,14 +10,11 @@ import DependencyModeler from './lib/dependencymodeler/DependencyModeler';
 import $ from 'jquery';
 import Mediator from './lib/mediator/Mediator';
 import Checker from './lib/guidelines/Checker';
-import ErrorBar, {makeGuidelineLink, makeQuickFixDiv} from './lib/guidelines/ErrorBar';
+import ErrorBar from './lib/guidelines/ErrorBar';
 import { download, upload } from './lib/util/FileUtil';
 import getDropdown from "./lib/util/Dropdown";
 import {
-    attr as domAttr,
-    classes as domClasses,
-    event as domEvent,
-    query as domQuery
+    classes as domClasses
 } from 'min-dom';
 
 import conferenceProcess from '../resources/conferenceModel/process.bpmn';
@@ -26,8 +23,6 @@ import conferenceOLC from '../resources/conferenceModel/olc.xml';
 import conferenceTerminationCondition from '../resources/conferenceModel/terminationCondition.xml';
 
 import Zip from 'jszip';
-import OlcEvents from "./lib/olcmodeler/OlcEvents";
-import CommonEvents from "./lib/common/CommonEvents";
 import {appendOverlayListeners} from "./lib/util/HtmlUtil";
 
 const LOAD_DUMMY = false; // Set to true to load conference example data
@@ -121,11 +116,11 @@ mediator.getModelers().forEach ( modeler => {
 async function createNewDiagram() {
     try {
       checker.deactivate();
+      await dependencyModeler.createNew();
       await fragmentModeler.importXML(diagramXML);
       await olcModeler.createNew();
       await dataModeler.importXML(newDatamodel);
       await objectiveModeler.createDiagram();
-      await dependencyModeler.createNew();
       terminationConditionModeler.createNew();
       if (LOAD_DUMMY) {
         await loadDebugData();
@@ -185,12 +180,12 @@ async function importFromZip (zipData) {
       throw new Error('Missing file: '+key)
     }
   });
+  await dependencyModeler.importXML(await files.dependencyModel.async("string"));
   await dataModeler.importXML(await files.dataModel.async("string"));
-  await objectiveModeler.importXML(await files.objectiveModel.async("string"));
   await olcModeler.importXML(await files.olcs.async("string"));
   await fragmentModeler.importXML(await files.fragments.async("string"));
   await terminationConditionModeler.importXML(await files.terminationCondition.async("string"));
-  await dependencyModeler.importXML(await files.dependencyModel.async("string"));
+  await objectiveModeler.importXML(await files.objectiveModel.async("string"));
   checker.activate();
 }
 

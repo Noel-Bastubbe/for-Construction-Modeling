@@ -494,6 +494,26 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
         }
     });
 
+    eventBus.on('import.parse.complete', ({context}) => {
+        context.warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({property, value, element}) => {
+            if (property === 'om:classRef') {
+                const dataClass = this.mediator.dataModelerHook.modeler.get('elementRegistry').get(value).businessObject;
+                if (!dataClass) { throw new Error('Could not resolve data class with id '+value); }
+                element.classRef = dataClass;
+            }
+            if (property === 'om:state') {
+                const state = this.mediator.olcModelerHook.modeler.get('elementRegistry').get(value).businessObject;
+                if (!state) { throw new Error('Could not resolve state with id '+value); }
+                element.state = state;
+            }
+            if (property === 'odDi:objectiveRef') {
+                const objective = this.mediator.dependencyModelerHook.modeler.get('elementRegistry').get(value).businessObject;
+                if (!objective) { throw new Error('Could not resolve objectives with id '+value); }
+                element.objectiveRef = objective;
+            }
+        });
+    });
+
     eventBus.on(ObjectiveEvents.OBJECTIVE_CREATION_REQUESTED, event => {
         return this.mediator.objectiveCreationRequested(event.name);
     });
