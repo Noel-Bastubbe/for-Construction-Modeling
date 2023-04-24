@@ -5,14 +5,14 @@ import customModelingModule from './modeling';
 import bpmnExtension from './moddle/bpmnextension.json';
 import { is } from 'bpmn-js/lib/util/ModelUtil';
 import { without } from 'min-dash';
-import DependencyModeler from "../dependencymodeler/DependencyModeler";
-import Modeler from "../datamodelmodeler/Modeler";
+import fragmentLabelHandling from "./fragmentLabelHandling";
 
 
 export default function FragmentModeler(options) {
     const customModules = [
         fragmentPaletteModule,
         customModelingModule,
+        fragmentLabelHandling,
         {
             fragmentModeler: ['value', this]
         }
