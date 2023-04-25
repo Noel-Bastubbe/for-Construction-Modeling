@@ -6,6 +6,7 @@ import TerminationConditionModeler from './lib/terminationconditionmodeler/Termi
 import DataModelModeler from './lib/datamodelmodeler/Modeler';
 import ObjectiveModeler from './lib/objectivemodeler/OmModeler';
 import DependencyModeler from './lib/dependencymodeler/DependencyModeler';
+import Modeler from './lib/rolemodeler/modeler/lib/Modeler';
 
 import $ from 'jquery';
 import Mediator from './lib/mediator/Mediator';
@@ -85,6 +86,15 @@ var fragmentModeler = new FragmentModeler({
     }]
 });
 
+var roleModeler = new Modeler({
+  container: '#role-canvas',
+  keyboard: { bindTo: document.querySelector('#role-canvas') },
+  additionalModules: [{
+  //   __init__ : ['mediator'],
+  //   mediator : ['type', mediator.FragmentModelerHook]
+  }]
+});
+
 var terminationConditionModeler = new TerminationConditionModeler(
   '#terminationcondition-canvas'
 );
@@ -122,6 +132,7 @@ async function createNewDiagram() {
       await dataModeler.importXML(newDatamodel);
       await objectiveModeler.createDiagram();
       terminationConditionModeler.createNew();
+      await roleModeler.createDiagram();
       if (LOAD_DUMMY) {
         await loadDebugData();
       } 
@@ -161,6 +172,8 @@ async function exportToZip () {
   zip.file('terminationCondition.xml', terminationCondition);
   const dependencyModel = (await dependencyModeler.saveXML({ format: true })).xml;
   zip.file('dependencyModel.xml', dependencyModel);
+  const roles = (await roleModeler.saveXML({ format: true })).xml;
+  zip.file('roles.xml', roles);
   return zip.generateAsync({type : 'base64'});
 }
 
@@ -186,6 +199,7 @@ async function importFromZip (zipData) {
   await fragmentModeler.importXML(await files.fragments.async("string"));
   await terminationConditionModeler.importXML(await files.terminationCondition.async("string"));
   await objectiveModeler.importXML(await files.objectiveModel.async("string"));
+  await roleModeler.importXML(await files.roles.async("string"));
   checker.activate();
 }
 
