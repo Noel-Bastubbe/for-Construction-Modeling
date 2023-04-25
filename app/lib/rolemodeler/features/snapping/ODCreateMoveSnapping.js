@@ -1,4 +1,4 @@
-import inherits from 'inherits-browser';
+import inherits from 'inherits';
 
 import CreateMoveSnapping from 'diagram-js/lib/features/snapping/CreateMoveSnapping';
 

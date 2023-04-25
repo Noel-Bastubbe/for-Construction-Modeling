@@ -1,4 +1,4 @@
-import inherits from 'inherits-browser';
+import inherits from 'inherits';
 
 import BaseModeler from './BaseModeler';
 
@@ -43,11 +43,11 @@ export default function RoleModeler(options) {
   BaseModeler.call(this, options);
 }
 
-inherits(Modeler, BaseModeler);
+inherits(RoleModeler, BaseModeler);
 
 
-Modeler.Viewer = Viewer;
-Modeler.NavigatedViewer = NavigatedViewer;
+RoleModeler.Viewer = Viewer;
+RoleModeler.NavigatedViewer = NavigatedViewer;
 
 /**
 * The createDiagram result.
@@ -71,12 +71,12 @@ Modeler.NavigatedViewer = NavigatedViewer;
  * @returns {Promise<CreateDiagramResult, CreateDiagramError>}
  *
  */
-Modeler.prototype.createDiagram = function() {
+RoleModeler.prototype.createDiagram = function() {
   return this.importXML(initialDiagram);
 };
 
 
-Modeler.prototype._interactionModules = [
+RoleModeler.prototype._interactionModules = [
 
   // non-modeling components
   KeyboardMoveModule,
@@ -85,7 +85,7 @@ Modeler.prototype._interactionModules = [
   ZoomScrollModule
 ];
 
-Modeler.prototype._modelingModules = [
+RoleModeler.prototype._modelingModules = [
 
   // modeling components
   AutoplaceModule,
@@ -116,8 +116,18 @@ Modeler.prototype._modelingModules = [
 // - interaction modules
 // - modeling modules
 
-Modeler.prototype._modules = [].concat(
+RoleModeler.prototype._modules = [].concat(
   Viewer.prototype._modules,
-  Modeler.prototype._interactionModules,
-  Modeler.prototype._modelingModules
+  RoleModeler.prototype._interactionModules,
+  RoleModeler.prototype._modelingModules
 );
+
+RoleModeler.prototype.id = "ROM";
+
+RoleModeler.prototype.name = function (constructionMode) {
+  if (constructionMode) {
+    return "Role Model";
+  } else {
+    return "Role Model";
+  }
+};
