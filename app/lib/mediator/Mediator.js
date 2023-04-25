@@ -328,7 +328,7 @@ Mediator.prototype.DataModelerHook.isHook = true;
 // === Dependency Modeler Hook
 Mediator.prototype.DependencyModelerHook = function (eventBus, dependencyModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, dependencyModeler, 'Dependency Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki');
+    AbstractHook.call(this, dependencyModeler, 'Dependency Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model');
     this.mediator.dependencyModelerHook = this;
     this.eventBus = eventBus;
 
@@ -625,22 +625,22 @@ Mediator.prototype.OlcModelerHook.isHook = true;
 // === Role Modeler Hook
 Mediator.prototype.RoleModelerHook = function (eventBus, roleModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, roleModeler, 'Role Model' ,'https://github.com/bptlab/fCM-design-support/wiki/Data-Model');
+    AbstractHook.call(this, roleModeler, 'Role Model' ,'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Role-Model');
     this.mediator.roleModelerHook = this;
     this.eventBus = eventBus;
 
     this.executed([
         'shape.create'
     ], event => {
-        if (is(event.context.shape, 'od:Class')) {
-            this.mediator.addedClass(event.context.shape.businessObject);
+        if (is(event.context.shape, 'rom:Role')) {
+            // this.mediator.addedRole(event.context.shape.businessObject);
         }
     });
 
     this.reverted([
         'shape.create'
     ], event => {
-        if (is(event.context.shape, 'od:Class')) {
+        if (is(event.context.shape, 'rom:Role')) {
             console.log(event);
             //this.mediator.addedState(event.context.shape.businessObject);
         }
@@ -649,15 +649,15 @@ Mediator.prototype.RoleModelerHook = function (eventBus, roleModeler) {
     this.executed([
         'shape.delete'
     ], event => {
-        if (is(event.context.shape, 'od:Class')) {
-            this.mediator.deletedClass(event.context.shape.businessObject);
+        if (is(event.context.shape, 'rom:Role')) {
+            // this.mediator.deletedClass(event.context.shape.businessObject);
         }
     });
 
     this.reverted([
         'shape.delete'
     ], event => {
-        if (is(event.context.shape, 'od:Class')) {
+        if (is(event.context.shape, 'rom:Role')) {
             console.log(event);
             //this.mediator.deletedState(event.context.shape.businessObject);
         }
@@ -667,8 +667,8 @@ Mediator.prototype.RoleModelerHook = function (eventBus, roleModeler) {
         'elements.delete'
     ], event => {
         event.context.elements = event.context.elements.filter(element => {
-            if (is(element, 'od:Class')) {
-                return this.mediator.confirmClassDeletion(element.businessObject);
+            if (is(element, 'rom:Role')) {
+                // return this.mediator.confirmRoleDeletion(element.businessObject);
             } else {
                 return true;
             }
@@ -679,19 +679,19 @@ Mediator.prototype.RoleModelerHook = function (eventBus, roleModeler) {
     this.executed([
         'element.updateLabel'
     ], event => {
-        var changedLabel = event.context.element.businessObject.labelAttribute;
-        if (is(event.context.element, 'od:Class') && (changedLabel === 'name' || !changedLabel)) {
-            this.mediator.renamedClass(event.context.element.businessObject);
-        }
+        // var changedLabel = event.context.element.businessObject.labelAttribute;
+        // if (is(event.context.element, 'od:Class') && (changedLabel === 'name' || !changedLabel)) {
+        //     this.mediator.renamedRole(event.context.element.businessObject);
+        // }
     });
 
     this.reverted([
         'element.updateLabel'
     ], event => {
-        var changedLabel = event.context.element.businessObject.labelAttribute;
-        if (is(event.context.element, 'od:Class') && (changedLabel === 'name' || !changedLabel)) {
-            this.mediator.renamedClass(event.context.element.businessObject);
-        }
+        // var changedLabel = event.context.element.businessObject.labelAttribute;
+        // if (is(event.context.element, 'od:Class') && (changedLabel === 'name' || !changedLabel)) {
+        //     this.mediator.renamedRole(event.context.element.businessObject);
+        // }
     });
 }
 inherits(Mediator.prototype.RoleModelerHook, CommandInterceptor);
