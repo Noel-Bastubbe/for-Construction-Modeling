@@ -1,4 +1,4 @@
-import inherits from 'inherits-browser';
+import inherits from 'inherits';
 
 import EditorActions from 'diagram-js/lib/features/editor-actions/EditorActions';
 

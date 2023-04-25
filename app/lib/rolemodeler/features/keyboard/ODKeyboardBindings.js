@@ -1,4 +1,4 @@
-import inherits from 'inherits-browser';
+import inherits from 'inherits';
 
 import KeyboardBindings from 'diagram-js/lib/features/keyboard/KeyboardBindings';
 

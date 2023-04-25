@@ -1,4 +1,4 @@
-import inherits from 'inherits-browser';
+import inherits from 'inherits';
 
 import { assign, isObject } from 'min-dash';
 

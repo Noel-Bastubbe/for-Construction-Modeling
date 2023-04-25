@@ -1,4 +1,4 @@
-import inherits from 'inherits-browser';
+import inherits from 'inherits';
 
 import OrderingProvider from 'diagram-js/lib/features/ordering/OrderingProvider';
 

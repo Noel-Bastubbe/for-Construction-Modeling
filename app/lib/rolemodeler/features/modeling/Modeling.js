@@ -1,4 +1,4 @@
-import inherits from 'inherits-browser';
+import inherits from 'inherits';
 
 import BaseModeling from 'diagram-js/lib/features/modeling/Modeling';
 
