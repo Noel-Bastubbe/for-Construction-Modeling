@@ -6,7 +6,7 @@ import TerminationConditionModeler from './lib/terminationconditionmodeler/Termi
 import DataModelModeler from './lib/datamodelmodeler/Modeler';
 import ObjectiveModeler from './lib/objectivemodeler/OmModeler';
 import DependencyModeler from './lib/dependencymodeler/DependencyModeler';
-import Modeler from './lib/rolemodeler/modeler/lib/Modeler';
+import RoleModeler from './lib/rolemodeler/RoleModeler';
 
 import $ from 'jquery';
 import Mediator from './lib/mediator/Mediator';
@@ -86,12 +86,12 @@ var fragmentModeler = new FragmentModeler({
     }]
 });
 
-var roleModeler = new Modeler({
+var roleModeler = new RoleModeler({
   container: '#role-canvas',
   keyboard: { bindTo: document.querySelector('#role-canvas') },
   additionalModules: [{
-  //   __init__ : ['mediator'],
-  //   mediator : ['type', mediator.FragmentModelerHook]
+     __init__ : ['mediator'],
+     mediator : ['type', mediator.RoleModelerHook]
   }]
 });
 

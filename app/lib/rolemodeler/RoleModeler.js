@@ -39,7 +39,7 @@ var initialDiagram =
     </odDi:odRootBoard>
 </od:definitions>`;
 
-export default function Modeler(options) {
+export default function RoleModeler(options) {
   BaseModeler.call(this, options);
 }
 
