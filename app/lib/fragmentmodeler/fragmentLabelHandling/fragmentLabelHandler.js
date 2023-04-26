@@ -9,7 +9,6 @@ export default class FragmentLabelHandler extends CommandInterceptor {
         super(eventBus);
         this._eventBus = eventBus;
         this._modeling = modeling;
-        this._directEditing = directEditing;
         this._dropdownContainer = document.createElement('div');
         this._dropdownContainer.classList.add('dd-dropdown-multicontainer');
         this._nameDropdown = getDropdown("Name");
@@ -92,32 +91,21 @@ export default class FragmentLabelHandler extends CommandInterceptor {
                     const newDurationInput = this._durationDropdown.getInputValue();
                     const newRoleInput = this._roleDropdown.getInputValue();
                     const newNoPInput = this._NoPDropdown.getInputValue();
-                    let needUpdate = false;
                     if (newNameInput !== '' && newNameInput !== activity.name) {
                         this.updateName(newNameInput,element);
                         populateNameDropdown();
-                        needUpdate = true;
                     }
                     if (newDurationInput !== activity.duration) {
                         this.updateDuration(newDurationInput,element);
                         populateDurationDropdown();
-                        needUpdate = true;
                     }
                     if (newRoleInput !== activity.role) {
                         this.updateRole(newRoleInput,element);
                         populateRoleDropdown();
-                        needUpdate = true;
                     }
                     if (newNoPInput !== activity.NoP) {
                         this.updateNoP(newNoPInput,element);
                         populateNoPDropdown();
-                        needUpdate = true;
-                    }
-                    if (needUpdate) {
-                        this._nameDropdown.focusInput();
-                        this._durationDropdown.focusInput();
-                        this._NoPDropdown.focusInput();
-                        updateRoleSelection();
                     }
                 }
 
