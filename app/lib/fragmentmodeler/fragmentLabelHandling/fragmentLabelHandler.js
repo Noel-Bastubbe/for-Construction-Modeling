@@ -26,7 +26,7 @@ export default class FragmentLabelHandler extends CommandInterceptor {
         this._fragmentModeler = fragmentModeler;
 
         eventBus.on('directEditing.activate', function (e) {
-            if (is(e.active.element, 'bpmn2:task')) {
+            if (is(e.active.element, 'bpmn:Task')) {
                 directEditing.cancel();
             }
         });
@@ -63,7 +63,7 @@ export default class FragmentLabelHandler extends CommandInterceptor {
                 }
                 const populateRoleDropdown = () => {
                     this._roleDropdown.populate(
-                        [],
+                        [], // TODO Change this to the list of roles instead of an empty list
                         (state, element) => {
                             this.updateRole(state, element);
                             updateRoleSelection();
@@ -116,7 +116,6 @@ export default class FragmentLabelHandler extends CommandInterceptor {
                     if (needUpdate) {
                         this._nameDropdown.focusInput();
                         this._durationDropdown.focusInput();
-                        this._roleDropdown.focusInput();
                         this._NoPDropdown.focusInput();
                         updateRoleSelection();
                     }
