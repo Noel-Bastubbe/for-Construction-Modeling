@@ -1,31 +1,37 @@
 import BaseRenderer from "diagram-js/lib/draw/BaseRenderer";
-import { is, assign } from 'util/util';
+import {is} from "../../util/Util";
+import {assign} from 'min-dash';
 import {getLabelColor, getSemantic} from 'bpmn-js/lib/draw/BpmnRenderUtil';
-import TextRenderer from 'bpmn-js/lib/draw/TextRenderer';
+import {
+    append as svgAppend,
+    classes as svgClasses
+} from 'tiny-svg';
 
 const HIGH_PRIORITY = 1500;
 
 export default class CustomRenderer extends BaseRenderer {
-    constructor(eventBus, bpmnRenderer) {
+    constructor(eventBus, bpmnRenderer, textRenderer) {
         super(eventBus, HIGH_PRIORITY);
 
         this.bpmnRenderer = bpmnRenderer;
+        this.textRenderer = textRenderer;
+    }
+
+    canRender(element) {
+        return is(element, 'bpmn:Task');
     }
 
     drawShape(parentNode, element) {
         const shape = this.bpmnRenderer.drawShape(parentNode, element);
-
-        if (is(element, 'bpmn:Task')) {
-            this.renderEmbeddedTimeLabel(parentNode.gfx, element, 'right-top');
-            return shape;
-        }
+        this.renderEmbeddedTimeLabel(parentNode, element, 'right-top');
+        return shape;
     }
 
     renderEmbeddedTimeLabel(parentGfx, element, align) {
         let semantic = getSemantic(element);
 
         if (semantic.duration) {
-            var duration = "\n" + "🕒:" + semantic.duration ;
+            var duration = "\n" + "🕒:" + semantic.duration;
         } else {
             duration = "";
         }
@@ -48,7 +54,7 @@ export default class CustomRenderer extends BaseRenderer {
             }
         }, options);
 
-        var text = TextRenderer.createText(label || '', options);
+        var text = this.textRenderer.createText(label || '', options);
 
         svgClasses(text).add('djs-label');
 
@@ -57,3 +63,5 @@ export default class CustomRenderer extends BaseRenderer {
         return text;
     }
 }
+
+CustomRenderer.$inject = ['eventBus', 'bpmnRenderer', 'textRenderer'];
