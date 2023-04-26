@@ -102,16 +102,16 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
       'rom:Role', 'od-elements', 'bpmn-icon-task',
       translate('Create Role')
     ),
-    // 'object-linker': {
-    //   group: 'od-elements',
-    //   className: 'bpmn-icon-connection',
-    //   title: translate('Link objects'),
-    //   action: {
-    //     click: function(event) {
-    //       globalConnect.start(event);
-    //     }
-    //   }
-    // }
+    'object-linker': {
+      group: 'od-elements',
+      className: 'bpmn-icon-connection',
+      title: translate('Link objects'),
+      action: {
+        click: function(event) {
+          globalConnect.start(event);
+        }
+      }
+    }
   });
 
   return actions;
