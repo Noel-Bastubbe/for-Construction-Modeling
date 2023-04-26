@@ -4,7 +4,7 @@ import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
 import {is} from "../../util/Util";
 
-export default class FragmentLabelHandler extends CommandInterceptor {
+export default class TaskLabelHandler extends CommandInterceptor {
     constructor(eventBus, modeling, directEditing, overlays, fragmentModeler) {
         super(eventBus);
         this._eventBus = eventBus;
@@ -192,7 +192,7 @@ export default class FragmentLabelHandler extends CommandInterceptor {
 
 }
 
-FragmentLabelHandler.$inject = [
+TaskLabelHandler.$inject = [
     'eventBus',
     'modeling',
     'directEditing',
