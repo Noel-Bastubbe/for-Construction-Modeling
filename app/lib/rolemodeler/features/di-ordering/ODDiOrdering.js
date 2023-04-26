@@ -1,4 +1,4 @@
-import { getDi } from '../../draw/ODRendererUtil';
+import { getDi } from '../../draw/ROMRendererUtil';
 import { getBusinessObject } from '../../util/ModelUtil';
 
 import {

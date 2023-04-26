@@ -30,30 +30,35 @@
       ],
       "properties": [
         {
-          "name": "inheritance",
+          "name": "link",
           "isMany": true,
-          "type": "Inheritance",
+          "type": "Link",
           "isReference": true
         }
       ]
     },
     {
-      "name": "Inheritance",
+      "name": "Link",
       "superClass": [
         "BoardElement"
       ],
       "properties": [
         {
-          "name": "super",
+          "name": "type",
           "isAttr": true,
-          "isReference": true,
-          "type": "Role"
+          "type": "String"
         },
         {
-          "name": "sub",
+          "name": "sourceRef",
           "isAttr": true,
           "isReference": true,
-          "type": "Role"
+          "type": "Object"
+        },
+        {
+          "name": "targetRef",
+          "isAttr": true,
+          "isReference": true,
+          "type": "Object"
         }
       ]
     },

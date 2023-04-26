@@ -1,8 +1,8 @@
-import ODRenderer from './ODRenderer';
+import ROMRenderer from './ROMRenderer';
 import TextRenderer from './TextRenderer';
 
 export default {
-  __init__: [ 'odRenderer' ],
-  odRenderer: [ 'type', ODRenderer ],
+  __init__: [ 'romRenderer' ],
+  romRenderer: [ 'type', ROMRenderer ],
   textRenderer: [ 'type', TextRenderer ],
 };

@@ -4,7 +4,7 @@ function getLabelAttr(semantic) {
   if (semantic.labelAttribute) {
     return semantic.labelAttribute;
   }
-  if (isAny(semantic, [ 'rom:Inheritance', 'rom:Role' ])) {
+  if (isAny(semantic, [ 'rom:Link', 'rom:Role' ])) {
     return 'name';
   }
 }

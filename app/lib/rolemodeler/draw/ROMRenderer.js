@@ -4,6 +4,7 @@ import { assign, isObject } from 'min-dash';
 
 import { append as svgAppend, attr as svgAttr, classes as svgClasses, create as svgCreate } from 'tiny-svg';
 
+
 import { createLine } from 'diagram-js/lib/util/RenderUtil';
 import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 
@@ -14,17 +15,18 @@ import {
   query as domQuery
 } from 'min-dom';
 
-import { getFillColor, getRectPath, getSemantic, getStrokeColor } from './ODRendererUtil';
+import { getFillColor, getRectPath, getSemantic, getStrokeColor } from './ROMRendererUtil';
 import Ids from 'ids';
 
 var RENDERER_IDS = new Ids();
+var TASK_BORDER_RADIUS = 10;
 
 var HIGH_FILL_OPACITY = .35;
 
 var DEFAULT_TEXT_SIZE = 16;
 var markers = {};
 
-export default function ODRenderer(
+export default function ROMRenderer(
     config, eventBus, styles,
     canvas, textRenderer, priority) {
 
@@ -248,7 +250,7 @@ export default function ODRenderer(
 
   this.handlers = {
     'rom:Role': function(parentGfx, element, attrs) {
-      var rect = drawRect(parentGfx, element.width, element.height, 0, assign({
+      var rect = drawRect(parentGfx, element.width, element.height, TASK_BORDER_RADIUS, assign({
         fill: getFillColor(element, defaultFillColor),
         fillOpacity: HIGH_FILL_OPACITY,
         stroke: getStrokeColor(element, defaultStrokeColor)
@@ -258,7 +260,7 @@ export default function ODRenderer(
 
       return rect;
     },
-    'rom:inheritance': function(parentGfx, element) {
+    'rom:Link': function(parentGfx, element) {
       var pathData = createPathFromConnection(element);
 
       var fill = getFillColor(element, defaultFillColor),
@@ -278,9 +280,9 @@ export default function ODRenderer(
 }
 
 
-inherits(ODRenderer, BaseRenderer);
+inherits(ROMRenderer, BaseRenderer);
 
-ODRenderer.$inject = [
+ROMRenderer.$inject = [
   'config.odm',
   'eventBus',
   'styles',
@@ -289,11 +291,11 @@ ODRenderer.$inject = [
 ];
 
 
-ODRenderer.prototype.canRender = function(element) {
+ROMRenderer.prototype.canRender = function(element) {
   return is(element, 'rom:BoardElement');
 };
 
-ODRenderer.prototype.drawShape = function(parentGfx, element) {
+ROMRenderer.prototype.drawShape = function(parentGfx, element) {
   var type = element.type;
   var h = this.handlers[type];
 
@@ -301,7 +303,7 @@ ODRenderer.prototype.drawShape = function(parentGfx, element) {
   return h(parentGfx, element);
 };
 
-ODRenderer.prototype.drawConnection = function(parentGfx, element) {
+ROMRenderer.prototype.drawConnection = function(parentGfx, element) {
   var type = element.type;
   var h = this.handlers[type];
 
@@ -309,7 +311,7 @@ ODRenderer.prototype.drawConnection = function(parentGfx, element) {
   return h(parentGfx, element);
 };
 
-ODRenderer.prototype.getShapePath = function(element) {
+ROMRenderer.prototype.getShapePath = function(element) {
 
   return getRectPath(element);
 };
