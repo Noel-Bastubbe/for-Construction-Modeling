@@ -95,7 +95,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                         this.updateName(newNameInput,element);
                         populateNameDropdown();
                     }
-                    if (newDurationInput !== activity.duration) {
+                    if (newDurationInput !== activity.duration && newDurationInput > 0) {
                         this.updateDuration(newDurationInput,element);
                         populateDurationDropdown();
                     }
@@ -103,7 +103,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                         this.updateRole(newRoleInput,element);
                         populateRoleDropdown();
                     }
-                    if (newNoPInput !== activity.NoP) {
+                    if (newNoPInput !== activity.NoP && newNoPInput > 0) {
                         this.updateNoP(newNoPInput,element);
                         populateNoPDropdown();
                     }
