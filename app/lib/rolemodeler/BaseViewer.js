@@ -268,7 +268,7 @@ BaseViewer.prototype.open = function(rootBoardOrId) {
       rootBord = findRootBoard(definitions, rootBoardOrId);
 
       if (!rootBord) {
-        var err2 = new Error('OdRootBoard <' + rootBoardOrId + '> not found');
+        var err2 = new Error('RomRootBoard <' + rootBoardOrId + '> not found');
 
         return reject(addWarningsToError(err2, []));
       }
