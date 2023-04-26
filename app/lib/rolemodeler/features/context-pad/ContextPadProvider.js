@@ -141,7 +141,7 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
     assign(actions, {
       'append.append-task': appendAction(
         'rom:Role',
-        'od-no-font-icon-object',
+        'bpmn-icon-task',
         translate('Link with new object')
       ),
     });
