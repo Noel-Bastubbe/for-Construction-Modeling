@@ -50,7 +50,7 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
       create.start(event, shape);
     }
 
-    var shortType = type.replace(/^od:/, '');
+    var shortType = type.replace(/^rom:/, '');
 
     return {
       group: group,
@@ -99,8 +99,8 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
       separator: true
     },
     'create-object': createAction(
-      'od:Object', 'od-elements', 'od-icon-object',
-      translate('Create object')
+      'rom:Role', 'od-elements', 'bpmn-icon-task',
+      translate('Create Role')
     ),
     'object-linker': {
       group: 'od-elements',
@@ -115,11 +115,7 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
     'od-separator': {
       group: 'od-elements',
       separator: true
-    },
-    'create.text-box': createAction(
-      'od:TextBox', 'text', 'pjs-text-box',
-      translate('Create text')
-    )
+    }
   });
 
   return actions;

@@ -32,12 +32,12 @@ import SnappingModule from './features/snapping';
 
 var initialDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
-<od:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
-    <od:odBoard id="Board_debug" />
+<rom:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
+    <rom:odBoard id="Board_debug" />
     <odDi:odRootBoard id="RootBoard_debug">
         <odDi:odPlane id="Plane_debug" boardElement="Board_debug" />
     </odDi:odRootBoard>
-</od:definitions>`;
+</rom:definitions>`;
 
 export default function RoleModeler(options) {
   BaseModeler.call(this, options);

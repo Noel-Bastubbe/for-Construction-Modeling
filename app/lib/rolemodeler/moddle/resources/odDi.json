@@ -29,7 +29,7 @@
           "name": "boardElement",
           "isAttr": true,
           "isReference": true,
-          "type": "od:BoardElement",
+          "type": "rom:BoardElement",
           "redefines": "BoardElement#modelElement"
         }
       ],
@@ -42,7 +42,7 @@
           "name": "boardElement",
           "isAttr": true,
           "isReference": true,
-          "type": "od:BoardElement",
+          "type": "rom:BoardElement",
           "redefines": "BoardElement#modelElement"
         },
         {
@@ -63,21 +63,21 @@
           "name": "boardElement",
           "isAttr": true,
           "isReference": true,
-          "type": "od:BoardElement",
+          "type": "rom:BoardElement",
           "redefines": "BoardElement#modelElement"
         },
         {
           "name": "sourceElement",
           "isAttr": true,
           "isReference": true,
-          "type": "od:BoardElement",
+          "type": "rom:BoardElement",
           "redefines": "Edge#source"
         },
         {
           "name": "targetElement",
           "isAttr": true,
           "isReference": true,
-          "type": "od:BoardElement",
+          "type": "rom:BoardElement",
           "redefines": "Edge#target"
         },
         {
@@ -168,14 +168,14 @@
       "properties": [
         {
           "name": "source",
-          "type": "od:BoardElement",
+          "type": "rom:BoardElement",
           "isReadOnly": true,
           "isVirtual": true,
           "isReference": true
         },
         {
           "name": "target",
-          "type": "od:BoardElement",
+          "type": "rom:BoardElement",
           "isReadOnly": true,
           "isVirtual": true,
           "isReference": true

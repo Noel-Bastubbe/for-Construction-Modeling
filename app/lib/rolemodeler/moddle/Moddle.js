@@ -43,7 +43,7 @@ ODModdle.prototype = Object.create(Moddle.prototype);
  * Instantiates a od model tree from a given xml string.
  *
  * @param {String}   xmlStr
- * @param {String}   [typeName='od:Definitions'] name of the root element
+ * @param {String}   [typeName='rom:Definitions'] name of the root element
  * @param {Object}   [options]  options to pass to the underlying reader
  *
  * @returns {Promise<ParseResult, ParseError>}
@@ -51,7 +51,7 @@ ODModdle.prototype = Object.create(Moddle.prototype);
 ODModdle.prototype.fromXML = function(xmlStr, typeName, options) {
   if (!isString(typeName)) {
     options = typeName;
-    typeName = 'od:Definitions';
+    typeName = 'rom:Definitions';
   }
 
   var reader = new Reader(assign({ model: this, lax: false }, options));
@@ -71,7 +71,7 @@ ODModdle.prototype.fromXML = function(xmlStr, typeName, options) {
 /**
  * Serializes a od object tree to XML.
  *
- * @param {String}   element    the root element, typically an instance of `od:Definitions`
+ * @param {String}   element    the root element, typically an instance of `rom:Definitions`
  * @param {Object}   [options]  to pass to the underlying writer
  *
  * @returns {Promise<SerializationResult, Error>}

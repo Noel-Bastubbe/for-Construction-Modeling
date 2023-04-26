@@ -48,12 +48,12 @@ export default function ObjectConnectSnapping(eventBus) {
     }
 
     if (hover && isAnyType(canExecute, [
-      'od:Link',
+      'rom:Inheritance',
     ])) {
       context.connectionStart = mid(start);
 
       // snap hover
-      if (isAny(hover, [ 'od:Object' ])) {
+      if (isAny(hover, [ 'rom:Role' ])) {
         snapToTargetMid(event, hover);
       }
     }

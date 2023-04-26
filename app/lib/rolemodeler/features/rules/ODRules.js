@@ -177,7 +177,7 @@ function isParent(possibleParent, element) {
 }
 
 function isGroup(element) {
-  return is(element, 'od:Group') && !element.labelTarget;
+  return is(element, 'rom:Group') && !element.labelTarget;
 }
 
 /**
@@ -192,7 +192,7 @@ function canStartConnection(element) {
   }
 
   return is(element,
-    'od:Object'
+    'rom:Role'
   );
 }
 
@@ -206,13 +206,13 @@ function canConnect(source, target) {
     return null;
   }
   if (canConnectLink(source, target)) {
-    return { type: 'od:Link' };
+    return { type: 'rom:Inheritance' };
   }
   return false;
 }
 
 function canConnectLink(source, target) {
-  return is(source, 'od:Object') && is(target, 'od:Object');
+  return is(source, 'rom:Role') && is(target, 'rom:Role');
 }
 
 /**
@@ -228,7 +228,7 @@ function canDrop(element, target) {
   }
 
   // drop board elements onto boards
-  return is(element, 'od:BoardElement') && is(target, 'od:OdBoard');
+  return is(element, 'rom:BoardElement') && is(target, 'rom:OdBoard');
 }
 
 function canReplace(elements, target) {
@@ -254,7 +254,7 @@ function canAttach(elements, target) {
     return false;
   }
 
-  if (is(target, 'od:BoardElement')) {
+  if (is(target, 'rom:BoardElement')) {
     return false;
   }
 
@@ -298,7 +298,7 @@ function canCreate(shape, target, source, position) {
 }
 
 function canResize(shape, newBounds) {
-  if (isAny(shape, [ 'od:Object' ])) {
+  if (isAny(shape, [ 'rom:Role' ])) {
     return !newBounds || (newBounds.width >= 50 && newBounds.height >= 50);
   }
   return false;

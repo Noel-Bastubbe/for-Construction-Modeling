@@ -145,7 +145,7 @@ export default function LabelBehavior(
     }
 
     // we want to trigger on board elements only
-    if (!is(element.labelTarget || element, 'od:BoardElement')) {
+    if (!is(element.labelTarget || element, 'rom:BoardElement')) {
       return;
     }
 

@@ -278,5 +278,5 @@ OdImporter.prototype._getElement = function(semantic) {
 // helpers //////////
 
 function isFrameElement(semantic) {
-  return is(semantic, 'od:Group');
+  return is(semantic, 'rom:Group');
 }

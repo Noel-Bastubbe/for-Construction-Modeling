@@ -89,7 +89,8 @@ export default function ODRenderer(
     options = assign({
       size: {
         width: 100
-      }
+      },
+      align: 'center-middle'
     }, options);
 
     var text = textRenderer.createText(label || '', options);
@@ -137,46 +138,6 @@ export default function ODRenderer(
     });
   }
 
-  function renderAttributes(parentGfx, element) {
-    var semantic = getSemantic(element);
-    if (semantic.attributeValues) {
-      renderLabel(parentGfx, semantic.attributeValues, {
-        box: {
-          height: element.height + 30,
-          width: element.width
-        },
-        padding: 5,
-        align: 'center-middle',
-        style: {
-          fill: defaultStrokeColor
-        }
-      });
-    }
-  }
-
-  function addDivider(parentGfx, element) {
-    drawLine(parentGfx, [
-      { x: 0, y: 30 },
-      { x: element.width, y: 30 }
-    ], {
-      stroke: getStrokeColor(element, defaultStrokeColor)
-    });
-  }
-
-  function drawLine(parentGfx, waypoints, attrs) {
-    attrs = computeStyle(attrs, [ 'no-fill' ], {
-      stroke: 'black',
-      strokeWidth: 2,
-      fill: 'none'
-    });
-
-    var line = createLine(waypoints, attrs);
-
-    svgAppend(parentGfx, line);
-
-    return line;
-  }
-
   function renderTitelLabel(parentGfx, element) {
     let semantic = getSemantic(element);
     let text = '';
@@ -186,7 +147,7 @@ export default function ODRenderer(
     }
     renderLabel(parentGfx, text, {
       box: {
-        height: 30,
+        height: element.height,
         width: element.width
       },
       padding: 5,
@@ -286,22 +247,18 @@ export default function ODRenderer(
   }
 
   this.handlers = {
-    'od:Object': function(parentGfx, element, attrs) {
+    'rom:Role': function(parentGfx, element, attrs) {
       var rect = drawRect(parentGfx, element.width, element.height, 0, assign({
         fill: getFillColor(element, defaultFillColor),
         fillOpacity: HIGH_FILL_OPACITY,
         stroke: getStrokeColor(element, defaultStrokeColor)
       }, attrs));
 
-      addDivider(parentGfx, element);
-
       renderTitelLabel(parentGfx, element);
-
-      renderAttributes(parentGfx, element);
 
       return rect;
     },
-    'od:Link': function(parentGfx, element) {
+    'rom:inheritance': function(parentGfx, element) {
       var pathData = createPathFromConnection(element);
 
       var fill = getFillColor(element, defaultFillColor),
@@ -313,20 +270,6 @@ export default function ODRenderer(
         stroke: getStrokeColor(element, defaultStrokeColor)
       };
       return drawPath(parentGfx, pathData, attrs);
-    },
-    'od:TextBox': function(parentGfx, element) {
-      var attrs = {
-        fill: 'none',
-        stroke: 'none'
-      };
-
-      var textSize = element.textSize || DEFAULT_TEXT_SIZE;
-
-      var rect = drawRect(parentGfx, element.width, element.height, 0, attrs);
-
-      renderEmbeddedLabel(parentGfx, element, 'center-middle', textSize);
-
-      return rect;
     },
     'label': function(parentGfx, element) {
       return renderExternalLabel(parentGfx, element);
@@ -347,7 +290,7 @@ ODRenderer.$inject = [
 
 
 ODRenderer.prototype.canRender = function(element) {
-  return is(element, 'od:BoardElement');
+  return is(element, 'rom:BoardElement');
 };
 
 ODRenderer.prototype.drawShape = function(parentGfx, element) {

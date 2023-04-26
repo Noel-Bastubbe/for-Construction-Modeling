@@ -110,7 +110,7 @@ BaseViewer.prototype.importXML = function(xml, rootBoard) {
     // allow xml manipulation
     xml = self._emit('import.parse.start', { xml: xml }) || xml;
 
-    self._moddle.fromXML(xml, 'od:Definitions').then(function(result) {
+    self._moddle.fromXML(xml, 'rom:Definitions').then(function(result) {
 
       var definitions = result.rootElement;
       var references = result.references;
