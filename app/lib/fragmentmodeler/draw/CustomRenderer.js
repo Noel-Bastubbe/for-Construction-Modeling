@@ -31,7 +31,7 @@ export default class CustomRenderer extends BaseRenderer {
         let semantic = getSemantic(element);
 
         if (semantic.duration) {
-            var duration = "\n" + "🕒:" + semantic.duration;
+            var duration = "🕒:" + semantic.duration;
         } else {
             duration = "";
         }
