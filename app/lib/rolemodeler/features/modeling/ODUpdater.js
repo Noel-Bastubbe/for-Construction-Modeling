@@ -369,7 +369,7 @@ ODUpdater.prototype.updateConnection = function(context) {
       newSource = getBusinessObject(connection.source),
       newTarget = getBusinessObject(connection.target);
 
-  var inverseSet = is(businessObject, 'rom:Inheritance');
+  var inverseSet = is(businessObject, 'rom:Link');
 
   if (businessObject.sourceRef !== newSource) {
     if (inverseSet) {

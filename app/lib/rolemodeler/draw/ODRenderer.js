@@ -258,7 +258,7 @@ export default function ODRenderer(
 
       return rect;
     },
-    'rom:inheritance': function(parentGfx, element) {
+    'rom:Link': function(parentGfx, element) {
       var pathData = createPathFromConnection(element);
 
       var fill = getFillColor(element, defaultFillColor),

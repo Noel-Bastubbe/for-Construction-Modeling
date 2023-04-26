@@ -39,7 +39,7 @@ export function getFlowNodePosition(source, element) {
 
   var horizontalDistance = getConnectedDistance(source, {
     filter: function(connection) {
-      return is(connection, 'rom:Inheritance');
+      return is(connection, 'rom:Link');
     }
   });
 

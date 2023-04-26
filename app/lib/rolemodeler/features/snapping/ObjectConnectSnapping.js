@@ -48,7 +48,7 @@ export default function ObjectConnectSnapping(eventBus) {
     }
 
     if (hover && isAnyType(canExecute, [
-      'rom:Inheritance',
+      'rom:Link',
     ])) {
       context.connectionStart = mid(start);
 
