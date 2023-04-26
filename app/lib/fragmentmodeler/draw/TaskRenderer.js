@@ -9,7 +9,7 @@ import {
 
 const HIGH_PRIORITY = 1500;
 
-export default class CustomRenderer extends BaseRenderer {
+export default class TaskRenderer extends BaseRenderer {
     constructor(eventBus, bpmnRenderer, textRenderer) {
         super(eventBus, HIGH_PRIORITY);
 
@@ -23,11 +23,11 @@ export default class CustomRenderer extends BaseRenderer {
 
     drawShape(parentNode, element) {
         const shape = this.bpmnRenderer.drawShape(parentNode, element);
-        this.renderEmbeddedTimeLabel(parentNode, element, 'right-top');
+        this.renderEmbeddedDurationLabel(parentNode, element, 'right-top');
         return shape;
     }
 
-    renderEmbeddedTimeLabel(parentGfx, element, align) {
+    renderEmbeddedDurationLabel(parentGfx, element, align) {
         let semantic = getSemantic(element);
 
         if (semantic.duration) {
@@ -64,4 +64,4 @@ export default class CustomRenderer extends BaseRenderer {
     }
 }
 
-CustomRenderer.$inject = ['eventBus', 'bpmnRenderer', 'textRenderer'];
+TaskRenderer.$inject = ['eventBus', 'bpmnRenderer', 'textRenderer'];

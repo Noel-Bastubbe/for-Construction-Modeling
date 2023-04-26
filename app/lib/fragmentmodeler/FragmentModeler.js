@@ -6,14 +6,14 @@ import bpmnExtension from './moddle/bpmnextension.json';
 import { is } from 'bpmn-js/lib/util/ModelUtil';
 import { without } from 'min-dash';
 import taskLabelHandling from "./taskLabelHandling";
-import customRenderer from "./draw";
+import taskRenderer from "./draw";
 
 
 export default function FragmentModeler(options) {
     const customModules = [
         fragmentPaletteModule,
         customModelingModule,
-        customRenderer,
+        taskRenderer,
         taskLabelHandling,
         {
             fragmentModeler: ['value', this]

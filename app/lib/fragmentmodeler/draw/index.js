@@ -1,6 +1,6 @@
-import CustomRenderer from './CustomRenderer';
+import TaskRenderer from './TaskRenderer';
 
 export default {
-    __init__: [ 'customRenderer' ],
-    customRenderer: [ 'type', CustomRenderer ]
+    __init__: [ 'taskRenderer' ],
+    taskRenderer: [ 'type', TaskRenderer ]
 };
