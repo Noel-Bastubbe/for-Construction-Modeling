@@ -1,8 +1,8 @@
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 import inherits from 'inherits';
-import { isFunction, without } from 'min-dash';
-import { is } from '../util/Util';
-import { namespace, root } from '../util/Util';
+import {isFunction, without} from 'min-dash';
+import {is} from '../util/Util';
+import {namespace, root} from '../util/Util';
 import AbstractHook from './AbstractHook';
 import CommonEvents from '../common/CommonEvents';
 import ObjectiveEvents from "../objectivemodeler/ObjectiveEvents";
@@ -41,9 +41,9 @@ export default function Mediator() {
     //Propagate mouse events in order to defocus elements and close menus
     this.on(['element.mousedown', 'element.mouseup', 'element.click'], DEFAULT_EVENT_PRIORITY - 1, (event, data, hook) => {
         if (!event.handledByMediator) {
-            const { originalEvent, element } = event;
+            const {originalEvent, element} = event;
             without(this.getHooks(), hook).forEach(propagateHook => {
-                propagateHook.eventBus?.fire(event.type, { originalEvent, element, handledByMediator: true });
+                propagateHook.eventBus?.fire(event.type, {originalEvent, element, handledByMediator: true});
             });
         } else {
             // Do not propagate handle these events by low priority listeners such as canvas-move
@@ -83,7 +83,7 @@ Mediator.prototype.handleHookCreated = function (hook) {
     });
 }
 
-Mediator.prototype.executed = function(events, callback) {
+Mediator.prototype.executed = function (events, callback) {
     this._executed.push({events, callback});
     this.getHooks().forEach(hook => {
         if (hook.executed) {
@@ -92,7 +92,7 @@ Mediator.prototype.executed = function(events, callback) {
     });
 }
 
-Mediator.prototype.on = function(events, priority, callback) {
+Mediator.prototype.on = function (events, priority, callback) {
     if (isFunction(priority)) {
         callback = priority;
         priority = DEFAULT_EVENT_PRIORITY;
@@ -103,7 +103,7 @@ Mediator.prototype.on = function(events, priority, callback) {
     });
 }
 
-Mediator.prototype.focusElement = function(element) {
+Mediator.prototype.focusElement = function (element) {
     const hook = this.getHookForElement(element);
     const modeler = hook.modeler;
     this.focus(modeler);
@@ -112,11 +112,11 @@ Mediator.prototype.focusElement = function(element) {
     }
 }
 
-Mediator.prototype.getHookForElement = function(element) {
+Mediator.prototype.getHookForElement = function (element) {
     const elementNamespace = namespace(element);
     const modelers = this.getHooks().filter(hook => hook.getNamespace() === elementNamespace);
     if (modelers.length !== 1) {
-        throw new Error('Modeler for element '+element+' was not unique or present: '+modelers);
+        throw new Error('Modeler for element ' + element + ' was not unique or present: ' + modelers);
     }
     return modelers[0];
 }
@@ -229,7 +229,7 @@ Mediator.prototype.confirmStateDeletion = function (olcState) {
     const affectedDataObjectReferences = this.fragmentModelerHook.modeler.getDataObjectReferencesInState(olcState);
     const affectedObjects = this.objectiveModelerHook.modeler.getObjectsInState(olcState);
     return confirm('Do you really want to delete state \"' + olcState.name + '\" ?'
-        + '\n' + 'It would be removed from ' + affectedLiterals.length + ' literal(s) and '+ affectedDataObjectReferences.length + ' data object reference(s) and '+ affectedObjects.length + ' object(s).');
+        + '\n' + 'It would be removed from ' + affectedLiterals.length + ' literal(s) and ' + affectedDataObjectReferences.length + ' data object reference(s) and ' + affectedObjects.length + ' object(s).');
 }
 
 Mediator.prototype.deletedState = function (olcState) {
@@ -247,7 +247,7 @@ Mediator.prototype.renamedState = function (olcState) {
 // === Data Modeler Hook
 Mediator.prototype.DataModelerHook = function (eventBus, dataModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, dataModeler, 'Data Model' ,'https://github.com/bptlab/fCM-design-support/wiki/Data-Model');
+    AbstractHook.call(this, dataModeler, 'Data Model', 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model');
     this.mediator.dataModelerHook = this;
     this.eventBus = eventBus;
 
@@ -379,7 +379,7 @@ Mediator.prototype.DependencyModelerHook = function (eventBus, dependencyModeler
 
     eventBus.on(CommonEvents.OBJECTIVE_RENAMED, event => {
         const objective = event.objective.businessObject;
-        this.mediator.renamedObjective(objective,objective.name);
+        this.mediator.renamedObjective(objective, objective.name);
     });
 }
 inherits(Mediator.prototype.DependencyModelerHook, CommandInterceptor);
@@ -399,14 +399,22 @@ Mediator.prototype.FragmentModelerHook = function (eventBus, fragmentModeler) {
     this.eventBus = eventBus;
 
     eventBus.on('import.parse.complete', ({warnings}) => {
-        warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({property, value, element}) => {
+        warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({
+                                                                                                property,
+                                                                                                value,
+                                                                                                element
+                                                                                            }) => {
             if (property === 'fcm:dataclass') {
                 const dataClass = this.mediator.dataModelerHook.modeler.get('elementRegistry').get(value).businessObject;
-                if (!dataClass) { throw new Error('Could not resolve data class with id '+value); }
+                if (!dataClass) {
+                    throw new Error('Could not resolve data class with id ' + value);
+                }
                 element.dataclass = dataClass;
             } else if (property === 'fcm:states') {
                 const state = this.mediator.olcModelerHook.modeler.getStateById(value)
-                if (!state) { throw new Error('Could not resolve olc state with id '+value); }
+                if (!state) {
+                    throw new Error('Could not resolve olc state with id ' + value);
+                }
                 element.get('states').push(state);
             }
         });
@@ -425,7 +433,7 @@ Mediator.prototype.FragmentModelerHook.isHook = true;
 // === Objective Modeler Hook
 Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, objectiveModeler, 'Objective Model' ,'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki');
+    AbstractHook.call(this, objectiveModeler, 'Objective Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki');
     this.mediator.objectiveModelerHook = this;
     this.eventBus = eventBus;
 
@@ -495,20 +503,30 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
     });
 
     eventBus.on('import.parse.complete', ({context}) => {
-        context.warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({property, value, element}) => {
+        context.warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({
+                                                                                                        property,
+                                                                                                        value,
+                                                                                                        element
+                                                                                                    }) => {
             if (property === 'om:classRef') {
                 const dataClass = this.mediator.dataModelerHook.modeler.get('elementRegistry').get(value).businessObject;
-                if (!dataClass) { throw new Error('Could not resolve data class with id '+value); }
+                if (!dataClass) {
+                    throw new Error('Could not resolve data class with id ' + value);
+                }
                 element.classRef = dataClass;
             }
             if (property === 'om:state') {
                 const state = this.mediator.olcModelerHook.modeler.getStateById(value);
-                if (!state) { throw new Error('Could not resolve state with id '+value); }
+                if (!state) {
+                    throw new Error('Could not resolve state with id ' + value);
+                }
                 element.state = state;
             }
             if (property === 'odDi:objectiveRef') {
                 const objective = this.mediator.dependencyModelerHook.modeler.get('elementRegistry').get(value).businessObject;
-                if (!objective) { throw new Error('Could not resolve objectives with id '+value); }
+                if (!objective) {
+                    throw new Error('Could not resolve objectives with id ' + value);
+                }
                 element.objectiveRef = objective;
             }
         });
@@ -600,16 +618,22 @@ Mediator.prototype.OlcModelerHook = function (eventBus, olcModeler) {
     });
 
     eventBus.on('import.parse.complete', ({context}) => {
-        context.warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({property, value, element}) => {
+        context.warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({
+                                                                                                        property,
+                                                                                                        value,
+                                                                                                        element
+                                                                                                    }) => {
             if (property === 'olc:classRef') {
                 const dataClass = this.mediator.dataModelerHook.modeler.get('elementRegistry').get(value).businessObject;
-                if (!dataClass) { throw new Error('Could not resolve data class with id '+value); }
+                if (!dataClass) {
+                    throw new Error('Could not resolve data class with id ' + value);
+                }
                 element.classRef = dataClass;
             }
         });
     });
 
-    this.locationOfElement = function(element) {
+    this.locationOfElement = function (element) {
         return 'Olc ' + root(element).name;
     }
 }
@@ -625,7 +649,7 @@ Mediator.prototype.OlcModelerHook.isHook = true;
 // === Role Modeler Hook
 Mediator.prototype.RoleModelerHook = function (eventBus, roleModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, roleModeler, 'Role Model' ,'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Role-Model');
+    AbstractHook.call(this, roleModeler, 'Role Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Role-Model');
     this.mediator.roleModelerHook = this;
     this.eventBus = eventBus;
 
@@ -668,7 +692,7 @@ Mediator.prototype.RoleModelerHook = function (eventBus, roleModeler) {
     ], event => {
         event.context.elements = event.context.elements.filter(element => {
             if (is(element, 'rom:Role')) {
-                // return this.mediator.confirmRoleDeletion(element.businessObject);
+                return this.modeler.deleteRole(element);
             } else {
                 return true;
             }
@@ -710,7 +734,7 @@ Mediator.prototype.TerminationConditionModelerHook = function (terminationCondit
     this.mediator.terminationConditionModelerHook = this;
     this.eventBus = terminationConditionModeler.eventBus;
 
-    this.getRootObject = function() {
+    this.getRootObject = function () {
         return this.modeler.getTerminationCondition();
     }
 
@@ -726,14 +750,22 @@ Mediator.prototype.TerminationConditionModelerHook = function (terminationCondit
     }
 
     this.eventBus.on('import.parse.complete', ({warnings}) => {
-        warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({property, value, element}) => {
+        warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({
+                                                                                                property,
+                                                                                                value,
+                                                                                                element
+                                                                                            }) => {
             if (property === 'tc:class') {
                 const olcClass = this.mediator.olcModelerHook.modeler.getOlcById(value);
-                if (!olcClass) { throw new Error('Could not resolve data class with id '+value); }
+                if (!olcClass) {
+                    throw new Error('Could not resolve data class with id ' + value);
+                }
                 element.class = olcClass;
             } else if (property === 'tc:states') {
                 const state = this.mediator.olcModelerHook.modeler.getStateById(value)
-                if (!state) { throw new Error('Could not resolve olc state with id '+value); }
+                if (!state) {
+                    throw new Error('Could not resolve olc state with id ' + value);
+                }
                 element.get('states').push(state);
             }
         });
