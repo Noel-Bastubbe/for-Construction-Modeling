@@ -1,19 +1,10 @@
-import {
-    assign
-} from 'min-dash';
+import {assign} from 'min-dash';
 
-import {
-    getLabel
-} from './LabelUtil';
+import {getLabel} from './LabelUtil';
 
 import {isAny} from '../modeling/util/ModelingUtil';
 
-import {
-    getExternalLabelMid,
-    isLabelExternal,
-    hasExternalLabel,
-    isLabel
-} from '../../util/LabelUtil';
+import {getExternalLabelMid, hasExternalLabel, isLabel, isLabelExternal} from '../../util/LabelUtil';
 
 
 export default function LabelEditingProvider(
@@ -139,7 +130,9 @@ LabelEditingProvider.prototype.activate = function (element) {
 
     assign(context, bounds);
 
-    var options = {centerVertically: true};
+    var options = {
+        centerVertically: true
+    };
 
     // external labels
     if (isLabelExternal(element)) {
