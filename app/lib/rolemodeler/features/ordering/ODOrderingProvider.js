@@ -25,7 +25,7 @@ export default function ODOrderingProvider(eventBus, canvas, translate) {
   var orders = [
     { type: 'rom:Role', order: { level: 5 } },
     {
-      type: 'rom:Link',
+      type: 'rom:Inheritance',
       order: {
         level: 3,
       }

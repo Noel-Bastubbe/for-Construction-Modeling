@@ -31,7 +31,7 @@ import ResizeModule from 'diagram-js/lib/features/resize';
 import SnappingModule from './features/snapping';
 
 var initialDiagram =
-  `<?xml version="1.0" encoding="UTF-8"?>
+    `<?xml version="1.0" encoding="UTF-8"?>
 <rom:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
     <rom:odBoard id="Board_debug" />
     <odDi:odRootBoard id="RootBoard_debug">
@@ -40,7 +40,7 @@ var initialDiagram =
 </rom:definitions>`;
 
 export default function RoleModeler(options) {
-  BaseModeler.call(this, options);
+    BaseModeler.call(this, options);
 }
 
 inherits(RoleModeler, BaseModeler);
@@ -50,20 +50,20 @@ RoleModeler.Viewer = Viewer;
 RoleModeler.NavigatedViewer = NavigatedViewer;
 
 /**
-* The createDiagram result.
-*
-* @typedef {Object} CreateDiagramResult
-*
-* @property {Array<string>} warnings
-*/
+ * The createDiagram result.
+ *
+ * @typedef {Object} CreateDiagramResult
+ *
+ * @property {Array<string>} warnings
+ */
 
 /**
-* The createDiagram error.
-*
-* @typedef {Error} CreateDiagramError
-*
-* @property {Array<string>} warnings
-*/
+ * The createDiagram error.
+ *
+ * @typedef {Error} CreateDiagramError
+ *
+ * @property {Array<string>} warnings
+ */
 
 /**
  * Create a new diagram to start modeling.
@@ -71,42 +71,42 @@ RoleModeler.NavigatedViewer = NavigatedViewer;
  * @returns {Promise<CreateDiagramResult, CreateDiagramError>}
  *
  */
-RoleModeler.prototype.createDiagram = function() {
-  return this.importXML(initialDiagram);
+RoleModeler.prototype.createDiagram = function () {
+    return this.importXML(initialDiagram);
 };
 
 
 RoleModeler.prototype._interactionModules = [
 
-  // non-modeling components
-  KeyboardMoveModule,
-  MoveCanvasModule,
-  TouchModule,
-  ZoomScrollModule
+    // non-modeling components
+    KeyboardMoveModule,
+    MoveCanvasModule,
+    TouchModule,
+    ZoomScrollModule
 ];
 
 RoleModeler.prototype._modelingModules = [
 
-  // modeling components
-  AutoplaceModule,
-  AlignElementsModule,
-  AutoScrollModule,
-  BendpointsModule,
-  ConnectModule,
-  ConnectionPreviewModule,
-  ContextPadModule,
-  CopyPasteModule,
-  CreateModule,
-  EditorActionsModule,
-  GridSnappingModule,
-  KeyboardModule,
-  KeyboardMoveSelectionModule,
-  LabelEditingModule,
-  ModelingModule,
-  MoveModule,
-  PaletteModule,
-  ResizeModule,
-  SnappingModule,
+    // modeling components
+    AutoplaceModule,
+    AlignElementsModule,
+    AutoScrollModule,
+    BendpointsModule,
+    ConnectModule,
+    ConnectionPreviewModule,
+    ContextPadModule,
+    CopyPasteModule,
+    CreateModule,
+    EditorActionsModule,
+    GridSnappingModule,
+    KeyboardModule,
+    KeyboardMoveSelectionModule,
+    LabelEditingModule,
+    ModelingModule,
+    MoveModule,
+    PaletteModule,
+    ResizeModule,
+    SnappingModule,
 ];
 
 
@@ -117,21 +117,21 @@ RoleModeler.prototype._modelingModules = [
 // - modeling modules
 
 RoleModeler.prototype._modules = [].concat(
-  Viewer.prototype._modules,
-  RoleModeler.prototype._interactionModules,
-  RoleModeler.prototype._modelingModules
+    Viewer.prototype._modules,
+    RoleModeler.prototype._interactionModules,
+    RoleModeler.prototype._modelingModules
 );
 
 RoleModeler.prototype.id = "ROM";
 
 RoleModeler.prototype.deleteRole = function (role) {
-  this.get('modeling').removeShape(role);
+    this.get('modeling').removeShape(role);
 }
 
 RoleModeler.prototype.name = function (constructionMode) {
-  if (constructionMode) {
-    return "Role Model";
-  } else {
-    return "Role Model";
-  }
+    if (constructionMode) {
+        return "Role Model";
+    } else {
+        return "Role Model";
+    }
 };

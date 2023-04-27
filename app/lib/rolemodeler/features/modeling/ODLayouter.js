@@ -45,7 +45,7 @@ ODLayouter.prototype.layoutConnection = function(connection, hints) {
     connectionEnd = getConnectionDocking(waypoints && waypoints[ waypoints.length - 1 ], target);
   }
 
-  if (is(connection, 'rom:Link')) {
+  if (is(connection, 'rom:Inheritance')) {
 
     // layout all connection between flow elements h:h, except for
     if (source === target) {
