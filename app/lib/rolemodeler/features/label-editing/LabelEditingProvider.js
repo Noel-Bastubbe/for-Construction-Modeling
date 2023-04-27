@@ -139,7 +139,7 @@ LabelEditingProvider.prototype.activate = function (element) {
 
     assign(context, bounds);
 
-    var options = {};
+    var options = {centerVertically: true};
 
     // external labels
     if (isLabelExternal(element)) {
@@ -200,8 +200,8 @@ LabelEditingProvider.prototype.getEditingBBox = function (element) {
 
         assign(bounds, {
             width: bbox.width,
-            y: bbox.y + (30 * zoom),
-            height: (30 * zoom)
+            y: bbox.y,
+            height: bbox.height
         });
 
         assign(style, {
@@ -210,23 +210,9 @@ LabelEditingProvider.prototype.getEditingBBox = function (element) {
             paddingTop: (7 * zoom) + 'px',
             paddingBottom: (7 * zoom) + 'px',
             paddingLeft: (5 * zoom) + 'px',
-            paddingRight: (5 * zoom) + 'px'
+            paddingRight: (5 * zoom) + 'px',
+            background: 'white'
         });
-
-        // if (isAny(element, [ 'rom:Role' ])) {
-        //
-        //   // Editing attributes should be different.
-        //   if (element.businessObject.labelAttribute === 'attributeValues') {
-        //     assign(bounds, {
-        //       y: bbox.y + (30 * zoom),
-        //       height: bbox.height - (30 * zoom)
-        //     });
-        //   } else {
-        //     assign(bounds, {
-        //       height: (30 * zoom)
-        //     });
-        //   }
-        // }
     }
 
     var width = 90 * zoom,
