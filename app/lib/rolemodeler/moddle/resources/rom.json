@@ -30,15 +30,15 @@
       ],
       "properties": [
         {
-          "name": "inheritance",
+          "name": "link",
           "isMany": true,
-          "type": "Inheritance",
+          "type": "Link",
           "isReference": true
         }
       ]
     },
     {
-      "name": "Inheritance",
+      "name": "Link",
       "superClass": [
         "BoardElement"
       ],
@@ -49,13 +49,13 @@
           "type": "String"
         },
         {
-          "name": "parentClass",
+          "name": "sourceRef",
           "isAttr": true,
           "isReference": true,
           "type": "Object"
         },
         {
-          "name": "childClass",
+          "name": "targetRef",
           "isAttr": true,
           "isReference": true,
           "type": "Object"

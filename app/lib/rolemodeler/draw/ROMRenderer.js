@@ -274,19 +274,6 @@ export default function ROMRenderer(
             return rect;
         },
         'rom:Link': function (parentGfx, element) {
-            var pathData = createPathFromConnection(element);
-
-            var fill = getFillColor(element, defaultFillColor),
-                stroke = getStrokeColor(element, defaultStrokeColor);
-
-            var attrs = {
-                strokeLinejoin: 'round',
-                markerEnd: marker('sequenceflow-end', fill, stroke),
-                stroke: getStrokeColor(element, defaultStrokeColor)
-            };
-            return drawPath(parentGfx, pathData, attrs);
-        },
-        'rom:Inheritance': function (parentGfx, element) {
             let pathData = createPathFromConnection(element);
 
             let attrs = {

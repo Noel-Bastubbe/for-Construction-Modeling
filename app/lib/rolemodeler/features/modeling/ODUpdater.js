@@ -369,21 +369,21 @@ ODUpdater.prototype.updateConnection = function(context) {
       newSource = getBusinessObject(connection.source),
       newTarget = getBusinessObject(connection.target);
 
-  var inverseSet = is(businessObject, 'rom:Inheritance');
+  var inverseSet = is(businessObject, 'rom:Link');
 
-  if (businessObject.parentClass !== newSource) {
+  if (businessObject.sourceRef !== newSource) {
     if (inverseSet) {
-      collectionRemove(businessObject.parentClass && businessObject.parentClass.get('links'), businessObject);
+      collectionRemove(businessObject.sourceRef && businessObject.sourceRef.get('links'), businessObject);
 
       if (newSource && newSource.get('links')) {
         newSource.get('links').push(businessObject);
       }
     }
 
-    businessObject.parentClass = newSource;
+    businessObject.sourceRef = newSource;
   }
-  if (businessObject.childClass !== newTarget) {
-    businessObject.childClass = newTarget;
+  if (businessObject.targetRef !== newTarget) {
+    businessObject.targetRef = newTarget;
   }
 
   this.updateConnectionWaypoints(connection);
