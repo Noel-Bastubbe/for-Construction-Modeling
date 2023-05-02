@@ -5,7 +5,6 @@ import {
 import getDropdown from '../../util/Dropdown';
 import {download, upload} from '../../util/FileUtil';
 import { appendOverlayListeners } from '../../util/HtmlUtil';
-import ObjectiveEvents from "../ObjectiveEvents";
 
 
 export default function RemButtonBar(canvas, eventBus, remModeler) {
@@ -56,10 +55,6 @@ export default function RemButtonBar(canvas, eventBus, remModeler) {
             renameObjectiveInput.value = selectObjectiveComponent.value.name;
             renameObjectiveInput.addEventListener("change", function () {
                 renameObjectiveInput.blur();
-                eventBus.fire(ObjectiveEvents.OBJECTIVE_RENAMING_REQUESTED, {
-                    objective: selectObjectiveComponent.value.objectiveRef,
-                    name: renameObjectiveInput.value
-                });
                 selectObjectiveComponent.showValue(remModeler.getCurrentObjective());
             });
             renameObjectiveInput.addEventListener("focusout", function () {
@@ -81,11 +76,7 @@ export default function RemButtonBar(canvas, eventBus, remModeler) {
     deleteObjectiveButton.addEventListener('click', () => {
         var objectiveToDelete = selectObjectiveComponent.value;
         if( objectiveToDelete.id !== 'StartBoard' && objectiveToDelete.id !== 'FinalBoard') {
-            var shouldDelete = eventBus.fire(ObjectiveEvents.OBJECTIVE_DELETION_REQUESTED, {objective: objectiveToDelete});
-            if (shouldDelete !== false) {
-                // Deletion was not rejected and not handled somewhere else; should not happen when mediator is involved
-                remModeler.deleteObjective(objectiveToDelete);
-            }
+            
         }
         selectObjectiveComponent.showValue(remModeler.getCurrentObjective());
     });
@@ -105,9 +96,7 @@ export default function RemButtonBar(canvas, eventBus, remModeler) {
         selectObjectiveMenu.addCreateElementInput(() => {
             var objectiveName = selectObjectiveMenu.getInputValue();
             if (objectiveName && objectiveName.length > 0) {
-                eventBus.fire(ObjectiveEvents.OBJECTIVE_CREATION_REQUESTED, {
-                    name: objectiveName
-                });
+                
             }
         });
         deleteObjectiveButton.disabled = objectives.length === 0;
@@ -126,8 +115,6 @@ export default function RemButtonBar(canvas, eventBus, remModeler) {
     }
 
     eventBus.on('import.render.complete', event => selectObjectiveComponent.showValue(event.rootBoard));
-    eventBus.on([ObjectiveEvents.DEFINITIONS_CHANGED], event => repopulateDropdown());
-
 }
 
 RemButtonBar.$inject = [

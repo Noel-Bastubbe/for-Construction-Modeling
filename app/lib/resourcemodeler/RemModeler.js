@@ -32,7 +32,6 @@ import RemObjectDropdown from './remObjectLabelHandling';
 import PaletteModule from './features/palette';
 import ResizeModule from 'diagram-js/lib/features/resize';
 import SnappingModule from './features/snapping';
-import SpaceToolBehaviorModule from './behavior';
 import {nextPosition} from '../util/Util';
 import {is} from "bpmn-js/lib/util/ModelUtil";
 import modeling from './features/modeling';
@@ -116,7 +115,7 @@ RemModeler.prototype._modelingModules = [
     PaletteModule,
     ResizeModule,
     SnappingModule,
-    SpaceToolBehaviorModule
+    // SpaceToolBehaviorModule
 ];
 
 
@@ -191,7 +190,6 @@ RemModeler.prototype.addObjective = function (objectiveReference) {
     var rootBoard = this.get('elementFactory').createRootBoard(objectiveReference.name || 'undefined', objectiveReference);
     this._definitions.get('rootBoards').push(rootBoard[0]);
     this._definitions.get('rootElements').push(rootBoard[1]);
-    this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
     this.showObjective(rootBoard[0]);
 }
 
@@ -204,7 +202,6 @@ RemModeler.prototype.deleteObjective = function (objectiveReference) {
         currentIndex = findIndex(this._definitions.get('rootBoards'), objective);
         var indexAfterRemoval = Math.min(currentIndex, this._definitions.get('rootBoards').length - 2);
         this._definitions.get('rootBoards').splice(currentIndex, 1);
-        this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
 
         if (this.getCurrentObjective() === objective) {
             this.showObjective(this._definitions.get('rootBoards')[indexAfterRemoval]);
@@ -215,7 +212,6 @@ RemModeler.prototype.deleteObjective = function (objectiveReference) {
 RemModeler.prototype.renameObjective = function (objectiveReference, name) {
     var objective = this.getObjectiveByReference(objectiveReference);
     objective.name = name;
-    this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
 }
 
 RemModeler.prototype.createInstance = function (name, clazz) {
