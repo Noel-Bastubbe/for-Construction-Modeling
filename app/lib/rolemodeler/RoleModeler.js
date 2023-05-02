@@ -127,8 +127,12 @@ RoleModeler.prototype._modules = [].concat(
 
 RoleModeler.prototype.id = "ROM";
 
-RoleModeler.prototype.deleteRole = function (role) {
-    this.get('modeling').removeShape(role);
+RoleModeler.prototype.name = function (constructionMode) {
+    if (constructionMode) {
+        return "Role Model";
+    } else {
+        return "Role Model";
+    }
 }
 
 RoleModeler.prototype.createRole = function (name) {
@@ -142,14 +146,6 @@ RoleModeler.prototype.createRole = function (name) {
         name: name
     }, {x, y}, diagramRoot);
     return shape.businessObject;
-}
-
-RoleModeler.prototype.name = function (constructionMode) {
-    if (constructionMode) {
-        return "Role Model";
-    } else {
-        return "Role Model";
-    }
 }
 
 RoleModeler.prototype.getRoles = function () {

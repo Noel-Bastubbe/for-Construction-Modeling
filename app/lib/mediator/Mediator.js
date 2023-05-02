@@ -704,14 +704,14 @@ Mediator.prototype.RoleModelerHook = function (eventBus, roleModeler) {
             this.mediator.addedRole(event.context.shape.businessObject);
         }
     });
-    //
-    // this.reverted([
-    //     'shape.create'
-    // ], event => {
-    //     if (is(event.context.shape, 'rom:Role')) {
-    //         console.log(event);
-    //     }
-    // });
+
+    this.reverted([
+        'shape.create'
+    ], event => {
+        if (is(event.context.shape, 'rom:Role')) {
+            // console.log(event);
+        }
+    });
 
     this.executed([
         'shape.delete'
@@ -721,21 +721,21 @@ Mediator.prototype.RoleModelerHook = function (eventBus, roleModeler) {
         }
     });
 
-    // this.reverted([
-    //     'shape.delete'
-    // ], event => {
-    //     if (is(event.context.shape, 'rom:Role')) {
-    //         console.log(event);
-    //         //this.mediator.deletedState(event.context.shape.businessObject);
-    //     }
-    // });
+    this.reverted([
+        'shape.delete'
+    ], event => {
+        if (is(event.context.shape, 'rom:Role')) {
+            // console.log(event);
+            //this.mediator.deletedState(event.context.shape.businessObject);
+        }
+    });
 
     this.preExecute([
         'elements.delete'
     ], event => {
         event.context.elements = event.context.elements.filter(element => {
             if (is(element, 'rom:Role')) {
-                return this.mediator.confirmRoleDeletion(element);
+                return this.mediator.confirmRoleDeletion(element.businessObject);
             } else {
                 return true;
             }
@@ -749,14 +749,11 @@ Mediator.prototype.RoleModelerHook = function (eventBus, roleModeler) {
         this.mediator.renamedRole(event.context.element);
     });
 
-    // this.reverted([
-    //     'element.updateLabel'
-    // ], event => {
-    //     // var changedLabel = event.context.element.businessObject.labelAttribute;
-    //     // if (is(event.context.element, 'od:Class') && (changedLabel === 'name' || !changedLabel)) {
-    //     //     this.mediator.renamedRole(event.context.element.businessObject);
-    //     // }
-    // });
+    this.reverted([
+        'element.updateLabel'
+    ], event => {
+
+    });
 
     eventBus.on(RoleEvents.LIST_CHANGED, event => {
         this.mediator.roleListChanged(event.roles);
