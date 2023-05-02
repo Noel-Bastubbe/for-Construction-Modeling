@@ -6,6 +6,7 @@ import TerminationConditionModeler from './lib/terminationconditionmodeler/Termi
 import DataModelModeler from './lib/datamodelmodeler/Modeler';
 import ObjectiveModeler from './lib/objectivemodeler/OmModeler';
 import DependencyModeler from './lib/dependencymodeler/DependencyModeler';
+import RemModeler from './lib/resourcemodeler/RemModeler';
 
 import $ from 'jquery';
 import Mediator from './lib/mediator/Mediator';
@@ -85,6 +86,17 @@ var fragmentModeler = new FragmentModeler({
     }]
 });
 
+var resourceModeler = new RemModeler({
+    container: '#resourcemodel-canvas',
+    keyboard: {
+        bindTo: document.querySelector('#resourcemodel-canvas')
+    },
+    additionalModules: [{
+        __init__ : ['mediator'],
+        mediator : ['type', mediator.ResourceModelerHook]
+    }]
+});
+
 var terminationConditionModeler = new TerminationConditionModeler(
   '#terminationcondition-canvas'
 );
@@ -121,6 +133,7 @@ async function createNewDiagram() {
       await olcModeler.createNew();
       await dataModeler.importXML(newDatamodel);
       await objectiveModeler.createDiagram();
+      await resourceModeler.createDiagram();
       terminationConditionModeler.createNew();
       if (LOAD_DUMMY) {
         await loadDebugData();
@@ -162,6 +175,8 @@ async function exportToZip () {
   const dependencyModel = (await dependencyModeler.saveXML({ format: true })).xml;
   zip.file('dependencyModel.xml', dependencyModel);
   return zip.generateAsync({type : 'base64'});
+  const resourceModel = (await resourceModeler.saveXML({ format: true })).xml;
+  zip.file('resourceModel.xml', resourceModel);
 }
 
 async function importFromZip (zipData) {

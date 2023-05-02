@@ -536,6 +536,9 @@ Mediator.prototype.ObjectiveModelerHook.$inject = [
 
 Mediator.prototype.ObjectiveModelerHook.isHook = true;
 
+
+
+
 // === Olc Modeler Hook
 Mediator.prototype.OlcModelerHook = function (eventBus, olcModeler) {
     CommandInterceptor.call(this, eventBus);
