@@ -38,7 +38,6 @@ export default class TaskRenderer extends BaseRenderer {
         return shape;
     }
 
-
     renderEmbeddedDurationLabel(parentGfx, element, align) {
         let semantic = getSemantic(element);
 
