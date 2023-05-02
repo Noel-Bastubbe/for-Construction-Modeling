@@ -14,7 +14,7 @@ import {
   query as domQuery
 } from 'min-dom';
 
-import { getFillColor, getRectPath, getSemantic, getStrokeColor } from './ODRendererUtil';
+import { getFillColor, getRectPath, getSemantic, getStrokeColor } from './REMRendererUtil';
 import Ids from 'ids';
 
 var RENDERER_IDS = new Ids();
@@ -24,7 +24,7 @@ var HIGH_FILL_OPACITY = .35;
 var DEFAULT_TEXT_SIZE = 16;
 var markers = {};
 
-export default function ODRenderer(
+export default function REMRenderer(
     config, eventBus, styles,
     canvas, textRenderer, priority) {
 
@@ -331,9 +331,9 @@ export default function ODRenderer(
 }
 
 
-inherits(ODRenderer, BaseRenderer);
+inherits(REMRenderer, BaseRenderer);
 
-ODRenderer.$inject = [
+REMRenderer.$inject = [
   'config.odm',
   'eventBus',
   'styles',
@@ -342,11 +342,11 @@ ODRenderer.$inject = [
 ];
 
 
-ODRenderer.prototype.canRender = function(element) {
+REMRenderer.prototype.canRender = function(element) {
   return is(element, 'rem:BoardElement');
 };
 
-ODRenderer.prototype.drawShape = function(parentGfx, element) {
+REMRenderer.prototype.drawShape = function(parentGfx, element) {
   var type = element.type;
   var h = this.handlers[type];
 
@@ -354,7 +354,7 @@ ODRenderer.prototype.drawShape = function(parentGfx, element) {
   return h(parentGfx, element);
 };
 
-ODRenderer.prototype.drawConnection = function(parentGfx, element) {
+REMRenderer.prototype.drawConnection = function(parentGfx, element) {
   var type = element.type;
   var h = this.handlers[type];
 
@@ -362,7 +362,7 @@ ODRenderer.prototype.drawConnection = function(parentGfx, element) {
   return h(parentGfx, element);
 };
 
-ODRenderer.prototype.getShapePath = function(element) {
+REMRenderer.prototype.getShapePath = function(element) {
 
   return getRectPath(element);
 };

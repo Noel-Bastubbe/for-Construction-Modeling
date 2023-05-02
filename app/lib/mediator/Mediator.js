@@ -652,22 +652,41 @@ Mediator.prototype.ResourceModelerHook.isHook = true;
 // === Olc Modeler Hook
 Mediator.prototype.OlcModelerHook = function (eventBus, olcModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, olcModeler, 'OLCs', 'https://github.com/bptlab/fCM-design-support/wiki/Object-Lifecycle-(OLC)');
-    this.mediator.olcModelerHook = this;
+    AbstractHook.call(this, resourceModeler, 'Data Model' ,'https://github.com/bptlab/fCM-design-support/wiki/Data-Model');
+    this.mediator.resourceModelerHook = this;
     this.eventBus = eventBus;
 
     this.executed([
         'shape.create'
     ], event => {
-        if (is(event.context.shape, 'olc:State')) {
-            // this.mediator.addedState(event.context.shape.businessObject);
+        if (is(event.context.shape, 'rem:Resource')) {
+            //this.mediator.addedClass(event.context.shape.businessObject);
         }
     });
+
+    this.reverted([
+        'shape.create'
+    ], event => {
+        if (is(event.context.shape, 'rem:Resource')) {
+            console.log(event);
+            //this.mediator.addedState(event.context.shape.businessObject);
+        }
+    });
+
     this.executed([
         'shape.delete'
     ], event => {
-        if (is(event.context.shape, 'olc:State')) {
-            this.mediator.deletedState(event.context.shape.businessObject);
+        if (is(event.context.shape, 'rem:Resource')) {
+            //this.mediator.deletedClass(event.context.shape.businessObject);
+        }
+    });
+
+    this.reverted([
+        'shape.delete'
+    ], event => {
+        if (is(event.context.shape, 'rem:Resource')) {
+            console.log(event);
+            //this.mediator.deletedState(event.context.shape.businessObject);
         }
     });
 
@@ -675,65 +694,41 @@ Mediator.prototype.OlcModelerHook = function (eventBus, olcModeler) {
         'elements.delete'
     ], event => {
         event.context.elements = event.context.elements.filter(element => {
-            if (is(element, 'olc:State')) {
-                return this.mediator.confirmStateDeletion(element.businessObject);
+            if (is(element, 'rem:Resource')) {
+                return this.mediator.confirmClassDeletion(element);
             } else {
                 return true;
             }
         });
     });
 
+
     this.executed([
         'element.updateLabel'
     ], event => {
-        if (is(event.context.element, 'olc:State')) {
-            this.mediator.renamedState(event.context.element.businessObject);
-        }
+        /*var changedLabel = event.context.element.businessObject.labelAttribute;
+        if (is(event.context.element, 'rem:Resource') && (changedLabel === 'name' || !changedLabel)) {
+            this.mediator.renamedClass(event.context.element.businessObject);
+        }*/
     });
 
     this.reverted([
         'element.updateLabel'
     ], event => {
-        if (is(event.context.element, 'olc:State')) {
-            this.mediator.renamedState(event.context.element.businessObject);
-        }
+        /*var changedLabel = event.context.element.businessObject.labelAttribute;
+        if (is(event.context.element, 'od:Class') && (changedLabel === 'name' || !changedLabel)) {
+            this.mediator.renamedClass(event.context.element.businessObject);
+        }*/
     });
-
-    eventBus.on(OlcEvents.DEFINITIONS_CHANGED, event => {
-        this.mediator.olcListChanged(event.definitions.olcs);
-    });
-
-    eventBus.on(OlcEvents.OLC_RENAME, event => {
-        this.mediator.olcRenamed(event.olc, event.name);
-    });
-
-    eventBus.on(OlcEvents.OLC_DELETION_REQUESTED, event => {
-        this.mediator.olcDeletionRequested(event.olc);
-        return false; // Deletion should never be directly done in olc modeler, will instead propagate from data modeler
-    });
-
-    eventBus.on('import.parse.complete', ({context}) => {
-        context.warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({property, value, element}) => {
-            if (property === 'olc:classRef') {
-                const dataClass = this.mediator.dataModelerHook.modeler.get('elementRegistry').get(value).businessObject;
-                if (!dataClass) { throw new Error('Could not resolve data class with id '+value); }
-                element.classRef = dataClass;
-            }
-        });
-    });
-
-    this.locationOfElement = function(element) {
-        return 'Olc ' + root(element).name;
-    }
 }
-inherits(Mediator.prototype.OlcModelerHook, CommandInterceptor);
+inherits(Mediator.prototype.ResourceModelerHook, CommandInterceptor);
 
-Mediator.prototype.OlcModelerHook.$inject = [
+Mediator.prototype.ResourceModelerHook.$inject = [
     'eventBus',
-    'olcModeler'
+    'resourceModeler'
 ];
 
-Mediator.prototype.OlcModelerHook.isHook = true;
+Mediator.prototype.ResourceModelerHook.isHook = true;
 
 // ===  Termination Condition Modeler Hook
 Mediator.prototype.TerminationConditionModelerHook = function (terminationConditionModeler) {

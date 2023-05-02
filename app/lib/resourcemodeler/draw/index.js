@@ -1,8 +1,8 @@
-import ODRenderer from './ODRenderer';
+import REMRenderer from './REMRenderer';
 import TextRenderer from './TextRenderer';
 
 export default {
-  __init__: [ 'odRenderer' ],
-  odRenderer: [ 'type', ODRenderer ],
+  __init__: [ 'remRenderer' ],
+  remRenderer: [ 'type', REMRenderer ],
   textRenderer: [ 'type', TextRenderer ],
 };
