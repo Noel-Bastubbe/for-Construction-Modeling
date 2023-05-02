@@ -136,7 +136,7 @@ export default class DepLabelHandler extends CommandInterceptor {
         this._eventBus.fire('element.changed', {
             element
         });
-        this._eventBus.fire(CommonEvents.OBJECTIVE_RENAMED, {
+        this._eventBus.fire(ObjectiveEvents.OBJECTIVE_RENAMED, {
             objective: element
         });
     }

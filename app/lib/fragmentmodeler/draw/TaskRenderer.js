@@ -62,7 +62,7 @@ export default class TaskRenderer extends BaseRenderer {
         var displayedText = "";
 
         if (semantic.role) {
-            displayedText = displayedText + semantic.role;
+            displayedText = displayedText + semantic.role.name;
         }
         if (semantic.NoP) {
             if (semantic.role) {

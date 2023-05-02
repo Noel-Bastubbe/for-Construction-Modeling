@@ -30,6 +30,8 @@ import PaletteModule from './features/palette';
 import ResizeModule from 'diagram-js/lib/features/resize';
 import SnappingModule from './features/snapping';
 import {is} from "bpmn-js/lib/util/ModelUtil";
+import {nextPosition} from "../util/Util";
+import Modeler from "../datamodelmodeler/Modeler";
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -129,6 +131,19 @@ RoleModeler.prototype.deleteRole = function (role) {
     this.get('modeling').removeShape(role);
 }
 
+RoleModeler.prototype.createRole = function (name) {
+    const modeling = this.get('modeling');
+    const canvas = this.get('canvas');
+    const diagramRoot = canvas.getRootElement();
+
+    const {x, y} = nextPosition(this, 'rom:Role');
+    const shape = modeling.createShape({
+        type: 'rom:Role',
+        name: name
+    }, {x, y}, diagramRoot);
+    return shape.businessObject;
+}
+
 RoleModeler.prototype.name = function (constructionMode) {
     if (constructionMode) {
         return "Role Model";
@@ -138,5 +153,5 @@ RoleModeler.prototype.name = function (constructionMode) {
 }
 
 RoleModeler.prototype.getRoles = function () {
-    return this.get('elementRegistry').filter(element => is(element, 'rom:Role'));
+    return this.get('elementRegistry').filter(element => is(element, 'rom:Role')).map(element => element.businessObject);
 }

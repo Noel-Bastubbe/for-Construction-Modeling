@@ -43,8 +43,8 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 const populateNameDropdown = () => {
                     this._nameDropdown.populate(
                         [],
-                        (state, element) => {
-                            this.updateName(state, element);
+                        (name, element) => {
+                            this.updateName(name, element);
                             },
                         element
                     );
@@ -53,8 +53,8 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 const populateDurationDropdown = () => {
                     this._durationDropdown.populate(
                         [],
-                        (state, element) => {
-                            this.updateDuration(state, element);
+                        (duration, element) => {
+                            this.updateDuration(duration, element);
                         },
                         element
                     );
@@ -62,20 +62,21 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 }
                 const populateRoleDropdown = () => {
                     this._roleDropdown.populate(
-                        this._fragmentModeler._roles, // TODO Change this to the list of roles instead of an empty list
-                        (state, element) => {
-                            this.updateRole(state, element);
+                        this._fragmentModeler._roles || [], // TODO Change this to the list of roles instead of an empty list
+                        (role, element) => {
+                            this.updateRole(role, element);
                             updateRoleSelection();
                         },
                         element
                     );
                     this._roleDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
+                    updateRoleSelection();
                 }
                 const populateNoPDropdown = () => {
                     this._NoPDropdown.populate(
                         [],
-                        (state, element) => {
-                            this.updateNoP(state, element);
+                        (NoP, element) => {
+                            this.updateNoP(NoP, element);
                         },
                         element
                     );
@@ -99,8 +100,9 @@ export default class TaskLabelHandler extends CommandInterceptor {
                         this.updateDuration(newDurationInput,element);
                         populateDurationDropdown();
                     }
-                    if (newRoleInput !== activity.role) {
-                        this.updateRole(newRoleInput,element);
+                    if (newRoleInput !== '' && newRoleInput !== activity.role) {
+                        let newRole = this.createRole(newRoleInput);
+                        this.updateRole(newRole,element);
                         populateRoleDropdown();
                     }
                     if (newNoPInput !== activity.NoP && newNoPInput > 0) {
@@ -164,15 +166,18 @@ export default class TaskLabelHandler extends CommandInterceptor {
         this._eventBus.fire('element.changed', {
             element
         });
-        this._eventBus.fire(CommonEvents.OBJECTIVE_RENAMED, {
-            objective: element
-        });
     }
 
     updateDuration(newTime, element) {
         element.businessObject.duration = newTime;
         this._eventBus.fire('element.changed', {
             element
+        });
+    }
+
+    createRole(name) {
+        return this._eventBus.fire(CommonEvents.ROLE_CREATION_REQUESTED, {
+            name
         });
     }
 
