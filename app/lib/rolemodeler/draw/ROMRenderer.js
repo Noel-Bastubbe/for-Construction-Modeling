@@ -165,11 +165,11 @@ export default function ROMRenderer(
         return pathData;
     }
 
-    function marker(type, fill, stroke) {
+    function marker(fill, stroke) {
         var id = '-' + colorEscape(fill) + '-' + colorEscape(stroke) + '-' + rendererId;
 
         if (!markers[id]) {
-            createMarker(id, type, fill, stroke);
+            createMarker(id, fill, stroke);
         }
 
         return 'url(#' + id + ')';
@@ -228,29 +228,13 @@ export default function ROMRenderer(
         return str.replace(/[^0-9a-zA-z]+/g, '_');
     }
 
-    function createMarker(id, type, fill, stroke) {
+    function createMarker(id, fill, stroke) {
 
-        if (type === 'sequenceflow-end') {
-            var sequenceflowEnd = svgCreate('path');
-            svgAttr(sequenceflowEnd, {d: 'M 1 5 L 11 10 L 1 15 Z'});
-
-            addMarker(id, {
-                element: sequenceflowEnd,
-                ref: {x: 11, y: 10},
-                scale: 0.5,
-                attrs: {
-                    fill: stroke,
-                    stroke: stroke
-                }
-            });
-        }
-
-        if (type === 'inheritance') {
-            var inheritance = svgCreate('path');
-            svgAttr(inheritance, {d: 'M 11 5 L 1 10 L 11 15 Z'});
+            var link = svgCreate('path');
+            svgAttr(link, {d: 'M 11 5 L 1 10 L 11 15 Z'});
 
             addMarker(id, {
-                element: inheritance,
+                element: link,
                 ref: {x: 1, y: 10},
                 scale: 0.8,
                 attrs: {
@@ -258,7 +242,6 @@ export default function ROMRenderer(
                     stroke: stroke
                 }
             });
-        }
     }
 
     this.handlers = {
@@ -278,7 +261,7 @@ export default function ROMRenderer(
 
             let attrs = {
                 strokeLinejoin: 'round',
-                markerStart: marker('inheritance', 'white', 'black'),
+                markerStart: marker('white', 'black'),
                 stroke: 'black'
             };
             return drawPath(parentGfx, pathData, attrs);
