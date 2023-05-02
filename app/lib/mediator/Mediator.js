@@ -421,7 +421,6 @@ Mediator.prototype.FragmentModelerHook.$inject = [
 
 Mediator.prototype.FragmentModelerHook.isHook = true;
 
-
 // === Objective Modeler Hook
 Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) {
     CommandInterceptor.call(this, eventBus);
@@ -536,8 +535,119 @@ Mediator.prototype.ObjectiveModelerHook.$inject = [
 
 Mediator.prototype.ObjectiveModelerHook.isHook = true;
 
+// === Resource Modeler Hook
+Mediator.prototype.ResourceModelerHook = function (eventBus, resourceModeler) {
+    CommandInterceptor.call(this, eventBus);
+    AbstractHook.call(this, resourceModeler, 'Resource Model' ,'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki');
+    this.mediator.resourceModelerHook = this;
+    this.eventBus = eventBus;
+
+    this.executed([
+        'shape.create'
+    ], event => {
+        if (is(event.context.shape, 'rem:Resource')) {
+            //this.mediator.addedClass(event.context.shape.businessObject);
+        }
+    });
+
+    this.reverted([
+        'shape.create'
+    ], event => {
+        if (is(event.context.shape, 'rem:Resource')) {
+            console.log(event);
+            //this.mediator.addedState(event.context.shape.businessObject);
+        }
+    });
+
+    this.executed([
+        'shape.delete'
+    ], event => {
+        if (is(event.context.shape, 'rem:Resource')) {
+            //this.mediator.deletedClass(event.context.shape.businessObject);
+        }
+    });
+
+    this.reverted([
+        'shape.delete'
+    ], event => {
+        if (is(event.context.shape, 'rem:Resource')) {
+            console.log(event);
+            //this.mediator.deletedState(event.context.shape.businessObject);
+        }
+    });
+
+    this.preExecute([
+        'elements.delete'
+    ], event => {
+        event.context.elements = event.context.elements.filter(element => {
+            if (is(element, 'rem:Resource')) {
+                return this.modeler.deleteObject(element);
+            } else {
+                return true;
+            }
+        });
+    });
 
 
+    this.executed([
+        'element.updateLabel'
+    ], event => {
+        var changedLabel = event.context.element.businessObject.labelAttribute;
+        if (is(event.context.element, 'rem:Resource') && (changedLabel === 'name' || !changedLabel)) {
+            //this.mediator.renamedClass(event.context.element.businessObject);
+        }
+    });
+
+    this.reverted([
+        'element.updateLabel'
+    ], event => {
+        var changedLabel = event.context.element.businessObject.labelAttribute;
+        if (is(event.context.element, 'rem:Resource') && (changedLabel === 'name' || !changedLabel)) {
+            //this.mediator.renamedClass(event.context.element.businessObject);
+        }
+    });
+
+    eventBus.on('import.parse.complete', ({context}) => {
+        context.warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({property, value, element}) => {
+            if (property === 'rem:classRef') {
+                const dataClass = this.mediator.dataModelerHook.modeler.get('elementRegistry').get(value).businessObject;
+                if (!dataClass) { throw new Error('Could not resolve data class with id '+value); }
+                element.classRef = dataClass;
+            }
+            if (property === 'rem:state') {
+                const state = this.mediator.olcModelerHook.modeler.getStateById(value);
+                if (!state) { throw new Error('Could not resolve state with id '+value); }
+                element.state = state;
+            }
+            if (property === 'odDi:objectiveRef') {
+                const objective = this.mediator.dependencyModelerHook.modeler.get('elementRegistry').get(value).businessObject;
+                if (!objective) { throw new Error('Could not resolve objectives with id '+value); }
+                element.objectiveRef = objective;
+            }
+        });
+    });
+
+    eventBus.on(ObjectiveEvents.OBJECTIVE_CREATION_REQUESTED, event => {
+        return this.mediator.objectiveCreationRequested(event.name);
+    });
+
+    eventBus.on(ObjectiveEvents.OBJECTIVE_DELETION_REQUESTED, event => {
+        this.mediator.objectiveDeletionRequested(event.objective);
+        return false; // Deletion should never be directly done in objective modeler, will instead propagate from dependency modeler
+    });
+
+    eventBus.on(ObjectiveEvents.OBJECTIVE_RENAMING_REQUESTED, event => {
+        this.mediator.objectiveRenamingRequested(event.objective, event.name);
+    });
+}
+inherits(Mediator.prototype.ResourceModelerHook, CommandInterceptor);
+
+Mediator.prototype.ResourceModelerHook.$inject = [
+    'eventBus',
+    'resourceModeler'
+];
+
+Mediator.prototype.ResourceModelerHook.isHook = true;
 
 // === Olc Modeler Hook
 Mediator.prototype.OlcModelerHook = function (eventBus, olcModeler) {

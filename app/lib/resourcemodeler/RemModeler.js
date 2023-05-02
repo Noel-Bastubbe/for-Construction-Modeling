@@ -88,7 +88,7 @@ RemModeler.prototype._interactionModules = [
     // non-modeling components
     KeyboardMoveModule,
     MoveCanvasModule,
-    RemButtonBarModule,
+    // RemButtonBarModule,
     TouchModule,
     ZoomScrollModule
 ];
@@ -152,7 +152,7 @@ RemModeler.prototype.createResource = function (name) {
         type: 'rem:Resource',
         name: name
     }, {x, y}, diagramRoot);
-    return shape.businessResourcet;
+    return shape.businessResource;
 }
 
 RemModeler.prototype.renameResource = function (resource, name) {
@@ -161,4 +161,225 @@ RemModeler.prototype.renameResource = function (resource, name) {
 
 RemModeler.prototype.deleteResource = function (resource) {
     this.get('modeling').removeShape(resource);
+}
+
+RemModeler.prototype.updateProperty = function (object, property) {
+    this.get('modeling').updateProperties(object, property);
+}
+
+RemModeler.prototype.getObjectives = function () {
+    return this._definitions.get('rootBoards');
+}
+
+RemModeler.prototype.showObjective = function (objective) {
+    const container = this.get('canvas').getContainer();
+    this._objective = objective;
+    this.clear();
+    if (objective) {
+        container.style.visibility = '';
+        this.open(objective);
+    } else {
+        container.style.visibility = 'hidden';
+    }
+}
+
+RemModeler.prototype.getCurrentObjective = function () {
+    return this._objective;
+}
+
+RemModeler.prototype.addObjective = function (objectiveReference) {
+    var rootBoard = this.get('elementFactory').createRootBoard(objectiveReference.name || 'undefined', objectiveReference);
+    this._definitions.get('rootBoards').push(rootBoard[0]);
+    this._definitions.get('rootElements').push(rootBoard[1]);
+    this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
+    this.showObjective(rootBoard[0]);
+}
+
+RemModeler.prototype.deleteObjective = function (objectiveReference) {
+    var objective = this.getObjectiveByReference(objectiveReference);
+    if (objective.id !== 'StartBoard') {
+        var currentIndex = findIndex(this._definitions.get('rootElements'), objective.plane.boardElement);
+        this._definitions.get('rootElements').splice(currentIndex, 1);
+
+        currentIndex = findIndex(this._definitions.get('rootBoards'), objective);
+        var indexAfterRemoval = Math.min(currentIndex, this._definitions.get('rootBoards').length - 2);
+        this._definitions.get('rootBoards').splice(currentIndex, 1);
+        this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
+
+        if (this.getCurrentObjective() === objective) {
+            this.showObjective(this._definitions.get('rootBoards')[indexAfterRemoval]);
+        }
+    }
+}
+
+RemModeler.prototype.renameObjective = function (objectiveReference, name) {
+    var objective = this.getObjectiveByReference(objectiveReference);
+    objective.name = name;
+    this._emit(ObjectiveEvents.DEFINITIONS_CHANGED, {definitions: this._definitions});
+}
+
+RemModeler.prototype.createInstance = function (name, clazz) {
+    const objectInstance = this.get('elementFactory').createObjectInstance(name, clazz);
+    this._definitions.get('objectInstances').push(objectInstance);
+    return objectInstance;
+}
+
+RemModeler.prototype.renameInstance = function (instance, name) {
+    instance.name = name;
+    this.getVisualsWithInstance(instance).forEach(element => {
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
+    });
+}
+
+RemModeler.prototype.deleteInstance = function (instance) {
+    let changedVisuals = this.getVisualsWithInstance(instance);
+    this.getObjectsWithInstance(instance).forEach(element => {
+        element.instance = undefined;
+    });
+    changedVisuals.forEach(element =>
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
+    );
+    let instances = this._definitions.get('objectInstances');
+    let index = instances.indexOf(instance);
+    if (index > -1) {
+        instances.splice(index, 1);
+    }
+}
+
+RemModeler.prototype.handleOlcListChanged = function (olcs, dryRun = false) {
+    this._olcs = olcs;
+}
+
+RemModeler.prototype.handleStateRenamed = function (olcState) {
+    this.getVisualsInState(olcState).forEach(element =>
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
+    );
+}
+
+RemModeler.prototype.handleStateDeleted = function (olcState) {
+    let changedVisual = this.getVisualsInState(olcState);
+    this.getObjectsInState(olcState).forEach(element => {
+        element.state = undefined;
+    });
+    changedVisual.forEach(element =>
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
+    );
+}
+
+RemModeler.prototype.handleClassRenamed = function (clazz) {
+    this.getVisualsOfClass(clazz).forEach(element => {
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
+    });
+}
+
+RemModeler.prototype.handleClassDeleted = function (clazz) {
+    let objectives = this._definitions.get('rootElements');
+    objectives.forEach(objective => {
+        let elements = objective.get('boardElements');
+
+        for (let i = 0; i < elements.length; i++) {
+            if (this.isObjectOfDeletedClass(clazz, elements[i]) || this.isLinkConnectedToObjectOfDeletedClass(clazz, elements[i])) {
+                elements.splice(i, 1);
+                i--;
+            }
+        }
+    })
+
+    let instances = this._definitions.get('objectInstances');
+    for (let i = 0; i < instances.length; i++) {
+        if (clazz.id && instances[i].classRef?.id === clazz.id) {
+            instances.splice(i, 1);
+            i--;
+        }
+    }
+    this.showObjective(this.getCurrentObjective());
+    // This is needed to update the visual representation of the objective that is currently loaded.
+    // This may need to be adapted once the error of links between deleted objects is resolved
+}
+
+RemModeler.prototype.getVisualsInState = function (olcState) {
+    return this.get('elementRegistry').filter(element =>
+        is(element, 'rem:Resource') &&
+        olcState.id &&
+        element.businessObject.state?.id === olcState.id
+    );
+}
+
+RemModeler.prototype.getObjectsInState = function (olcState) {
+    let objectives = this._definitions.get('rootElements');
+    let objects = objectives.map(objective => objective.get('boardElements')).flat(1).filter((element) =>
+        is(element, 'rem:Resource') &&
+        olcState.id &&
+        element.state?.id === olcState.id);
+    return objects;
+}
+
+RemModeler.prototype.getVisualsOfClass = function (clazz) {
+    return this.get('elementRegistry').filter(element =>
+        is(element, 'rem:Resource') &&
+        clazz.id &&
+        element.businessObject.classRef?.id === clazz.id
+    );
+}
+
+RemModeler.prototype.getVisualsWithInstance = function (instance) {
+    return this.get('elementRegistry').filter(element =>
+        is(element, 'rem:Resource') &&
+        instance.id &&
+        element.businessObject.instance?.id === instance.id
+    );
+}
+
+RemModeler.prototype.getObjectsWithInstance = function (instance) {
+    let objectives = this._definitions.get('rootElements');
+    let objects = objectives.map(objective => objective.get('boardElements')).flat(1).filter((element) =>
+        is(element, 'rem:Resource') &&
+        instance.id &&
+        element.instance?.id === instance.id);
+    return objects;
+}
+
+RemModeler.prototype.getObjectsOfClass = function (clazz) {
+    let objectives = this._definitions.get('rootElements');
+    let objects = objectives.map(objective => objective.get('boardElements')).flat(1).filter((element) =>
+        is(element, 'rem:Resource') &&
+        clazz.id &&
+        element.classRef?.id === clazz.id);
+    return objects;
+}
+
+RemModeler.prototype.getObjectInstancesOfClass = function (clazz) {
+    let instances = this._definitions.get('objectInstances');
+    return instances.filter(instance =>
+        is(instance, 'rem:ObjectInstance') &&
+        clazz.id &&
+        instance.classRef?.id === clazz.id
+    );
+}
+
+RemModeler.prototype.getObjectiveByReference = function (objectiveReference) {
+    const objective = this.getObjectives().filter(objective => objective.objectiveRef === objectiveReference)[0];
+    if (!objective) {
+        throw 'Unknown rootBoard of objective \"' + objectiveReference.name + '\"';
+    } else {
+        return objective;
+    }
+}
+
+RemModeler.prototype.isObjectOfDeletedClass = function (clazz, element) {
+    return is(element, 'rem:Resource') && clazz.id && element.classRef?.id === clazz.id;
+}
+
+RemModeler.prototype.isLinkConnectedToObjectOfDeletedClass = function (clazz, element) {
+    return is(element, 'rem:Link') && clazz.id && ((element.sourceRef?.classRef?.id === clazz.id) || (element.targetRef?.classRef?.id === clazz.id));
 }

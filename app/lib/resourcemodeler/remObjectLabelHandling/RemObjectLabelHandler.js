@@ -5,7 +5,7 @@ import {appendOverlayListeners} from "../../util/HtmlUtil";
 import {is} from "../../util/Util";
 
 export default class RemObjectLabelHandler extends CommandInterceptor {
-    constructor(eventBus, modeling, directEditing, overlays, objectiveModeler) {
+    constructor(eventBus, modeling, directEditing, overlays, resourceModeler) {
         super(eventBus);
         this._eventBus = eventBus;
         this._modeling = modeling;
@@ -21,7 +21,7 @@ export default class RemObjectLabelHandler extends CommandInterceptor {
         this._currentDropdownTarget = undefined;
         this._overlayId = undefined;
         this._overlays = overlays;
-        this._objectiveModeler = objectiveModeler;
+        this._resourceModeler = resourceModeler;
 
         eventBus.on('directEditing.activate', function (e) {
             if (is(e.active.element, 'rem:Resource')) {
@@ -32,7 +32,7 @@ export default class RemObjectLabelHandler extends CommandInterceptor {
         eventBus.on(['element.dblclick', 'create.end', 'autoPlace.end'], e => {
             const element = e.element || e.shape || e.elements[0];
             if (is(element, 'rem:Resource')) {
-                const olcs = this._objectiveModeler._olcs;
+                const olcs = this._resourceModeler._olcs;
                 const omObject = element.businessObject;
                 this._dropdownContainer.currentElement = element;
                 let currentOlc = undefined;
@@ -65,14 +65,14 @@ export default class RemObjectLabelHandler extends CommandInterceptor {
                         },
                         element, undefined,
                         (entry, newValue) => {
-                            this._objectiveModeler.renameInstance(entry.option, newValue)
-                            populateInstanceDropdown(this._objectiveModeler.getObjectInstancesOfClass(omObject.classRef));
+                            this._resourceModeler.renameInstance(entry.option, newValue)
+                            populateInstanceDropdown(this._resourceModeler.getObjectInstancesOfClass(omObject.classRef));
                             omObject.classRef && this._instanceDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
                             updateInstanceSelection();
                         },
                         (entry) => {
-                            this._objectiveModeler.deleteInstance(entry.option);
-                            populateInstanceDropdown(this._objectiveModeler.getObjectInstancesOfClass(omObject.classRef));
+                            this._resourceModeler.deleteInstance(entry.option);
+                            populateInstanceDropdown(this._resourceModeler.getObjectInstancesOfClass(omObject.classRef));
                             omObject.classRef && this._instanceDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
                             updateInstanceSelection();
                         },
@@ -89,7 +89,7 @@ export default class RemObjectLabelHandler extends CommandInterceptor {
                             currentOlc = olcs.filter(olc => olc.classRef === omObject.classRef)[0];
                             this._classDropdown.getEntries().forEach(entry => entry.setSelected(entry.option === currentOlc));
                             states = currentOlc.get('Elements').filter(element => is(element, 'olc:State'));
-                            instances = this._objectiveModeler.getObjectInstancesOfClass(omObject.classRef);
+                            instances = this._resourceModeler.getObjectInstancesOfClass(omObject.classRef);
                         }
 
                         populateStateDropdown(states);
@@ -138,7 +138,7 @@ export default class RemObjectLabelHandler extends CommandInterceptor {
                         needUpdate = true;
                     }
                     if (newInstanceInput !== '') {
-                        const newInstance = this._objectiveModeler.createInstance(newInstanceInput, currentOlc.classRef);
+                        const newInstance = this._resourceModeler.createInstance(newInstanceInput, currentOlc.classRef);
                         this.updateInstance(newInstance, element);
                         needUpdate = true;
                     }
@@ -248,5 +248,5 @@ RemObjectLabelHandler.$inject = [
     'modeling',
     'directEditing',
     'overlays',
-    'objectiveModeler'
+    'resourceModeler'
 ];

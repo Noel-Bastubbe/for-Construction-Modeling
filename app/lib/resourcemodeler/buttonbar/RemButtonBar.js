@@ -8,7 +8,7 @@ import { appendOverlayListeners } from '../../util/HtmlUtil';
 import ObjectiveEvents from "../ObjectiveEvents";
 
 
-export default function RemButtonBar(canvas, eventBus, omModeler) {
+export default function RemButtonBar(canvas, eventBus, remModeler) {
     var container = canvas.getContainer().parentElement;
     var buttonBar = document.createElement('div');
     domClasses(buttonBar).add('olc-buttonbar');
@@ -17,17 +17,17 @@ export default function RemButtonBar(canvas, eventBus, omModeler) {
     // Import export buttons (disabled)
 
     const exportButton = document.createElement('button');
-    exportButton.innerHTML = 'Export ObjectiveModel as Xml'
+    exportButton.innerHTML = 'Export ResourceModel as Xml'
     exportButton.addEventListener('click', function () {
-        omModeler.saveXML({ format: true }).then(result => {
+        remModeler.saveXML({ format: true }).then(result => {
             download('foobar.xml', result.xml);
         });
     });
     // buttonBar.appendChild(exportButton);
     const importButton = document.createElement('button');
-    importButton.innerHTML = 'Import ObjectiveModel from Xml'
+    importButton.innerHTML = 'Import ResourceModel from Xml'
     importButton.addEventListener('click', function () {
-        upload(xml => omModeler.importXML(xml));
+        upload(xml => remModeler.importXML(xml));
     });
     // buttonBar.appendChild(importButton);
 
@@ -50,7 +50,7 @@ export default function RemButtonBar(canvas, eventBus, omModeler) {
         }
     });
     selectObjectiveComponent.addEventListener('dblclick', event => {
-        if (omModeler.getCurrentObjective().id !== 'StartBoard' && omModeler.getCurrentObjective().id !== 'FinalBoard' && selectObjectiveComponent.value && (event.target === selectObjectiveComponent || event.target === selectedObjectiveSpan)) {
+        if (remModeler.getCurrentObjective().id !== 'StartBoard' && remModeler.getCurrentObjective().id !== 'FinalBoard' && selectObjectiveComponent.value && (event.target === selectObjectiveComponent || event.target === selectedObjectiveSpan)) {
             selectObjectiveMenu.hide();
             var renameObjectiveInput = document.createElement('input');
             renameObjectiveInput.value = selectObjectiveComponent.value.name;
@@ -60,7 +60,7 @@ export default function RemButtonBar(canvas, eventBus, omModeler) {
                     objective: selectObjectiveComponent.value.objectiveRef,
                     name: renameObjectiveInput.value
                 });
-                selectObjectiveComponent.showValue(omModeler.getCurrentObjective());
+                selectObjectiveComponent.showValue(remModeler.getCurrentObjective());
             });
             renameObjectiveInput.addEventListener("focusout", function () {
                 selectObjectiveComponent.replaceChild(selectedObjectiveSpan, renameObjectiveInput);
@@ -84,10 +84,10 @@ export default function RemButtonBar(canvas, eventBus, omModeler) {
             var shouldDelete = eventBus.fire(ObjectiveEvents.OBJECTIVE_DELETION_REQUESTED, {objective: objectiveToDelete});
             if (shouldDelete !== false) {
                 // Deletion was not rejected and not handled somewhere else; should not happen when mediator is involved
-                omModeler.deleteObjective(objectiveToDelete);
+                remModeler.deleteObjective(objectiveToDelete);
             }
         }
-        selectObjectiveComponent.showValue(omModeler.getCurrentObjective());
+        selectObjectiveComponent.showValue(remModeler.getCurrentObjective());
     });
     buttonBar.appendChild(deleteObjectiveButton);
 
@@ -96,10 +96,10 @@ export default function RemButtonBar(canvas, eventBus, omModeler) {
     }
 
     function repopulateDropdown() {
-        var objectives = omModeler.getObjectives();
+        var objectives = remModeler.getObjectives();
         var valueBefore = selectObjectiveComponent.value;
         selectObjectiveMenu.populate(objectives, objective => {
-            omModeler.showObjective(objective);
+            remModeler.showObjective(objective);
             selectObjectiveMenu.hide();
         });
         selectObjectiveMenu.addCreateElementInput(() => {
