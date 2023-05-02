@@ -39,7 +39,8 @@
                 {
                     "name": "role",
                     "isAttr": true,
-                    "type": "string"
+                    "isReference": true,
+                    "type": "rom:Role"
                 },
                 {
                     "name": "NoP",

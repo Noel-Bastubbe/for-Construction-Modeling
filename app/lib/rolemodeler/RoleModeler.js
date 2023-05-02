@@ -29,6 +29,7 @@ import MoveModule from 'diagram-js/lib/features/move';
 import PaletteModule from './features/palette';
 import ResizeModule from 'diagram-js/lib/features/resize';
 import SnappingModule from './features/snapping';
+import {is} from "bpmn-js/lib/util/ModelUtil";
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -134,4 +135,8 @@ RoleModeler.prototype.name = function (constructionMode) {
     } else {
         return "Role Model";
     }
-};
+}
+
+RoleModeler.prototype.getRoles = function () {
+    return this.get('elementRegistry').filter(element => is(element, 'rom:Role'));
+}

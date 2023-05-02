@@ -55,6 +55,10 @@ FragmentModeler.prototype.handleOlcListChanged = function (olcs, dryRun=false) {
     this._olcs = olcs;
 }
 
+FragmentModeler.prototype.handleRoleListChanged = function (roles, dryRun=false) {
+    this._roles = roles;
+}
+
 FragmentModeler.prototype.handleStateRenamed = function (olcState) {
     this.getDataObjectReferencesInState(olcState).forEach((element, gfx) =>
         this.get('eventBus').fire('element.changed', {

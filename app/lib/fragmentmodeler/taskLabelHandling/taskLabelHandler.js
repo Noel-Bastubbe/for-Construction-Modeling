@@ -62,7 +62,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 }
                 const populateRoleDropdown = () => {
                     this._roleDropdown.populate(
-                        [], // TODO Change this to the list of roles instead of an empty list
+                        this._fragmentModeler._roles, // TODO Change this to the list of roles instead of an empty list
                         (state, element) => {
                             this.updateRole(state, element);
                             updateRoleSelection();

@@ -216,6 +216,13 @@ Mediator.prototype.olcRenamed = function (olc, name) {
     this.dataModelerHook.modeler.renameClass(olc.classRef, name);
 }
 
+// === Role helpers
+
+Mediator.prototype.roleListChanged = function (roles) {
+    this.fragmentModelerHook.modeler.handleRoleListChanged(roles);
+}
+
+
 // === State helpers (used within OLC Modeler)
 
 Mediator.prototype.createState = function (name, olc) {
@@ -416,6 +423,12 @@ Mediator.prototype.FragmentModelerHook = function (eventBus, fragmentModeler) {
                     throw new Error('Could not resolve olc state with id ' + value);
                 }
                 element.get('states').push(state);
+            } else if (property === 'fcm:role') {
+                const role = this.mediator.roleModelerHook.modeler.get('elementRegistry').get(value).businessObject;
+                if (!role) {
+                    throw new Error('Could not resolve role with id ' + value);
+                }
+                element.role = role;
             }
         });
     });
