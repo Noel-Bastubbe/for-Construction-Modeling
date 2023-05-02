@@ -230,11 +230,11 @@ export default function ROMRenderer(
 
     function createMarker(id, fill, stroke) {
 
-            var link = svgCreate('path');
-            svgAttr(link, {d: 'M 11 5 L 1 10 L 11 15 Z'});
+            var inheritance = svgCreate('path');
+            svgAttr(inheritance, {d: 'M 11 5 L 1 10 L 11 15 Z'});
 
             addMarker(id, {
-                element: link,
+                element: inheritance,
                 ref: {x: 1, y: 10},
                 scale: 0.8,
                 attrs: {
