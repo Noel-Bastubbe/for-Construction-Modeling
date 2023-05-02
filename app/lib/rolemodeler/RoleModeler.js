@@ -32,7 +32,7 @@ import SnappingModule from './features/snapping';
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
-<rom:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
+<rom:definitions xmlns:rom="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
     <rom:odBoard id="Board_debug" />
     <odDi:odRootBoard id="RootBoard_debug">
         <odDi:odPlane id="Plane_debug" boardElement="Board_debug" />
