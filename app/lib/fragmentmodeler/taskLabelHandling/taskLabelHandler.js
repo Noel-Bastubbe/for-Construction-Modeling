@@ -4,37 +4,40 @@ import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
 import {is} from "../../util/Util";
 
-export default class DepLabelHandler extends CommandInterceptor {
-    constructor(eventBus, modeling, directEditing, overlays, dependencyModeler) {
+export default class TaskLabelHandler extends CommandInterceptor {
+    constructor(eventBus, modeling, directEditing, overlays, fragmentModeler) {
         super(eventBus);
         this._eventBus = eventBus;
         this._modeling = modeling;
-        this._directEditing = directEditing;
         this._dropdownContainer = document.createElement('div');
         this._dropdownContainer.classList.add('dd-dropdown-multicontainer');
         this._nameDropdown = getDropdown("Name");
         this._dropdownContainer.appendChild(this._nameDropdown);
-        this._timeDropdown = getDropdown("Time");
-        this._dropdownContainer.appendChild(this._timeDropdown);
+        this._durationDropdown = getDropdown("Duration");
+        this._dropdownContainer.appendChild(this._durationDropdown);
+        this._roleDropdown = getDropdown("Role");
+        this._dropdownContainer.appendChild(this._roleDropdown);
+        this._NoPDropdown = getDropdown("Number Of People");
+        this._dropdownContainer.appendChild(this._NoPDropdown);
         this._currentDropdownTarget = undefined;
         this._overlayId = undefined;
         this._overlays = overlays;
-        this._dependencyModeler = dependencyModeler;
+        this._fragmentModeler = fragmentModeler;
 
         eventBus.on('directEditing.activate', function (e) {
-            if (is(e.active.element, 'dep:Objective')) {
+            if (is(e.active.element, 'bpmn:Task')) {
                 directEditing.cancel();
             }
         });
 
         eventBus.on(['element.dblclick', 'create.end', 'autoPlace.end'], e => {
             const element = e.element || e.shape || e.elements[0];
-            if (is(element, 'dep:Objective') && element.businessObject.id !== 'start_state') {
-                const objective = element.businessObject;
+            if (is(element, 'bpmn:Task')) {
+                const activity = element.businessObject;
                 this._dropdownContainer.currentElement = element;
 
-                if (element.businessObject.id === 'final_state') {
-                    this._dropdownContainer.removeChild(this._nameDropdown);
+                const updateRoleSelection = () => {
+                    this._roleDropdown.getEntries().forEach(entry => entry.setSelected(activity.role === entry.option));
                 }
 
                 const populateNameDropdown = () => {
@@ -45,38 +48,64 @@ export default class DepLabelHandler extends CommandInterceptor {
                             },
                         element
                     );
-                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",objective.name);
+                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",activity.name);
                 }
-                const populateTimeDropdown = () => {
-                    this._timeDropdown.populate(
+                const populateDurationDropdown = () => {
+                    this._durationDropdown.populate(
                         [],
-                        (olc, element) => {
-                            this.updateTime(olc.classRef, element);
+                        (state, element) => {
+                            this.updateDuration(state, element);
                         },
                         element
                     );
-                    this._timeDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",objective.date);
+                    this._durationDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.duration);
+                }
+                const populateRoleDropdown = () => {
+                    this._roleDropdown.populate(
+                        [], // TODO Change this to the list of roles instead of an empty list
+                        (state, element) => {
+                            this.updateRole(state, element);
+                            updateRoleSelection();
+                        },
+                        element
+                    );
+                    this._roleDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
+                }
+                const populateNoPDropdown = () => {
+                    this._NoPDropdown.populate(
+                        [],
+                        (state, element) => {
+                            this.updateNoP(state, element);
+                        },
+                        element
+                    );
+                    this._NoPDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.NoP);
                 }
                 populateNameDropdown();
-                populateTimeDropdown();
+                populateDurationDropdown();
+                populateRoleDropdown();
+                populateNoPDropdown();
 
                 this._dropdownContainer.confirm = (event) => {
                     const newNameInput = this._nameDropdown.getInputValue();
-                    const newTimeInput = this._timeDropdown.getInputValue();
-                    let needUpdate = false;
-                    if (newNameInput !== '' && newNameInput !== objective.name) {
+                    const newDurationInput = this._durationDropdown.getInputValue();
+                    const newRoleInput = this._roleDropdown.getInputValue();
+                    const newNoPInput = this._NoPDropdown.getInputValue();
+                    if (newNameInput !== '' && newNameInput !== activity.name) {
                         this.updateName(newNameInput,element);
                         populateNameDropdown();
-                        needUpdate = true;
                     }
-                    if (newTimeInput !== objective.date) {
-                        this.updateTime(newTimeInput,element);
-                        populateTimeDropdown();
-                        needUpdate = true;
+                    if (newDurationInput !== activity.duration && newDurationInput > 0) {
+                        this.updateDuration(newDurationInput,element);
+                        populateDurationDropdown();
                     }
-                    if (needUpdate) {
-                        this._nameDropdown.focusInput();
-                        this._timeDropdown.focusInput();
+                    if (newRoleInput !== activity.role) {
+                        this.updateRole(newRoleInput,element);
+                        populateRoleDropdown();
+                    }
+                    if (newNoPInput !== activity.NoP && newNoPInput > 0) {
+                        this.updateNoP(newNoPInput,element);
+                        populateNoPDropdown();
                     }
                 }
 
@@ -89,7 +118,9 @@ export default class DepLabelHandler extends CommandInterceptor {
                         return false;
                     } else if (event.target.classList.contains('dd-dropdown-entry')) {
                         this._nameDropdown.clearInput();
-                        this._timeDropdown.clearInput();
+                        this._durationDropdown.clearInput();
+                        this._roleDropdown.clearInput();
+                        this._NoPDropdown.clearInput();
                     } else if (event.target.tagName !== 'INPUT' || !event.target.value) {
                         this._dropdownContainer.confirm();
                     }
@@ -100,9 +131,6 @@ export default class DepLabelHandler extends CommandInterceptor {
                     if (this._overlayId) {
                         this._overlays.remove(this._overlayId);
                         this._overlayId = undefined;
-                    }
-                    if (element.businessObject.id === 'final_state') {
-                        this._dropdownContainer.insertBefore(this._nameDropdown,this._timeDropdown);
                     }
                     this._dropdownContainer.currentElement = undefined;
                     this._currentDropdownTarget = undefined;
@@ -141,18 +169,33 @@ export default class DepLabelHandler extends CommandInterceptor {
         });
     }
 
-    updateTime(newTime, element) {
-        element.businessObject.date = newTime;
+    updateDuration(newTime, element) {
+        element.businessObject.duration = newTime;
         this._eventBus.fire('element.changed', {
             element
         });
     }
+
+    updateRole(newRole, element) {
+        element.businessObject.role = newRole;
+        this._eventBus.fire('element.changed', {
+            element
+        });
+    }
+
+    updateNoP(newNoP, element) {
+        element.businessObject.NoP = newNoP;
+        this._eventBus.fire('element.changed', {
+            element
+        });
+    }
+
 }
 
-DepLabelHandler.$inject = [
+TaskLabelHandler.$inject = [
     'eventBus',
     'modeling',
     'directEditing',
     'overlays',
-    'dependencyModeler'
+    'fragmentModeler'
 ];
