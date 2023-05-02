@@ -134,6 +134,10 @@ ODRules.prototype.init = function() {
 
 ODRules.prototype.canConnect = canConnect;
 
+//ODRules.prototype.canConnectAssociation = canConnectAssociation;
+
+//ODRules.prototype.canConnectInheritance = canConnectInheritance;
+
 ODRules.prototype.canMove = canMove;
 
 ODRules.prototype.canAttach = canAttach;
@@ -200,11 +204,19 @@ function nonExistingOrLabel(element) {
   return !element || isLabel(element);
 }
 
+// https://github.com/bpmn-io/bpmn-js/blob/develop/lib/features/rules/BpmnRules.js
 
-function canConnect(source, target) {
+//function canConnect(source, target, connection) {
+  function canConnect(source, target) {
   if (nonExistingOrLabel(source) || nonExistingOrLabel(target)) {
     return null;
   }
+  /*if (canConnectLink(source, target)) {
+    if (!is(connection, 'od:Association')) {
+      return { type: 'od:InheritanceAssociation' };
+    }
+    return { type: 'od:Association' };
+  } */
   if (canConnectLink(source, target)) {
     return { type: 'od:Association' };
   }

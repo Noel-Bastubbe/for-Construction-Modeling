@@ -221,7 +221,7 @@ export default function ODRenderer(
 
   function addMarker(id, options) {
     var attrs = assign({
-      fill: 'black',
+      fill: 'black',  
       strokeWidth: 1,
       strokeLinecap: 'round',
       strokeDasharray: 'none'
@@ -272,16 +272,16 @@ export default function ODRenderer(
     return str.replace(/[^0-9a-zA-z]+/g, '_');
   }
 
-  function createMarker(id, type, fill, stroke) {
+  function createMarker(id, fill, stroke) {
     var linkEnd = svgCreate('path');
     svgAttr(linkEnd, { d: 'M 1 5 L 11 10 L 1 15 Z' });
 
     addMarker(id, {
       element: linkEnd,
       ref: { x: 11, y: 10 },
-      scale: 0.5,
+      scale: 1, 
       attrs: {
-        fill: stroke,
+        fill: fill, 
         stroke: stroke
       }
     });
@@ -311,7 +311,20 @@ export default function ODRenderer(
 
       var attrs = {
         strokeLinejoin: 'round',
-        stroke: getStrokeColor(element, defaultStrokeColor)
+        markerEnd: marker('white', 'black'),    
+        stroke: getStrokeColor(element, defaultStrokeColor) 
+      };
+      return drawPath(parentGfx, pathData, attrs);
+    },
+    'od:InheritAssociation': function(parentGfx, element) {
+      var pathData = createPathFromConnection(element);
+
+      var fill = getFillColor(element, defaultFillColor),
+          stroke = getStrokeColor(element, defaultStrokeColor);
+
+      var attrs = {
+        strokeLinejoin: 'round',   
+        stroke: getStrokeColor(element, defaultStrokeColor) 
       };
       return drawPath(parentGfx, pathData, attrs);
     },
