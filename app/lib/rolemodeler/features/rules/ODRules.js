@@ -206,7 +206,7 @@ function canConnect(source, target) {
     return null;
   }
   if (canConnectLink(source, target)) {
-    return { type: 'rom:Link' };
+    return { type: 'rom:Inheritance' };
   }
   return false;
 }

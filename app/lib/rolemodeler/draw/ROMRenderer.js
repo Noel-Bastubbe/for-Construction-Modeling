@@ -256,7 +256,7 @@ export default function ROMRenderer(
 
             return rect;
         },
-        'rom:Link': function (parentGfx, element) {
+        'rom:Inheritance': function (parentGfx, element) {
             let pathData = createPathFromConnection(element);
 
             let attrs = {
