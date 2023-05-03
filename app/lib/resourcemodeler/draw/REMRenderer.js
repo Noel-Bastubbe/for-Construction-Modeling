@@ -154,7 +154,6 @@ export default function REMRenderer(
     }
   }
 
-
   function addDivider(parentGfx, element) {
     drawLine(parentGfx, [
       { x: 0, y: 30 },

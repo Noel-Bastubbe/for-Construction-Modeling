@@ -162,6 +162,14 @@ RemModeler.prototype.deleteResource = function (resource) {
     this.get('modeling').removeShape(resource);
 }
 
+RemModeler.prototype.handleResourceRenamed = function (resource) {
+    this.getVisualsOfResource(resource).forEach(element => {
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
+    });
+}
+
 // RemModeler.prototype.updateProperty = function (object, property) {
 //     this.get('modeling').updateProperties(object, property);
 // }
@@ -270,13 +278,13 @@ RemModeler.prototype.deleteResource = function (resource) {
 //     );
 // }
 
-// RemModeler.prototype.handleClassRenamed = function (clazz) {
-//     this.getVisualsOfClass(clazz).forEach(element => {
-//         this.get('eventBus').fire('element.changed', {
-//             element
-//         })
-//     });
-// }
+RemModeler.prototype.handleResourceRenamed = function (resource) {
+    this.getVisualsOfResource(resource).forEach(element => {
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
+    });
+}
 
 // RemModeler.prototype.handleClassDeleted = function (clazz) {
 //     let objectives = this._definitions.get('rootElements');
@@ -320,13 +328,12 @@ RemModeler.prototype.deleteResource = function (resource) {
 //     return objects;
 // }
 
-// RemModeler.prototype.getVisualsOfClass = function (clazz) {
-//     return this.get('elementRegistry').filter(element =>
-//         is(element, 'rem:Resource') &&
-//         clazz.id &&
-//         element.businessObject.classRef?.id === clazz.id
-//     );
-// }
+RemModeler.prototype.getVisualsOfResource = function (resource) {
+    return this.get('elementRegistry').filter(element =>
+        is(element, 'rem:Resource') &&
+        resource.id
+    );
+}
 
 // RemModeler.prototype.getVisualsWithInstance = function (instance) {
 //     return this.get('elementRegistry').filter(element =>
