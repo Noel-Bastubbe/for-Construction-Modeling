@@ -138,21 +138,22 @@ export default function REMRenderer(
   }
 
   function renderAttributes(parentGfx, element) {
-    let semantic = getSemantic(element);
-    let label = "state: "
-    label += semantic.state?.name || "no State"
-    renderLabel(parentGfx, label, {
-      box: {
-        height: element.height + 30,
-        width: element.width
-      },
-      padding: 5,
-      align: 'center-middle',
-      style: {
-        fill: defaultStrokeColor
-      }
-    });
+    var semantic = getSemantic(element);
+    if (semantic.attributeValues) {
+      renderLabel(parentGfx, semantic.attributeValues, {
+        box: {
+          height: element.height + 30,
+          width: element.width
+        },
+        padding: 5,
+        align: 'center-middle',
+        style: {
+          fill: defaultStrokeColor
+        }
+      });
+    }
   }
+
 
   function addDivider(parentGfx, element) {
     drawLine(parentGfx, [
@@ -179,7 +180,10 @@ export default function REMRenderer(
 
   function renderTitelLabel(parentGfx, element) {
     let semantic = getSemantic(element);
-    let text = `${semantic.classRef?.name} : ${semantic.instance?.name}`;
+    let text = '';
+    if (semantic.name) {
+      text = semantic.name;
+    }
     renderLabel(parentGfx, text, {
       box: {
         height: 30,

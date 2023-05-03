@@ -154,9 +154,9 @@ RemModeler.prototype.name = function (constructionMode) {
 //     return shape.businessResource;
 // }
 
-// RemModeler.prototype.renameResource = function (resource, name) {
-//     this.get('modeling').updateLabel(this.get('elementRegistry').get(resource.id), name);
-// }
+ RemModeler.prototype.renameResource = function (resource, name) {
+    this.get('modeling').updateLabel(this.get('elementRegistry').get(resource.id), name);
+ }
 
 RemModeler.prototype.deleteResource = function (resource) {
     this.get('modeling').removeShape(resource);
