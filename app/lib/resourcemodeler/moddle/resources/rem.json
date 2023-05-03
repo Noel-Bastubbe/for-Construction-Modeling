@@ -1,5 +1,5 @@
 {
-  "name": "Object diagram",
+  "name": "Resource Model",
   "uri": "http://tk/schema/od",
   "prefix": "rem",
   "xml": {
@@ -114,11 +114,6 @@
         {
           "name": "rootElements",
           "type": "RootElement",
-          "isMany": true
-        },
-        {
-          "name": "objectInstances",
-          "type": "ObjectInstance",
           "isMany": true
         },
         {
