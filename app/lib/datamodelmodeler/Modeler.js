@@ -127,6 +127,7 @@ Modeler.prototype._modules = [].concat(
 );
 
 Modeler.prototype.id = "DM";
+Modeler.prototype.rank = 2;
 
 Modeler.prototype.name = function (constructionMode) {
   if (constructionMode) {

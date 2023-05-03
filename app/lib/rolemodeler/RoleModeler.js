@@ -123,6 +123,7 @@ RoleModeler.prototype._modules = [].concat(
 );
 
 RoleModeler.prototype.id = "ROM";
+RoleModeler.prototype.rank = 5;
 
 RoleModeler.prototype.deleteRole = function (role) {
     this.get('modeling').removeShape(role);

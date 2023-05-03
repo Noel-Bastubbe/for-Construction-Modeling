@@ -42,6 +42,7 @@ export default function FragmentModeler(options) {
 inherits(FragmentModeler, BpmnModeler);
 
 FragmentModeler.prototype.id = "FM";
+FragmentModeler.prototype.rank = 1;
 
 FragmentModeler.prototype.name = function (constructionMode) {
     if (constructionMode) {

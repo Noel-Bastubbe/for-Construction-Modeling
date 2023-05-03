@@ -111,6 +111,7 @@ export default function DependencyModeler(options) {
 inherits(DependencyModeler, Diagram);
 
 DependencyModeler.prototype.id = "DEP";
+DependencyModeler.prototype.rank = 4;
 
     DependencyModeler.prototype.name = function (constructionMode) {
   if (constructionMode) {
