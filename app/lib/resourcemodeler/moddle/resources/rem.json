@@ -30,42 +30,10 @@
       ],
       "properties": [
         {
-          "name": "state",
-          "isAttr": true,
-          "isReference": true,
-          "type": "olc:State"
-        },
-        {
           "name": "links",
           "isMany": true,
           "type": "Link",
           "isReference": true
-        },
-        {
-          "name": "classRef",
-          "isAttr": true,
-          "isReference": true,
-          "type": "rem:Resource"
-        },
-        {
-          "name": "instance",
-          "isAttr": true,
-          "isReference": true,
-          "type": "ObjectInstance"
-        }
-      ]
-    },
-    {
-      "name": "ObjectInstance",
-      "superClass": [
-        "BoardElement"
-      ],
-      "properties": [
-        {
-          "name": "classRef",
-          "isAttr": true,
-          "isReference": true,
-          "type": "rem:Resource"
         }
       ]
     },

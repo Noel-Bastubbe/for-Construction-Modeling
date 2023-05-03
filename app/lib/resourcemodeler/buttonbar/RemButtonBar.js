@@ -120,5 +120,5 @@ export default function RemButtonBar(canvas, eventBus, remModeler) {
 RemButtonBar.$inject = [
     'canvas',
     'eventBus',
-    'objectiveModeler'
+    'resourceModeler'
 ];
