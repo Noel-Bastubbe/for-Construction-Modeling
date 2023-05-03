@@ -650,7 +650,7 @@ Mediator.prototype.ResourceModelerHook = function (eventBus, resourceModeler) {
   this.preExecute(["elements.delete"], (event) => {
     event.context.elements = event.context.elements.filter((element) => {
       if (is(element, "rem:Resource")) {
-        return this.modeler.deleteObject(element);
+        return this.modeler.deleteResource(element);
       } else {
         return true;
       }
@@ -658,23 +658,23 @@ Mediator.prototype.ResourceModelerHook = function (eventBus, resourceModeler) {
   });
 
   this.executed(["element.updateLabel"], (event) => {
-    var changedLabel = event.context.element.businessObject.labelAttribute;
-    if (
-      is(event.context.element, "rem:Resource") &&
-      (changedLabel === "name" || !changedLabel)
-    ) {
-      //this.mediator.renamedClass(event.context.element.businessObject);
-    }
+    // var changedLabel = event.context.element.businessObject.labelAttribute;
+    // if (
+    //   is(event.context.element, "rem:Resource") &&
+    //   (changedLabel === "name" || !changedLabel)
+    // ) {
+    //   //this.mediator.renamedClass(event.context.element.businessObject);
+    // }
   });
 
   this.reverted(["element.updateLabel"], (event) => {
-    var changedLabel = event.context.element.businessObject.labelAttribute;
-    if (
-      is(event.context.element, "rem:Resource") &&
-      (changedLabel === "name" || !changedLabel)
-    ) {
-      //this.mediator.renamedClass(event.context.element.businessObject);
-    }
+    // var changedLabel = event.context.element.businessObject.labelAttribute;
+    // if (
+    //   is(event.context.element, "rem:Resource") &&
+    //   (changedLabel === "name" || !changedLabel)
+    // ) {
+    //   //this.mediator.renamedClass(event.context.element.businessObject);
+    // }
   });
 
   eventBus.on("import.parse.complete", ({ context }) => {

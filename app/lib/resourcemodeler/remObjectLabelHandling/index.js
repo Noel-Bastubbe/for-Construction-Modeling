@@ -1,6 +1,6 @@
-import RemObjectLabelHandler from "./RemObjectLabelHandler";
+// import RemObjectLabelHandler from "./RemObjectLabelHandler";
 
-export default {
-    __init__: [ 'remObjectLabelHandler' ],
-    remObjectLabelHandler: [ 'type', RemObjectLabelHandler ]
-};
+// export default {
+//     __init__: [ 'remObjectLabelHandler' ],
+//     remObjectLabelHandler: [ 'type', RemObjectLabelHandler ]
+// };
