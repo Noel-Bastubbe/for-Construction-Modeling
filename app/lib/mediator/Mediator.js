@@ -755,8 +755,8 @@ Mediator.prototype.RoleModelerHook = function (eventBus, roleModeler) {
 
     });
 
-    eventBus.on(RoleEvents.LIST_CHANGED, event => {
-        this.mediator.roleListChanged(event.roles);
+    eventBus.on('import.render.complete', event => {
+        this.mediator.roleListChanged(this.modeler.getRoles());
     });
 }
 inherits(Mediator.prototype.RoleModelerHook, CommandInterceptor);
