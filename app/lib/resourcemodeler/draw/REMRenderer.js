@@ -139,9 +139,9 @@ export default function REMRenderer(
 
   function renderAttributes(parentGfx, element) {
     let semantic = getSemantic(element);
-    let text = '';
+    let text = 'Roles: ';
     if (semantic.roles) {
-      text = semantic.roles;
+      text = text + semantic.roles;
     }
       renderLabel(parentGfx, text, {
         box: {
