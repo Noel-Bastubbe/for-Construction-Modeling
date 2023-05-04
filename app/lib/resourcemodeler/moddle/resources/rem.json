@@ -34,6 +34,27 @@
           "isMany": true,
           "type": "Link",
           "isReference": true
+        },
+        {
+          "name": "capacity",
+          "isAttr": true,
+          "type": "Integer"
+        },
+        {
+          "name": "roles",
+          "isMany": true,
+          "type": "rom:Role",
+          "isReference": true
+        }, 
+        {
+          "name": "availabilityStart",
+          "isAttr": true,
+          "type": "Integer"
+        },
+        {
+          "name": "availabilityEnd",
+          "isAttr": true,
+          "type": "Integer"
         }
       ]
     },
@@ -73,12 +94,6 @@
           "isMany": true,
           "type": "BoardElement"
         }
-      ]
-    },
-    {
-      "name": "TextBox",
-      "superClass": [
-        "BoardElement"
       ]
     },
     {
