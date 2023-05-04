@@ -28,7 +28,6 @@ import LabelEditingModule from './features/label-editing';
 import ModelingModule from './features/modeling';
 import MoveModule from 'diagram-js/lib/features/move';
 import RemButtonBarModule from './buttonbar';
-import RemObjectDropdown from './remObjectLabelHandling';
 import PaletteModule from './features/palette';
 import ResizeModule from 'diagram-js/lib/features/resize';
 import SnappingModule from './features/snapping';
@@ -111,7 +110,6 @@ RemModeler.prototype._modelingModules = [
     LabelEditingModule,
     ModelingModule,
     MoveModule,
-    RemObjectDropdown,
     PaletteModule,
     ResizeModule,
     SnappingModule,
