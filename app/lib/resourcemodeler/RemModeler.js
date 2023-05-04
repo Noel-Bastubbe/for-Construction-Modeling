@@ -34,6 +34,7 @@ import SnappingModule from './features/snapping';
 import {nextPosition} from '../util/Util';
 import {is} from "bpmn-js/lib/util/ModelUtil";
 import modeling from './features/modeling';
+import taskLabelHandling from "./remObjectLabelHandling";
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -80,7 +81,6 @@ RemModeler.prototype.createDiagram = function () {
     return this.importXML(initialDiagram);
 };
 
-
 RemModeler.prototype._interactionModules = [
 
     // non-modeling components
@@ -113,6 +113,7 @@ RemModeler.prototype._modelingModules = [
     PaletteModule,
     ResizeModule,
     SnappingModule,
+    taskLabelHandling,
     // SpaceToolBehaviorModule
 ];
 

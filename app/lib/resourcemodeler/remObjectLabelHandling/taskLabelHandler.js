@@ -5,7 +5,7 @@ import {appendOverlayListeners} from "../../util/HtmlUtil";
 import {is} from "../../util/Util";
 
 export default class TaskLabelHandler extends CommandInterceptor {
-    constructor(eventBus, modeling, directEditing, overlays, fragmentModeler) {
+    constructor(eventBus, modeling, directEditing, overlays, resourceModeler) {
         super(eventBus);
         this._eventBus = eventBus;
         this._modeling = modeling;
@@ -22,17 +22,17 @@ export default class TaskLabelHandler extends CommandInterceptor {
         this._currentDropdownTarget = undefined;
         this._overlayId = undefined;
         this._overlays = overlays;
-        this._fragmentModeler = fragmentModeler;
+        this._resourceModeler = resourceModeler;
 
         eventBus.on('directEditing.activate', function (e) {
-            if (is(e.active.element, 'bpmn:Task')) {
+            if (is(e.active.element, 'rem:Resource')) {
                 directEditing.cancel();
             }
         });
 
         eventBus.on(['element.dblclick', 'create.end', 'autoPlace.end'], e => {
             const element = e.element || e.shape || e.elements[0];
-            if (is(element, 'bpmn:Task')) {
+            if (is(element, 'rem:Resource')) {
                 const activity = element.businessObject;
                 this._dropdownContainer.currentElement = element;
 
@@ -197,5 +197,5 @@ TaskLabelHandler.$inject = [
     'modeling',
     'directEditing',
     'overlays',
-    'fragmentModeler'
+    'resourceModeler'
 ];
