@@ -1,6 +1,6 @@
-import RemObjectLabelHandler from "./RemObjectLabelHandler";
+import TaskLabelHandler from "./taskLabelHandler";
 
 export default {
-    __init__: [ 'remObjectLabelHandler' ],
-    remObjectLabelHandler: [ 'type', RemObjectLabelHandler ]
+    __init__: [ 'taskLabelHandler' ],
+    taskLabelHandler: [ 'type', TaskLabelHandler ]
 };
