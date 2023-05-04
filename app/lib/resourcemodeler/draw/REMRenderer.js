@@ -138,9 +138,12 @@ export default function REMRenderer(
   }
 
   function renderAttributes(parentGfx, element) {
-    var semantic = getSemantic(element);
-    if (semantic.attributeValues) {
-      renderLabel(parentGfx, semantic.attributeValues, {
+    let semantic = getSemantic(element);
+    let text = '';
+    if (semantic.roles) {
+      text = semantic.roles;
+    }
+      renderLabel(parentGfx, text, {
         box: {
           height: element.height + 30,
           width: element.width
@@ -151,7 +154,6 @@ export default function REMRenderer(
           fill: defaultStrokeColor
         }
       });
-    }
   }
 
   function addDivider(parentGfx, element) {
