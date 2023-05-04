@@ -170,13 +170,13 @@ async function exportToZip () {
   zip.file('objectiveModel.xml', objectiveModel);
   const olcs = (await olcModeler.saveXML({ format: true })).xml;
   zip.file('olcs.xml', olcs);
+  const resourceModel = (await resourceModeler.saveXML({ format: true })).xml;
+  zip.file('resourceModel.xml', resourceModel);
   const terminationCondition = (await terminationConditionModeler.saveXML({ format: true })).xml;
   zip.file('terminationCondition.xml', terminationCondition);
   const dependencyModel = (await dependencyModeler.saveXML({ format: true })).xml;
   zip.file('dependencyModel.xml', dependencyModel);
   return zip.generateAsync({type : 'base64'});
-  const resourceModel = (await resourceModeler.saveXML({ format: true })).xml;
-  zip.file('resourceModel.xml', resourceModel);
 }
 
 async function importFromZip (zipData) {
@@ -188,7 +188,8 @@ async function importFromZip (zipData) {
       objectiveModel: zip.file('objectiveModel.xml'),
       olcs: zip.file('olcs.xml'),
       terminationCondition: zip.file('terminationCondition.xml'),
-      dependencyModel: zip.file('dependencyModel.xml')
+      dependencyModel: zip.file('dependencyModel.xml'),
+      resourceModel: zip.file('resourceModel.xml'),
   };
   Object.keys(files).forEach(key => {
     if (!files[key]) {
@@ -201,6 +202,7 @@ async function importFromZip (zipData) {
   await fragmentModeler.importXML(await files.fragments.async("string"));
   await terminationConditionModeler.importXML(await files.terminationCondition.async("string"));
   await objectiveModeler.importXML(await files.objectiveModel.async("string"));
+  await resourceModeler.importXML(await files.resourceModel.async("string"));
   checker.activate();
 }
 
