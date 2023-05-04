@@ -17,8 +17,10 @@ export default class TaskLabelHandler extends CommandInterceptor {
         this._dropdownContainer.appendChild(this._rolesDropdown);
         this._capacityDropdown = getDropdown("Capacity");
         this._dropdownContainer.appendChild(this._capacityDropdown);
-        this._availabilityDropdown = getDropdown("Availability");
-        this._dropdownContainer.appendChild(this._availabilityDropdown);
+        this._availabilityStartDropdown = getDropdown("Availability Start");
+        this._dropdownContainer.appendChild(this._availabilityStartDropdown);
+        this._availabilityEndDropdown = getDropdown("Availability End");
+        this._dropdownContainer.appendChild(this._availabilityEndDropdown);
         this._currentDropdownTarget = undefined;
         this._overlayId = undefined;
         this._overlays = overlays;
@@ -50,6 +52,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                     );
                     this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",activity.name);
                 }
+
                 const populateCapacityDropdown = () => {
                     this._capacityDropdown.populate(
                         [],
@@ -60,6 +63,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                     );
                     this._capacityDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.capacity);
                 }
+
                 const populateRolesDropdown = () => {
                     this._rolesDropdown.populate(
                         [], // TODO Change this to the list of roles instead of an empty list
@@ -71,26 +75,42 @@ export default class TaskLabelHandler extends CommandInterceptor {
                     );
                     this._rolesDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
                 }
-                const populateAvailabilityDropdown = () => {
-                    this._availabilityDropdown.populate(
+
+                const populateavailabilityStartDropdown = () => {
+                    this._availabilityStartDropdown.populate(
                         [],
                         (state, element) => {
-                            this.updateAvailability(state, element);
+                            this.updateavailabilityStart(state, element);
                         },
                         element
                     );
-                    this._availabilityDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
+                    this._availabilityStartDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.availabilityStart);
                 }
+
+                const populateavailabilityEndDropdown = () => {
+                    this._availabilityEndDropdown.populate(
+                        [],
+                        (state, element) => {
+                            this.updateavailabilityEnd(state, element);
+                        },
+                        element
+                    );
+                    this._availabilityEndDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.availabilityEnd);
+                }
+                
                 populateNameDropdown();
                 populateCapacityDropdown();
                 populateRolesDropdown();
-                populateAvailabilityDropdown();
+                populateavailabilityStartDropdown();
+                populateavailabilityEndDropdown();
 
                 this._dropdownContainer.confirm = (event) => {
                     const newNameInput = this._nameDropdown.getInputValue();
                     const newCapacityInput = this._capacityDropdown.getInputValue();
                     const newRolesInput = this._rolesDropdown.getInputValue();
-                    const newAvailabilityInput = this._availabilityDropdown.getInputValue();
+                    const newAvailabilityStartInput = this._availabilityStartDropdown.getInputValue();
+                    const newAvailabilityEndInput = this._availabilityEndDropdown.getInputValue();
+
                     if (newNameInput !== '' && newNameInput !== activity.name) {
                         this.updateName(newNameInput,element);
                         populateNameDropdown();
@@ -103,9 +123,13 @@ export default class TaskLabelHandler extends CommandInterceptor {
                         this.updateRoles(newRolesInput,element);
                         populateRolesDropdown();
                     }
-                    if (newAvailabilityInput !== activity.availability && newAvailabilityInput > 0) {
-                        this.updateAvailability(newAvailabilityInput,element);
-                        populateAvailabilityDropdown();
+                    if (newAvailabilityStartInput !== activity.availabilityStart && newAvailabilityStartInput > 0) {
+                        this.updateavailabilityStart(newAvailabilityStartInput,element);
+                        populateavailabilityStartDropdown();
+                    }
+                    if (newAvailabilityEndInput !== activity.availabilityEnd && newAvailabilityEndInput > 0) {
+                        this.updateavailabilityEnd(newAvailabilityEndInput,element);
+                        populateavailabilityEndDropdown();
                     }
                 }
 
@@ -120,7 +144,8 @@ export default class TaskLabelHandler extends CommandInterceptor {
                         this._nameDropdown.clearInput();
                         this._capacityDropdown.clearInput();
                         this._rolesDropdown.clearInput();
-                        this._availabilityDropdown.clearInput();
+                        this._availabilityStartDropdown.clearInput();
+                        this._availabilityEndDropdown.clearInput();
                     } else if (event.target.tagName !== 'INPUT' || !event.target.value) {
                         this._dropdownContainer.confirm();
                     }
@@ -183,13 +208,19 @@ export default class TaskLabelHandler extends CommandInterceptor {
         });
     }
 
-    updateAvailability(newAvailability, element) {
-        element.businessObject.availability = newAvailability;
+    updateavailabilityStart(newAvailabilityStart, element) {
+        element.businessObject.availabilityStart = newAvailabilityStart;
         this._eventBus.fire('element.changed', {
             element
         });
     }
 
+    updateavailabilityEnd(newAvailabilityEnd, element) {
+        element.businessObject.availabilityEnd = newAvailabilityEnd;
+        this._eventBus.fire('element.changed', {
+            element
+        });
+    }
 }
 
 TaskLabelHandler.$inject = [
