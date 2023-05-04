@@ -13,12 +13,12 @@ export default class TaskLabelHandler extends CommandInterceptor {
         this._dropdownContainer.classList.add('dd-dropdown-multicontainer');
         this._nameDropdown = getDropdown("Name");
         this._dropdownContainer.appendChild(this._nameDropdown);
-        this._durationDropdown = getDropdown("Duration");
-        this._dropdownContainer.appendChild(this._durationDropdown);
-        this._roleDropdown = getDropdown("Role");
-        this._dropdownContainer.appendChild(this._roleDropdown);
-        this._NoPDropdown = getDropdown("Number Of People");
-        this._dropdownContainer.appendChild(this._NoPDropdown);
+        this._rolesDropdown = getDropdown("Roles");
+        this._dropdownContainer.appendChild(this._rolesDropdown);
+        this._capacityDropdown = getDropdown("Capacity");
+        this._dropdownContainer.appendChild(this._capacityDropdown);
+        this._availabilityDropdown = getDropdown("Availability");
+        this._dropdownContainer.appendChild(this._availabilityDropdown);
         this._currentDropdownTarget = undefined;
         this._overlayId = undefined;
         this._overlays = overlays;
@@ -36,8 +36,8 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 const activity = element.businessObject;
                 this._dropdownContainer.currentElement = element;
 
-                const updateRoleSelection = () => {
-                    this._roleDropdown.getEntries().forEach(entry => entry.setSelected(activity.role === entry.option));
+                const updateRolesSelection = () => {
+                    this._rolesDropdown.getEntries().forEach(entry => entry.setSelected(activity.roles === entry.option));
                 }
 
                 const populateNameDropdown = () => {
@@ -50,62 +50,62 @@ export default class TaskLabelHandler extends CommandInterceptor {
                     );
                     this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",activity.name);
                 }
-                const populateDurationDropdown = () => {
-                    this._durationDropdown.populate(
+                const populateCapacityDropdown = () => {
+                    this._capacityDropdown.populate(
                         [],
                         (state, element) => {
-                            this.updateDuration(state, element);
+                            this.updateCapacity(state, element);
                         },
                         element
                     );
-                    this._durationDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.duration);
+                    this._capacityDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.capacity);
                 }
-                const populateRoleDropdown = () => {
-                    this._roleDropdown.populate(
+                const populateRolesDropdown = () => {
+                    this._rolesDropdown.populate(
                         [], // TODO Change this to the list of roles instead of an empty list
                         (state, element) => {
-                            this.updateRole(state, element);
-                            updateRoleSelection();
+                            this.updateRoles(state, element);
+                            updateRolesSelection();
                         },
                         element
                     );
-                    this._roleDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
+                    this._rolesDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
                 }
-                const populateNoPDropdown = () => {
-                    this._NoPDropdown.populate(
+                const populateAvailabilityDropdown = () => {
+                    this._availabilityDropdown.populate(
                         [],
                         (state, element) => {
-                            this.updateNoP(state, element);
+                            this.updateAvailability(state, element);
                         },
                         element
                     );
-                    this._NoPDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.NoP);
+                    this._availabilityDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
                 }
                 populateNameDropdown();
-                populateDurationDropdown();
-                populateRoleDropdown();
-                populateNoPDropdown();
+                populateCapacityDropdown();
+                populateRolesDropdown();
+                populateAvailabilityDropdown();
 
                 this._dropdownContainer.confirm = (event) => {
                     const newNameInput = this._nameDropdown.getInputValue();
-                    const newDurationInput = this._durationDropdown.getInputValue();
-                    const newRoleInput = this._roleDropdown.getInputValue();
-                    const newNoPInput = this._NoPDropdown.getInputValue();
+                    const newCapacityInput = this._capacityDropdown.getInputValue();
+                    const newRolesInput = this._rolesDropdown.getInputValue();
+                    const newAvailabilityInput = this._availabilityDropdown.getInputValue();
                     if (newNameInput !== '' && newNameInput !== activity.name) {
                         this.updateName(newNameInput,element);
                         populateNameDropdown();
                     }
-                    if (newDurationInput !== activity.duration && newDurationInput > 0) {
-                        this.updateDuration(newDurationInput,element);
-                        populateDurationDropdown();
+                    if (newCapacityInput !== activity.capacity && newCapacityInput > 0) {
+                        this.updateCapacity(newCapacityInput,element);
+                        populateCapacityDropdown();
                     }
-                    if (newRoleInput !== activity.role) {
-                        this.updateRole(newRoleInput,element);
-                        populateRoleDropdown();
+                    if (newRolesInput !== activity.roles) {
+                        this.updateRoles(newRolesInput,element);
+                        populateRolesDropdown();
                     }
-                    if (newNoPInput !== activity.NoP && newNoPInput > 0) {
-                        this.updateNoP(newNoPInput,element);
-                        populateNoPDropdown();
+                    if (newAvailabilityInput !== activity.availability && newAvailabilityInput > 0) {
+                        this.updateAvailability(newAvailabilityInput,element);
+                        populateAvailabilityDropdown();
                     }
                 }
 
@@ -118,9 +118,9 @@ export default class TaskLabelHandler extends CommandInterceptor {
                         return false;
                     } else if (event.target.classList.contains('dd-dropdown-entry')) {
                         this._nameDropdown.clearInput();
-                        this._durationDropdown.clearInput();
-                        this._roleDropdown.clearInput();
-                        this._NoPDropdown.clearInput();
+                        this._capacityDropdown.clearInput();
+                        this._rolesDropdown.clearInput();
+                        this._availabilityDropdown.clearInput();
                     } else if (event.target.tagName !== 'INPUT' || !event.target.value) {
                         this._dropdownContainer.confirm();
                     }
@@ -169,22 +169,22 @@ export default class TaskLabelHandler extends CommandInterceptor {
         });
     }
 
-    updateDuration(newTime, element) {
-        element.businessObject.duration = newTime;
+    updateCapacity(newCapacity, element) {
+        element.businessObject.capacity = newCapacity;
         this._eventBus.fire('element.changed', {
             element
         });
     }
 
-    updateRole(newRole, element) {
-        element.businessObject.role = newRole;
+    updateRoles(newRoles, element) {
+        element.businessObject.roles = newRoles;
         this._eventBus.fire('element.changed', {
             element
         });
     }
 
-    updateNoP(newNoP, element) {
-        element.businessObject.NoP = newNoP;
+    updateAvailability(newAvailability, element) {
+        element.businessObject.availability = newAvailability;
         this._eventBus.fire('element.changed', {
             element
         });
