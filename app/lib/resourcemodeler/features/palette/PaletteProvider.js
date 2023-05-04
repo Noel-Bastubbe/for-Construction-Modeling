@@ -115,11 +115,7 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
     'od-separator': {
       group: 'od-elements',
       separator: true
-    },
-    'create.text-box': createAction(
-      'rem:TextBox', 'text', 'pjs-text-box',
-      translate('Create text')
-    )
+    }
   });
 
   return actions;

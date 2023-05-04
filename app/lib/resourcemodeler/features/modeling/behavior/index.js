@@ -4,7 +4,6 @@ import FixHoverBehavior from './FixHoverBehavior';
 import ImportDockingFix from './ImportDockingFix';
 import LabelBehavior from './LabelBehavior';
 import UnclaimIdBehavior from './UnclaimIdBehavior';
-import EmptyTextBoxBehavior from './EmptyTextBoxBehavior';
 
 export default {
   __init__: [
@@ -14,7 +13,6 @@ export default {
     'importDockingFix',
     'labelBehavior',
     'unclaimIdBehavior',
-    'emptyTextBoxBehavior'
   ],
   adaptiveLabelPositioningBehavior: [ 'type', AdaptiveLabelPositioningBehavior ],
   appendBehavior: [ 'type', AppendBehavior ],
@@ -22,5 +20,4 @@ export default {
   importDockingFix: [ 'type', ImportDockingFix ],
   labelBehavior: [ 'type', LabelBehavior ],
   unclaimIdBehavior: [ 'type', UnclaimIdBehavior ],
-  emptyTextBoxBehavior: [ 'type', EmptyTextBoxBehavior ]
 };

@@ -313,20 +313,6 @@ export default function REMRenderer(
       };
       return drawPath(parentGfx, pathData, attrs);
     },
-    'rem:TextBox': function(parentGfx, element) {
-      var attrs = {
-        fill: 'none',
-        stroke: 'none'
-      };
-
-      var textSize = element.textSize || DEFAULT_TEXT_SIZE;
-
-      var rect = drawRect(parentGfx, element.width, element.height, 0, attrs);
-
-      renderEmbeddedLabel(parentGfx, element, 'center-middle', textSize);
-
-      return rect;
-    },
     'label': function(parentGfx, element) {
       return renderExternalLabel(parentGfx, element);
     }

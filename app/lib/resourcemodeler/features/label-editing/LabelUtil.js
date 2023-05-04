@@ -4,7 +4,7 @@ function getLabelAttr(semantic) {
   if (semantic.labelAttribute) {
     return semantic.labelAttribute;
   }
-  if (isAny(semantic, [ 'rem:TextBox', 'rem:Link', 'rem:Resource' ])) {
+  if (isAny(semantic, [ 'rem:Link', 'rem:Resource' ])) {
     return 'name';
   }
 }

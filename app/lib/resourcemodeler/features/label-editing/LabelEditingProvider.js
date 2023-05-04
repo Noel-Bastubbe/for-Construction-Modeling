@@ -110,7 +110,7 @@ export default function LabelEditingProvider(
 
   function activateDirectEdit(element, force) {
     if (force ||
-      isAny(element, [ 'rem:TextBox', 'rem:Resource' ])) {
+      isAny(element, [ 'rem:Resource' ])) {
       directEditing.activate(element);
     }
   }
@@ -154,13 +154,6 @@ LabelEditingProvider.prototype.activate = function(element) {
   assign(context, bounds);
 
   var options = {};
-
-  // text boxes
-  if (isAny(element, [ 'rem:TextBox' ])) {
-    assign(options, {
-      centerVertically: true
-    });
-  }
 
   // external labels
   if (isLabelExternal(element)) {
@@ -217,7 +210,7 @@ LabelEditingProvider.prototype.getEditingBBox = function(element) {
   };
 
 
-  if (isAny(element, [ 'rem:TextBox', 'rem:Resource' ])) {
+  if (isAny(element, [ 'rem:Resource' ])) {
 
     assign(bounds, {
       width: bbox.width,
