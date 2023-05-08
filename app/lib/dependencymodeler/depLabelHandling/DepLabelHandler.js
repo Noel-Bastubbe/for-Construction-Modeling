@@ -2,6 +2,7 @@ import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
 import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
 import {is} from "../../util/Util";
+import ObjectiveEvents from "../../objectivemodeler/ObjectiveEvents";
 
 export default class DepLabelHandler extends CommandInterceptor {
     constructor(eventBus, modeling, directEditing, overlays, dependencyModeler) {

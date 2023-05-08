@@ -139,17 +139,18 @@ export default function REMRenderer(
 
   function renderAttributes(parentGfx, element) {
     let semantic = getSemantic(element);
-    let text = 'Roles: ';
-    if (semantic.roles) {
-      text += semantic.roles.map(role => role.name).join(", ")
-    }
-    text += '\nCapa: ';
+    let text = '';
+    text += 'Capa: ';
     if (semantic.capacity) {
       text += semantic.capacity;
     }
     text += '\nAvailability: ';
     if (semantic.availabilityStart && semantic.availabilityEnd) {
       text += semantic.availabilityStart + " - " + semantic.availabilityEnd;
+    }
+    text += '\nRoles: ';
+    if (semantic.roles) {
+      text += semantic.roles.map(role => role.name).join(", ")
     }
       renderLabel(parentGfx, text, {
         box: {

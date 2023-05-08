@@ -39,7 +39,7 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                 this._dropdownContainer.currentElement = element;
 
                 const updateRolesSelection = () => {
-                    this._rolesDropdown.getEntries().forEach(entry => entry.setSelected(resource.roles.find(role => role === entry.option)));
+                    this._rolesDropdown.getEntries().forEach(entry => entry.setSelected(resource.roles?.find(role => role === entry.option)));
                 }
 
                 const populateNameDropdown = () => {
@@ -120,7 +120,7 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                         this.updateCapacity(newCapacityInput,element);
                         populateCapacityDropdown();
                     }
-                    if (newRoleInput !== '' && !this._resourceModeler._roles.find(role => role.name === newRoleInput)) {
+                    if (newRoleInput !== '' && !this._resourceModeler._roles?.find(role => role.name === newRoleInput)) {
                         let newRole = this.createRole(newRoleInput);
                         this.updateRoles(newRole,element);
                         populateRolesDropdown();
