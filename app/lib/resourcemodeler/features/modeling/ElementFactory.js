@@ -1,17 +1,12 @@
-import {
-  assign,
-  forEach
-} from 'min-dash';
+import {assign, forEach} from 'min-dash';
 
 import inherits from 'inherits';
 
-import { is } from '../../util/ModelUtil';
+import {is} from '../../util/ModelUtil';
 
 import BaseElementFactory from 'diagram-js/lib/core/ElementFactory';
 
-import {
-  DEFAULT_LABEL_SIZE
-} from '../../util/LabelUtil';
+import {DEFAULT_LABEL_SIZE} from '../../util/LabelUtil';
 
 
 /**
@@ -74,7 +69,7 @@ ElementFactory.prototype.createOdElement = function(elementType, attrs) {
       throw new Error(translate('no shape type specified'));
     }
 
-    businessObject = this._odFactory.create(attrs.type);
+    businessObject = this._odFactory.create(attrs.type, attrs);
   }
 
   if (!businessObject.di) {

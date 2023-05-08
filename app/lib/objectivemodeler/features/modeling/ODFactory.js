@@ -1,14 +1,8 @@
-import {
-  assign, map, pick,
-} from 'min-dash';
+import {assign, map, pick,} from 'min-dash';
 
-import {
-  isAny
-} from './util/ModelingUtil';
+import {isAny} from './util/ModelingUtil';
 
-import {
-  is
-} from '../../util/ModelUtil';
+import {is} from '../../util/ModelUtil';
 
 
 export default function ODFactory(moddle) {

@@ -1,6 +1,4 @@
-import {
-  remove as svgRemove
-} from 'tiny-svg';
+import {remove as svgRemove} from 'tiny-svg';
 
 var MARKER_HIDDEN = 'djs-element-hidden';
 

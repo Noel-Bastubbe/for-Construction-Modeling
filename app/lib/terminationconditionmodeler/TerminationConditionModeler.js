@@ -1,12 +1,11 @@
 import $ from 'jquery';
-import { without } from 'min-dash';
-import { formatStates, type, is } from '../util/Util';
+import {without} from 'min-dash';
+import {formatStates, is, type} from '../util/Util';
 import getDropdown from '../util/Dropdown';
 import EventBus from 'diagram-js/lib/core/EventBus'
 import TerminationConditionEvents from './TerminationConditionEvents';
 import TerminationConditionModdle from './TerminationConditionModdle';
 import CommonEvents from '../common/CommonEvents';
-import OlcModeler from "../olcmodeler/OlcModeler";
 
 const NAMESPACE = 'tc';
 

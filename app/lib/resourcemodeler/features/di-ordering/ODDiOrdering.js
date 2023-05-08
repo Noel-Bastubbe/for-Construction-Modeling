@@ -1,12 +1,9 @@
-import { getDi } from '../../draw/REMRendererUtil';
-import { getBusinessObject } from '../../util/ModelUtil';
+import {getDi} from '../../draw/ROMRendererUtil';
+import {getBusinessObject} from '../../util/ModelUtil';
 
-import {
-  filter,
-  map
-} from 'min-dash';
+import {filter, map} from 'min-dash';
 
-import { selfAndAllChildren } from 'diagram-js/lib/util/Elements';
+import {selfAndAllChildren} from 'diagram-js/lib/util/Elements';
 
 
 var HIGH_PRIORITY = 2000;

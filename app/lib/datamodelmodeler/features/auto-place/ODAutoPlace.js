@@ -1,4 +1,4 @@
-import { getNewShapePosition } from './ODAutoPlaceUtil';
+import {getNewShapePosition} from './ODAutoPlaceUtil';
 
 
 /**

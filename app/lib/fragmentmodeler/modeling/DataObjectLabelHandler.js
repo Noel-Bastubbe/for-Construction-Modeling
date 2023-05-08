@@ -1,9 +1,9 @@
 import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
-import { without } from 'min-dash';
+import {without} from 'min-dash';
 import CommonEvents from "../../common/CommonEvents";
 import getDropdown from "../../util/Dropdown";
-import { appendOverlayListeners } from "../../util/HtmlUtil";
-import { formatStates, is } from "../../util/Util";
+import {appendOverlayListeners} from "../../util/HtmlUtil";
+import {formatStates, is} from "../../util/Util";
 
 export default class DataObjectLabelHandler extends CommandInterceptor {
     constructor(eventBus, modeling, directEditing, overlays, fragmentModeler) {

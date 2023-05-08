@@ -1,20 +1,18 @@
 import inherits from 'inherits';
 
-import { assign, isObject } from 'min-dash';
+import {assign, isObject} from 'min-dash';
 
-import { append as svgAppend, attr as svgAttr, classes as svgClasses, create as svgCreate } from 'tiny-svg';
+import {append as svgAppend, attr as svgAttr, classes as svgClasses, create as svgCreate} from 'tiny-svg';
 
-import { createLine } from 'diagram-js/lib/util/RenderUtil';
+import {createLine} from 'diagram-js/lib/util/RenderUtil';
 import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 
-import { getLabel } from '../features/label-editing/LabelUtil';
+import {getLabel} from '../features/label-editing/LabelUtil';
 
-import { getBusinessObject, is } from '../util/ModelUtil';
-import {
-  query as domQuery
-} from 'min-dom';
+import {getBusinessObject, is} from '../util/ModelUtil';
+import {query as domQuery} from 'min-dom';
 
-import { getFillColor, getRectPath, getSemantic, getStrokeColor } from './ODRendererUtil';
+import {getFillColor, getRectPath, getSemantic, getStrokeColor} from './ODRendererUtil';
 import Ids from 'ids';
 
 var RENDERER_IDS = new Ids();

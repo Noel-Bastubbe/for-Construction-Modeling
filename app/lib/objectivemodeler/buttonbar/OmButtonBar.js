@@ -1,10 +1,8 @@
-import {
-    classes as domClasses,
-} from 'min-dom';
+import {classes as domClasses,} from 'min-dom';
 
 import getDropdown from '../../util/Dropdown';
 import {download, upload} from '../../util/FileUtil';
-import { appendOverlayListeners } from '../../util/HtmlUtil';
+import {appendOverlayListeners} from '../../util/HtmlUtil';
 import ObjectiveEvents from "../ObjectiveEvents";
 
 

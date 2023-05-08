@@ -1,15 +1,6 @@
-import {
-  setLabel,
-  getLabel,
-  getLabelAttr
-} from '../LabelUtil';
+import {getLabel, getLabelAttr, setLabel} from '../LabelUtil';
 
-import {
-  getExternalLabelMid,
-  isLabelExternal,
-  hasExternalLabel,
-  isLabel
-} from '../../../util/LabelUtil';
+import {getExternalLabelMid, hasExternalLabel, isLabel, isLabelExternal} from '../../../util/LabelUtil';
 
 var NULL_DIMENSIONS = {
   width: 0,

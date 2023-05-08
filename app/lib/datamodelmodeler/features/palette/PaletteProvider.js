@@ -1,6 +1,4 @@
-import {
-  assign
-} from 'min-dash';
+import {assign} from 'min-dash';
 
 /**
  * A palette provider for od elements.

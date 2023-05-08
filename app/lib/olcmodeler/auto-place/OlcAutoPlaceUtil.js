@@ -1,15 +1,12 @@
-import { is } from '../../util/Util';
+import {is} from '../../util/Util';
 
 // TODO candidate for common module
-import {
-	getMid,
-	asTRBL,
-} from 'diagram-js/lib/layout/LayoutUtil';
+import {asTRBL, getMid,} from 'diagram-js/lib/layout/LayoutUtil';
 
 import {
-	findFreePosition,
-	generateGetNextPosition,
-	getConnectedDistance
+    findFreePosition,
+    generateGetNextPosition,
+    getConnectedDistance
 } from 'diagram-js/lib/features/auto-place/AutoPlaceUtil';
 
 export function getNewShapePosition(source, element) {

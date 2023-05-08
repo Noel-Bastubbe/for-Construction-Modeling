@@ -1,4 +1,4 @@
-import { isAny } from '../modeling/util/ModelingUtil';
+import {isAny} from '../modeling/util/ModelingUtil';
 
 function getLabelAttr(semantic) {
   if (semantic.labelAttribute) {

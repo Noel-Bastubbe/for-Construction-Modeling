@@ -1,16 +1,8 @@
-import {
-  getDistancePointPoint,
-  rotateVector,
-  getAngle
-} from './GeometricUtil';
+import {getAngle, getDistancePointPoint, rotateVector} from './GeometricUtil';
 
-import {
-  getAttachment
-} from './LineAttachmentUtil';
+import {getAttachment} from './LineAttachmentUtil';
 
-import {
-  roundPoint
-} from 'diagram-js/lib/layout/LayoutUtil';
+import {roundPoint} from 'diagram-js/lib/layout/LayoutUtil';
 
 
 export function findNewLabelLineStartIndex(oldWaypoints, newWaypoints, attachment, hints) {

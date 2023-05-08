@@ -1,9 +1,7 @@
-import {
-  assign
-} from 'min-dash';
-import { getLabelAttr } from '../features/label-editing/LabelUtil';
+import {assign} from 'min-dash';
+import {getLabelAttr} from '../features/label-editing/LabelUtil';
 
-import { is } from './ModelUtil';
+import {is} from './ModelUtil';
 
 
 export var DEFAULT_LABEL_SIZE = {

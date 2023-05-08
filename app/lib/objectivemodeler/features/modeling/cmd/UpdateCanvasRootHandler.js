@@ -1,7 +1,4 @@
-import {
-  add as collectionAdd,
-  remove as collectionRemove
-} from 'diagram-js/lib/util/Collections';
+import {add as collectionAdd, remove as collectionRemove} from 'diagram-js/lib/util/Collections';
 
 
 export default function UpdateCanvasRootHandler(canvas, modeling) {

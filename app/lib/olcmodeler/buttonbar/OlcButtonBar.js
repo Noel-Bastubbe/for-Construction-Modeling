@@ -1,14 +1,9 @@
-import {
-    attr as domAttr,
-    classes as domClasses,
-    event as domEvent,
-    query as domQuery
-} from 'min-dom';
+import {classes as domClasses} from 'min-dom';
 import CommonEvents from '../../common/CommonEvents';
 
 import getDropdown from '../../util/Dropdown';
 import {download, upload} from '../../util/FileUtil';
-import { appendOverlayListeners } from '../../util/HtmlUtil';
+import {appendOverlayListeners} from '../../util/HtmlUtil';
 
 import OlcEvents from '../OlcEvents';
 

@@ -26,6 +26,29 @@
                 }
             ]
 
+        },
+        {
+            "name": "ActivityConfiguration",
+            "extends": ["bpmn:Task"],
+            "properties": [
+                {
+                    "name": "duration",
+                    "isAttr": true,
+                    "type": "int"
+                },
+                {
+                    "name": "role",
+                    "isAttr": true,
+                    "isReference": true,
+                    "type": "rom:Role"
+                },
+                {
+                    "name": "NoP",
+                    "isAttr": true,
+                    "type": "int"
+                }
+            ]
+
         }
     ],
     "enumerations": []
