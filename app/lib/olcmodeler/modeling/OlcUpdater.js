@@ -1,11 +1,8 @@
 import inherits from 'inherits';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
-import OlcModeler from '../OlcModeler';
 
-import {
-  remove as collectionRemove
-} from 'diagram-js/lib/util/Collections';
+import {remove as collectionRemove} from 'diagram-js/lib/util/Collections';
 
 
 export default function OlcUpdater(eventBus, connectionDocking) {

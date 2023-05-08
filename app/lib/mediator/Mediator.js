@@ -1,13 +1,11 @@
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 import inherits from 'inherits';
 import {isFunction, without} from 'min-dash';
-import {is} from '../util/Util';
-import {namespace, root} from '../util/Util';
+import {is, namespace, root} from '../util/Util';
 import AbstractHook from './AbstractHook';
 import CommonEvents from '../common/CommonEvents';
 import ObjectiveEvents from "../objectivemodeler/ObjectiveEvents";
 import OlcEvents from '../olcmodeler/OlcEvents';
-import RoleEvents from "../rolemodeler/RoleEvents";
 
 const DEFAULT_EVENT_PRIORITY = 1000; //From diagram-js/lib/core/EventBus.DEFAULT_PRIORITY
 

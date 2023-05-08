@@ -1,5 +1,5 @@
 import inherits from 'inherits';
-import { groupBy} from 'min-dash'
+import {groupBy} from 'min-dash'
 
 import Diagram from 'diagram-js';
 
@@ -29,9 +29,7 @@ import DepModelingModule from './modeling';
 import DepAutoPlaceModule from './auto-place';
 
 import DepModdle from './moddle';
-import { nextPosition, root } from '../util/Util';
-import OmModeler from "../objectivemodeler/OmModeler";
-import Modeler from "../datamodelmodeler/Modeler";
+import {nextPosition, root} from '../util/Util';
 
 var emptyDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>

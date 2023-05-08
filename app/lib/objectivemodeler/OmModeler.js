@@ -36,7 +36,6 @@ import SnappingModule from './features/snapping';
 import SpaceToolBehaviorModule from './behavior';
 import {nextPosition} from '../util/Util';
 import {is} from "bpmn-js/lib/util/ModelUtil";
-import modeling from './features/modeling';
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>

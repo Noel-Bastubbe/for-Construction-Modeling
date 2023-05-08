@@ -2,9 +2,7 @@ import inherits from 'inherits';
 
 import EditorActions from 'diagram-js/lib/features/editor-actions/EditorActions';
 
-import {
-  getBBox
-} from 'diagram-js/lib/util/Elements';
+import {getBBox} from 'diagram-js/lib/util/Elements';
 
 
 /**

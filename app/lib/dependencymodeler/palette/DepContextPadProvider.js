@@ -1,4 +1,4 @@
-import { is } from "../../util/Util";
+import {is} from "../../util/Util";
 
 export default function DepContextPadProvider(connect, contextPad, modeling, elementFactory, create, autoPlace,
 elementRegistry) {

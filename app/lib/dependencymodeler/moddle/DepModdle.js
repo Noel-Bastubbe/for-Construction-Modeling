@@ -1,8 +1,8 @@
-import { isString, assign } from 'min-dash';
+import {assign} from 'min-dash';
 
-import { Moddle } from 'moddle';
+import {Moddle} from 'moddle';
 
-import { Reader, Writer } from 'moddle-xml';
+import {Reader, Writer} from 'moddle-xml';
 
 export default function DepModdle(packages, options) {
     Moddle.call(this, packages, options);

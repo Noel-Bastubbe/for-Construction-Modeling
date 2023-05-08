@@ -1,22 +1,13 @@
-import {
-  assign
-} from 'min-dash';
+import {assign} from 'min-dash';
 
-import { is } from '../util/ModelUtil';
+import {is} from '../util/ModelUtil';
 
-import {
-  isLabelExternal,
-  getExternalLabelBounds
-} from '../util/LabelUtil';
+import {getExternalLabelBounds, isLabelExternal} from '../util/LabelUtil';
 
-import {
-  getLabel
-} from '../features/label-editing/LabelUtil';
+import {getLabel} from '../features/label-editing/LabelUtil';
 
-import {
-  elementToString
-} from './Util';
-import { getMid } from 'diagram-js/lib/layout/LayoutUtil';
+import {elementToString} from './Util';
+import {getMid} from 'diagram-js/lib/layout/LayoutUtil';
 
 
 function elementData(semantic, attrs) {

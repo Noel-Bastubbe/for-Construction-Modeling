@@ -1,14 +1,6 @@
-import {
-  getBusinessObject
-} from '../../util/ModelUtil';
+import {getBusinessObject} from '../../util/ModelUtil';
 
-import {
-  forEach,
-  isArray,
-  isUndefined,
-  omit,
-  reduce
-} from 'min-dash';
+import {forEach, isArray, isUndefined, omit, reduce} from 'min-dash';
 
 function copyProperties(source, target, properties) {
   if (!isArray(properties)) {

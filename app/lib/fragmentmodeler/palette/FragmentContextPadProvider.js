@@ -1,4 +1,4 @@
-import { is } from'../../util/Util';
+import {is} from '../../util/Util';
 
 export default class FragmentContextPadProvider {
 	constructor(contextPad, autoPlace, create, elementFactory, translate, popupMenu) {

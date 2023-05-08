@@ -1,6 +1,11 @@
-import { is } from '../datamodelmodeler/util/ModelUtil';
-import { type } from '../util/Util';
-import { getClassDependencies, getClassDependents, getConnectedByExistentialAssociation, getConnectedElements } from './GuidelineUtils';
+import {is} from '../datamodelmodeler/util/ModelUtil';
+import {type} from '../util/Util';
+import {
+    getClassDependencies,
+    getClassDependents,
+    getConnectedByExistentialAssociation,
+    getConnectedElements
+} from './GuidelineUtils';
 
 export const SEVERITY = {
     ERROR : {

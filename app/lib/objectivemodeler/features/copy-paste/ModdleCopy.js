@@ -1,14 +1,4 @@
-import {
-  find,
-  forEach,
-  isArray,
-  isDefined,
-  isObject,
-  matchPattern,
-  reduce,
-  has,
-  sortBy
-} from 'min-dash';
+import {find, forEach, has, isArray, isDefined, isObject, matchPattern, reduce, sortBy} from 'min-dash';
 
 var DISALLOWED_PROPERTIES = [
   'boardElements'

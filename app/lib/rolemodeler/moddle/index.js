@@ -1,7 +1,4 @@
-
-import {
-  assign
-} from 'min-dash';
+import {assign} from 'min-dash';
 
 import Moddle from './Moddle';
 

@@ -31,7 +31,6 @@ import ResizeModule from 'diagram-js/lib/features/resize';
 import SnappingModule from './features/snapping';
 import {is} from "bpmn-js/lib/util/ModelUtil";
 import {nextPosition} from "../util/Util";
-import Modeler from "../datamodelmodeler/Modeler";
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>

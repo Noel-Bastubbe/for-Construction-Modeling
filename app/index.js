@@ -14,9 +14,7 @@ import Checker from './lib/guidelines/Checker';
 import ErrorBar from './lib/guidelines/ErrorBar';
 import {download, upload} from './lib/util/FileUtil';
 import getDropdown from "./lib/util/Dropdown";
-import {
-    classes as domClasses
-} from 'min-dom';
+import {classes as domClasses} from 'min-dom';
 
 import conferenceProcess from '../resources/conferenceModel/process.bpmn';
 import conferenceDataModel from '../resources/conferenceModel/datamodel.xml';

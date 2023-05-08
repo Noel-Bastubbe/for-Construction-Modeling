@@ -5,7 +5,6 @@ import {getLabel} from './LabelUtil';
 import {isAny} from '../modeling/util/ModelingUtil';
 
 import {getExternalLabelMid, hasExternalLabel, isLabel, isLabelExternal} from '../../util/LabelUtil';
-import RoleEvents from "../../RoleEvents";
 
 
 export default function LabelEditingProvider(

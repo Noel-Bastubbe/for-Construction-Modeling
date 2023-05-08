@@ -1,52 +1,24 @@
-import {
-  assign
-} from 'min-dash';
+import {assign, sortBy} from 'min-dash';
 
 import inherits from 'inherits';
 
-import {
-  is,
-  getBusinessObject
-} from '../../../util/ModelUtil';
+import {getBusinessObject, is} from '../../../util/ModelUtil';
 
-import {
-  isLabelExternal,
-  getExternalLabelMid,
-  hasExternalLabel,
-  isLabel
-} from '../../../util/LabelUtil';
+import {getExternalLabelMid, hasExternalLabel, isLabel, isLabelExternal} from '../../../util/LabelUtil';
 
-import {
-  getLabel
-} from '../../label-editing/LabelUtil';
+import {getLabel} from '../../label-editing/LabelUtil';
 
-import {
-  getLabelAdjustment
-} from './util/LabelLayoutUtil';
+import {getLabelAdjustment} from './util/LabelLayoutUtil';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 
-import {
-  getNewAttachPoint
-} from 'diagram-js/lib/util/AttachUtil';
+import {getNewAttachPoint} from 'diagram-js/lib/util/AttachUtil';
 
-import {
-  getMid,
-  roundPoint
-} from 'diagram-js/lib/layout/LayoutUtil';
+import {getMid, roundPoint} from 'diagram-js/lib/layout/LayoutUtil';
 
-import {
-  delta
-} from 'diagram-js/lib/util/PositionUtil';
+import {delta} from 'diagram-js/lib/util/PositionUtil';
 
-import {
-  sortBy
-} from 'min-dash';
-
-import {
-  getDistancePointLine,
-  perpendicularFoot
-} from './util/GeometricUtil';
+import {getDistancePointLine, perpendicularFoot} from './util/GeometricUtil';
 
 var DEFAULT_LABEL_DIMENSIONS = {
   width: 90,

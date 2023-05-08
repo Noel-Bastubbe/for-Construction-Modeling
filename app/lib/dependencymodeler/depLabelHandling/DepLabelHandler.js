@@ -1,5 +1,4 @@
 import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
-import CommonEvents from "../../common/CommonEvents";
 import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
 import {is} from "../../util/Util";

@@ -2,7 +2,7 @@ import inherits from 'inherits';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 
-import { isLabel } from '../../../util/LabelUtil';
+import {isLabel} from '../../../util/LabelUtil';
 
 
 /**

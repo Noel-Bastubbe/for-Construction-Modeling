@@ -1,22 +1,12 @@
-import {
-  assign,
-  forEach
-} from 'min-dash';
+import {assign, forEach} from 'min-dash';
 
 import inherits from 'inherits';
 
-import {
-  remove as collectionRemove
-} from 'diagram-js/lib/util/Collections';
+import {remove as collectionRemove} from 'diagram-js/lib/util/Collections';
 
-import {
-  Label
-} from 'diagram-js/lib/model';
+import {Label} from 'diagram-js/lib/model';
 
-import {
-  getBusinessObject,
-  is
-} from '../../util/ModelUtil';
+import {getBusinessObject, is} from '../../util/ModelUtil';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 

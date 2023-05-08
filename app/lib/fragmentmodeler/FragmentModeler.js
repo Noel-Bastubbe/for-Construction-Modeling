@@ -3,8 +3,8 @@ import BpmnModeler from 'bpmn-js/lib/Modeler';
 import fragmentPaletteModule from './palette';
 import customModelingModule from './modeling';
 import bpmnExtension from './moddle/bpmnextension.json';
-import { is } from 'bpmn-js/lib/util/ModelUtil';
-import { without } from 'min-dash';
+import {is} from 'bpmn-js/lib/util/ModelUtil';
+import {without} from 'min-dash';
 import taskLabelHandling from "./taskLabelHandling";
 import taskRenderer from "./draw";
 

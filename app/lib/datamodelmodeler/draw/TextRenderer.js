@@ -1,4 +1,4 @@
-import { assign } from 'min-dash';
+import {assign} from 'min-dash';
 
 import TextUtil from 'diagram-js/lib/util/Text';
 

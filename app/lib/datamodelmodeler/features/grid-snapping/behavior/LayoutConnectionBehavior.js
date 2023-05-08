@@ -2,11 +2,9 @@ import inherits from 'inherits';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 
-import { pointsAligned } from 'diagram-js/lib/util/Geometry';
+import {pointsAligned} from 'diagram-js/lib/util/Geometry';
 
-import {
-  assign
-} from 'min-dash';
+import {assign} from 'min-dash';
 
 var HIGH_PRIORITY = 3000;
 

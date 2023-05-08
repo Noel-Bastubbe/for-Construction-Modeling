@@ -1,4 +1,4 @@
-import { namespace } from "../util/Util";
+import {namespace} from "../util/Util";
 
 /**
  * Makes the hook interface explicit

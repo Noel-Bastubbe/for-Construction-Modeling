@@ -1,18 +1,10 @@
 import inherits from 'inherits';
 
-import {
-  getOrientation,
-  getMid,
-  asTRBL
-} from 'diagram-js/lib/layout/LayoutUtil';
+import {asTRBL, getMid, getOrientation} from 'diagram-js/lib/layout/LayoutUtil';
 
-import {
-  substract
-} from 'diagram-js/lib/util/Math';
+import {substract} from 'diagram-js/lib/util/Math';
 
-import {
-  hasExternalLabel
-} from '../../../util/LabelUtil';
+import {hasExternalLabel} from '../../../util/LabelUtil';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 

@@ -1,20 +1,8 @@
 import BaseRenderer from "diagram-js/lib/draw/BaseRenderer";
 import {is} from "../../util/Util";
 import {assign} from 'min-dash';
-import {
-    getCirclePath,
-    getDiamondPath, getFillColor,
-    getLabelColor, getRectPath,
-    getRoundRectPath,
-    getSemantic, getStrokeColor
-} from 'bpmn-js/lib/draw/BpmnRenderUtil';
-import {
-    append as svgAppend,
-    classes as svgClasses,
-    remove as svgRemove,
-    select as svgSelect
-} from 'tiny-svg';
-import BpmnRenderer from "bpmn-js/lib/draw/BpmnRenderer";
+import {getLabelColor, getSemantic} from 'bpmn-js/lib/draw/BpmnRenderUtil';
+import {append as svgAppend, classes as svgClasses, remove as svgRemove, select as svgSelect} from 'tiny-svg';
 
 const HIGH_PRIORITY = 1500;
 
