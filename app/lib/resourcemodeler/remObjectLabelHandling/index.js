@@ -1,6 +1,6 @@
-import TaskLabelHandler from "./taskLabelHandler";
+import ResourceLabelHandler from "./resourceLabelHandler";
 
 export default {
     __init__: [ 'taskLabelHandler' ],
-    taskLabelHandler: [ 'type', TaskLabelHandler ]
+    taskLabelHandler: [ 'type', ResourceLabelHandler ]
 };

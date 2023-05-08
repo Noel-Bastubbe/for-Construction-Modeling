@@ -4,7 +4,7 @@ import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
 import {is} from "../../util/Util";
 
-export default class TaskLabelHandler extends CommandInterceptor {
+export default class ResourceLabelHandler extends CommandInterceptor {
     constructor(eventBus, modeling, directEditing, overlays, resourceModeler) {
         super(eventBus);
         this._eventBus = eventBus;
@@ -223,7 +223,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
     }
 }
 
-TaskLabelHandler.$inject = [
+ResourceLabelHandler.$inject = [
     'eventBus',
     'modeling',
     'directEditing',
