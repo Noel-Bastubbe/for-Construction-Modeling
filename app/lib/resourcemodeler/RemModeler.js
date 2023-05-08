@@ -31,6 +31,7 @@ import ResizeModule from 'diagram-js/lib/features/resize';
 import SnappingModule from './features/snapping';
 import {is} from "bpmn-js/lib/util/ModelUtil";
 import taskLabelHandling from "./remObjectLabelHandling";
+import RoleModeler from "../rolemodeler/RoleModeler";
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -127,6 +128,7 @@ RemModeler.prototype._modules = [].concat(
 );
 
 RemModeler.prototype.id = "REM";
+RoleModeler.prototype.rank = 10;
 
 RemModeler.prototype.name = function (constructionMode) {
     if (constructionMode) {
@@ -136,33 +138,26 @@ RemModeler.prototype.name = function (constructionMode) {
     }
 }
 
-RemModeler.prototype.renameResource = function (resource, name) {
-    this.get('modeling').updateLabel(this.get('elementRegistry').get(resource.id), name);
-}
+// RemModeler.prototype.renameResource = function (resource, name) {
+//     this.get('modeling').updateLabel(this.get('elementRegistry').get(resource.id), name);
+// }
+//
+// RemModeler.prototype.deleteResource = function (resource) {
+//     this.get('modeling').removeShape(resource);
+// }
 
-RemModeler.prototype.deleteResource = function (resource) {
-    this.get('modeling').removeShape(resource);
-}
-
-RemModeler.prototype.handleResourceRenamed = function (resource) {
-    this.getVisualsOfResource(resource).forEach(element => {
+RemModeler.prototype.handleRoleRenamed = function (role) {
+    this.getResourcesWithRole(role).forEach(element => {
         this.get('eventBus').fire('element.changed', {
             element
         })
     });
 }
 
-RemModeler.prototype.handleResourceRenamed = function (resource) {
-    this.getVisualsOfResource(resource).forEach(element => {
-        this.get('eventBus').fire('element.changed', {
-            element
-        })
-    });
-}
-
-RemModeler.prototype.getVisualsOfResource = function (resource) {
+RemModeler.prototype.getResourcesWithRole = function (role) {
     return this.get('elementRegistry').filter(element =>
         is(element, 'rem:Resource') &&
-        resource.id
+        role.id &&
+        element.businessObject.role?.id === role.id
     );
 }

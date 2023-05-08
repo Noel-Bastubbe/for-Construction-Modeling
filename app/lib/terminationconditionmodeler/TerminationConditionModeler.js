@@ -27,6 +27,7 @@ export default function TerminationConditionModeler(container) {
 }
 
 TerminationConditionModeler.prototype.id = "TC";
+TerminationConditionModeler.prototype.rank = 8;
 
 TerminationConditionModeler.prototype.name = function (constructionMode) {
     if (constructionMode) {

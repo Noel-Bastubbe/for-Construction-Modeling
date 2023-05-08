@@ -2,7 +2,6 @@ import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
 import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
 import {is} from "../../util/Util";
-import ObjectiveEvents from "../../objectivemodeler/ObjectiveEvents";
 
 export default class DepLabelHandler extends CommandInterceptor {
     constructor(eventBus, modeling, directEditing, overlays, dependencyModeler) {
@@ -88,9 +87,8 @@ export default class DepLabelHandler extends CommandInterceptor {
                     } else if (!this._dropdownContainer.contains(event.target)) {
                         return false;
                     } else if (event.target.classList.contains('dd-dropdown-entry')) {
-                        this._classDropdown.clearInput();
-                        this._instanceDropdown.clearInput();
-                        this._stateDropdown.clearInput();
+                        this._nameDropdown.clearInput();
+                        this._timeDropdown.clearInput();
                     } else if (event.target.tagName !== 'INPUT' || !event.target.value) {
                         this._dropdownContainer.confirm();
                     }

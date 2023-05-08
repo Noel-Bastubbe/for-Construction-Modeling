@@ -137,6 +137,7 @@ OmModeler.prototype._modules = [].concat(
 );
 
 OmModeler.prototype.id = "OM";
+OmModeler.prototype.rank = 3;
 
 OmModeler.prototype.name = function (constructionMode) {
     if (constructionMode) {
