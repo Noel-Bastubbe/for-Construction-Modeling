@@ -38,7 +38,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                 let currentOlc = undefined;
 
                 const updateStateSelection = () => {
-                    this._stateDropdown.getEntries().forEach(entry => entry.setSelected(omObject.state === entry.option));
+                    this._stateDropdown.getEntries().forEach(entry => entry.setSelected(omObject.states?.find(state => state === entry.option)));
                 }
 
                 const updateInstanceSelection = () => {
@@ -49,7 +49,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                     this._stateDropdown.populate(
                         states,
                         (state, element) => {
-                            this.updateState(state, element);
+                            this.updateStates(state, element);
                             updateStateSelection();
                         },
                         element
@@ -134,7 +134,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                     }
                     if (newStateInput !== '') {
                         const newState = this.createState(newStateInput, currentOlc);
-                        this.updateState(newState, element);
+                        this.updateStates(newState, element);
                         needUpdate = true;
                     }
                     if (newInstanceInput !== '') {
@@ -210,12 +210,14 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
         });
     }
 
-    updateState(newState, element) {
+    updateStates(newState, element) {
         const omObject = element.businessObject;
-        if (omObject.state === newState) {
-            omObject.state = undefined;
+        if((omObject.states?.find(role => role === newState))) {
+            omObject.states.pop(newState);
+        } else if (omObject.states){
+            omObject.states.push(newState);
         } else {
-            omObject.state = newState;
+            omObject.states = [newState];
         }
         this._eventBus.fire('element.changed', {
             element
