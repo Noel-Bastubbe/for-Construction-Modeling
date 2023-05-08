@@ -259,6 +259,7 @@ async function navigationDropdown() {
 
     function repopulateDropdown() {
         var modelers = mediator.getModelers();
+        modelers.sort((a, b) => {return a.rank - b.rank});
         if (constructionMode) {
             modelers = modelers.filter(object => object !== terminationConditionModeler);
         }
