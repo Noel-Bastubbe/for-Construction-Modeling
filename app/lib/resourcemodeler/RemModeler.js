@@ -139,13 +139,10 @@ RemModeler.prototype.name = function (constructionMode) {
     }
 }
 
-// RemModeler.prototype.renameResource = function (resource, name) {
-//     this.get('modeling').updateLabel(this.get('elementRegistry').get(resource.id), name);
-// }
-//
-// RemModeler.prototype.deleteResource = function (resource) {
-//     this.get('modeling').removeShape(resource);
-// }
+RemModeler.prototype.deleteResource = function (resource) {
+    this.get('modeling').removeShape(resource);
+}
+
 RemModeler.prototype.handleRoleListChanged = function (roles, dryRun=false) {
     this._roles = roles;
 }

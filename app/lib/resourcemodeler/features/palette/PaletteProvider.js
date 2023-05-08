@@ -109,10 +109,6 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
           globalConnect.start(event);
         }
       }
-    },
-    'od-separator': {
-      group: 'od-elements',
-      separator: true
     }
   });
 

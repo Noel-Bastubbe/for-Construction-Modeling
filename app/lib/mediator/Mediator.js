@@ -734,9 +734,9 @@ Mediator.prototype.ResourceModelerHook = function (eventBus, resourceModeler) {
     });
 
     this.preExecute(["elements.delete"], (event) => {
-        event.context.elements = event.context.elements.filter((element) => {
+        event.context.elements = event.context.elements.filter(element => {
             if (is(element, "rem:Resource")) {
-                // return this.modeler.deleteResource(element);
+                return this.modeler.deleteResource(element);
             } else {
                 return true;
             }
