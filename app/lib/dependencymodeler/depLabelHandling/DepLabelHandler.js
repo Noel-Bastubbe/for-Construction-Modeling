@@ -33,10 +33,6 @@ export default class DepLabelHandler extends CommandInterceptor {
                 const objective = element.businessObject;
                 this._dropdownContainer.currentElement = element;
 
-                if (element.businessObject.id === 'final_state') {
-                    this._dropdownContainer.removeChild(this._nameDropdown);
-                }
-
                 const populateNameDropdown = () => {
                     this._nameDropdown.populate(
                         [],
@@ -100,9 +96,6 @@ export default class DepLabelHandler extends CommandInterceptor {
                     if (this._overlayId) {
                         this._overlays.remove(this._overlayId);
                         this._overlayId = undefined;
-                    }
-                    if (element.businessObject.id === 'final_state') {
-                        this._dropdownContainer.insertBefore(this._nameDropdown,this._timeDropdown);
                     }
                     this._dropdownContainer.currentElement = undefined;
                     this._currentDropdownTarget = undefined;

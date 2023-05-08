@@ -55,7 +55,7 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
 
   const entries = {};
 
-  if (element.id !== 'start_state' && element.id !== 'final_state') {
+  if (element.id !== 'start_state') {
     entries['delete'] = {
       group: 'edit',
       className: 'bpmn-icon-trash',
@@ -67,25 +67,25 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
     }
   }
 
-  if (is(element, 'dep:Objective') && occurencesOfSource.length === 0 && element.id !== 'final_state') {
+  if (is(element, 'dep:Objective')) {
     entries['connect'] = {
       group: 'edit',
-          className: 'bpmn-icon-connection',
-          title: 'Connect',
-          action: {
+      className: 'bpmn-icon-connection',
+      title: 'Connect',
+      action: {
         click: startConnect,
-            dragstart: startConnect
+        dragstart: startConnect
       }
     }
-      entries['append'] = {
-        group: 'create',
-        className: 'bpmn-icon-start-event-none',
-        title: 'Append Objective',
-        action: {
-          click: appendObjective,
-          dragstart: appendObjectiveStart
-        }
+    entries['append'] = {
+      group: 'create',
+      className: 'bpmn-icon-start-event-none',
+      title: 'Append Objective',
+      action: {
+        click: appendObjective,
+        dragstart: appendObjectiveStart
       }
+    }
   }
 
   return entries;
