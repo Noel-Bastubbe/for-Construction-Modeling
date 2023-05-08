@@ -15,6 +15,7 @@ export default function LabelEditingProvider(
     this._canvas = canvas;
     this._modeling = modeling;
     this._textRenderer = textRenderer;
+    this._eventBus = eventBus;
 
     directEditing.registerProvider(this);
 
