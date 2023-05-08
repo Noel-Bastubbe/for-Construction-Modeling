@@ -767,11 +767,17 @@ Mediator.prototype.ResourceModelerHook = function (eventBus, resourceModeler) {
         context.warnings
             .filter(({ message }) => message.startsWith("unresolved reference"))
             .forEach(({ property, value, element }) => {
-                // if (property === 'odDi:objectiveRef') {
-                //     const objective = this.mediator.dependencyModelerHook.modeler.get('elementRegistry').get(value).businessObject;
-                //     if (!objective) { throw new Error('Could not resolve objectives with id '+value); }
-                //     element.objectiveRef = objective;
-                // }
+                if (property === 'rem:roles') {
+                    const role = this.mediator.roleModelerHook.modeler.get('elementRegistry').get(value).businessObject;
+                    if (!role) {
+                        throw new Error('Could not resolve role with id ' + value);
+                    }
+                    if(element.roles){
+                        element.roles.push(role);
+                    } else {
+                        element.roles = [role]
+                    }
+                }
             });
     });
 };
