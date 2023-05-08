@@ -32,6 +32,7 @@ import SnappingModule from './features/snapping';
 import {is} from "bpmn-js/lib/util/ModelUtil";
 import taskLabelHandling from "./remObjectLabelHandling";
 import RoleModeler from "../rolemodeler/RoleModeler";
+import FragmentModeler from "../fragmentmodeler/FragmentModeler";
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -145,6 +146,9 @@ RemModeler.prototype.name = function (constructionMode) {
 // RemModeler.prototype.deleteResource = function (resource) {
 //     this.get('modeling').removeShape(resource);
 // }
+RemModeler.prototype.handleRoleListChanged = function (roles, dryRun=false) {
+    this._roles = roles;
+}
 
 RemModeler.prototype.handleRoleRenamed = function (role) {
     this.getResourcesWithRole(role).forEach(element => {
@@ -154,10 +158,19 @@ RemModeler.prototype.handleRoleRenamed = function (role) {
     });
 }
 
+RemModeler.prototype.handleRoleDeleted = function (role) {
+    this.getTasksWithRole(role).forEach((element, gfx) => {
+        element.businessObject.roles.pop(role);
+        this.get('eventBus').fire('element.changed', {
+            element
+        });
+    });
+}
+
 RemModeler.prototype.getResourcesWithRole = function (role) {
     return this.get('elementRegistry').filter(element =>
         is(element, 'rem:Resource') &&
         role.id &&
-        element.businessObject.role?.id === role.id
+        element.businessObject.roles?.find(ele => ele.id === role.id)
     );
 }

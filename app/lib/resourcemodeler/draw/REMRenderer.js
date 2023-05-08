@@ -141,7 +141,15 @@ export default function REMRenderer(
     let semantic = getSemantic(element);
     let text = 'Roles: ';
     if (semantic.roles) {
-      text = text + semantic.roles;
+      text += semantic.roles.map(role => role.name).join(", ")
+    }
+    text += '\nCapa: ';
+    if (semantic.capacity) {
+      text += semantic.capacity;
+    }
+    text += '\nAvailability: ';
+    if (semantic.availabilityStart && semantic.availabilityEnd) {
+      text += semantic.availabilityStart + " - " + semantic.availabilityEnd;
     }
       renderLabel(parentGfx, text, {
         box: {
@@ -149,7 +157,7 @@ export default function REMRenderer(
           width: element.width
         },
         padding: 5,
-        align: 'center-middle',
+        align: 'left-middle',
         style: {
           fill: defaultStrokeColor
         }

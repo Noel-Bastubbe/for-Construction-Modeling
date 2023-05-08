@@ -35,11 +35,11 @@ export default class ResourceLabelHandler extends CommandInterceptor {
         eventBus.on(['element.dblclick', 'create.end', 'autoPlace.end'], e => {
             const element = e.element || e.shape || e.elements[0];
             if (is(element, 'rem:Resource')) {
-                const activity = element.businessObject;
+                const resource = element.businessObject;
                 this._dropdownContainer.currentElement = element;
 
                 const updateRolesSelection = () => {
-                    this._rolesDropdown.getEntries().forEach(entry => entry.setSelected(activity.roles === entry.option));
+                    this._rolesDropdown.getEntries().forEach(entry => entry.setSelected(resource.roles.find(role => role === entry.option)));
                 }
 
                 const populateNameDropdown = () => {
@@ -50,7 +50,7 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                             },
                         element
                     );
-                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",activity.name);
+                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",resource.name);
                 }
 
                 const populateCapacityDropdown = () => {
@@ -61,22 +61,23 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                         },
                         element
                     );
-                    this._capacityDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.capacity);
+                    this._capacityDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.capacity);
                 }
 
                 const populateRolesDropdown = () => {
                     this._rolesDropdown.populate(
-                        [], // TODO Change this to the list of roles instead of an empty list
-                        (state, element) => {
-                            this.updateRoles(state, element);
+                        this._resourceModeler._roles || [], // TODO Change this to the list of roles instead of an empty list
+                        (role, element) => {
+                            this.updateRoles(role, element);
                             updateRolesSelection();
                         },
                         element
                     );
                     this._rolesDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
+                    updateRolesSelection();
                 }
 
-                const populateavailabilityStartDropdown = () => {
+                const populateAvailabilityStartDropdown = () => {
                     this._availabilityStartDropdown.populate(
                         [],
                         (state, element) => {
@@ -84,10 +85,10 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                         },
                         element
                     );
-                    this._availabilityStartDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.availabilityStart);
+                    this._availabilityStartDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.availabilityStart);
                 }
 
-                const populateavailabilityEndDropdown = () => {
+                const populateAvailabilityEndDropdown = () => {
                     this._availabilityEndDropdown.populate(
                         [],
                         (state, element) => {
@@ -95,41 +96,42 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                         },
                         element
                     );
-                    this._availabilityEndDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.availabilityEnd);
+                    this._availabilityEndDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.availabilityEnd);
                 }
                 
                 populateNameDropdown();
                 populateCapacityDropdown();
                 populateRolesDropdown();
-                populateavailabilityStartDropdown();
-                populateavailabilityEndDropdown();
+                populateAvailabilityStartDropdown();
+                populateAvailabilityEndDropdown();
 
                 this._dropdownContainer.confirm = (event) => {
                     const newNameInput = this._nameDropdown.getInputValue();
                     const newCapacityInput = this._capacityDropdown.getInputValue();
-                    const newRolesInput = this._rolesDropdown.getInputValue();
+                    const newRoleInput = this._rolesDropdown.getInputValue();
                     const newAvailabilityStartInput = this._availabilityStartDropdown.getInputValue();
                     const newAvailabilityEndInput = this._availabilityEndDropdown.getInputValue();
 
-                    if (newNameInput !== '' && newNameInput !== activity.name) {
+                    if (newNameInput !== '' && newNameInput !== resource.name) {
                         this.updateName(newNameInput,element);
                         populateNameDropdown();
                     }
-                    if (newCapacityInput !== activity.capacity && newCapacityInput > 0) {
+                    if (newCapacityInput !== resource.capacity && newCapacityInput > 0) {
                         this.updateCapacity(newCapacityInput,element);
                         populateCapacityDropdown();
                     }
-                    if (newRolesInput !== activity.roles) {
-                        this.updateRoles(newRolesInput,element);
+                    if (newRoleInput !== '' && !this._resourceModeler._roles.find(role => role.name === newRoleInput)) {
+                        let newRole = this.createRole(newRoleInput);
+                        this.updateRoles(newRole,element);
                         populateRolesDropdown();
                     }
-                    if (newAvailabilityStartInput !== activity.availabilityStart && newAvailabilityStartInput > 0) {
+                    if (newAvailabilityStartInput !== resource.availabilityStart && newAvailabilityStartInput > 0) {
                         this.updateavailabilityStart(newAvailabilityStartInput,element);
-                        populateavailabilityStartDropdown();
+                        populateAvailabilityStartDropdown();
                     }
-                    if (newAvailabilityEndInput !== activity.availabilityEnd && newAvailabilityEndInput > 0) {
+                    if (newAvailabilityEndInput !== resource.availabilityEnd && newAvailabilityEndInput > 0) {
                         this.updateavailabilityEnd(newAvailabilityEndInput,element);
-                        populateavailabilityEndDropdown();
+                        populateAvailabilityEndDropdown();
                     }
                 }
 
@@ -201,8 +203,21 @@ export default class ResourceLabelHandler extends CommandInterceptor {
         });
     }
 
-    updateRoles(newRoles, element) {
-        element.businessObject.roles = newRoles;
+    createRole(name) {
+        return this._eventBus.fire(CommonEvents.ROLE_CREATION_REQUESTED, {
+            name
+        });
+    }
+
+    updateRoles(newRole, element) {
+        if((element.businessObject.roles?.find(role => role === newRole)))
+        {
+            element.businessObject.roles.pop(newRole);
+        } else if(element.businessObject.roles){
+            element.businessObject.roles.push(newRole);
+        } else {
+            element.businessObject.roles = [newRole];
+        }
         this._eventBus.fire('element.changed', {
             element
         });

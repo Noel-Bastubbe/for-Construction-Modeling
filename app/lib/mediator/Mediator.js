@@ -224,6 +224,7 @@ Mediator.prototype.olcRenamed = function (olc, name) {
 Mediator.prototype.roleListChanged = function () {
     let roles = this.roleModelerHook.modeler.getRoles();
     this.fragmentModelerHook.modeler.handleRoleListChanged(roles);
+    this.resourceModelerHook.modeler.handleRoleListChanged(roles);
 }
 
 Mediator.prototype.roleCreationRequested = function (name) {
@@ -244,11 +245,13 @@ Mediator.prototype.confirmRoleDeletion = function (role) {
 
 Mediator.prototype.deletedRole = function (role) {
     this.fragmentModelerHook.modeler.handleRoleDeleted(role);
+    this.resourceModelerHook.modeler.handleRoleDeleted(role);
     this.roleListChanged();
 }
 
 Mediator.prototype.renamedRole = function (role) {
     this.fragmentModelerHook.modeler.handleRoleRenamed(role);
+    this.resourceModelerHook.modeler.handleRoleRenamed(role);
 }
 
 
