@@ -22,6 +22,8 @@ export default class Checker {
         this.errorBar = errorBar;
         this.hiddenSeverities = {};
         this.messageDropdown = getDropdown();
+        this.messageDropdown.classList.remove("dd-dropdown-menu");
+        this.messageDropdown.classList.add("dd-dropdown-menu-warnings");
         mediator.on(['element.click', 'create.start'], event => {
             this.hideDropdowns();
         });
