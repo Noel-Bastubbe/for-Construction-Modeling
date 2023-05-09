@@ -482,7 +482,7 @@ export default [
                     } else if (stack.has(targetElement)) {
                         violations.push({
                             element: targetElement,
-                            message: 'A cycle was detected in the Dependency Modeler.'
+                            message: 'Please do not create cycles in the Dependency Modeler.'
                         });
                     }
                 }
