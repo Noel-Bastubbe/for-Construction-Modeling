@@ -85,7 +85,7 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                         },
                         element
                     );
-                    this._availabilityStartDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.availabilityStart);
+                    this._availabilityStartDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.availabilityStart, "0");
                 }
 
                 const populateAvailabilityEndDropdown = () => {
@@ -96,7 +96,7 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                         },
                         element
                     );
-                    this._availabilityEndDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.availabilityEnd);
+                    this._availabilityEndDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.availabilityEnd, "0");
                 }
                 
                 populateNameDropdown();
@@ -125,11 +125,11 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                         this.updateRoles(newRole,element);
                         populateRolesDropdown();
                     }
-                    if (newAvailabilityStartInput !== resource.availabilityStart && newAvailabilityStartInput > 0) {
+                    if (newAvailabilityStartInput !== resource.availabilityStart && newAvailabilityStartInput >= 0) {
                         this.updateavailabilityStart(newAvailabilityStartInput,element);
                         populateAvailabilityStartDropdown();
                     }
-                    if (newAvailabilityEndInput !== resource.availabilityEnd && newAvailabilityEndInput > 0) {
+                    if (newAvailabilityEndInput !== resource.availabilityEnd && newAvailabilityEndInput >= 0) {
                         this.updateavailabilityEnd(newAvailabilityEndInput,element);
                         populateAvailabilityEndDropdown();
                     }
