@@ -127,6 +127,8 @@ TerminationConditionModeler.prototype.createLiteralElement = function (parentEle
 
     classElement.dropdown = getDropdown();
     stateElement.dropdown = getDropdown();
+    stateElement.dropdown.classList.remove("dd-dropdown-menu");
+    stateElement.dropdown.classList.add("dd-dropdown-menu-termination-condition");
 
     this.populateLiteral(literal, element);
 
