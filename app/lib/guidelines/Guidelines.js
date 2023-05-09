@@ -461,35 +461,45 @@ export default [
         link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep3---include-the-start-state-into-the-dependency-graph'
     },
     {
-        title : 'Do not create cycles in the Dependency Modeler.',
-        id : 'DEP4',
+        title: 'Do not create cycles in the Dependency Modeler.',
+        id: 'DEP4',
         getViolations(mediator) {
             const dependencyModeler = mediator.dependencyModelerHook.modeler;
-            const objectives = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Objective'));
-            const dependencies = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Dependency'));
-            const startState = objectives.filter(element => element.id === 'start_state');
-
-            let connectedObjectives = 1;
-            let currentObjective = startState[0].id;
-            for (let j = 0; j < objectives.length; j++) {
-                for (let i = 0; i < dependencies.length; i++) {
-                    if (dependencies[i].source.id === currentObjective) {
-                        currentObjective = dependencies[i].target.id;
-                        connectedObjectives++;
+            const elements = dependencyModeler.get('elementRegistry').getAll();
+            const visited = new Set();
+            const stack = new Set();
+            const violations = [];
+    
+            function detectCycle(element) {
+                visited.add(element);
+                stack.add(element);
+    
+                const outgoingDependencies = element.outgoing.filter(connection => connection.type === 'dep:Dependency');
+                for (let i = 0; i < outgoingDependencies.length; i++) {
+                    const targetElement = outgoingDependencies[i].target;
+                    if (!visited.has(targetElement)) {
+                        detectCycle(targetElement);
+                    } else if (stack.has(targetElement)) {
+                        violations.push({
+                            element: targetElement,
+                            message: 'A cycle was detected in the Dependency Modeler.'
+                        });
                     }
                 }
+    
+                stack.delete(element);
             }
-
-            if (connectedObjectives !== objectives.length && objectives.length - dependencies.length === 1) {
-                return [{
-                    element : mediator.dependencyModelerHook.getRootObject(),
-                    message : 'Please do not create cycles in the Dependency Modeler.'
-                }];
-            } else {
-                return [];
+    
+            for (let i = 0; i < elements.length; i++) {
+                const element = elements[i];
+                if (!visited.has(element)) {
+                    detectCycle(element);
+                }
             }
+    
+            return violations;
         },
-        severity : SEVERITY.ERROR,
+        severity: SEVERITY.ERROR,
         link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep4---mind-cyclic-dependencies'
-    },
+    }, 
 ]
