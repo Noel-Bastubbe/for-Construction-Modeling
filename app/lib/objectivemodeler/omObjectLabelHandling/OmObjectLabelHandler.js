@@ -1,4 +1,5 @@
 import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
+import {without} from 'min-dash';
 import CommonEvents from "../../common/CommonEvents";
 import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
@@ -212,12 +213,10 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
 
     updateStates(newState, element) {
         const omObject = element.businessObject;
-        if((omObject.states?.find(role => role === newState))) {
-            omObject.states.pop(newState);
-        } else if (omObject.states){
-            omObject.states.push(newState);
+        if(omObject.get('states').includes(newState)) {
+            omObject.states = without(omObject.get('states'), newState);
         } else {
-            omObject.states = [newState];
+            omObject.states.push(newState);
         }
         this._eventBus.fire('element.changed', {
             element
