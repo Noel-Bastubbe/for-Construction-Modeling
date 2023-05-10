@@ -16,8 +16,7 @@ import { is } from '../../util/ModelUtil';
 export default function ContextPadProvider(
     config, injector, eventBus, connect, create,
     elementFactory, elementRegistry, contextPad, modeling, rules,
-    translate) {
-    //popupMenu
+    translate, popupMenu) {
 
   config = config || {};
 
@@ -28,12 +27,12 @@ export default function ContextPadProvider(
   this._elementFactory = elementFactory;
   this._elementRegistry = elementRegistry;
   this._contextPad = contextPad;
-  //this._popupMenu = popupMenu; 
 
   this._modeling = modeling;
 
   this._rules = rules;
   this._translate = translate;
+  this._popupMenu = popupMenu; 
 
   if (config.autoPlace !== false) {
     this._autoPlace = injector.get('autoPlace', false);
@@ -65,9 +64,9 @@ ContextPadProvider.$inject = [
   'elementRegistry',
   'contextPad',
   'modeling',
-  //'popupMenu',
   'rules',
-  'translate'
+  'translate',
+  'popupMenu'
 ];
 
 
@@ -79,10 +78,11 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
     _translate: translate,
     _connect: connect,
     _elementFactory: elementFactory,
-    _elementRegistry: elementRegistry,
-    //_popupMenu: popupMenu, 
+    _elementRegistry: elementRegistry, 
     _autoPlace: autoPlace,
-    _create: create
+    _create: create,
+    _popupMenu: popupMenu,
+    _contextPad: contextPad
   } = this;
 
   let actions = {};
@@ -90,7 +90,7 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
   if (element.type === 'label') {
     return actions;
   }
-  /*
+
   function getReplaceMenuPosition(element) {
 
     var Y_OFFSET = 5;
@@ -106,49 +106,46 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
 
     return pos;
   }
-  */
-  /*if (element.type === 'od:Association') {
-    if (!popupMenu.isEmpty(element, 'bpmn-replace')) {
 
-      // Replace menu entry
-      assign(actions, {
-        'replace': {
-          group: 'edit',
-          className: 'bpmn-icon-screw-wrench',
-          title: translate('Change type'),
-          action: {
-            click: function(event, element) {
+  if (!popupMenu.isEmpty(element, 'bpmn-replace')) {
+    // Replace menu entry
+    assign(actions, {
+      'replace': {
+        group: 'edit',
+        className: 'bpmn-icon-screw-wrench',
+        title: translate('Change type'),
+        action: {
+          click: function(event, element) {
 
-              var position = assign(getReplaceMenuPosition(element), {
-                cursor: { x: event.x, y: event.y }
-              });
+            var position = assign(getReplaceMenuPosition(element), {
+              cursor: { x: event.x, y: event.y }
+            });
 
-              popupMenu.open(element, 'bpmn-replace', position, {
-                title: translate('Change element'),
-                width: 300,
-                search: true
-              });
-            }
+            popupMenu.open(element, 'bpmn-replace', position, {
+              title: translate('Change element'),
+              width: 300,
+              search: true
+            });
           }
         }
-      });
-    }
+      }
+    });
   }
-  */
 
+  /*
   if (element.type === 'od:Association') {
+
     assign(actions, {
       'change': {
           group: 'edit',
           className: 'bpmn-icon-screw-wrench',
           title: translate('Change type'),
           action: {
-            click: function(element) { 
-              modeling.updateProperties(element, { sourceCardinality: '0..1' });
-            }
-        }
+            click: changeToInheritance 
+          }
     }});
   }
+  */
 
   createDeleteEntry(actions);
   
@@ -159,6 +156,10 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
   }
 
   return actions;
+
+  function changeToInheritance() {
+
+  }
 
   function removeElement() {
     modeling.removeElements([ element ]);

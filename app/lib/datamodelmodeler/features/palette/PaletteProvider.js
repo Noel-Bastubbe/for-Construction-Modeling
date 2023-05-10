@@ -111,16 +111,6 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
           globalConnect.start(event);
         }
       }
-    },
-    'object-linker-inheritance': {
-      group: 'od-elements',
-      className: 'bpmn-icon-user',
-      title: translate('Inherited Classes'),
-      action: {
-        click: function(event) {
-          globalConnect.start(event);
-        }
-      }
     }
   });
 

@@ -310,10 +310,18 @@ export default function ODRenderer(
           stroke = getStrokeColor(element, defaultStrokeColor);
 
       var attrs = {
-        strokeLinejoin: 'round',
-        markerEnd: marker('white', 'black'),    
+        strokeLinejoin: 'round',   
         stroke: getStrokeColor(element, defaultStrokeColor) 
       };
+ 
+      if (element.businessObject.inheritance == true) {
+        var attrs = {
+          strokeLinejoin: 'round',   
+          markerEnd: marker('white', 'black'),  
+          stroke: getStrokeColor(element, defaultStrokeColor) 
+        };   
+      }
+
       return drawPath(parentGfx, pathData, attrs);
     },
     'od:InheritAssociation': function(parentGfx, element) {
