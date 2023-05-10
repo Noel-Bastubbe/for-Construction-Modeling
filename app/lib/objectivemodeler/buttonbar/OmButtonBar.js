@@ -41,6 +41,8 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
             : '<no Objective selected>';
     }
     var selectObjectiveMenu = getDropdown();
+    selectObjectiveMenu.classList.remove("dd-dropdown-menu");
+    selectObjectiveMenu.classList.add("dd-dropdown-menu-scrollable");
     selectObjectiveComponent.addEventListener('click', event => {
         if (event.target === selectObjectiveComponent || event.target === selectedObjectiveSpan) {
             repopulateDropdown();

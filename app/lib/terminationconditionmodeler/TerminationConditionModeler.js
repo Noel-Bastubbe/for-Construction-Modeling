@@ -126,6 +126,8 @@ TerminationConditionModeler.prototype.createLiteralElement = function (parentEle
     parentElement.append(element);
 
     classElement.dropdown = getDropdown();
+    classElement.dropdown.classList.remove("dd-dropdown-menu");
+    classElement.dropdown.classList.add("dd-dropdown-menu-termination-condition");
     stateElement.dropdown = getDropdown();
     stateElement.dropdown.classList.remove("dd-dropdown-menu");
     stateElement.dropdown.classList.add("dd-dropdown-menu-termination-condition");
