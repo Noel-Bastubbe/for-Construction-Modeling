@@ -140,7 +140,7 @@ export default function REMRenderer(
   function renderAttributes(parentGfx, element) {
     let semantic = getSemantic(element);
     let text = '';
-    text += 'Capa: ';
+    text += 'Capacity: ';
     if (semantic.capacity) {
       text += semantic.capacity;
     }
