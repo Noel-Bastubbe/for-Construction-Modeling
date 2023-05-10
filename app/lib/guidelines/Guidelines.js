@@ -421,24 +421,52 @@ export default [
         link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Model#d3---connect-the-case-class-to-every-other-class'
     },
     {
-        title : 'Connect each Objective at least to one other Objective.',
-        id : 'DEP2',
+        title: 'Check if all Objectives are reachable from the Start State.',
+        id: 'DEP2',
         getViolations(mediator) {
             const dependencyModeler = mediator.dependencyModelerHook.modeler;
-            const objectives = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Objective'));
-            const dependencies = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Dependency'));
+            const elements = dependencyModeler.get('elementRegistry').getAll();
+            const visited = new Set();
+            const unreachable = new Set();
 
-            if (objectives.length - dependencies.length > 1) {
-                return [{
-                    element : mediator.dependencyModelerHook.getRootObject(),
-                    message : 'Please connect all Objectives to each other.'
-                }];
+            function dfs(element) {
+                visited.add(element);
+
+                const outgoingDependencies = element.outgoing.filter(connection => connection.type === 'dep:Dependency');
+                for (let i = 0; i < outgoingDependencies.length; i++) {
+                    const targetElement = outgoingDependencies[i].target;
+                    if (!visited.has(targetElement)) {
+                        dfs(targetElement);
+                    }
+                }
+            }
+
+            const startState = elements.find(element => element.id === 'start_state');
+            dfs(startState);
+
+            for (let i = 0; i < elements.length; i++) {
+                const element = elements[i];
+                if (is(element, 'dep:Objective')) {
+                    if (!visited.has(element)) {
+                        unreachable.add(element);
+                    }
+                }
+            }
+
+            if (unreachable.size > 0) {
+                const violations = [...unreachable].map(element => {
+                    return {
+                        element: element,
+                        message: 'This Objective is not reachable from the Start State.'
+                    };
+                });
+                return violations;
             } else {
                 return [];
             }
         },
-        severity : SEVERITY.WARNING,
-        link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep2---link-every-objectives-to-at-least-one-other-objective'
+        severity: SEVERITY.WARNING,
+        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep2---check-if-all-objectives-are-reachable-from-the-start-state'
     },
     {
         title : 'Connect the Start State to one other Objective.',
