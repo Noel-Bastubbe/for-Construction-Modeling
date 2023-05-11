@@ -32,7 +32,7 @@ import SnappingModule from './features/snapping';
 import {is} from "bpmn-js/lib/util/ModelUtil";
 import taskLabelHandling from "./resourceLabelHandling";
 import RoleModeler from "../rolemodeler/RoleModeler";
-import FragmentModeler from "../fragmentmodeler/FragmentModeler";
+import {without} from "min-dash";
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -156,8 +156,8 @@ RemModeler.prototype.handleRoleRenamed = function (role) {
 }
 
 RemModeler.prototype.handleRoleDeleted = function (role) {
-    this.getTasksWithRole(role).forEach((element, gfx) => {
-        element.businessObject.roles.pop(role);
+    this.getResourcesWithRole(role).forEach((element, gfx) => {
+        element.businessObject.roles = without(element.businessObject.roles, role);
         this.get('eventBus').fire('element.changed', {
             element
         });

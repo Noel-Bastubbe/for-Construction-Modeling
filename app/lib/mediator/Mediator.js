@@ -239,8 +239,9 @@ Mediator.prototype.addedRole = function () {
 
 Mediator.prototype.confirmRoleDeletion = function (role) {
     const affectedTasks = this.fragmentModelerHook.modeler.getTasksWithRole(role);
+    const affectedResources = this.resourceModelerHook.modeler.getResourcesWithRole(role);
     return confirm('Do you really want to delete role \"' + role.name + '\" ?'
-        + '\n' + 'It would be removed from ' + affectedTasks.length + ' Task(s).');
+        + '\n' + 'It would be removed from ' + affectedTasks.length + ' Task(s) and ' + affectedResources.length + ' Resource(s).');
 }
 
 Mediator.prototype.deletedRole = function (role) {
