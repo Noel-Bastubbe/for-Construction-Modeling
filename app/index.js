@@ -7,6 +7,7 @@ import DataModelModeler from './lib/datamodelmodeler/Modeler';
 import ObjectiveModeler from './lib/objectivemodeler/OmModeler';
 import DependencyModeler from './lib/dependencymodeler/DependencyModeler';
 import RoleModeler from './lib/rolemodeler/RoleModeler';
+import RemModeler from './lib/resourcemodeler/RemModeler';
 
 import $ from 'jquery';
 import Mediator from './lib/mediator/Mediator';
@@ -93,6 +94,17 @@ var roleModeler = new RoleModeler({
     }]
 });
 
+var resourceModeler = new RemModeler({
+    container: '#resourcemodel-canvas',
+    keyboard: {
+        bindTo: document.querySelector('#resourcemodel-canvas')
+    },
+    additionalModules: [{
+        __init__ : ['mediator'],
+        mediator : ['type', mediator.ResourceModelerHook]
+    }]
+});
+
 var terminationConditionModeler = new TerminationConditionModeler(
     '#terminationcondition-canvas'
 );
@@ -123,11 +135,12 @@ async function loadDebugData() {
 async function createNewDiagram() {
     try {
         checker.deactivate();
-        await roleModeler.createDiagram();
         await dependencyModeler.createNew();
-        await dataModeler.importXML(newDatamodel);
         await fragmentModeler.importXML(diagramXML);
         await olcModeler.createNew();
+        await dataModeler.importXML(newDatamodel);
+        await roleModeler.createDiagram();
+        await resourceModeler.createDiagram();
         await objectiveModeler.createDiagram();
         terminationConditionModeler.createNew();
         if (LOAD_DUMMY) {
@@ -165,6 +178,8 @@ async function exportToZip() {
     zip.file('objectiveModel.xml', objectiveModel);
     const olcs = (await olcModeler.saveXML({format: true})).xml;
     zip.file('olcs.xml', olcs);
+    const resourceModel = (await resourceModeler.saveXML({ format: true })).xml;
+    zip.file('resourceModel.xml', resourceModel);
     const terminationCondition = (await terminationConditionModeler.saveXML({format: true})).xml;
     zip.file('terminationCondition.xml', terminationCondition);
     const dependencyModel = (await dependencyModeler.saveXML({format: true})).xml;
@@ -184,6 +199,7 @@ async function importFromZip(zipData) {
         olcs: zip.file('olcs.xml'),
         terminationCondition: zip.file('terminationCondition.xml'),
         dependencyModel: zip.file('dependencyModel.xml'),
+        resourceModel: zip.file('resourceModel.xml'),
         roleModel: zip.file('roleModel.xml')
     };
     Object.keys(files).forEach(key => {
@@ -198,6 +214,7 @@ async function importFromZip(zipData) {
     await fragmentModeler.importXML(await files.fragments.async("string"));
     await terminationConditionModeler.importXML(await files.terminationCondition.async("string"));
     await objectiveModeler.importXML(await files.objectiveModel.async("string"));
+    await resourceModeler.importXML(await files.resourceModel.async("string"));
     checker.activate();
 }
 

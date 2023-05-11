@@ -58,7 +58,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                         },
                         element
                     );
-                    this._durationDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.duration);
+                    this._durationDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.duration, "0");
                 }
                 const populateRoleDropdown = () => {
                     this._roleDropdown.populate(
@@ -96,7 +96,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                         this.updateName(newNameInput,element);
                         populateNameDropdown();
                     }
-                    if (newDurationInput !== activity.duration && newDurationInput > 0) {
+                    if (newDurationInput !== activity.duration && newDurationInput >= 0) {
                         this.updateDuration(newDurationInput,element);
                         populateDurationDropdown();
                     }

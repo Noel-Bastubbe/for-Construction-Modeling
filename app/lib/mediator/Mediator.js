@@ -224,6 +224,7 @@ Mediator.prototype.olcRenamed = function (olc, name) {
 Mediator.prototype.roleListChanged = function () {
     let roles = this.roleModelerHook.modeler.getRoles();
     this.fragmentModelerHook.modeler.handleRoleListChanged(roles);
+    this.resourceModelerHook.modeler.handleRoleListChanged(roles);
 }
 
 Mediator.prototype.roleCreationRequested = function (name) {
@@ -244,11 +245,13 @@ Mediator.prototype.confirmRoleDeletion = function (role) {
 
 Mediator.prototype.deletedRole = function (role) {
     this.fragmentModelerHook.modeler.handleRoleDeleted(role);
+    this.resourceModelerHook.modeler.handleRoleDeleted(role);
     this.roleListChanged();
 }
 
 Mediator.prototype.renamedRole = function (role) {
     this.fragmentModelerHook.modeler.handleRoleRenamed(role);
+    this.resourceModelerHook.modeler.handleRoleRenamed(role);
 }
 
 
@@ -434,34 +437,35 @@ Mediator.prototype.FragmentModelerHook = function (eventBus, fragmentModeler) {
     this.mediator.fragmentModelerHook = this;
     this.eventBus = eventBus;
 
-    eventBus.on('import.parse.complete', ({warnings}) => {
-        warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({
-                                                                                                property,
-                                                                                                value,
-                                                                                                element
-                                                                                            }) => {
-            if (property === 'fcm:dataclass') {
-                const dataClass = this.mediator.dataModelerHook.modeler.get('elementRegistry').get(value).businessObject;
-                if (!dataClass) {
-                    throw new Error('Could not resolve data class with id ' + value);
-                }
-                element.dataclass = dataClass;
-            } else if (property === 'fcm:states') {
-                const state = this.mediator.olcModelerHook.modeler.getStateById(value)
-                if (!state) {
-                    throw new Error('Could not resolve olc state with id ' + value);
-                }
-                element.get('states').push(state);
-            } else if (property === 'fcm:role') {
-                const role = this.mediator.roleModelerHook.modeler.get('elementRegistry').get(value).businessObject;
-                if (!role) {
-                    throw new Error('Could not resolve role with id ' + value);
-                }
-                element.role = role;
+  eventBus.on("import.parse.complete", ({ warnings }) => {
+    warnings
+      .filter(({ message }) => message.startsWith("unresolved reference"))
+      .forEach(({ property, value, element }) => {
+        if (property === "fcm:dataclass") {
+          const dataClass = this.mediator.dataModelerHook.modeler
+            .get("elementRegistry")
+            .get(value).businessObject;
+          if (!dataClass) {
+            throw new Error("Could not resolve data class with id " + value);
+          }
+          element.dataclass = dataClass;
+        } else if (property === "fcm:states") {
+          const state =
+            this.mediator.olcModelerHook.modeler.getStateById(value);
+          if (!state) {
+            throw new Error("Could not resolve olc state with id " + value);
+          }
+          element.get("states").push(state);
+        } else if (property === 'fcm:role') {
+            const role = this.mediator.roleModelerHook.modeler.get('elementRegistry').get(value).businessObject;
+            if (!role) {
+                throw new Error('Could not resolve role with id ' + value);
             }
-        });
-    });
-}
+            element.role = role;
+        }
+      });
+  });
+};
 inherits(Mediator.prototype.FragmentModelerHook, CommandInterceptor);
 
 Mediator.prototype.FragmentModelerHook.$inject = [
@@ -544,39 +548,41 @@ Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) 
         }
     });
 
-    eventBus.on('import.parse.complete', ({context}) => {
-        context.warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({
-                                                                                                        property,
-                                                                                                        value,
-                                                                                                        element
-                                                                                                    }) => {
-            if (property === 'om:classRef') {
-                const dataClass = this.mediator.dataModelerHook.modeler.get('elementRegistry').get(value).businessObject;
-                if (!dataClass) {
-                    throw new Error('Could not resolve data class with id ' + value);
-                }
-                element.classRef = dataClass;
-            }
-            if (property === 'om:states') {
-                const state = this.mediator.olcModelerHook.modeler.getStateById(value);
-                if (!state) {
-                    throw new Error('Could not resolve state with id ' + value);
-                }
-                if(element.states){
-                    element.states.push(state);
-                } else {
-                    element.states = [state];
-                }
-            }
-            if (property === 'odDi:objectiveRef') {
-                const objective = this.mediator.dependencyModelerHook.modeler.get('elementRegistry').get(value).businessObject;
-                if (!objective) {
-                    throw new Error('Could not resolve objectives with id ' + value);
-                }
-                element.objectiveRef = objective;
-            }
-        });
-    });
+  eventBus.on("import.parse.complete", ({ context }) => {
+    context.warnings
+      .filter(({ message }) => message.startsWith("unresolved reference"))
+      .forEach(({ property, value, element }) => {
+        if (property === "om:classRef") {
+          const dataClass = this.mediator.dataModelerHook.modeler
+            .get("elementRegistry")
+            .get(value).businessObject;
+          if (!dataClass) {
+            throw new Error("Could not resolve data class with id " + value);
+          }
+          element.classRef = dataClass;
+        }
+          if (property === "om:states") {
+              const state = this.mediator.olcModelerHook.modeler.getStateById(value);
+              if (!state) {
+                  throw new Error("Could not resolve state with id " + value);
+              }
+              if(element.states){
+                  element.states.push(state);
+              } else {
+                  element.states = [state];
+              }
+          }
+        if (property === "odDi:objectiveRef") {
+          const objective = this.mediator.dependencyModelerHook.modeler
+            .get("elementRegistry")
+            .get(value).businessObject;
+          if (!objective) {
+            throw new Error("Could not resolve objectives with id " + value);
+          }
+          element.objectiveRef = objective;
+        }
+      });
+  });
 
     eventBus.on(ObjectiveEvents.OBJECTIVE_CREATION_REQUESTED, event => {
         return this.mediator.objectiveCreationRequested(event.name);
@@ -663,21 +669,21 @@ Mediator.prototype.OlcModelerHook = function (eventBus, olcModeler) {
         return false; // Deletion should never be directly done in olc modeler, will instead propagate from data modeler
     });
 
-    eventBus.on('import.parse.complete', ({context}) => {
-        context.warnings.filter(({message}) => message.startsWith('unresolved reference')).forEach(({
-                                                                                                        property,
-                                                                                                        value,
-                                                                                                        element
-                                                                                                    }) => {
-            if (property === 'olc:classRef') {
-                const dataClass = this.mediator.dataModelerHook.modeler.get('elementRegistry').get(value).businessObject;
-                if (!dataClass) {
-                    throw new Error('Could not resolve data class with id ' + value);
-                }
-                element.classRef = dataClass;
-            }
-        });
-    });
+  eventBus.on("import.parse.complete", ({ context }) => {
+    context.warnings
+      .filter(({ message }) => message.startsWith("unresolved reference"))
+      .forEach(({ property, value, element }) => {
+        if (property === "olc:classRef") {
+          const dataClass = this.mediator.dataModelerHook.modeler
+            .get("elementRegistry")
+            .get(value).businessObject;
+          if (!dataClass) {
+            throw new Error("Could not resolve data class with id " + value);
+          }
+          element.classRef = dataClass;
+        }
+      });
+  });
 
     this.locationOfElement = function (element) {
         return 'Olc ' + root(element).name;
@@ -691,6 +697,101 @@ Mediator.prototype.OlcModelerHook.$inject = [
 ];
 
 Mediator.prototype.OlcModelerHook.isHook = true;
+
+// === Resource Modeler Hook
+Mediator.prototype.ResourceModelerHook = function (eventBus, resourceModeler) {
+    CommandInterceptor.call(this, eventBus);
+    AbstractHook.call(
+        this,
+        resourceModeler,
+        "Resource Model",
+        "https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki"
+    );
+    this.mediator.resourceModelerHook = this;
+    this.eventBus = eventBus;
+
+    this.executed(["shape.create"], (event) => {
+        if (is(event.context.shape, "rem:Resource")) {
+            //this.mediator.addedClass(event.context.shape.businessObject);
+        }
+    });
+
+    this.reverted(["shape.create"], (event) => {
+        if (is(event.context.shape, "rem:Resource")) {
+            console.log(event);
+            //this.mediator.addedState(event.context.shape.businessObject);
+        }
+    });
+
+    this.executed(["shape.delete"], (event) => {
+        if (is(event.context.shape, "rem:Resource")) {
+            //this.mediator.deletedClass(event.context.shape.businessObject);
+        }
+    });
+
+    this.reverted(["shape.delete"], (event) => {
+        if (is(event.context.shape, "rem:Resource")) {
+            console.log(event);
+            //this.mediator.deletedState(event.context.shape.businessObject);
+        }
+    });
+
+    this.preExecute(["elements.delete"], (event) => {
+        event.context.elements = event.context.elements.filter(element => {
+            if (is(element, "rem:Resource")) {
+                return this.modeler.deleteResource(element);
+            } else {
+                return true;
+            }
+        });
+    });
+
+    this.executed(["element.updateLabel"], (event) => {
+        // var changedLabel = event.context.element.businessObject.labelAttribute;
+        // if (
+        //   is(event.context.element, "rem:Resource") &&
+        //   (changedLabel === "name" || !changedLabel)
+        // ) {
+        //   //this.mediator.renamedClass(event.context.element.businessObject);
+        // }
+    });
+
+    this.reverted(["element.updateLabel"], (event) => {
+        // var changedLabel = event.context.element.businessObject.labelAttribute;
+        // if (
+        //   is(event.context.element, "rem:Resource") &&
+        //   (changedLabel === "name" || !changedLabel)
+        // ) {
+        //   //this.mediator.renamedClass(event.context.element.businessObject);
+        // }
+    });
+
+    eventBus.on("import.parse.complete", ({ context }) => {
+        context.warnings
+            .filter(({ message }) => message.startsWith("unresolved reference"))
+            .forEach(({ property, value, element }) => {
+                if (property === 'rem:roles') {
+                    const role = this.mediator.roleModelerHook.modeler.get('elementRegistry').get(value).businessObject;
+                    if (!role) {
+                        throw new Error('Could not resolve role with id ' + value);
+                    }
+                    if(element.roles){
+                        element.roles.push(role);
+                    } else {
+                        element.roles = [role]
+                    }
+                }
+            });
+    });
+};
+inherits(Mediator.prototype.ResourceModelerHook, CommandInterceptor);
+
+Mediator.prototype.ResourceModelerHook.$inject = [
+    "eventBus",
+    "resourceModeler",
+];
+
+Mediator.prototype.ResourceModelerHook.isHook = true;
 
 // === Role Modeler Hook
 Mediator.prototype.RoleModelerHook = function (eventBus, roleModeler) {
