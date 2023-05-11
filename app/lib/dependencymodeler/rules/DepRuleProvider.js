@@ -41,8 +41,8 @@ DepRuleProvider.prototype.init = function () {
     //TODO this leads to reverse connections being created because of diagram-js' Connect.js trying to
 
     return is(source, 'dep:Objective') && is(target, 'dep:Objective')
-        && existingConnections.length === 0 && occurencesOfSource.length === 0 && occurencesOfTarget.length === 0
-        && source !== target && target.id !== 'start_state' && source.id !== 'final_state' && { type: 'dep:Dependency'};
+        && existingConnections.length === 0
+        && source !== target && target.id !== 'start_state' && { type: 'dep:Dependency'};
   });
 
   this.addRule('connection.start', function (context) {

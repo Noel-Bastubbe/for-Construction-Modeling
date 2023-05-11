@@ -2,6 +2,7 @@ import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
 import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
 import {is} from "../../util/Util";
+import ObjectiveEvents from "../../objectivemodeler/ObjectiveEvents";
 
 export default class DepLabelHandler extends CommandInterceptor {
     constructor(eventBus, modeling, directEditing, overlays, dependencyModeler) {
@@ -31,10 +32,6 @@ export default class DepLabelHandler extends CommandInterceptor {
             if (is(element, 'dep:Objective') && element.businessObject.id !== 'start_state') {
                 const objective = element.businessObject;
                 this._dropdownContainer.currentElement = element;
-
-                if (element.businessObject.id === 'final_state') {
-                    this._dropdownContainer.removeChild(this._nameDropdown);
-                }
 
                 const populateNameDropdown = () => {
                     this._nameDropdown.populate(
@@ -99,9 +96,6 @@ export default class DepLabelHandler extends CommandInterceptor {
                     if (this._overlayId) {
                         this._overlays.remove(this._overlayId);
                         this._overlayId = undefined;
-                    }
-                    if (element.businessObject.id === 'final_state') {
-                        this._dropdownContainer.insertBefore(this._nameDropdown,this._timeDropdown);
                     }
                     this._dropdownContainer.currentElement = undefined;
                     this._currentDropdownTarget = undefined;
