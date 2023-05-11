@@ -126,7 +126,7 @@ export default function getDropdown(name = "") {
             );
         }
     };
-1
+
     dropdownMenu.getEntry = function (option) {
         return this.getEntries().filter((entry) => entry.option === option)[0];
     };
