@@ -3,6 +3,7 @@ import CommonEvents from "../../common/CommonEvents";
 import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
 import {is} from "../../util/Util";
+import {without} from "min-dash";
 
 export default class ResourceLabelHandler extends CommandInterceptor {
     constructor(eventBus, modeling, directEditing, overlays, resourceModeler) {
@@ -212,7 +213,7 @@ export default class ResourceLabelHandler extends CommandInterceptor {
     updateRoles(newRole, element) {
         if((element.businessObject.roles?.find(role => role === newRole)))
         {
-            element.businessObject.roles.pop(newRole);
+            element.businessObject.roles = without(element.businessObject.roles, newRole);
         } else if(element.businessObject.roles){
             element.businessObject.roles.push(newRole);
         } else {
