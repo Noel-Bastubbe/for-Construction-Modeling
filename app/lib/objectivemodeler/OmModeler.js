@@ -36,6 +36,7 @@ import SnappingModule from './features/snapping';
 import SpaceToolBehaviorModule from './behavior';
 import {nextPosition} from '../util/Util';
 import {is} from "bpmn-js/lib/util/ModelUtil";
+import {without} from 'min-dash';
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -270,7 +271,7 @@ OmModeler.prototype.handleStateRenamed = function (olcState) {
 OmModeler.prototype.handleStateDeleted = function (olcState) {
     let changedVisual = this.getVisualsInState(olcState);
     this.getObjectsInState(olcState).forEach(element => {
-        element.state = undefined;
+        element.states = without(element.states, olcState);
     });
     changedVisual.forEach(element =>
         this.get('eventBus').fire('element.changed', {
@@ -316,7 +317,7 @@ OmModeler.prototype.getVisualsInState = function (olcState) {
     return this.get('elementRegistry').filter(element =>
         is(element, 'om:Object') &&
         olcState.id &&
-        element.businessObject.state?.id === olcState.id
+        element.businessObject.states.some(state => state.id === olcState.id)
     );
 }
 
@@ -325,7 +326,7 @@ OmModeler.prototype.getObjectsInState = function (olcState) {
     let objects = objectives.map(objective => objective.get('boardElements')).flat(1).filter((element) =>
         is(element, 'om:Object') &&
         olcState.id &&
-        element.state?.id === olcState.id);
+        element.states.some(state => state.id === olcState.id));
     return objects;
 }
 
