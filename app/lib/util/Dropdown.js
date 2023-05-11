@@ -22,6 +22,11 @@ export default function getDropdown(name = "") {
             dropdownTitle.innerHTML = name;
             this.appendChild(dropdownTitle);
         }
+        
+        const dropdownContent = document.createElement("div");
+        dropdownContent.classList.add("dd-dropdown-content");
+        this.appendChild(dropdownContent);
+
         for (const option of options) {
             const box = document.createElement("div");
             box.classList.add("dd-dropdown-box");
@@ -90,7 +95,7 @@ export default function getDropdown(name = "") {
                     }
                 }
             };
-            this.appendChild(box);
+            dropdownContent.appendChild(box);
 
             // Delete and Edit name button in Objective Model
             //display none
@@ -98,24 +103,24 @@ export default function getDropdown(name = "") {
     };
 
     dropdownMenu.getEntries = function () {
-        let boxList = Array.from(this.children).filter((child) =>
+        let boxList = Array.from(this.children[1].children).filter((child) =>
             child.classList.contains("dd-dropdown-box")
         );
         return boxList.map((box) =>
             box.firstChild
         );
     };
-
+1
     dropdownMenu.getEntry = function (option) {
         return this.getEntries().filter((entry) => entry.option === option)[0];
     };
 
-    dropdownMenu.addCreateElementInput = function (onConfirm, type = "text", value, minValue = "1") {
+    dropdownMenu.addCreateElementInput = function (onConfirm, type = "text", value) {
         const createNewElementEditorContainer = document.createElement("div");
         createNewElementEditorContainer.classList.add("dd-dropdown-create-input");
         const createNewElementEditor = document.createElement("input");
         createNewElementEditor.type = type;
-        createNewElementEditor.min = minValue;
+        createNewElementEditor.min = 1;
         if (value) {
             createNewElementEditor.value = value;
         } else {
