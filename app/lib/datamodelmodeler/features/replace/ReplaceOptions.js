@@ -5,15 +5,6 @@
 *   label: string | LabelGetter;
 *   actionName: string;
 *   className: string;
-*   target?: {
-*     type: string;
-*     isExpanded?: boolean;
-*     isInterrupting?: boolean;
-*     triggeredByEvent?: boolean;
-*     cancelActivity?: boolean;
-*     eventDefinitionType?: string;
-*     eventDefinitionAttrs?: Record<string, any>
-*   };
 * } } ReplaceOption
 */
 

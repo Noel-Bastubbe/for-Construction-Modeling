@@ -88,31 +88,6 @@
       ]
     },
     {
-      "name": "InheritAssociation",
-      "superClass": [
-        "BoardElement"
-      ],
-      "properties": [
-        {
-          "name": "type",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
-          "name": "sourceRef",
-          "isAttr": true,
-          "isReference": true,
-          "type": "Class"
-        },
-        {
-          "name": "targetRef",
-          "isAttr": true,
-          "isReference": true,
-          "type": "Class"
-        }
-      ]
-    },
-    {
       "name": "OdBoard",
       "superClass": [
         "RootElement"

@@ -324,18 +324,6 @@ export default function ODRenderer(
 
       return drawPath(parentGfx, pathData, attrs);
     },
-    'od:InheritAssociation': function(parentGfx, element) {
-      var pathData = createPathFromConnection(element);
-
-      var fill = getFillColor(element, defaultFillColor),
-          stroke = getStrokeColor(element, defaultStrokeColor);
-
-      var attrs = {
-        strokeLinejoin: 'round',   
-        stroke: getStrokeColor(element, defaultStrokeColor) 
-      };
-      return drawPath(parentGfx, pathData, attrs);
-    },
     'od:TextBox': function(parentGfx, element) {
       var attrs = {
         fill: 'none',

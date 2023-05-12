@@ -1,38 +1,15 @@
-/*export default function ReplaceMenuProvider(popupMenu) {
-    popupMenu.registerProvider('bpmn-replace', this);
-}
-
-ReplaceMenuProvider.$inject = [
-    'popupMenu'
-];
-
-ReplaceMenuProvider.prototype.getPopupMenuHeaderEntries = function(element) {
-    return function(entries) {
-        return entries;
-        }
-}
-*/
-
 import {
     getBusinessObject,
     is
   } from '../../util/ModelUtil';
   
-  /*import {
-    isEventSubProcess,
-    isExpanded
-  } from '../../util/DiUtil';
-  */
-
   import {
     isDifferentType
   } from './util/TypeUtil';
   
   import {
     forEach,
-    filter,
     isArray,
-    isUndefined
   } from 'min-dash';
   
   import * as replaceOptions from '../replace/ReplaceOptions';
@@ -60,7 +37,6 @@ import {
    */
   
   /**
-   * A BPMN-specific popup menu provider.
    *
    * @implements {PopupMenuProvider}
    *
@@ -112,13 +88,9 @@ import {
   
     var rules = this._rules;
   
-    var filteredReplaceOptions = [];
-  
     if (isArray(target) || !rules.allowed('shape.replace', { element: target })) {
       return {};
     }
-  
-    var differentType = isDifferentType(target);
   
     if (is(businessObject, 'od:Association')) {
       return this._createConnectionEntries(target, replaceOptions.CONNECTION);
@@ -126,52 +98,7 @@ import {
   
     return {};
   };
-  
-  /**
-   * @param {PopupMenuTarget} target
-   *
-   * @return {PopupMenuHeaderEntries}
-   */
-  /*
-  ReplaceMenuProvider.prototype.getPopupMenuHeaderEntries = function(target) {
-  
-    var headerEntries = {};
-  
-    if (is(target, 'bpmn:Activity') && !isEventSubProcess(target)) {
-      headerEntries = {
-        ...headerEntries,
-        ...this._getLoopCharacteristicsHeaderEntries(target)
-      };
-    }
-  
-    if (is(target, 'bpmn:DataObjectReference')) {
-      headerEntries = {
-        ...headerEntries,
-        ...this._getCollectionHeaderEntries(target)
-      };
-    }
-  
-    if (is(target, 'bpmn:Participant')) {
-      headerEntries = {
-        ...headerEntries,
-        ...this._getParticipantMultiplicityHeaderEntries(target)
-      };
-    }
-  
-    if (is(target, 'bpmn:SubProcess') &&
-        !is(target, 'bpmn:Transaction') &&
-        !isEventSubProcess(target)) {
-      headerEntries = {
-        ...headerEntries,
-        ...this._getAdHocHeaderEntries(target)
-      };
-    }
-  
-    return headerEntries;
-  };
-  */
-  
-  
+    
   /**
    * Create popup menu entries for the given target.
    *
@@ -193,7 +120,7 @@ import {
   };
   
   /**
-   * Creates popup menu entries for the given sequence flow.
+   * Creates popup menu entries for the given connection.
    *
    * @param  {PopupMenuTarget} target
    * @param  {ReplaceOption[]} replaceOptions
@@ -212,70 +139,14 @@ import {
     var self = this;
   
     forEach(replaceOptions, function(replaceOption) {
-    /*
-      switch (replaceOption.actionName) {
-      case 'replace-with-default-flow':
-        if (businessObject.sourceRef.default !== businessObject &&
-              (is(businessObject.sourceRef, 'bpmn:ExclusiveGateway') ||
-               is(businessObject.sourceRef, 'bpmn:InclusiveGateway') ||
-               is(businessObject.sourceRef, 'bpmn:ComplexGateway') ||
-               is(businessObject.sourceRef, 'bpmn:Activity'))) {
-  
-          entries = {
-            ...entries,
-            [ replaceOption.actionName ]: self._createEntry(replaceOption, target, function() {
-              modeling.updateProperties(target.source, { default: businessObject });
-            })
-          };
-        }
-        break;
-      case 'replace-with-conditional-flow':
-        if (!businessObject.conditionExpression && is(businessObject.sourceRef, 'bpmn:Activity')) {
-  
-          entries = {
-            ...entries,
-            [ replaceOption.actionName ]: self._createEntry(replaceOption, target, function() {
-              var conditionExpression = moddle.create('bpmn:FormalExpression', { body: '' });
-  
-              modeling.updateProperties(target, { conditionExpression: conditionExpression });
-            })
-          };
-        }
-        break;
-      default:
-    */
-   /*
-        // conditional flow -> sequence flow
-        if (is(businessObject.sourceRef, 'bpmn:Activity') && businessObject.conditionExpression) {
-          entries = {
-            ...entries,
-            [ replaceOption.actionName ]: self._createEntry(replaceOption, target, function() {
-              modeling.updateProperties(target, { conditionExpression: undefined });
-            })
-          };
-        }
-  
-        // default flow -> sequence flow
-        if ((is(businessObject.sourceRef, 'bpmn:ExclusiveGateway') ||
-             is(businessObject.sourceRef, 'bpmn:InclusiveGateway') ||
-             is(businessObject.sourceRef, 'bpmn:ComplexGateway') ||
-             is(businessObject.sourceRef, 'bpmn:Activity')) &&
-             businessObject.sourceRef.default === businessObject) {
-          entries = {
-            ...entries,
-            [ replaceOption.actionName ]: self._createEntry(replaceOption, target, function() {
-              modeling.updateProperties(target.source, { default: undefined });
-            })
-          };
-        }
-        */
-
         switch (replaceOption.actionName) {
             case 'replace-with-association':
                 entries = {
                     ...entries,
                     [ replaceOption.actionName ]: self._createEntry(replaceOption, target, function() {
                       modeling.updateProperties(target, { inheritance: false });
+                      modeling.updateProperties(target, { sourceCardinality: '0..*' });
+                      modeling.updateProperties(target, { targetCardinality: '0..*' });
                     })
                   };
                 break;
@@ -284,7 +155,8 @@ import {
                     ...entries,
                     [ replaceOption.actionName ]: self._createEntry(replaceOption, target, function() {
                         modeling.updateProperties(target, { inheritance: true });
-                        modeling.updateProperties(target, { sourceCardinality: ' ' });
+                        modeling.updateProperties(target, { sourceCardinality: ''}); 
+                        modeling.updateProperties(target, { targetCardinality: ''}); 
                     })
                 };
                 break;
@@ -330,198 +202,3 @@ import {
       action: action
     };
   };
-  
-  /**
-   * Get popup menu header entries for the loop characteristics of the given BPMN element.
-   *
-   * @param  {PopupMenuTarget} target
-   *
-   * @return {PopupMenuHeaderEntries}
-   */
-  /*
-  ReplaceMenuProvider.prototype._getLoopCharacteristicsHeaderEntries = function(target) {
-  
-    var self = this;
-    var translate = this._translate;
-  
-    function toggleLoopEntry(event, entry) {
-      var newLoopCharacteristics = getBusinessObject(target).loopCharacteristics;
-  
-      if (entry.active) {
-        newLoopCharacteristics = undefined;
-      } else {
-        if (isUndefined(entry.options.isSequential) || !newLoopCharacteristics
-        || !is(newLoopCharacteristics, entry.options.loopCharacteristics)) {
-          newLoopCharacteristics = self._moddle.create(entry.options.loopCharacteristics);
-        }
-  
-        newLoopCharacteristics.isSequential = entry.options.isSequential;
-      }
-      self._modeling.updateProperties(target, { loopCharacteristics: newLoopCharacteristics });
-    }
-  
-    var businessObject = getBusinessObject(target),
-        loopCharacteristics = businessObject.loopCharacteristics;
-  
-    var isSequential,
-        isLoop,
-        isParallel;
-  
-    if (loopCharacteristics) {
-      isSequential = loopCharacteristics.isSequential;
-      isLoop = loopCharacteristics.isSequential === undefined;
-      isParallel = loopCharacteristics.isSequential !== undefined && !loopCharacteristics.isSequential;
-    }
-  
-  
-    return {
-      'toggle-parallel-mi' : {
-        className: 'bpmn-icon-parallel-mi-marker',
-        title: translate('Parallel Multi Instance'),
-        active: isParallel,
-        action: toggleLoopEntry,
-        options: {
-          loopCharacteristics: 'bpmn:MultiInstanceLoopCharacteristics',
-          isSequential: false
-        }
-      },
-      'toggle-sequential-mi': {
-        className: 'bpmn-icon-sequential-mi-marker',
-        title: translate('Sequential Multi Instance'),
-        active: isSequential,
-        action: toggleLoopEntry,
-        options: {
-          loopCharacteristics: 'bpmn:MultiInstanceLoopCharacteristics',
-          isSequential: true
-        }
-      },
-      'toggle-loop': {
-        className: 'bpmn-icon-loop-marker',
-        title: translate('Loop'),
-        active: isLoop,
-        action: toggleLoopEntry,
-        options: {
-          loopCharacteristics: 'bpmn:StandardLoopCharacteristics'
-        }
-      }
-    };
-  };
-  */
-  
-  /**
-   * Get popup menu header entries for the collection property of the given BPMN element.
-   *
-   * @param  {PopupMenuTarget} target
-   *
-   * @return {PopupMenuHeaderEntries}
-   */
-  /*
-  ReplaceMenuProvider.prototype._getCollectionHeaderEntries = function(target) {
-  
-    var self = this;
-    var translate = this._translate;
-  
-    var dataObject = target.businessObject.dataObjectRef;
-  
-    if (!dataObject) {
-      return {};
-    }
-  
-    function toggleIsCollection(event, entry) {
-      self._modeling.updateModdleProperties(
-        target,
-        dataObject,
-        { isCollection: !entry.active });
-    }
-  
-    var isCollection = dataObject.isCollection;
-  
-    return {
-      'toggle-is-collection': {
-        className: 'bpmn-icon-parallel-mi-marker',
-        title: translate('Collection'),
-        active: isCollection,
-        action: toggleIsCollection,
-      }
-    };
-  };
-  */
-  
-  /**
-   * Get popup menu header entries for the participant multiplicity property of the given BPMN element.
-   *
-   * @param  {PopupMenuTarget} target
-   *
-   * @return {PopupMenuHeaderEntries}
-   */
-  /*
-  ReplaceMenuProvider.prototype._getParticipantMultiplicityHeaderEntries = function(target) {
-  
-    var self = this;
-    var bpmnFactory = this._bpmnFactory;
-    var translate = this._translate;
-  
-    function toggleParticipantMultiplicity(event, entry) {
-      var isActive = entry.active;
-      var participantMultiplicity;
-  
-      if (!isActive) {
-        participantMultiplicity = bpmnFactory.create('bpmn:ParticipantMultiplicity');
-      }
-  
-      self._modeling.updateProperties(
-        target,
-        { participantMultiplicity: participantMultiplicity });
-    }
-  
-    var participantMultiplicity = target.businessObject.participantMultiplicity;
-  
-    return {
-      'toggle-participant-multiplicity': {
-        className: 'bpmn-icon-parallel-mi-marker',
-        title: translate('Participant Multiplicity'),
-        active: !!participantMultiplicity,
-        action: toggleParticipantMultiplicity,
-      }
-    };
-  };
-  */
-  
-  /**
-   * Get popup menu header entries for the ad-hoc property of the given BPMN element.
-   *
-   * @param  {PopupMenuTarget} element
-   *
-   * @return {PopupMenuHeaderEntries}
-   */
-  /*
-  ReplaceMenuProvider.prototype._getAdHocHeaderEntries = function(element) {
-    var translate = this._translate;
-    var businessObject = getBusinessObject(element);
-  
-    var isAdHoc = is(businessObject, 'bpmn:AdHocSubProcess');
-  
-    var replaceElement = this._bpmnReplace.replaceElement;
-  
-    return {
-      'toggle-adhoc': {
-        className: 'bpmn-icon-ad-hoc-marker',
-        title: translate('Ad-hoc'),
-        active: isAdHoc,
-        action: function(event, entry) {
-          if (isAdHoc) {
-            return replaceElement(element, { type: 'bpmn:SubProcess' }, {
-              autoResize: false,
-              layoutConnection: false
-            });
-          } else {
-            return replaceElement(element, { type: 'bpmn:AdHocSubProcess' }, {
-              autoResize: false,
-              layoutConnection: false
-            });
-          }
-        }
-      }
-    };
-  };
-  */
