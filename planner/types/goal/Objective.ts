@@ -21,7 +21,7 @@ export class Objective {
         }
 
         for (let objectiveLinks of this.objectiveLinks) {
-            if (!state.links.some(instanceLink => objectiveLinks.isMatchedBy(instanceLink))) {
+            if (!state.instanceLinks.some(instanceLink => objectiveLinks.isMatchedBy(instanceLink))) {
                 return false;
             }
         }
