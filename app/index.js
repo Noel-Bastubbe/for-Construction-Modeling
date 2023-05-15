@@ -100,8 +100,8 @@ var resourceModeler = new RemModeler({
         bindTo: document.querySelector('#resourcemodel-canvas')
     },
     additionalModules: [{
-        __init__ : ['mediator'],
-        mediator : ['type', mediator.ResourceModelerHook]
+        __init__: ['mediator'],
+        mediator: ['type', mediator.ResourceModelerHook]
     }]
 });
 
@@ -178,7 +178,7 @@ async function exportToZip() {
     zip.file('objectiveModel.xml', objectiveModel);
     const olcs = (await olcModeler.saveXML({format: true})).xml;
     zip.file('olcs.xml', olcs);
-    const resourceModel = (await resourceModeler.saveXML({ format: true })).xml;
+    const resourceModel = (await resourceModeler.saveXML({format: true})).xml;
     zip.file('resourceModel.xml', resourceModel);
     const terminationCondition = (await terminationConditionModeler.saveXML({format: true})).xml;
     zip.file('terminationCondition.xml', terminationCondition);
@@ -241,7 +241,7 @@ async function displayFileName(zipName) {
 };
 
 document.getElementById('planningButton').addEventListener('click', () => {
-    window.alert("This is not possible right now.");
+    alert("This is not possible right now.");
 });
 
 async function navigationDropdown() {
@@ -278,7 +278,9 @@ async function navigationDropdown() {
 
     function repopulateDropdown() {
         var modelers = mediator.getModelers();
-        modelers.sort((a, b) => {return a.rank - b.rank});
+        modelers.sort((a, b) => {
+            return a.rank - b.rank
+        });
         if (constructionMode) {
             modelers = modelers.filter(object => object !== terminationConditionModeler);
         }
