@@ -5,6 +5,7 @@ import {DataObjectInstance} from "../executionState/DataObjectInstance";
 import {ExecutionState} from "../executionState/ExecutionState";
 import {DataObjectReference} from "./DataObjectReference";
 import {InstanceLink} from "../executionState/InstanceLink";
+import {ExecutionAction} from "../executionState/ExecutionAction";
 
 export class Activity {
     name: string;
@@ -32,7 +33,7 @@ export class Activity {
     }
 
     public createdDataObjectReferences(): DataObjectReference[] {
-        let inputSet: DataObjectReference[]  = [];
+        let inputSet: DataObjectReference[] = [];
         if (this.inputSets.length > 0) {
             inputSet = this.inputSets[0].set;
         }
@@ -48,7 +49,7 @@ export class Activity {
     }
 
     public changedDataObjectReferences(): DataObjectReference[] {
-        let inputSet: DataObjectReference[]  = [];
+        let inputSet: DataObjectReference[] = [];
         if (this.inputSets.length > 0) {
             inputSet = this.inputSets[0].set;
         }
@@ -68,9 +69,9 @@ export class Activity {
             console.error("Activity was not executable.");
         }
         let createdDataObjectReferences: DataObjectReference[] = this.createdDataObjectReferences();
-        let changedDataObjectReferences: DataObjectReference[]  = this.changedDataObjectReferences();
+        let changedDataObjectReferences: DataObjectReference[] = this.changedDataObjectReferences();
         for (let dataObjectReference of createdDataObjectReferences) {
-            let newDataObjectInstanceName: string = dataObjectReference.dataclass.name + ":" + (executionState.getDataObjectInstanceOfClass(dataObjectReference.dataclass).length + 1);
+            let newDataObjectInstanceName: string = dataObjectReference.dataclass.name + ":" + (executionState.getDataObjectInstancesOfClass(dataObjectReference.dataclass).length + 1);
             let newDataObjectInstance: DataObjectInstance = new DataObjectInstance(newDataObjectInstanceName, dataObjectReference.dataclass, dataObjectReference.states[0]);
 
             // This creates links to every DataObjectInstance that is part of the input and does not respect the restriction by the fcM to only link when there exists an association between the dataclasses
@@ -96,5 +97,22 @@ export class Activity {
                 }
             }
         }
+    }
+
+    private getActionForInput(inputList: DataObjectInstance[], resource: Resource) {
+        let outputList = this.getOutputForInput(inputList);
+        return new ExecutionAction(this, 0, resource, inputList, outputList);
+    }
+
+    private getOutputForInput(inputList: DataObjectInstance[]): DataObjectInstance[] {
+        let output = this.outputSet.set.map(dataObjectReference => {
+            let instance = inputList.find(dataObjectInstance => dataObjectInstance.dataclass === dataObjectReference.dataclass);
+            if (instance) {
+                return new DataObjectInstance(instance.name, instance.dataclass, dataObjectReference.states[0]);
+            } else {
+                return new DataObjectInstance("new", dataObjectReference.dataclass, dataObjectReference.states[0]);
+            }
+        });
+        return output;
     }
 }

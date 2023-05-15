@@ -6,12 +6,12 @@ export class OutputAction {
     activity: Activity;
     start: number;
     end: number;
-    resource: Resource;
+    resource: Resource | null;
     capacity: number;
     inputList: DataObjectInstance[];
     outputList: DataObjectInstance[];
 
-    public constructor(activity: Activity, start: number, end: number, resource: Resource, capacity: number, inputList: DataObjectInstance[], outputList: DataObjectInstance[]) {
+    public constructor(activity: Activity, start: number, end: number, resource: Resource | null, capacity: number, inputList: DataObjectInstance[], outputList: DataObjectInstance[]) {
         this.activity = activity;
         this.start = start;
         this.end = end;

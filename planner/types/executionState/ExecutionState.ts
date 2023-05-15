@@ -28,7 +28,7 @@ export class ExecutionState {
         return activities.filter(activity => activity.isExecutable(this.dataObjectInstances, this.resources));
     }
 
-    public getDataObjectInstanceOfClass(dataclass: Dataclass): DataObjectInstance[] {
+    public getDataObjectInstancesOfClass(dataclass: Dataclass): DataObjectInstance[] {
         return this.dataObjectInstances.filter(DataObjectInstance => DataObjectInstance.dataclass === dataclass);
     }
 
