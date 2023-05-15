@@ -8,21 +8,18 @@ export class IOSet {
         this.set = set;
     }
 
-    public isSatisfiedBy(currentState: DataObjectInstance[]): boolean {
-        let satisfiedBy = true;
-        this.set.forEach(function (dataObjectReference) {
-                let foundCorrespondingDataObjectInstance = false;
-                currentState.forEach(function (dataObjectInstance) {
-                        if (dataObjectInstance.dataclass == dataObjectReference.dataclass && dataObjectReference.states.includes(dataObjectInstance.state)){
-                            foundCorrespondingDataObjectInstance = true;
-                        }
-                    }
-                )
-                if(!foundCorrespondingDataObjectInstance) {
-                    satisfiedBy = false;
+    public isSatisfiedBy(executionState: DataObjectInstance[]): boolean {
+        for (let dataObjectReference of this.set) {
+            let foundCorrespondingDataObjectInstance = false;
+            for (let dataObjectInstance of executionState) {
+                if (dataObjectInstance.dataclass == dataObjectReference.dataclass && dataObjectReference.states.includes(dataObjectInstance.state)) {
+                    foundCorrespondingDataObjectInstance =  true;
                 }
             }
-        );
-        return satisfiedBy;
+            if (!foundCorrespondingDataObjectInstance) {
+                return false;
+            }
+        }
+        return true;
     }
 }

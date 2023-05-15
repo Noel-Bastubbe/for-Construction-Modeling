@@ -54,12 +54,11 @@ export class Activity {
         }
         let outputSet = this.outputSet.set;
         let changedDataObjectReferences: DataObjectReference[] = [];
-        outputSet.forEach(function (DataObjectReference) {
-                if (inputSet.find(element => element.dataclass === DataObjectReference.dataclass)) {
-                    changedDataObjectReferences.push(DataObjectReference);
-                }
+        for (let dataObjectReference of outputSet) {
+            if (inputSet.find(element => element.dataclass === dataObjectReference.dataclass)) {
+                changedDataObjectReferences.push(dataObjectReference);
             }
-        )
+        }
         return changedDataObjectReferences;
     }
 
@@ -70,34 +69,32 @@ export class Activity {
         }
         let createdDataObjectReferences: DataObjectReference[] = this.createdDataObjectReferences();
         let changedDataObjectReferences: DataObjectReference[]  = this.changedDataObjectReferences();
-        createdDataObjectReferences.forEach(function (DataObjectReference) {
-            let newDataObjectInstanceName: string = DataObjectReference.dataclass.name + ":" + (executionState.getDataObjectInstanceOfClass(DataObjectReference.dataclass).length + 1);
-            let newDataObjectInstance: DataObjectInstance = new DataObjectInstance(newDataObjectInstanceName, DataObjectReference.dataclass, DataObjectReference.states[0]);
-            // This creates links to every DataObjectInstance that is part of the input and does not respect the restriction by the fcM to only link when there exists an association between the dataclasses
-            relevantDataObjectInstances.forEach(function (DataObjectInstance) {
-                    let newInstanceLink = new InstanceLink(DataObjectInstance, newDataObjectInstance);
-                    executionState.instanceLinks.push(newInstanceLink);
-                }
-            )
-            executionState.dataObjectInstances.push(newDataObjectInstance);
-        })
+        for (let dataObjectReference of createdDataObjectReferences) {
+            let newDataObjectInstanceName: string = dataObjectReference.dataclass.name + ":" + (executionState.getDataObjectInstanceOfClass(dataObjectReference.dataclass).length + 1);
+            let newDataObjectInstance: DataObjectInstance = new DataObjectInstance(newDataObjectInstanceName, dataObjectReference.dataclass, dataObjectReference.states[0]);
 
-        changedDataObjectReferences.forEach(function (DataObjectReference) {
-            if (DataObjectReference.isList) {
-                let affectedDataObjectInstances = relevantDataObjectInstances.filter(DataObjectInstance => DataObjectInstance.dataclass === DataObjectReference.dataclass);
-                affectedDataObjectInstances.forEach(function (DataObjectInstance) {
-                        DataObjectInstance.state = DataObjectReference.states[0];
-                    }
-                )
+            // This creates links to every DataObjectInstance that is part of the input and does not respect the restriction by the fcM to only link when there exists an association between the dataclasses
+            for (let dataObjectInstance of relevantDataObjectInstances) {
+                let newInstanceLink = new InstanceLink(dataObjectInstance, newDataObjectInstance);
+                executionState.instanceLinks.push(newInstanceLink);
+            }
+            executionState.dataObjectInstances.push(newDataObjectInstance);
+        }
+
+        for (let dataObjectReference of changedDataObjectReferences) {
+            if (dataObjectReference.isList) {
+                let affectedDataObjectInstances = relevantDataObjectInstances.filter(DataObjectInstance => DataObjectInstance.dataclass === dataObjectReference.dataclass);
+                for (let dataObjectInstance of affectedDataObjectInstances) {
+                    dataObjectInstance.state = dataObjectReference.states[0];
+                }
             } else {
-                let affectedDataObjectInstance = relevantDataObjectInstances.find(DataObjectInstance => DataObjectInstance.dataclass === DataObjectReference.dataclass);
+                let affectedDataObjectInstance = relevantDataObjectInstances.find(DataObjectInstance => DataObjectInstance.dataclass === dataObjectReference.dataclass);
                 if (affectedDataObjectInstance) {
-                    affectedDataObjectInstance.state = DataObjectReference.states[0];
+                    affectedDataObjectInstance.state = dataObjectReference.states[0];
                 } else {
                     console.error("Could not match a DataObjectReference to an affected DataObjectInstance")
                 }
             }
-        })
-
+        }
     }
 }

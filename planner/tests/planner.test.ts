@@ -8,6 +8,8 @@ import {Resource} from "../types/Resource";
 import {Dataclass} from "../types/Dataclass";
 import {InstanceLink} from "../types/executionState/InstanceLink";
 import {Planner} from "../Planner";
+import {Objective} from "../types/goal/Objective";
+import {ObjectiveNode} from "../types/goal/ObjectiveNode";
 
 // Dataclasses
 let house: Dataclass;
@@ -81,6 +83,12 @@ let tile: Activity;
 let lay: Activity;
 let buyCables: Activity;
 
+// ObjectiveNodes
+let objectiveNode: ObjectiveNode;
+
+// Objectives
+let objective: Objective;
+
 // Project State
 let activities: Activity[];
 let resources: Resource[];
@@ -149,6 +157,12 @@ beforeEach(() => {
 
     outputSetBuyCables = new IOSet([cableAvailable]);
 
+    //reset ObjectiveNodes
+    objectiveNode = new ObjectiveNode("house:1", house, ["painted"]);
+
+    //reset Objectives
+    objective = new Objective([objectiveNode], []);
+
     //reset all activities
     paint = new Activity("paint", 1, 1, painter, [inputSetPaint], outputSetPaint);
     plaster = new Activity("plaster", 1, 1, painter, [inputSetPlaster], outputSetPlaster);
@@ -186,19 +200,16 @@ describe('determining executable Activities', () => {
 describe('executing Activities', () => {
 
     test('activity with one inputSet is executable', () => {
-        currentState.dataObjectInstances = [mapleStreetInit];
         paint.execute(currentState,[mapleStreetInit]);
         expect(currentState.dataObjectInstances).toEqual([mapleStreetPainted]);
     });
 
     test('activity with many inputSets is executable', () => {
-        currentState.dataObjectInstances = [mapleStreetInit];
         tile.execute(currentState,[mapleStreetInit]);
         expect(currentState.dataObjectInstances).toEqual([mapleStreetTiled]);
     });
 
     test('activity that creates a new instance is executable', () => {
-        currentState.dataObjectInstances = [mapleStreetInit];
         buyCables.execute(currentState,[]);
         expect(currentState.dataObjectInstances).toEqual([mapleStreetInit, redCableAvailable]);
     });
@@ -221,9 +232,7 @@ describe('generating plans', () => {
 
     let planner = new Planner();
 
-    test('activity with one inputSet is executable', () => {
-        currentState.dataObjectInstances = [mapleStreetInit];
-        currentState.resources = [picasso,michelangelo];
-        expect(planner.simulateUntil(currentState,[mapleStreetTiled],[paint,tile],[picasso,michelangelo])).toEqual(true);
+    test('plan one activity', () => {
+        expect(planner.simulateUntil(currentState, objective, [paint], [picasso])).toEqual(true);
     });
 });
