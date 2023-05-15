@@ -240,6 +240,10 @@ async function displayFileName(zipName) {
     document.getElementById("fileName").innerHTML = zipName;
 };
 
+document.getElementById('planningButton').addEventListener('click', () => {
+    window.alert("This is not possible right now.");
+});
+
 async function navigationDropdown() {
     var container = document.getElementById("navigationBar");
     var buttonBar = document.createElement('div');
