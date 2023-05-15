@@ -76,7 +76,7 @@ export class Activity {
             // This creates links to every DataObjectInstance that is part of the input and does not respect the restriction by the fcM to only link when there exists an association between the dataclasses
             relevantDataObjectInstances.forEach(function (DataObjectInstance) {
                     let newInstanceLink = new InstanceLink(DataObjectInstance, newDataObjectInstance);
-                    executionState.links.push(newInstanceLink);
+                    executionState.instanceLinks.push(newInstanceLink);
                 }
             )
             executionState.dataObjectInstances.push(newDataObjectInstance);

@@ -3,18 +3,29 @@ import {Resource} from "../Resource";
 import {DataObjectInstance} from "./DataObjectInstance";
 import {InstanceLink} from "./InstanceLink";
 import {Dataclass} from "../Dataclass";
+import {ExecutionAction} from "./ExecutionAction";
+import {OutputAction} from "../output/OutputAction";
 
 export class ExecutionState {
     dataObjectInstances: DataObjectInstance[];
-    links: InstanceLink[];
+    instanceLinks: InstanceLink[];
+    resources: Resource[];
+    time: number;
 
-    public constructor(dataObjects: DataObjectInstance[], links: InstanceLink[]) {
+    runningActions: ExecutionAction[];
+    actionHistory: OutputAction[];
+
+    public constructor(dataObjects: DataObjectInstance[], instanceLinks: InstanceLink[], resources: Resource[], time: number, runningActions: ExecutionAction[] = [], actionHistory: OutputAction[] = []) {
         this.dataObjectInstances = dataObjects;
-        this.links = links;
+        this.instanceLinks = instanceLinks;
+        this.resources = resources;
+        this.time = time;
+        this.runningActions = runningActions;
+        this.actionHistory = actionHistory;
     }
 
-    public executableActivities(activities: Activity[], resources: Resource[]): Activity[] {
-        return activities.filter(activity => activity.isExecutable(this.dataObjectInstances, resources));
+    public executableActivities(activities: Activity[]): Activity[] {
+        return activities.filter(activity => activity.isExecutable(this.dataObjectInstances, this.resources));
     }
 
     public getDataObjectInstanceOfClass(dataclass: Dataclass): DataObjectInstance[] {

@@ -1,8 +1,8 @@
-import {DataObjectInstance} from "./DataObjectInstance";
+import {DataObjectInstance} from "../executionState/DataObjectInstance";
 import {Activity} from "../fragments/Activity";
 import {Resource} from "../Resource";
 
-export class Action {
+export class OutputAction {
     activity: Activity;
     start: number;
     end: number;

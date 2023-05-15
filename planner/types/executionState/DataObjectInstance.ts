@@ -4,6 +4,7 @@ export class DataObjectInstance {
     name: string;
     dataclass: Dataclass;
     state: string;
+    isBlocked: boolean = false;
 
     public constructor(name: string, dataclass: Dataclass, state: string) {
         this.name = name;

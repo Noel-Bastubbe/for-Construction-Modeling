@@ -22,7 +22,7 @@ export class Planner {
             if (this.isFulfilledBy(node, goal)) {
                 return true;
             }
-            for (let activity of node.executableActivities(activities, resources)) {
+            for (let activity of node.executableActivities(activities)) {
                 let simulatedState = startState;
                 activity.execute(simulatedState, simulatedState.dataObjectInstances);
                 queue.push(simulatedState);
