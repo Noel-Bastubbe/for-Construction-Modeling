@@ -1,4 +1,4 @@
-import {DataObjectInstance} from "../executionState/DataObjectInstance";
+import {DataObjectInstance} from "./DataObjectInstance";
 import {Activity} from "../fragments/Activity";
 import {Resource} from "../Resource";
 import {ExecutionState} from "./ExecutionState";
@@ -11,6 +11,7 @@ export class ExecutionAction {
     resource: Resource | null
     inputList: DataObjectInstance[];
     outputList: DataObjectInstance[];
+    //todo: newLinks: InstanceLink[];
 
     public constructor(activity: Activity, runningTime: number, resource: Resource, inputList: DataObjectInstance[], outputList: DataObjectInstance[]) {
         this.activity = activity;
