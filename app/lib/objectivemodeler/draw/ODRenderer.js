@@ -179,9 +179,8 @@ export default function ODRenderer(
     let semantic = getSemantic(element);
     let text;
     if (semantic.instance !== undefined) {
-      text = `${semantic.instance?.name} : ${semantic.classRef?.name}`;
-    }
-    else {
+      text = `${semantic.instance.name} : ${semantic.classRef?.name}`;
+    } else {
       text = ` : ${semantic.classRef?.name}`;
     }
     renderLabel(parentGfx, text, {
