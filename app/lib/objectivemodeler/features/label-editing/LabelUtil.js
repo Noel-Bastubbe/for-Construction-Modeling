@@ -18,7 +18,6 @@ export function getLabel(element) {
   }
 }
 
-
 export function setLabel(element, text) {
   var semantic = element.businessObject,
       attr = getLabelAttr(semantic);
