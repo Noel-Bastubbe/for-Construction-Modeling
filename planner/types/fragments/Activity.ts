@@ -84,12 +84,12 @@ export class Activity {
 
         for (let dataObjectReference of changedDataObjectReferences) {
             if (dataObjectReference.isList) {
-                let affectedDataObjectInstances = relevantDataObjectInstances.filter(DataObjectInstance => DataObjectInstance.dataclass === dataObjectReference.dataclass);
+                let affectedDataObjectInstances = relevantDataObjectInstances.filter(dataObjectInstance => dataObjectInstance.dataclass === dataObjectReference.dataclass);
                 for (let dataObjectInstance of affectedDataObjectInstances) {
                     dataObjectInstance.state = dataObjectReference.states[0];
                 }
             } else {
-                let affectedDataObjectInstance = relevantDataObjectInstances.find(DataObjectInstance => DataObjectInstance.dataclass === dataObjectReference.dataclass);
+                let affectedDataObjectInstance = relevantDataObjectInstances.find(dataObjectInstance => dataObjectInstance.dataclass === dataObjectReference.dataclass);
                 if (affectedDataObjectInstance) {
                     affectedDataObjectInstance.state = dataObjectReference.states[0];
                 } else {
@@ -99,7 +99,7 @@ export class Activity {
         }
     }
 
-    private getActionForInput(inputList: DataObjectInstance[], resource: Resource) {
+    private getExecutionActionForInput(inputList: DataObjectInstance[], resource: Resource) {
         let outputList = this.getOutputForInput(inputList);
         return new ExecutionAction(this, 0, resource, inputList, outputList);
     }
