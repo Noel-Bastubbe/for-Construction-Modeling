@@ -1,4 +1,3 @@
-import path from 'path';
 import Excel from 'exceljs';
 import {ExecutionLog} from "../types/output/ExecutionLog";
 
@@ -24,12 +23,12 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
 
     columnHeaders.forEach((value, index) => {
         worksheet1.getCell(1, index + 2).value = value;
-        worksheet1.getCell(1, index + 2).alignment = {vertical: 'middle', horizontal: 'center'};
+        worksheet1.getCell(1, index + 2).alignment = {vertical: 'middle', horizontal: 'left'};
     });
 
     //writes work spaces in first column
     workSpaces.forEach((value, index) => {
-        worksheet1.getCell(index + 2, 1).value = value.name;
+        worksheet1.getCell(index + 2, 1).value = value.dataclass.name + ' ' + value.name;
     });
 
     //loops through all actions and fills excel sheet
@@ -73,9 +72,11 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
     }
 
     //styling
-    worksheet1.getColumn(1).border = {
-        right: {style: "thick"}
-    };
+    worksheet1.columns.forEach(it => {
+        it.border = {
+            left: {style: "thick"}
+        }
+    });
     worksheet1.getRow(1).border = {
         bottom: {style: "thick"}
     };
@@ -90,8 +91,8 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
     //Execution Plan (resources)
     const worksheet2 = workbook.addWorksheet('Execution Plan (resources)');
 
-    //creates the time axis: first creates array with all numbers from 1 up to deadline, then writes the time units (1,...,deadline) as headers in the sheet
     worksheet2.getCell(1, 1).value = 'Resource';
+    //creates the time axis: first creates array with all numbers from 1 up to deadline, then writes the time units (1,...,deadline) as headers in the sheet
     let headers: Array<number> = [];
     for (let index = 0; index <= deadline; index++) {
         headers.push(index);
@@ -99,7 +100,7 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
 
     headers.forEach((value, index) => {
         worksheet2.getCell(1, index + 2).value = value;
-        worksheet2.getCell(1, index + 2).alignment = {vertical: 'middle', horizontal: 'center'};
+        worksheet2.getCell(1, index + 2).alignment = {vertical: 'middle', horizontal: 'left'};
     });
 
     //writes resources in first column
@@ -126,7 +127,7 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
             const startColumn = currentAction.start + 2;
             const endColumn = currentAction.end + 1;
             worksheet2.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
-            let outputListString = currentAction.outputList.map(dataObjectInstance => dataObjectInstance.dataclass.name + dataObjectInstance.name).join(', ');
+            let outputListString = currentAction.outputList.map(dataObjectInstance => dataObjectInstance.dataclass.name + ' ' + dataObjectInstance.name).join(', ');
             worksheet2.getCell(rowIndex, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.action.name + ' (' + outputListString + ')';
 
             worksheet2.getCell(rowIndex, startColumn).border = {
@@ -147,9 +148,11 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
     }
 
     //styling
-    worksheet2.getColumn(1).border = {
-        right: {style: "thick"}
-    };
+    worksheet2.columns.forEach(it => {
+        it.border = {
+            left: {style: "thick"}
+        }
+    });
     worksheet2.getRow(1).border = {
         bottom: {style: "thick"}
     };
