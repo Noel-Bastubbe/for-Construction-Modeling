@@ -32,18 +32,18 @@ const exportExecutionPlan = (log) => __awaiter(void 0, void 0, void 0, function*
     }
     columnHeaders.forEach((value, index) => {
         worksheet1.getCell(1, index + 2).value = value;
-        worksheet1.getCell(1, index + 2).alignment = { vertical: 'middle', horizontal: 'center' };
+        worksheet1.getCell(1, index + 2).alignment = { vertical: 'middle', horizontal: 'left' };
     });
     //writes work spaces in first column
     workSpaces.forEach((value, index) => {
-        worksheet1.getCell(index + 2, 1).value = value.name;
+        worksheet1.getCell(index + 2, 1).value = value.dataclass.name + ' ' + value.name;
     });
     //loops through all actions and fills excel sheet
     for (let i = 0; i < actionList.length; i++) {
         let currentAction = actionList[i];
         //gets row (work space) in which action has to be written
         for (let i = 0; i < currentAction.outputList.length; i++) {
-            const workSpaceForActivity = currentAction.outputList[i].name;
+            const workSpaceForActivity = currentAction.outputList[i].dataclass.name + ' ' + currentAction.outputList[i].name;
             let rowIndex = null;
             worksheet1.eachRow((row, rowNumber) => {
                 if (row.getCell(1).value === workSpaceForActivity) {
@@ -73,9 +73,11 @@ const exportExecutionPlan = (log) => __awaiter(void 0, void 0, void 0, function*
         }
     }
     //styling
-    worksheet1.getColumn(1).border = {
-        right: { style: "thick" }
-    };
+    worksheet1.columns.forEach(it => {
+        it.border = {
+            left: { style: "thick" }
+        };
+    });
     worksheet1.getRow(1).border = {
         bottom: { style: "thick" }
     };
@@ -87,15 +89,15 @@ const exportExecutionPlan = (log) => __awaiter(void 0, void 0, void 0, function*
     worksheet1.getColumn(1).font = { size: 14, bold: true };
     //Execution Plan (resources)
     const worksheet2 = workbook.addWorksheet('Execution Plan (resources)');
-    //creates the time axis: first creates array with all numbers from 1 up to deadline, then writes the time units (1,...,deadline) as headers in the sheet
     worksheet2.getCell(1, 1).value = 'Resource';
+    //creates the time axis: first creates array with all numbers from 1 up to deadline, then writes the time units (1,...,deadline) as headers in the sheet
     let headers = [];
     for (let index = 0; index <= deadline; index++) {
         headers.push(index);
     }
     headers.forEach((value, index) => {
         worksheet2.getCell(1, index + 2).value = value;
-        worksheet2.getCell(1, index + 2).alignment = { vertical: 'middle', horizontal: 'center' };
+        worksheet2.getCell(1, index + 2).alignment = { vertical: 'middle', horizontal: 'left' };
     });
     //writes resources in first column
     resources.forEach((value, index) => {
@@ -118,7 +120,7 @@ const exportExecutionPlan = (log) => __awaiter(void 0, void 0, void 0, function*
             const startColumn = currentAction.start + 2;
             const endColumn = currentAction.end + 1;
             worksheet2.mergeCells(rowIndex, startColumn, rowIndex, endColumn);
-            let outputListString = currentAction.outputList.map(dataObjectInstance => dataObjectInstance.dataclass.name + dataObjectInstance.name).join(', ');
+            let outputListString = currentAction.outputList.map(dataObjectInstance => dataObjectInstance.dataclass.name + ' ' + dataObjectInstance.name).join(', ');
             worksheet2.getCell(rowIndex, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.action.name + ' (' + outputListString + ')';
             worksheet2.getCell(rowIndex, startColumn).border = {
                 top: { style: 'thin' },
@@ -135,9 +137,11 @@ const exportExecutionPlan = (log) => __awaiter(void 0, void 0, void 0, function*
         }
     }
     //styling
-    worksheet2.getColumn(1).border = {
-        right: { style: "thick" }
-    };
+    worksheet2.columns.forEach(it => {
+        it.border = {
+            left: { style: "thick" }
+        };
+    });
     worksheet2.getRow(1).border = {
         bottom: { style: "thick" }
     };

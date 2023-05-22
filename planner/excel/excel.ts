@@ -37,7 +37,7 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
 
         //gets row (work space) in which action has to be written
         for (let i = 0; i < currentAction.outputList.length; i++) {
-            const workSpaceForActivity = currentAction.outputList[i].name;
+            const workSpaceForActivity = currentAction.outputList[i].dataclass.name + ' ' + currentAction.outputList[i].name;
             let rowIndex = null;
             worksheet1.eachRow((row, rowNumber) => {
                 if (row.getCell(1).value === workSpaceForActivity) {
@@ -177,7 +177,5 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
 
     const buffer = await workbook.xlsx.writeBuffer();
     // Create a Blob from the buffer
-    const blob = new Blob([buffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-
-    return blob;
+    return new Blob([buffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
 };
