@@ -276,7 +276,7 @@ export async function planButtonAction() {
         for (let links of modelObjectives[i].get('boardElements').filter((element) => is(element, 'om:Link'))) {
 
         }
-        objectives.push(new Objective(objectiveNodes, objectiveLinks, objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date));
+        objectives.push(new Objective(objectiveNodes, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
     }
 
     let goal = new Goal(objectives);
@@ -303,7 +303,7 @@ export async function planButtonAction() {
         for (let dataObjectReference of action.get('dataOutputAssociations')) {
             outputSet.push(new DataObjectReference(dataclasses.find(element => element.name === dataObjectReference.get('targetRef').dataclass.name), dataObjectReference.get('targetRef').states[0].name, false));
         }
-        actions.push(new Action(action.name, action.duration, action.NoP, roles.find(element => element.name === action.role.name), new IOSet(inputSet), new IOSet(outputSet)))
+        actions.push(new Action(action.name, parseInt(action.duration), parseInt(action.NoP), roles.find(element => element.name === action.role.name), new IOSet(inputSet), new IOSet(outputSet)))
     }
 
 
