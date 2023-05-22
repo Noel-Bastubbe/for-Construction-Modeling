@@ -1,19 +1,19 @@
 import {is} from "bpmn-js/lib/util/ModelUtil";
-import {ExecutionDataObjectInstance} from "../types/executionState/ExecutionDataObjectInstance";
-import {InstanceLink} from "../types/executionState/InstanceLink";
-import {ExecutionState} from "../types/executionState/ExecutionState";
-import {DataObjectReference} from "../types/fragments/DataObjectReference";
-import {IOSet} from "../types/fragments/IOSet";
-import {Resource} from "../types/Resource";
-import {DataObjectInstance} from "../types/executionState/DataObjectInstance";
-import {Goal} from "../types/goal/Goal";
-import {Role} from "../types/Role";
-import {NodeLink} from "../types/goal/NodeLink";
-import {ObjectiveNode} from "../types/goal/ObjectiveNode";
-import {Objective} from "../types/goal/Objective";
-import {Action} from "../types/fragments/Action";
-import {Planner} from "../Planner";
-import {Dataclass} from "../types/Dataclass";
+import {ExecutionDataObjectInstance} from "../../dist/types/executionState/ExecutionDataObjectInstance";
+import {InstanceLink} from "../../dist/types/executionState/InstanceLink";
+import {ExecutionState} from "../../dist/types/executionState/ExecutionState";
+import {DataObjectReference} from "../../dist/types/fragments/DataObjectReference";
+import {IOSet} from "../../dist/types/fragments/IOSet";
+import {Resource} from "../../dist/types/Resource";
+import {DataObjectInstance} from "../../dist/types/executionState/DataObjectInstance";
+import {Goal} from "../../dist/types/goal/Goal";
+import {Role} from "../../dist/types/Role";
+import {NodeLink} from "../../dist/types/goal/NodeLink";
+import {ObjectiveNode} from "../../dist/types/goal/ObjectiveNode";
+import {Objective} from "../../dist/types/goal/Objective";
+import {Action} from "../../dist/types/fragments/Action";
+import {Planner} from "../../dist/Planner";
+import {Dataclass} from "../../dist/types/Dataclass";
 
 export function parseObjects(dataModeler, fragmentModeler, objectiveModeler, roleModeler, resourceModeler) {
 
