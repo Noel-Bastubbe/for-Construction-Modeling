@@ -15,7 +15,7 @@ import {Action} from "../types/fragments/Action";
 import {Planner} from "../Planner";
 import {Dataclass} from "../types/Dataclass";
 
-export async function parseObjects(dataModeler, fragmentModeler, objectiveModeler, roleModeler, resourceModeler) {
+export function parseObjects(dataModeler, fragmentModeler, objectiveModeler, roleModeler, resourceModeler) {
 
     let dataclasses = [];
     let modelDataclasses = dataModeler._definitions.get('rootElements').map(element => element.get('boardElements')).flat();
@@ -36,7 +36,7 @@ export async function parseObjects(dataModeler, fragmentModeler, objectiveModele
         for (let roleModelReference of resource.roles) {
             rolePlanReferences.push(roles.find(element => element.name === roleModelReference.name));
         }
-        resources.push(new Resource(resource.name, rolePlanReferences, resource.capacity));
+        resources.push(new Resource(resource.name, rolePlanReferences, parseInt(resource.capacity)));
     }
 
     let dataObjectInstances = [];
@@ -56,7 +56,7 @@ export async function parseObjects(dataModeler, fragmentModeler, objectiveModele
         for (let link of modelObjectives[i].get('boardElements').filter((element) => is(element, 'om:Link'))) {
             objectiveLinks.push(new NodeLink(objectiveNodes.find(element => element.dataObjectInstance.name === link.sourceRef.instance.name && element.dataObjectInstance.dataclass.name === link.sourceRef.classRef.name), objectiveNodes.find(element => element.dataObjectInstance.name === link.targetRef.instance.name && element.dataObjectInstance.dataclass.name === link.targetRef.classRef.name)));
         }
-        objectives.push(new Objective(objectiveNodes, objectiveLinks, objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date));
+        objectives.push(new Objective(objectiveNodes, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
     }
 
     let goal = new Goal(objectives);
@@ -83,7 +83,7 @@ export async function parseObjects(dataModeler, fragmentModeler, objectiveModele
         for (let dataObjectReference of action.get('dataOutputAssociations')) {
             outputSet.push(new DataObjectReference(dataclasses.find(element => element.name === dataObjectReference.get('targetRef').dataclass.name), dataObjectReference.get('targetRef').states[0].name, false));
         }
-        actions.push(new Action(action.name, action.duration, action.NoP, roles.find(element => element.name === action.role.name), new IOSet(inputSet), new IOSet(outputSet)))
+        actions.push(new Action(action.name, parseInt(action.duration), parseInt(action.NoP), roles.find(element => element.name === action.role.name), new IOSet(inputSet), new IOSet(outputSet)))
     }
 
     return new Planner(currentState, goal, actions);

@@ -1,4 +1,3 @@
-import {Dataclass} from "../Dataclass";
 import {DataObjectInstance} from "../executionState/DataObjectInstance";
 import {ExecutionDataObjectInstance} from "../executionState/ExecutionDataObjectInstance";
 
@@ -12,6 +11,6 @@ export class ObjectiveNode {
     }
 
     public isMatchedBy (executionDataObjectInstance: ExecutionDataObjectInstance) {
-        return this.dataObjectInstance === executionDataObjectInstance.dataObjectInstance && this.states.includes(executionDataObjectInstance.state);
+        return this.dataObjectInstance.dataclass == executionDataObjectInstance.dataObjectInstance.dataclass && this.dataObjectInstance.name == executionDataObjectInstance.dataObjectInstance.name && this.states.includes(executionDataObjectInstance.state);
     }
 }

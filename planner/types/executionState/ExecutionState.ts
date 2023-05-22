@@ -33,8 +33,8 @@ export class ExecutionState {
     }
 
     public getNewDataObjectInstanceOfClass(dataclass: Dataclass): DataObjectInstance {
-        let name = dataclass.name + ":" + this.allExecutionDataObjectInstances().filter(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance.dataclass === dataclass).length + 1;
-        return new DataObjectInstance(name, dataclass);
+        let name = this.allExecutionDataObjectInstances().filter(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance.dataclass === dataclass).length + 1;
+        return new DataObjectInstance(name.toString(), dataclass);
     }
 
     public getSuccessors(actions: Action[]): ExecutionState[] {

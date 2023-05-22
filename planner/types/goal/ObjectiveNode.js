@@ -7,7 +7,7 @@ class ObjectiveNode {
         this.states = states;
     }
     isMatchedBy(executionDataObjectInstance) {
-        return this.dataObjectInstance === executionDataObjectInstance.dataObjectInstance && this.states.includes(executionDataObjectInstance.state);
+        return this.dataObjectInstance.dataclass == executionDataObjectInstance.dataObjectInstance.dataclass && this.dataObjectInstance.name == executionDataObjectInstance.dataObjectInstance.name && this.states.includes(executionDataObjectInstance.state);
     }
 }
 exports.ObjectiveNode = ObjectiveNode;

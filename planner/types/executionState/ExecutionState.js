@@ -18,8 +18,8 @@ class ExecutionState {
         return this.availableExecutionDataObjectInstances.concat(this.blockedExecutionDataObjectInstances);
     }
     getNewDataObjectInstanceOfClass(dataclass) {
-        let name = dataclass.name + ":" + this.allExecutionDataObjectInstances().filter(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance.dataclass === dataclass).length + 1;
-        return new DataObjectInstance_1.DataObjectInstance(name, dataclass);
+        let name = this.allExecutionDataObjectInstances().filter(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance.dataclass === dataclass).length + 1;
+        return new DataObjectInstance_1.DataObjectInstance(name.toString(), dataclass);
     }
     getSuccessors(actions) {
         let successors = [];

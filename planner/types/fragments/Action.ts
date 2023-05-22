@@ -29,21 +29,24 @@ export class Action {
         if (!this.isExecutable(executionState)) {
             return [];
         }
-        let possibleInstances = [];
-        for (let dataObjectReference of this.inputSet.set) {
-            let matchingInstances = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance => dataObjectReference.isMatchedBy(executionDataObjectInstance));
-            possibleInstances.push(matchingInstances);
-        }
-        let inputs = cartesianProduct(...possibleInstances); // TODO Deal with empty input set
-        let possibleResources = executionState.resources.filter(resource => resource.satisfies(this.role, this.NoP))
-        let executionActions = []
-        for (let input of inputs) {
-            for (let resource of possibleResources) {
-                if (input.isArray()) {
-                    executionActions.push(this.getExecutionActionForInput(input, resource, executionState));
-                } else {
-                    executionActions.push(this.getExecutionActionForInput([input], resource, executionState));
+        let possibleResources = executionState.resources.filter(resource => resource.satisfies(this.role, this.NoP));
+        let executionActions = [];
+
+        if (this.inputSet.set.length > 0) {
+            let possibleInstances = [];
+            for (let dataObjectReference of this.inputSet.set) {
+                let matchingInstances = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance => dataObjectReference.isMatchedBy(executionDataObjectInstance));
+                possibleInstances.push(matchingInstances);
+            }
+            let inputs = cartesianProduct(...possibleInstances);
+            for (let input of inputs) {
+                for (let resource of possibleResources) {
+                    executionActions.push(this.getExecutionActionForInput([].concat(input), resource, executionState));
                 }
+            }
+        } else {
+            for (let resource of possibleResources) {
+                executionActions.push(this.getExecutionActionForInput([], resource, executionState));
             }
         }
         return executionActions;
