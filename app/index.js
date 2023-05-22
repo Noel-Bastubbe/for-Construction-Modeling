@@ -40,6 +40,7 @@ import {DataObjectReference} from "../planner/types/fragments/DataObjectReferenc
 import {IOSet} from "../planner/types/fragments/IOSet";
 import {ExecutionState} from "../planner/types/executionState/ExecutionState";
 import {ExecutionDataObjectInstance} from "../planner/types/executionState/ExecutionDataObjectInstance";
+import {exportExecutionPlan} from "../planner/excel/excel.js";
 
 const LOAD_DUMMY = false; // Set to true to load conference example data
 const SHOW_DEBUG_BUTTONS = false; // Set to true to show additional buttons for debugging
@@ -309,7 +310,8 @@ export async function planButtonAction() {
 
 
     const planner = new Planner(currentState, goal, actions);
-    planner.generatePlan();
+    let executionLog = planner.generatePlan();
+    await exportExecutionPlan(executionLog);
 }
 
 // IO Buttons
