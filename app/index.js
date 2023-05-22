@@ -311,7 +311,20 @@ export async function planButtonAction() {
 
     const planner = new Planner(currentState, goal, actions);
     let executionLog = planner.generatePlan();
-    await exportExecutionPlan(executionLog);
+    let blob = await exportExecutionPlan(executionLog);
+
+    const url = window.URL.createObjectURL(blob);
+
+    // Create a link element
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Execution Plan.xlsx';
+
+    // Programmatically click the link to initiate the download
+    link.click();
+
+    // Clean up the temporary URL
+    window.URL.revokeObjectURL(url);
 }
 
 // IO Buttons

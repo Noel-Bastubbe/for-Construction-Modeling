@@ -18,7 +18,7 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
 
     //creates the time axis: first creates array with all numbers from 1 up to deadline, then writes the time units (1,...,deadline) as headers in the sheet
     let columnHeaders: Array<number> = [];
-    for (let index = 1; index <= deadline; index++) {
+    for (let index = 0; index <= deadline; index++) {
         columnHeaders.push(index);
     }
 
@@ -49,7 +49,7 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
 
             //writes activity and further information in cells depending on start and end date
             if (rowIndex !== null) {
-                const startColumn = currentAction.start + 1;
+                const startColumn = currentAction.start + 2;
                 const endColumn = currentAction.end + 1;
                 worksheet1.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
                 worksheet1.getCell(rowIndex, startColumn).value = currentAction.resource?.name + ' (' + currentAction.capacity + ')' + ': ' + currentAction.action.name;
@@ -93,7 +93,7 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
     //creates the time axis: first creates array with all numbers from 1 up to deadline, then writes the time units (1,...,deadline) as headers in the sheet
     worksheet2.getCell(1, 1).value = 'Resource';
     let headers: Array<number> = [];
-    for (let index = 1; index <= deadline; index++) {
+    for (let index = 0; index <= deadline; index++) {
         headers.push(index);
     }
 
@@ -123,10 +123,10 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
 
         //writes activity and further information in cells depending on start and end date
         if (rowIndex !== null) {
-            const startColumn = currentAction.start + 1;
+            const startColumn = currentAction.start + 2;
             const endColumn = currentAction.end + 1;
             worksheet2.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
-            let outputListString = currentAction.outputList.map(dataObjectInstance => dataObjectInstance.name).join(', ');
+            let outputListString = currentAction.outputList.map(dataObjectInstance => dataObjectInstance.dataclass.name + dataObjectInstance.name).join(', ');
             worksheet2.getCell(rowIndex, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.action.name + ' (' + outputListString + ')';
 
             worksheet2.getCell(rowIndex, startColumn).border = {
@@ -160,6 +160,21 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
     worksheet2.getRow(1).font = {size: 14, bold: true};
     worksheet2.getColumn(1).font = {size: 14, bold: true};
 
-    const exportPath = path.resolve(__dirname, 'Execution Plan.xlsx');
-    await workbook.xlsx.writeFile();
+    worksheet1.columns.forEach(column => {
+        const lengths = column.values!.map(v => v!.toString().length);
+        const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+        column.width = maxLength < 15 ? 15 : maxLength;
+    });
+
+    worksheet2.columns.forEach(column => {
+        const lengths = column.values!.map(v => v!.toString().length);
+        const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+        column.width = maxLength < 20 ? 20 : maxLength;
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    // Create a Blob from the buffer
+    const blob = new Blob([buffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+
+    return blob;
 };
