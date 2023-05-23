@@ -25,6 +25,9 @@ import conferenceTerminationCondition from '../resources/conferenceModel/termina
 import Zip from 'jszip';
 import {appendOverlayListeners} from "./lib/util/HtmlUtil";
 
+import {parseObjects} from "../planner/parser/ModelObjectParser";
+import {exportExecutionPlan} from "../dist/excel/excel.js";
+
 const LOAD_DUMMY = false; // Set to true to load conference example data
 const SHOW_DEBUG_BUTTONS = false; // Set to true to show additional buttons for debugging
 
@@ -100,8 +103,8 @@ var resourceModeler = new RemModeler({
         bindTo: document.querySelector('#resourcemodel-canvas')
     },
     additionalModules: [{
-        __init__ : ['mediator'],
-        mediator : ['type', mediator.ResourceModelerHook]
+        __init__: ['mediator'],
+        mediator: ['type', mediator.ResourceModelerHook]
     }]
 });
 
@@ -178,7 +181,7 @@ async function exportToZip() {
     zip.file('objectiveModel.xml', objectiveModel);
     const olcs = (await olcModeler.saveXML({format: true})).xml;
     zip.file('olcs.xml', olcs);
-    const resourceModel = (await resourceModeler.saveXML({ format: true })).xml;
+    const resourceModel = (await resourceModeler.saveXML({format: true})).xml;
     zip.file('resourceModel.xml', resourceModel);
     const terminationCondition = (await terminationConditionModeler.saveXML({format: true})).xml;
     zip.file('terminationCondition.xml', terminationCondition);
@@ -218,6 +221,25 @@ async function importFromZip(zipData) {
     checker.activate();
 }
 
+export async function planButtonAction() {
+    const planner = parseObjects(dataModeler, fragmentModeler, objectiveModeler, roleModeler, resourceModeler);
+    let executionLog = planner.generatePlan();
+    let blob = await exportExecutionPlan(executionLog);
+
+    const url = window.URL.createObjectURL(blob);
+
+    // Create a link element
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Execution Plan.xlsx';
+
+    // Programmatically click the link to initiate the download
+    link.click();
+
+    // Clean up the temporary URL
+    window.URL.revokeObjectURL(url);
+}
+
 // IO Buttons
 document.getElementById('newButton').addEventListener('click', () => {
     createNewDiagram();
@@ -238,7 +260,11 @@ document.getElementById('saveButton').addEventListener('click', () => exportToZi
 
 async function displayFileName(zipName) {
     document.getElementById("fileName").innerHTML = zipName;
-};
+}
+
+document.getElementById('planningButton').addEventListener('click', () => {
+    planButtonAction();
+});
 
 async function navigationDropdown() {
     var container = document.getElementById("navigationBar");
@@ -263,8 +289,6 @@ async function navigationDropdown() {
         if (event.target === selectOlcComponent || event.target === selectedOlcSpan) {
             repopulateDropdown();
             showSelectOlcMenu();
-        } else {
-            return;
         }
     });
 
@@ -274,7 +298,9 @@ async function navigationDropdown() {
 
     function repopulateDropdown() {
         var modelers = mediator.getModelers();
-        modelers.sort((a, b) => {return a.rank - b.rank});
+        modelers.sort((a, b) => {
+            return a.rank - b.rank
+        });
         if (constructionMode) {
             modelers = modelers.filter(object => object !== terminationConditionModeler);
         }
@@ -305,7 +331,7 @@ async function navigationDropdown() {
     selectOlcComponent.showValue(currentModeler);
     selectOlcComponent.appendChild(selectedOlcSpan);
     buttonBar.appendChild(selectOlcComponent);
-};
+}
 
 navigationDropdown();
 
@@ -417,3 +443,4 @@ window.export = function (modeler) {
 }
 
 window.checker = checker;
+

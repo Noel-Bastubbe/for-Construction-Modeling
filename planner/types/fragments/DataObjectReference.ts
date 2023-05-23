@@ -1,13 +1,18 @@
 import {Dataclass} from "../Dataclass";
+import {ExecutionDataObjectInstance} from "../executionState/ExecutionDataObjectInstance";
 
 export class DataObjectReference {
     dataclass: Dataclass;
-    states: string[];
+    state: string;
     isList: boolean;
 
-    public constructor(dataclass: Dataclass, states: string[],  isList: boolean) {
+    public constructor(dataclass: Dataclass, state: string,  isList: boolean) {
         this.dataclass = dataclass;
-        this.states = states;
+        this.state = state;
         this.isList = isList;
+    }
+
+    public isMatchedBy (executionDataObjectInstance: ExecutionDataObjectInstance) {
+        return this.dataclass === executionDataObjectInstance.dataObjectInstance.dataclass && this.state === executionDataObjectInstance.state;
     }
 }

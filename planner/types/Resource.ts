@@ -2,16 +2,20 @@ import {Role} from "./Role";
 
 export class Resource {
     name: string;
-    role: Role;
+    roles: Role[];
     capacity: number;
 
-    public constructor(name: string, role: Role, capacity: number) {
+    public constructor(name: string, roles: Role[] = [], capacity: number) {
         this.name = name;
-        this.role = role;
+        this.roles = roles;
         this.capacity = capacity;
     }
 
     public satisfies(role: Role | null, NoP: number): boolean {
-        return role === this.role && NoP <= this.capacity;
+        if (!role) {
+            return true;
+        } else {
+            return this.roles.includes(role) && NoP <= this.capacity;
+        }
     }
 }
