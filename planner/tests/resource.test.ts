@@ -1,17 +1,8 @@
 import {Resource} from "../types/Resource";
 import {Role} from "../types/Role";
-import {Action} from "../types/fragments/Action";
-import {IOSet} from "../types/fragments/IOSet";
-import {DataObjectReference} from "../types/fragments/DataObjectReference";
-import {Dataclass} from "../types/Dataclass";
 
 let painter = new Role("painter");
 let picasso = new Resource("Picasso", [painter], 1);
-
-let house = new Dataclass("house");
-let houseInit = new DataObjectReference(house,"init",false);
-let housePainted = new DataObjectReference(house,"painted", false);
-
 
 describe('satisfies', () => {
 
