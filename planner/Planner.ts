@@ -27,7 +27,7 @@ export class Planner {
                 node = this.startState;
             }
             if (this.goal.isFulfilledBy(node)) {
-                return new ExecutionLog(node.actionHistory, node.allExecutionDataObjectInstances().map(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance), node.resources);
+                return new ExecutionLog(node.actionHistory, node.allExecutionDataObjectInstances().map(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance));
             }
             let newNodes = node.getSuccessors(this.actions);
 

@@ -181,7 +181,7 @@ beforeEach(() => {
     objectiveNode3 = new ObjectiveNode(bakerStreet, ["painted"]);
 
     //reset Objectives
-    objective = new Objective([objectiveNode], []);
+    objective = new Objective("",[objectiveNode], []);
 
     //reset Goal
     goal = new Goal([objective]);
@@ -266,7 +266,7 @@ describe('generating plans', () => {
         let outputAction = new OutputAction(paint,0,1,picasso,1,[mapleStreet],[mapleStreet]);
         let outputAction2 = new OutputAction(tile,1,2,michelangelo,1,[mapleStreet],[mapleStreet]);
         let executionLog = new ExecutionLog([outputAction,outputAction2],[mapleStreet]);
-        objective2 = new Objective([objectiveNode2], []);
+        objective2 = new Objective("2",[objectiveNode2], []);
         goal = new Goal([objective,objective2]);
         currentState.resources = [picasso,michelangelo];
         let planner = new Planner(currentState,goal,[paint,tile]);
@@ -277,7 +277,7 @@ describe('generating plans', () => {
         let outputAction = new OutputAction(paint,0,1,picasso,1,[mapleStreet],[mapleStreet]);
         let outputAction2 = new OutputAction(paint,1,2,picasso,1,[bakerStreet],[bakerStreet]);
         let executionLog = new ExecutionLog([outputAction,outputAction2],[mapleStreet,bakerStreet]);
-        objective = new Objective([objectiveNode,objectiveNode3], []);
+        objective = new Objective("",[objectiveNode,objectiveNode3], []);
         currentState.availableExecutionDataObjectInstances = [mapleStreetInit,bakerStreetInit];
         goal = new Goal([objective]);
         let planner = new Planner(currentState,goal,[paint,tile]);

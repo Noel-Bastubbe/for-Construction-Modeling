@@ -1,21 +1,14 @@
-import {ObjectiveNode} from "./ObjectiveNode";
-import {NodeLink} from "./NodeLink";
-import {ExecutionState} from "../executionState/ExecutionState";
-
-export class Objective {
-    id: string;
-    dataObjectNodes: ObjectiveNode[];
-    objectiveLinks: NodeLink[];
-    deadline: number | null;
-
-    public constructor(id: string, dataObjectNodes: ObjectiveNode[], links: NodeLink[], deadline: number | null = null) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Objective = void 0;
+class Objective {
+    constructor(id, dataObjectNodes, links, deadline = null) {
         this.id = id;
         this.dataObjectNodes = dataObjectNodes;
         this.objectiveLinks = links;
         this.deadline = deadline;
     }
-
-    public isFulfilledBy(executionState: ExecutionState) {
+    isFulfilledBy(executionState) {
         if (this.deadline && executionState.time > this.deadline) {
             return false;
         }
@@ -32,3 +25,4 @@ export class Objective {
         return true;
     }
 }
+exports.Objective = Objective;
