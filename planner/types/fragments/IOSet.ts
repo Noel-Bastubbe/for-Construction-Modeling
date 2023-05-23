@@ -10,7 +10,7 @@ export class IOSet {
 
     public isSatisfiedBy(executionDataObjectInstances: ExecutionDataObjectInstance[]): boolean {
         for (let dataObjectReference of this.set) {
-            let foundCorrespondingDataObjectInstance = false;
+            let foundCorrespondingDataObjectInstance: boolean = false;
             for (let executionDataObjectInstance of executionDataObjectInstances) {
                 if (dataObjectReference.isMatchedBy(executionDataObjectInstance)) {
                     foundCorrespondingDataObjectInstance = true;

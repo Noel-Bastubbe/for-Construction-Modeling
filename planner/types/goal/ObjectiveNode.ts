@@ -10,7 +10,9 @@ export class ObjectiveNode {
         this.states = states;
     }
 
-    public isMatchedBy (executionDataObjectInstance: ExecutionDataObjectInstance) {
-        return this.dataObjectInstance.dataclass == executionDataObjectInstance.dataObjectInstance.dataclass && this.dataObjectInstance.name == executionDataObjectInstance.dataObjectInstance.name && this.states.includes(executionDataObjectInstance.state);
+    public isMatchedBy(executionDataObjectInstance: ExecutionDataObjectInstance) {
+        return this.dataObjectInstance.dataclass == executionDataObjectInstance.dataObjectInstance.dataclass
+            && this.dataObjectInstance.name == executionDataObjectInstance.dataObjectInstance.name
+            && this.states.includes(executionDataObjectInstance.state);
     }
 }

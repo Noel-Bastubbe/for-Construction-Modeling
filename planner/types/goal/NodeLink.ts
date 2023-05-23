@@ -11,6 +11,7 @@ export class NodeLink {
     }
 
     public isMatchedBy(instanceLink: InstanceLink) {
-        return (this.first.dataObjectInstance === instanceLink.first && this.second.dataObjectInstance === instanceLink.second) || (this.second.dataObjectInstance === instanceLink.first && this.first.dataObjectInstance === instanceLink.second);
+        return (this.first.dataObjectInstance === instanceLink.first && this.second.dataObjectInstance === instanceLink.second)
+            || (this.second.dataObjectInstance === instanceLink.first && this.first.dataObjectInstance === instanceLink.second);
     }
 }

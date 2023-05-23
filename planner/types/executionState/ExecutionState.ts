@@ -17,7 +17,9 @@ export class ExecutionState {
     runningActions: ExecutionAction[];
     actionHistory: OutputAction[];
 
-    public constructor(availableDataObjects: ExecutionDataObjectInstance[], blockedDataObjects: ExecutionDataObjectInstance[], instanceLinks: InstanceLink[], resources: Resource[], time: number, runningActions: ExecutionAction[] = [], actionHistory: OutputAction[] = [], objectives: boolean[] = []) {
+    public constructor(availableDataObjects: ExecutionDataObjectInstance[], blockedDataObjects: ExecutionDataObjectInstance[],
+                       instanceLinks: InstanceLink[], resources: Resource[], time: number, runningActions: ExecutionAction[] = [],
+                       actionHistory: OutputAction[] = [], objectives: boolean[] = []) {
         this.availableExecutionDataObjectInstances = availableDataObjects;
         this.blockedExecutionDataObjectInstances = blockedDataObjects;
         this.instanceLinks = instanceLinks;
@@ -33,42 +35,30 @@ export class ExecutionState {
     }
 
     public getNewDataObjectInstanceOfClass(dataclass: Dataclass): DataObjectInstance {
-        let name = this.allExecutionDataObjectInstances().filter(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance.dataclass === dataclass).length + 1;
-        return new DataObjectInstance(name.toString(), dataclass);
+        let name: string = (this.allExecutionDataObjectInstances().filter(executionDataObjectInstance =>
+            executionDataObjectInstance.dataObjectInstance.dataclass === dataclass
+        ).length + 1).toString();
+        return new DataObjectInstance(name, dataclass);
     }
 
     public getSuccessors(actions: Action[]): ExecutionState[] {
         let successors: ExecutionState[] = [];
-        //get ExecutionActions Actions from Actions
-        let executionActions = actions.map(action => action.getExecutionActions(this)).flat();
-        //for each ExecutionAction, start ExecutionAction and get new ExecutionState
+        let executionActions: ExecutionAction[] = actions.map(action => action.getExecutionActions(this)).flat();
         executionActions.forEach(executionAction => {
-            let newState = executionAction.start(this);
+            let newState: ExecutionState = executionAction.start(this);
             successors.push(newState);
         });
-        //waitAction executen and get new ExecutionState
         successors.push(this.wait());
-        //push all to successors
         return successors;
     }
 
     private wait(): ExecutionState {
-        let newState = new ExecutionState(this.availableExecutionDataObjectInstances, this.blockedExecutionDataObjectInstances, this.instanceLinks, this.resources, this.time + 1, this.runningActions, this.actionHistory, this.objectives);
+        let newState: ExecutionState = new ExecutionState(this.availableExecutionDataObjectInstances, this.blockedExecutionDataObjectInstances, this.instanceLinks, this.resources,
+            this.time + 1, this.runningActions, this.actionHistory, this.objectives
+        );
         this.runningActions.forEach(action => {
             newState = action.tryToFinish(newState);
         });
         return newState;
     }
-
-    // public executeActiviy(activitiy: Activity, instance: ExecutionDataObjectInstance) {
-    //     let indexInInstances = this.dataObjectInstances.indexOf(instance);
-    //     let indexInOutput = activitiy.outputSet.map(element => element.dataclass).indexOf(instance.state[0].dataclass);
-    //     if (indexInOutput === -1) {
-    //         console.error("This Activity does not change the state of this instance.")
-    //     }
-    //     if (indexInInstances === -1) {
-    //         console.error("This instance does not exist at the current state.")
-    //     }
-    //     this.dataObjectInstances[indexInInstances].state.splice(indexInInstances, 1, activitiy.outputSet[indexInOutput]);
-    // }
 }

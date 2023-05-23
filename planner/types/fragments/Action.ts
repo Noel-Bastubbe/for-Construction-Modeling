@@ -29,13 +29,15 @@ export class Action {
         if (!this.isExecutable(executionState)) {
             return [];
         }
-        let possibleResources = executionState.resources.filter(resource => resource.satisfies(this.role, this.NoP));
-        let executionActions = [];
+        let possibleResources: Resource[] = executionState.resources.filter(resource => resource.satisfies(this.role, this.NoP));
+        let executionActions: ExecutionAction[] = [];
 
         if (this.inputSet.set.length > 0) {
-            let possibleInstances = [];
+            let possibleInstances: ExecutionDataObjectInstance[][] = [];
             for (let dataObjectReference of this.inputSet.set) {
-                let matchingInstances = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance => dataObjectReference.isMatchedBy(executionDataObjectInstance));
+                let matchingInstances = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance =>
+                    dataObjectReference.isMatchedBy(executionDataObjectInstance)
+                );
                 possibleInstances.push(matchingInstances);
             }
             let inputs = cartesianProduct(...possibleInstances);
@@ -59,16 +61,17 @@ export class Action {
     }
 
     private getOutputForInput(inputList: ExecutionDataObjectInstance[], executionState: ExecutionState): ExecutionDataObjectInstance[] {
-        let output = this.outputSet.set.map(output => {
-            let instance = inputList.find(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance.dataclass === output.dataclass);
+        return this.outputSet.set.map(output => {
+            let instance: ExecutionDataObjectInstance | undefined = inputList.find(executionDataObjectInstance =>
+                executionDataObjectInstance.dataObjectInstance.dataclass === output.dataclass
+            );
             if (instance) {
                 return new ExecutionDataObjectInstance(instance.dataObjectInstance, output.state);
             } else {
-                let newDataObjectInstance = executionState.getNewDataObjectInstanceOfClass(output.dataclass);
+                let newDataObjectInstance: DataObjectInstance = executionState.getNewDataObjectInstanceOfClass(output.dataclass);
                 return new ExecutionDataObjectInstance(newDataObjectInstance, output.state);
             }
         });
-        return output;
     }
 
     private isExecutable(executionState: ExecutionState) {
@@ -78,14 +81,13 @@ export class Action {
     private getAddedLinks(inputList: DataObjectInstance[], outputList: DataObjectInstance[]): InstanceLink[] {
         let addedLinks: InstanceLink[] = [];
         let addedObjects: DataObjectInstance[] = this.getAddedObjects(inputList, outputList);
-        let readObjects = inputList.filter(inputEntry => !outputList.find(outputEntry => inputEntry.dataclass === outputEntry.dataclass));
-        let allObjects = outputList.concat(readObjects);
+        let readObjects: DataObjectInstance[] = inputList.filter(inputEntry => !outputList.find(outputEntry => inputEntry.dataclass === outputEntry.dataclass));
+        let allObjects: DataObjectInstance[] = outputList.concat(readObjects);
 
-        for (let output of addedObjects) {
+        for (let addedObject of addedObjects) {
             for (let object of allObjects) {
-                //todo check if equality check works
-                if (output != object) {
-                    addedLinks.push(new InstanceLink(output, object));
+                if (addedObject != object) {
+                    addedLinks.push(new InstanceLink(addedObject, object));
                 }
             }
         }
