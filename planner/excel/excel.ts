@@ -8,6 +8,11 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
     let workSpaces = log.workSpaces;
     let actionList = log.actionList;
 
+    //sorts actions by start date
+    actionList = actionList.sort((action1, action2) => {
+        return action1.start - action2.start;
+    });
+
     //get deadline(=highest end number of all actions)
     let deadline = Math.max(...actionList.map(o => o.end));
 
@@ -104,8 +109,12 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
     });
 
     //writes resources in first column
-    resources.forEach((value, index) => {
-        worksheet2.getCell(index + 2, 1).value = value.name;
+    let index = 2;
+    resources.forEach((value) => {
+        for(let i = 0; i < value.capacity; i++){
+            worksheet2.getCell(index + i, 1).value = value.name;
+        }
+        index += value.capacity;
     });
 
     //loops through all actions and fills excel sheet
@@ -116,7 +125,7 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
         const resourceForActivity = currentAction.resource;
         let rowIndex = null;
         worksheet2.eachRow((row, rowNumber) => {
-            if (row.getCell(1).value === resourceForActivity?.name) {
+            if (row.getCell(1).value === resourceForActivity?.name && worksheet2.getCell(rowNumber, currentAction.start + 2).value === null) {
                 rowIndex = rowNumber;
                 return false;
             }
@@ -168,6 +177,7 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
         const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
         column.width = maxLength < 15 ? 15 : maxLength;
     });
+
 
     worksheet2.columns.forEach(column => {
         const lengths = column.values!.map(v => v!.toString().length);
