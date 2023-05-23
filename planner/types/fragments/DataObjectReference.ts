@@ -1,5 +1,4 @@
 import {Dataclass} from "../Dataclass";
-import {DataObjectInstance} from "../executionState/DataObjectInstance";
 import {ExecutionDataObjectInstance} from "../executionState/ExecutionDataObjectInstance";
 
 export class DataObjectReference {

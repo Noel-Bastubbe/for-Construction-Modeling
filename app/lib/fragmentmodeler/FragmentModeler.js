@@ -126,12 +126,11 @@ FragmentModeler.prototype.getDataObjectReferencesOfClass = function (clazz) {
 }
 
 FragmentModeler.prototype.getTasksWithRole = function (role) {
-    let list =  this.get('elementRegistry').filter((element, gfx) =>
+    return this.get('elementRegistry').filter((element, gfx) =>
         is(element, 'bpmn:Task') &&
         role.id &&
         element.businessObject.role?.id === role.id
     );
-    return list;
 }
 
 FragmentModeler.prototype.startDoCreation = function(event, elementShape, dataclass, isIncoming) {

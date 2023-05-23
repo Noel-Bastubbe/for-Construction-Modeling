@@ -1,6 +1,5 @@
 import {DataObjectInstance} from "../types/executionState/DataObjectInstance";
 import {ExecutionState} from "../types/executionState/ExecutionState";
-import {Activity} from "../types/fragments/Activity";
 import {IOSet} from "../types/fragments/IOSet";
 import {DataObjectReference} from "../types/fragments/DataObjectReference";
 import {Role} from "../types/Role";

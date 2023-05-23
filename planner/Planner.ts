@@ -1,18 +1,8 @@
-import {DataObjectInstance} from "./types/executionState/DataObjectInstance";
-import {Activity} from "./types/fragments/Activity";
 import {Resource} from "./types/Resource";
 import {ExecutionState} from "./types/executionState/ExecutionState";
-import {Objective} from "./types/goal/Objective";
 import {ExecutionLog} from "./types/output/ExecutionLog";
 import {Goal} from "./types/goal/Goal";
 import {Action} from "./types/fragments/Action";
-import {Dataclass} from "./types/Dataclass";
-import {InstanceLink} from "./types/executionState/InstanceLink";
-import {DataObjectReference} from "./types/fragments/DataObjectReference";
-import {Role} from "./types/Role";
-import {ObjectiveNode} from "./types/goal/ObjectiveNode";
-import {NodeLink} from "./types/goal/NodeLink";
-import {ExecutionDataObjectInstance} from "./types/executionState/ExecutionDataObjectInstance";
 
 export class Planner {
     startState: ExecutionState;
