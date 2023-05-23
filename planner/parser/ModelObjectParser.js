@@ -14,6 +14,7 @@ import {Objective} from "../../dist/types/goal/Objective";
 import {Action} from "../../dist/types/fragments/Action";
 import {Planner} from "../../dist/Planner";
 import {Dataclass} from "../../dist/types/Dataclass";
+import {cartesianProduct} from "../../dist/Util";
 
 export function parseObjects(dataModeler, fragmentModeler, objectiveModeler, dependencyModeler, roleModeler, resourceModeler) {
     let currentState = getCurrentState(objectiveModeler, getDataObjectInstances(objectiveModeler, getDataclasses(dataModeler)), getResources(resourceModeler, getRoles(roleModeler)));
@@ -109,20 +110,28 @@ function getCurrentState(objectiveModeler, dataObjectInstances, resources) {
     }
     return new ExecutionState(executionDataObjectInstances, [], instanceLinks, resources, 0, [], [], []);
 }
-
 function getActions(fragmentModeler, dataclasses, roles) {
     let actions = [];
     let modelActions = fragmentModeler._definitions.get('rootElements')[0].get('flowElements');
     for (let action of modelActions.filter(element => is(element, 'bpmn:Task'))) {
-        let inputSet = [];
+        let inputs = [];
         for (let dataObjectReference of action.get('dataInputAssociations')) {
-            inputSet.push(new DataObjectReference(dataclasses.find(element => element.name === dataObjectReference.get('sourceRef')[0].dataclass.name), dataObjectReference.get('sourceRef')[0].states[0].name, false));
+            let dataObjectReferences = [];
+            for (let i = 0; i < dataObjectReference.get('sourceRef')[0].states.length; i++) {
+                dataObjectReferences.push(new DataObjectReference(dataclasses.find(element => element.name === dataObjectReference.get('sourceRef')[0].dataclass.name), dataObjectReference.get('sourceRef')[0].states[i].name, false))
+            }
+            inputs.push(dataObjectReferences);
         }
+        inputs = cartesianProduct(...inputs);
+
         let outputSet = [];
         for (let dataObjectReference of action.get('dataOutputAssociations')) {
             outputSet.push(new DataObjectReference(dataclasses.find(element => element.name === dataObjectReference.get('targetRef').dataclass.name), dataObjectReference.get('targetRef').states[0].name, false));
         }
-        actions.push(new Action(action.name, parseInt(action.duration), parseInt(action.NoP), roles.find(element => element.name === action.role.name), new IOSet(inputSet), new IOSet(outputSet)))
+
+        for (let input of inputs) {
+            actions.push(new Action(action.name, parseInt(action.duration), parseInt(action.NoP), roles.find(element => element.name === action.role.name), new IOSet(input), new IOSet(outputSet)))
+        }
     }
-    return actions
+    return actions;
 }
