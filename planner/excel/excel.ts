@@ -123,36 +123,39 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
 
         //gets row (resource) in which action has to be written
         const resourceForActivity = currentAction.resource;
-        let rowIndex = null;
+        let rowIndex: number | null = null;
         worksheet2.eachRow((row, rowNumber) => {
-            if (row.getCell(1).value === resourceForActivity?.name && worksheet2.getCell(rowNumber, currentAction.start + 2).value === null) {
+            if (row.getCell(1).value === resourceForActivity?.name && worksheet2.getCell(rowNumber, currentAction.start + 2).value === null && !rowIndex) {
                 rowIndex = rowNumber;
-                return false;
             }
         });
 
         //writes activity and further information in cells depending on start and end date
         if (rowIndex !== null) {
-            const startColumn = currentAction.start + 2;
-            const endColumn = currentAction.end + 1;
-            worksheet2.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
-            let outputListString = currentAction.outputList.map(dataObjectInstance => dataObjectInstance.dataclass.name + ' ' + dataObjectInstance.name).join(', ');
-            worksheet2.getCell(rowIndex, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.action.name + ' (' + outputListString + ')';
+            for(let i = 0; i < currentAction.capacity; i++){
+                rowIndex = rowIndex + i;
+                const startColumn = currentAction.start + 2;
+                const endColumn = currentAction.end + 1;
+                worksheet2.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
+                let outputListString = currentAction.outputList.map(dataObjectInstance => dataObjectInstance.dataclass.name + ' ' + dataObjectInstance.name).join(', ');
+                worksheet2.getCell(rowIndex, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.action.name + ' (' + outputListString + ')';
 
-            worksheet2.getCell(rowIndex, startColumn).border = {
-                top: {style: 'thin'},
-                left: {style: 'thin'},
-                bottom: {style: 'thin'},
-                right: {style: 'thin'}
+                worksheet2.getCell(rowIndex, startColumn).border = {
+                    top: {style: 'thin'},
+                    left: {style: 'thin'},
+                    bottom: {style: 'thin'},
+                    right: {style: 'thin'}
+                }
+
+                worksheet2.getCell(rowIndex, startColumn).fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: {argb: 'E0E0E0'},
+                };
+
+                worksheet2.getCell(rowIndex, startColumn).alignment = {vertical: 'middle', horizontal: 'center'};
             }
 
-            worksheet2.getCell(rowIndex, startColumn).fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: {argb: 'E0E0E0'},
-            };
-
-            worksheet2.getCell(rowIndex, startColumn).alignment = {vertical: 'middle', horizontal: 'center'};
         }
     }
 
