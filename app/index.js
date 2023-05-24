@@ -28,6 +28,7 @@ import {appendOverlayListeners} from "./lib/util/HtmlUtil";
 import {exportExecutionPlan} from "../dist/excel/excel.js";
 import {ModelObjectParser} from "../planner/parser/ModelObjectParser";
 
+const constructionMode = false; // Set to true for renaming modelers for user study and removing termination condition modeler
 const LOAD_DUMMY = false; // Set to true to load conference example data
 const SHOW_DEBUG_BUTTONS = false; // Set to true to show additional buttons for debugging
 
@@ -118,8 +119,6 @@ const errorBar = new ErrorBar(document.getElementById("errorBar"), mediator);
 const checker = new Checker(mediator, errorBar);
 var currentModeler = fragmentModeler;
 
-// construction Mode for User Study, to enable set constructionMode to true
-const constructionMode = false;
 mediator.getModelers().forEach(modeler => {
         var header = document.getElementById("title" + modeler.id);
         header.innerHTML = modeler.name(constructionMode);

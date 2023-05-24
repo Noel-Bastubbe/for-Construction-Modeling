@@ -1,23 +1,25 @@
 import {Resource} from "../Resource";
-import {ExecutionDataObjectInstance} from "./ExecutionDataObjectInstance";
+import {StateInstance} from "./StateInstance";
 import {InstanceLink} from "./InstanceLink";
-import {ExecutionAction} from "./ExecutionAction";
-import {OutputAction} from "../output/OutputAction";
-import {Action} from "../fragments/Action";
+import {Action} from "./Action";
+import {ScheduledAction} from "../output/ScheduledAction";
+import {Activity} from "../fragments/Activity";
 import {Dataclass} from "../Dataclass";
-import {DataObjectInstance} from "./DataObjectInstance";
+import {Instance} from "./Instance";
 
 export class ExecutionState {
-    availableExecutionDataObjectInstances: ExecutionDataObjectInstance[];
-    blockedExecutionDataObjectInstances: ExecutionDataObjectInstance[];
+    availableExecutionDataObjectInstances: StateInstance[];
+    blockedExecutionDataObjectInstances: StateInstance[];
     instanceLinks: InstanceLink[];
     resources: Resource[];
     time: number;
     objectives: boolean[] = [];
-    runningActions: ExecutionAction[];
-    actionHistory: OutputAction[];
+    runningActions: Action[];
+    actionHistory: ScheduledAction[];
 
-    public constructor(availableDataObjects: ExecutionDataObjectInstance[], blockedDataObjects: ExecutionDataObjectInstance[], instanceLinks: InstanceLink[], resources: Resource[], time: number, runningActions: ExecutionAction[] = [], actionHistory: OutputAction[] = [], objectives: boolean[] = []) {
+    public constructor(availableDataObjects: StateInstance[], blockedDataObjects: StateInstance[],
+                       instanceLinks: InstanceLink[], resources: Resource[], time: number, runningActions: Action[] = [],
+                       actionHistory: ScheduledAction[] = [], objectives: boolean[] = []) {
         this.availableExecutionDataObjectInstances = availableDataObjects;
         this.blockedExecutionDataObjectInstances = blockedDataObjects;
         this.instanceLinks = instanceLinks;
@@ -28,47 +30,35 @@ export class ExecutionState {
         this.objectives = objectives;
     }
 
-    public allExecutionDataObjectInstances(): ExecutionDataObjectInstance[] {
+    public allExecutionDataObjectInstances(): StateInstance[] {
         return this.availableExecutionDataObjectInstances.concat(this.blockedExecutionDataObjectInstances);
     }
 
-    public getNewDataObjectInstanceOfClass(dataclass: Dataclass): DataObjectInstance {
-        let name = this.allExecutionDataObjectInstances().filter(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance.dataclass === dataclass).length + 1;
-        return new DataObjectInstance(dataclass.name.toString() + "_" + name.toString(), name.toString(), dataclass);
+    public getNewDataObjectInstanceOfClass(dataclass: Dataclass): Instance {
+        let name: string = (this.allExecutionDataObjectInstances().filter(executionDataObjectInstance =>
+            executionDataObjectInstance.dataObjectInstance.dataclass === dataclass
+        ).length + 1).toString();
+        return new Instance(name, dataclass);
     }
 
-    public getSuccessors(actions: Action[]): ExecutionState[] {
+    public getSuccessors(actions: Activity[]): ExecutionState[] {
         let successors: ExecutionState[] = [];
-        //get ExecutionActions Actions from Actions
-        let executionActions = actions.map(action => action.getExecutionActions(this)).flat();
-        //for each ExecutionAction, start ExecutionAction and get new ExecutionState
+        let executionActions: Action[] = actions.map(action => action.getExecutionActions(this)).flat();
         executionActions.forEach(executionAction => {
-            let newState = executionAction.start(this);
+            let newState: ExecutionState = executionAction.start(this);
             successors.push(newState);
         });
-        //waitAction executen and get new ExecutionState
         successors.push(this.wait());
-        //push all to successors
         return successors;
     }
 
     private wait(): ExecutionState {
-        let newState = new ExecutionState(this.availableExecutionDataObjectInstances, this.blockedExecutionDataObjectInstances, this.instanceLinks, this.resources, this.time + 1, this.runningActions, this.actionHistory, this.objectives);
+        let newState: ExecutionState = new ExecutionState(this.availableExecutionDataObjectInstances, this.blockedExecutionDataObjectInstances, this.instanceLinks, this.resources,
+            this.time + 1, this.runningActions, this.actionHistory, this.objectives
+        );
         this.runningActions.forEach(action => {
             newState = action.tryToFinish(newState);
         });
         return newState;
     }
-
-    // public executeActiviy(activitiy: Activity, instance: ExecutionDataObjectInstance) {
-    //     let indexInInstances = this.dataObjectInstances.indexOf(instance);
-    //     let indexInOutput = activitiy.outputSet.map(element => element.dataclass).indexOf(instance.state[0].dataclass);
-    //     if (indexInOutput === -1) {
-    //         console.error("This Activity does not change the state of this instance.")
-    //     }
-    //     if (indexInInstances === -1) {
-    //         console.error("This instance does not exist at the current state.")
-    //     }
-    //     this.dataObjectInstances[indexInInstances].state.splice(indexInInstances, 1, activitiy.outputSet[indexInOutput]);
-    // }
 }

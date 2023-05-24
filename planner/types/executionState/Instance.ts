@@ -1,6 +1,6 @@
 import {Dataclass} from "../Dataclass";
 
-export class DataObjectInstance {
+export class Instance {
     id: string;
     name: string;
     dataclass: Dataclass;

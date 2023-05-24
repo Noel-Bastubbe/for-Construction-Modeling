@@ -1,118 +1,114 @@
 import {IOSet} from "./IOSet";
-import {Role} from "../Role";
 import {Resource} from "../Resource";
-import {DataObjectInstance} from "../executionState/DataObjectInstance";
+import {Instance} from "../executionState/Instance";
+import {Action} from "../executionState/Action";
 import {ExecutionState} from "../executionState/ExecutionState";
-import {DataObjectReference} from "./DataObjectReference";
+import {Role} from "../Role";
+import {cartesianProduct} from "../../Util";
 import {InstanceLink} from "../executionState/InstanceLink";
-import {ExecutionAction} from "../executionState/ExecutionAction";
+import {StateInstance} from "../executionState/StateInstance";
 
 export class Activity {
-    // name: string;
-    // duration: number;
-    // NoP: number;
-    // role: Role | null;
-    // inputSets: IOSet[];
-    // outputSet: IOSet;
-    //
-    // public constructor(name: string, duration: number = 1, NoP: number = 1, role: Role | null = null, input: IOSet[], output: IOSet) {
-    //     this.name = name;
-    //     this.duration = duration;
-    //     this.NoP = NoP;
-    //     this.role = role;
-    //     this.inputSets = input;
-    //     this.outputSet = output;
-    // }
-    //
-    // public isExecutable(executionState: DataObjectInstance[], resources: Resource[]): boolean {
-    //     return this.inputSets.some(inputSet => inputSet.isSatisfiedBy(executionState)) && resources.some(resource => resource.satisfies(this.role, this.NoP));
-    // }
-    //
-    // public getMatchingInputSet(DataObjectInstances: DataObjectInstance[]): IOSet | undefined {
-    //     return this.inputSets.find(inputSet => inputSet.isSatisfiedBy(DataObjectInstances));
-    // }
-    //
-    // public createdDataObjectReferences(): DataObjectReference[] {
-    //     let inputSet: DataObjectReference[] = [];
-    //     if (this.inputSets.length > 0) {
-    //         inputSet = this.inputSets[0].set;
-    //     }
-    //     let outputSet = this.outputSet.set;
-    //     let createdDataObjectReferences: DataObjectReference[] = [];
-    //     outputSet.forEach(function (DataObjectReference) {
-    //             if (!inputSet.find(element => element.dataclass === DataObjectReference.dataclass)) {
-    //                 createdDataObjectReferences.push(DataObjectReference);
-    //             }
-    //         }
-    //     )
-    //     return createdDataObjectReferences;
-    // }
-    //
-    // public changedDataObjectReferences(): DataObjectReference[] {
-    //     let inputSet: DataObjectReference[] = [];
-    //     if (this.inputSets.length > 0) {
-    //         inputSet = this.inputSets[0].set;
-    //     }
-    //     let outputSet = this.outputSet.set;
-    //     let changedDataObjectReferences: DataObjectReference[] = [];
-    //     for (let dataObjectReference of outputSet) {
-    //         if (inputSet.find(element => element.dataclass === dataObjectReference.dataclass)) {
-    //             changedDataObjectReferences.push(dataObjectReference);
-    //         }
-    //     }
-    //     return changedDataObjectReferences;
-    // }
-    //
-    // public execute(executionState: ExecutionState, relevantDataObjectInstances: DataObjectInstance[]) {
-    //     let inputSet = this.getMatchingInputSet(relevantDataObjectInstances);
-    //     if (!inputSet && relevantDataObjectInstances.length > 0) {
-    //         console.error("Activity was not executable.");
-    //     }
-    //     let createdDataObjectReferences: DataObjectReference[] = this.createdDataObjectReferences();
-    //     let changedDataObjectReferences: DataObjectReference[] = this.changedDataObjectReferences();
-    //     for (let dataObjectReference of createdDataObjectReferences) {
-    //         let newDataObjectInstanceName: string = dataObjectReference.dataclass.name + ":" + (executionState.getNewDataObjectInstanceOfClass(dataObjectReference.dataclass).length + 1);
-    //         let newDataObjectInstance: DataObjectInstance = new DataObjectInstance(newDataObjectInstanceName, dataObjectReference.dataclass, dataObjectReference.states[0]);
-    //
-    //         // This creates links to every DataObjectInstance that is part of the input and does not respect the restriction by the fcM to only link when there exists an association between the dataclasses
-    //         for (let dataObjectInstance of relevantDataObjectInstances) {
-    //             let newInstanceLink = new InstanceLink(dataObjectInstance, newDataObjectInstance);
-    //             executionState.instanceLinks.push(newInstanceLink);
-    //         }
-    //         executionState.dataObjectInstances.push(newDataObjectInstance);
-    //     }
-    //
-    //     for (let dataObjectReference of changedDataObjectReferences) {
-    //         if (dataObjectReference.isList) {
-    //             let affectedDataObjectInstances = relevantDataObjectInstances.filter(dataObjectInstance => dataObjectInstance.dataclass === dataObjectReference.dataclass);
-    //             for (let dataObjectInstance of affectedDataObjectInstances) {
-    //                 dataObjectInstance.state = dataObjectReference.states[0];
-    //             }
-    //         } else {
-    //             let affectedDataObjectInstance = relevantDataObjectInstances.find(dataObjectInstance => dataObjectInstance.dataclass === dataObjectReference.dataclass);
-    //             if (affectedDataObjectInstance) {
-    //                 affectedDataObjectInstance.state = dataObjectReference.states[0];
-    //             } else {
-    //                 console.error("Could not match a DataObjectReference to an affected DataObjectInstance")
-    //             }
-    //         }
-    //     }
-    // }
-    //
-    // private getExecutionActionForInput(inputList: DataObjectInstance[], resource: Resource) {
-    //     let outputList = this.getOutputForInput(inputList);
-    //     return new ExecutionAction(this, 0, resource, inputList, outputList);
-    // }
-    //
-    // private getOutputForInput(inputList: DataObjectInstance[]): DataObjectInstance[] {
-    //     let output = this.outputSet.set.map(dataObjectReference => {
-    //         let instance = inputList.find(dataObjectInstance => dataObjectInstance.dataclass === dataObjectReference.dataclass);
-    //         if (instance) {
-    //             return new DataObjectInstance(instance.name, instance.dataclass, dataObjectReference.states[0]);
-    //         } else {
-    //             return new DataObjectInstance("new", dataObjectReference.dataclass, dataObjectReference.states[0]);
-    //         }
-    //     });
-    //     return output;
-    // }
+    name: string;
+    duration: number;
+    NoP: number;
+    role: Role | null;
+    inputSet: IOSet;
+    outputSet: IOSet;
+
+    public constructor(name: string, duration: number = 1, NoP: number = 1, role: Role | null = null, inputSet: IOSet, outputSet: IOSet) {
+        this.name = name;
+        this.duration = duration;
+        this.NoP = NoP;
+        this.role = role;
+        this.inputSet = inputSet;
+        this.outputSet = outputSet;
+    }
+
+    public getExecutionActions(executionState: ExecutionState): Action[] {
+
+        let executionActions: Action[] = [];
+        let needsInput: boolean = this.inputSet.set.length > 0;
+        let needsResources: boolean = this.role != null;
+
+        if (!needsInput && !needsResources) {
+            executionActions.push(this.getExecutionActionForInput([], null, executionState));
+        } else if (!needsInput && needsResources) {
+            let possibleResources: Resource[] = this.getPossibleResources(executionState);
+            for (let resource of possibleResources) {
+                executionActions.push(this.getExecutionActionForInput([], resource, executionState));
+            }
+        } else if (needsInput && !needsResources) {
+            let inputs: any[] = this.getPossibleInputs(executionState);
+            for (let input of inputs) {
+                executionActions.push(this.getExecutionActionForInput([].concat(input), null, executionState));
+            }
+        } else {
+            let inputs: any[] = this.getPossibleInputs(executionState);
+            let possibleResources: Resource[] = this.getPossibleResources(executionState);
+            for (let input of inputs) {
+                for (let resource of possibleResources) {
+                    executionActions.push(this.getExecutionActionForInput([].concat(input), resource, executionState));
+                }
+            }
+        }
+        return executionActions;
+    }
+
+    private getPossibleResources(executionState: ExecutionState) {
+        return executionState.resources.filter(resource => resource.satisfies(this.role, this.NoP));
+    }
+
+    private getPossibleInputs(executionState: ExecutionState): any[] {
+        let possibleInstances: StateInstance[][] = [];
+        for (let dataObjectReference of this.inputSet.set) {
+            let matchingInstances = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance =>
+                dataObjectReference.isMatchedBy(executionDataObjectInstance)
+            );
+            possibleInstances.push(matchingInstances);
+        }
+        return cartesianProduct(...possibleInstances);
+    }
+
+
+    private getExecutionActionForInput(inputList: StateInstance[], resource: Resource | null, executionState: ExecutionState) {
+        let outputList = this.getOutputForInput(inputList, executionState);
+        let addedLinks = this.getAddedLinks(inputList.map(input => input.dataObjectInstance), outputList.map(output => output.dataObjectInstance));
+        return new Action(this, 0, resource, inputList, outputList, addedLinks);
+    }
+
+    private getOutputForInput(inputList: StateInstance[], executionState: ExecutionState): StateInstance[] {
+        return this.outputSet.set.map(output => {
+            let instance: StateInstance | undefined = inputList.find(executionDataObjectInstance =>
+                executionDataObjectInstance.dataObjectInstance.dataclass === output.dataclass
+            );
+            if (instance) {
+                return new StateInstance(instance.dataObjectInstance, output.state);
+            } else {
+                let newDataObjectInstance: Instance = executionState.getNewDataObjectInstanceOfClass(output.dataclass);
+                return new StateInstance(newDataObjectInstance, output.state);
+            }
+        });
+    }
+
+    private getAddedLinks(inputList: Instance[], outputList: Instance[]): InstanceLink[] {
+        let addedLinks: InstanceLink[] = [];
+        let addedObjects: Instance[] = this.getAddedObjects(inputList, outputList);
+        let readObjects: Instance[] = inputList.filter(inputEntry => !outputList.find(outputEntry => inputEntry.dataclass === outputEntry.dataclass));
+        let allObjects: Instance[] = outputList.concat(readObjects);
+
+        for (let addedObject of addedObjects) {
+            for (let object of allObjects) {
+                if (addedObject != object) {
+                    addedLinks.push(new InstanceLink(addedObject, object));
+                }
+            }
+        }
+
+        return addedLinks;
+    }
+
+    private getAddedObjects(inputList: Instance[], outputList: Instance[]) {
+        return outputList.filter(outputEntry => !inputList.find(inputEntry => inputEntry.dataclass === outputEntry.dataclass));
+    }
 }

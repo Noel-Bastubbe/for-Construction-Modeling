@@ -1,14 +1,14 @@
-import {ObjectiveNode} from "./ObjectiveNode";
-import {NodeLink} from "./NodeLink";
+import {ObjectiveObject} from "./ObjectiveObject";
+import {ObjectiveLink} from "./ObjectiveLink";
 import {ExecutionState} from "../executionState/ExecutionState";
 
 export class Objective {
     id: string;
-    dataObjectNodes: ObjectiveNode[];
-    objectiveLinks: NodeLink[];
+    dataObjectNodes: ObjectiveObject[];
+    objectiveLinks: ObjectiveLink[];
     deadline: number | null;
 
-    public constructor(id: string, dataObjectNodes: ObjectiveNode[], links: NodeLink[], deadline: number | null = null) {
+    public constructor(id: string, dataObjectNodes: ObjectiveObject[], links: ObjectiveLink[], deadline: number | null = null) {
         this.id = id;
         this.dataObjectNodes = dataObjectNodes;
         this.objectiveLinks = links;
