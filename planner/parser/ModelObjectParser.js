@@ -36,7 +36,7 @@ export function parseObjects(dataModeler, fragmentModeler, objectiveModeler, rol
         for (let roleModelReference of resource.roles) {
             rolePlanReferences.push(roles.find(element => element.name === roleModelReference.name));
         }
-        resources.push(new Resource(resource.name, rolePlanReferences, parseInt(resource.capacity)));
+        resources.push(new Resource(resource.name, rolePlanReferences, getNumber(resource.capacity, 1), getNumber(resource.availabilityStart, 0), getNumber(resource.availabilityEnd, Infinity)));
     }
 
     let dataObjectInstances = [];
@@ -56,7 +56,7 @@ export function parseObjects(dataModeler, fragmentModeler, objectiveModeler, rol
         for (let link of modelObjectives[i].get('boardElements').filter((element) => is(element, 'om:Link'))) {
             objectiveLinks.push(new ObjectiveLink(objectiveNodes.find(element => element.dataObjectInstance.name === link.sourceRef.instance.name && element.dataObjectInstance.dataclass.name === link.sourceRef.classRef.name), objectiveNodes.find(element => element.dataObjectInstance.name === link.targetRef.instance.name && element.dataObjectInstance.dataclass.name === link.targetRef.classRef.name)));
         }
-        objectives.push(new Objective(objectiveNodes, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
+        objectives.push(new Objective(objectiveNodes, objectiveLinks, getNumber(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date, null)));
     }
 
     let goal = new Goal(objectives);
@@ -83,8 +83,13 @@ export function parseObjects(dataModeler, fragmentModeler, objectiveModeler, rol
         for (let dataObjectReference of action.get('dataOutputAssociations')) {
             outputSet.push(new DataObjectReference(dataclasses.find(element => element.name === dataObjectReference.get('targetRef').dataclass.name), dataObjectReference.get('targetRef').states[0].name, false));
         }
-        actions.push(new Activity(action.name, parseInt(action.duration) || 0, parseInt(action.NoP), roles.find(element => element.name === action.role.name), new IOSet(inputSet), new IOSet(outputSet)))
+        actions.push(new Activity(action.name, getNumber(action.duration, 0), getNumber(action.NoP, 1), roles.find(element => element.name === action.role.name), new IOSet(inputSet), new IOSet(outputSet)))
     }
 
     return new Planner(currentState, goal, actions);
+}
+
+function getNumber(value, defaultValue) {
+    let num = parseInt(value, 10)
+    return isNaN(num) ? defaultValue : num;
 }

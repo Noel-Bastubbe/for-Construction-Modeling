@@ -56,7 +56,7 @@ export class Activity {
     }
 
     private getPossibleResources(executionState: ExecutionState) {
-        return executionState.resources.filter(resource => resource.satisfies(this.role!, this.NoP, executionState.time));
+        return executionState.resources.filter(resource => resource.satisfies(this.role!, this.NoP, executionState.time, this.duration));
     }
 
     private getPossibleInputs(executionState: ExecutionState): any[] {
