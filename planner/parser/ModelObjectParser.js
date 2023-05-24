@@ -144,7 +144,7 @@ export class ModelObjectParser {
             }
 
             for (let input of inputs) {
-                actions.push(new Action(action.name, parseInt(action.duration ?? 0), parseInt(action.NoP), roles.find(element => element.id === action.role.id), new IOSet(input), new IOSet(outputSet)))
+                actions.push(new Action(action.name, parseInt(action.duration) || 0, parseInt(action.NoP), roles.find(element => element.id === action.role.id), new IOSet(input), new IOSet(outputSet)))
             }
         }
         return actions;
