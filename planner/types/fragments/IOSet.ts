@@ -8,11 +8,11 @@ export class IOSet {
         this.set = set;
     }
 
-    public isSatisfiedBy(executionDataObjectInstances: StateInstance[]): boolean {
+    public isSatisfiedBy(stateInstances: StateInstance[]): boolean {
         for (let dataObjectReference of this.set) {
             let foundCorrespondingDataObjectInstance: boolean = false;
-            for (let executionDataObjectInstance of executionDataObjectInstances) {
-                if (dataObjectReference.isMatchedBy(executionDataObjectInstance)) {
+            for (let stateInstance of stateInstances) {
+                if (dataObjectReference.isMatchedBy(stateInstance)) {
                     foundCorrespondingDataObjectInstance = true;
                     break;
                 }
