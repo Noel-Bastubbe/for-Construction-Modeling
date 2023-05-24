@@ -1,7 +1,7 @@
 import {ObjectiveObject} from "./ObjectiveObject";
 import {InstanceLink} from "../executionState/InstanceLink";
 
-export class NodeLink {
+export class ObjectiveLink {
     first: ObjectiveObject;
     second: ObjectiveObject;
 
