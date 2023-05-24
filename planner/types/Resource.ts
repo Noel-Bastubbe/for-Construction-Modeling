@@ -16,6 +16,6 @@ export class Resource {
     }
 
     public satisfies(role: Role, NoP: number, time: number, duration: number): boolean {
-            return this.roles.includes(role) && NoP <= this.capacity && time >= this.availabilityStart && time + duration <= this.availabilityEnd;
+            return this.roles.includes(role) && NoP <= this.capacity && time >= this.availabilityStart && time + duration - 1 <= this.availabilityEnd;
     }
 }
