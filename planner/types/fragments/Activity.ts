@@ -26,35 +26,52 @@ export class Activity {
     }
 
     public getExecutionActions(executionState: ExecutionState): Action[] {
-        if (!this.isExecutable(executionState)) {
-            return [];
-        }
-        let possibleResources: Resource[] = executionState.resources.filter(resource => resource.satisfies(this.role, this.NoP));
-        let executionActions: Action[] = [];
 
-        if (this.inputSet.set.length > 0) {
-            let possibleInstances: StateInstance[][] = [];
-            for (let dataObjectReference of this.inputSet.set) {
-                let matchingInstances = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance =>
-                    dataObjectReference.isMatchedBy(executionDataObjectInstance)
-                );
-                possibleInstances.push(matchingInstances);
+        let executionActions: Action[] = [];
+        let needsInput: boolean = this.inputSet.set.length > 0;
+        let needsResources: boolean = this.role != null;
+
+        if (!needsInput && !needsResources) {
+            executionActions.push(this.getExecutionActionForInput([], null, executionState));
+        } else if (!needsInput && needsResources) {
+            let possibleResources: Resource[] = this.getPossibleResources(executionState);
+            for (let resource of possibleResources) {
+                executionActions.push(this.getExecutionActionForInput([], resource, executionState));
             }
-            let inputs = cartesianProduct(...possibleInstances);
+        } else if (needsInput && !needsResources) {
+            let inputs: any[] = this.getPossibleInputs(executionState);
+            for (let input of inputs) {
+                executionActions.push(this.getExecutionActionForInput([].concat(input), null, executionState));
+            }
+        } else {
+            let inputs: any[] = this.getPossibleInputs(executionState);
+            let possibleResources: Resource[] = this.getPossibleResources(executionState);
             for (let input of inputs) {
                 for (let resource of possibleResources) {
                     executionActions.push(this.getExecutionActionForInput([].concat(input), resource, executionState));
                 }
             }
-        } else {
-            for (let resource of possibleResources) {
-                executionActions.push(this.getExecutionActionForInput([], resource, executionState));
-            }
         }
         return executionActions;
     }
 
-    private getExecutionActionForInput(inputList: StateInstance[], resource: Resource, executionState: ExecutionState) {
+    private getPossibleResources(executionState: ExecutionState) {
+        return executionState.resources.filter(resource => resource.satisfies(this.role, this.NoP));
+    }
+
+    private getPossibleInputs(executionState: ExecutionState): any[] {
+        let possibleInstances: StateInstance[][] = [];
+        for (let dataObjectReference of this.inputSet.set) {
+            let matchingInstances = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance =>
+                dataObjectReference.isMatchedBy(executionDataObjectInstance)
+            );
+            possibleInstances.push(matchingInstances);
+        }
+        return cartesianProduct(...possibleInstances);
+    }
+
+
+    private getExecutionActionForInput(inputList: StateInstance[], resource: Resource | null, executionState: ExecutionState) {
         let outputList = this.getOutputForInput(inputList, executionState);
         let addedLinks = this.getAddedLinks(inputList.map(input => input.dataObjectInstance), outputList.map(output => output.dataObjectInstance));
         return new Action(this, 0, resource, inputList, outputList, addedLinks);
@@ -72,10 +89,6 @@ export class Activity {
                 return new StateInstance(newDataObjectInstance, output.state);
             }
         });
-    }
-
-    private isExecutable(executionState: ExecutionState) {
-        return this.inputSet.isSatisfiedBy(executionState.availableExecutionDataObjectInstances) && executionState.resources.some(resource => resource.satisfies(this.role, this.NoP));
     }
 
     private getAddedLinks(inputList: Instance[], outputList: Instance[]): InstanceLink[] {
