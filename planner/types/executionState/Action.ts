@@ -25,7 +25,7 @@ export class Action {
 
     public start(executionState: ExecutionState): ExecutionState {
         let changedExecutionDataObjectInstances: StateInstance[] = this.getChangedExecutionDataObjectInstances();
-        let availableDataObjects: StateInstance[] = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance =>
+        let availableDataObjects: StateInstance[] = executionState.availableStateInstances.filter(executionDataObjectInstance =>
             !changedExecutionDataObjectInstances.some(it => it.instance === executionDataObjectInstance.instance)
         );
         let blockedDataObjects: StateInstance[] = executionState.blockedExecutionDataObjectInstances.concat(changedExecutionDataObjectInstances);
@@ -60,14 +60,14 @@ export class Action {
             let action: Action = new Action(this.action, this.runningTime + 1, this.resource, this.inputList, this.outputList, this.addedInstanceLinks);
             let runningActions: Action[] = executionState.runningActions.filter(action => action !== this);
             runningActions.push(action);
-            return new ExecutionState(executionState.availableExecutionDataObjectInstances, executionState.blockedExecutionDataObjectInstances,
+            return new ExecutionState(executionState.availableStateInstances, executionState.blockedExecutionDataObjectInstances,
                 executionState.instanceLinks, executionState.resources, executionState.time, runningActions, executionState.actionHistory, executionState.objectives
             );
         }
     }
 
     private finish(executionState: ExecutionState): ExecutionState {
-        let availableDataObjects: StateInstance[] = this.outputList.concat(executionState.availableExecutionDataObjectInstances);
+        let availableDataObjects: StateInstance[] = this.outputList.concat(executionState.availableStateInstances);
         let blockedDataObjects: StateInstance[] = this.getNewBlockedDataObjects(executionState);
         let instanceLinks: InstanceLink[] = this.addedInstanceLinks.concat(executionState.instanceLinks);
         let resources: Resource[] = this.getNewResources(executionState);

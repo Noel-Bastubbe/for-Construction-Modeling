@@ -8,7 +8,7 @@ import {Dataclass} from "../Dataclass";
 import {Instance} from "./Instance";
 
 export class ExecutionState {
-    availableExecutionDataObjectInstances: StateInstance[];
+    availableStateInstances: StateInstance[];
     blockedExecutionDataObjectInstances: StateInstance[];
     instanceLinks: InstanceLink[];
     resources: Resource[];
@@ -20,7 +20,7 @@ export class ExecutionState {
     public constructor(availableDataObjects: StateInstance[], blockedDataObjects: StateInstance[],
                        instanceLinks: InstanceLink[], resources: Resource[], time: number, runningActions: Action[] = [],
                        actionHistory: ScheduledAction[] = [], objectives: boolean[] = []) {
-        this.availableExecutionDataObjectInstances = availableDataObjects;
+        this.availableStateInstances = availableDataObjects;
         this.blockedExecutionDataObjectInstances = blockedDataObjects;
         this.instanceLinks = instanceLinks;
         this.resources = resources;
@@ -31,7 +31,7 @@ export class ExecutionState {
     }
 
     public allStateInstances(): StateInstance[] {
-        return this.availableExecutionDataObjectInstances.concat(this.blockedExecutionDataObjectInstances);
+        return this.availableStateInstances.concat(this.blockedExecutionDataObjectInstances);
     }
 
     public getNewDataObjectInstanceOfClass(dataclass: Dataclass): Instance {
@@ -53,7 +53,7 @@ export class ExecutionState {
     }
 
     private wait(): ExecutionState {
-        let newState: ExecutionState = new ExecutionState(this.availableExecutionDataObjectInstances, this.blockedExecutionDataObjectInstances, this.instanceLinks, this.resources,
+        let newState: ExecutionState = new ExecutionState(this.availableStateInstances, this.blockedExecutionDataObjectInstances, this.instanceLinks, this.resources,
             this.time + 1, this.runningActions, this.actionHistory, this.objectives
         );
         this.runningActions.forEach(action => {

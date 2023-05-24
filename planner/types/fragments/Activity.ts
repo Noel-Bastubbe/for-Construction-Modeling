@@ -62,7 +62,7 @@ export class Activity {
     private getPossibleInputs(executionState: ExecutionState): any[] {
         let possibleInstances: StateInstance[][] = [];
         for (let dataObjectReference of this.inputSet.set) {
-            let matchingInstances = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance =>
+            let matchingInstances = executionState.availableStateInstances.filter(executionDataObjectInstance =>
                 dataObjectReference.isMatchedBy(executionDataObjectInstance)
             );
             possibleInstances.push(matchingInstances);
