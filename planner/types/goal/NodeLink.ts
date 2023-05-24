@@ -1,11 +1,11 @@
-import {ObjectiveNode} from "./ObjectiveNode";
+import {ObjectiveObject} from "./ObjectiveObject";
 import {InstanceLink} from "../executionState/InstanceLink";
 
 export class NodeLink {
-    first: ObjectiveNode;
-    second: ObjectiveNode;
+    first: ObjectiveObject;
+    second: ObjectiveObject;
 
-    public constructor(first: ObjectiveNode, second: ObjectiveNode) {
+    public constructor(first: ObjectiveObject, second: ObjectiveObject) {
         this.first = first;
         this.second = second;
     }

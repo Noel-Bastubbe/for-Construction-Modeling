@@ -7,7 +7,7 @@ import {Resource} from "../types/Resource";
 import {Dataclass} from "../types/Dataclass";
 import {Planner} from "../Planner";
 import {Objective} from "../types/goal/Objective";
-import {ObjectiveNode} from "../types/goal/ObjectiveNode";
+import {ObjectiveObject} from "../types/goal/ObjectiveObject";
 import {Goal} from "../types/goal/Goal";
 import {Activity} from "../types/fragments/Activity";
 import {StateInstance} from "../types/executionState/StateInstance";
@@ -71,9 +71,9 @@ let paint: Activity;
 let tile: Activity;
 
 // ObjectiveNodes
-let objectiveNode: ObjectiveNode;
-let objectiveNode2: ObjectiveNode;
-let objectiveNode3: ObjectiveNode;
+let objectiveNode: ObjectiveObject;
+let objectiveNode2: ObjectiveObject;
+let objectiveNode3: ObjectiveObject;
 
 // Objectives
 let objective: Objective;
@@ -142,9 +142,9 @@ beforeEach(() => {
     outputSetBuyCables = new IOSet([cableAvailable]);
 
     //reset ObjectiveNodes
-    objectiveNode = new ObjectiveNode(mapleStreet, ["painted"]);
-    objectiveNode2 = new ObjectiveNode(mapleStreet, ["tiled"]);
-    objectiveNode3 = new ObjectiveNode(bakerStreet, ["painted"]);
+    objectiveNode = new ObjectiveObject(mapleStreet, ["painted"]);
+    objectiveNode2 = new ObjectiveObject(mapleStreet, ["tiled"]);
+    objectiveNode3 = new ObjectiveObject(bakerStreet, ["painted"]);
 
     //reset objectives
     objective = new Objective([objectiveNode], []);

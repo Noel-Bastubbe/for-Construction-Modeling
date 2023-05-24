@@ -1,7 +1,7 @@
 import {Instance} from "../executionState/Instance";
 import {StateInstance} from "../executionState/StateInstance";
 
-export class ObjectiveNode {
+export class ObjectiveObject {
     dataObjectInstance: Instance;
     states: string[];
 
