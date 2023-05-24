@@ -133,28 +133,28 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
         //writes activity and further information in cells depending on start and end date
         if (rowIndex !== null) {
             for(let i = 0; i < currentAction.capacity; i++){
-                rowIndex = rowIndex + 1;
                 const startColumn = currentAction.start + 2;
                 const endColumn = currentAction.end + 1;
-                worksheet2.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
+                worksheet2.mergeCells(rowIndex + i, startColumn, rowIndex + i, endColumn)
                 let outputListString = currentAction.outputList.map(dataObjectInstance => dataObjectInstance.dataclass.name + ' ' + dataObjectInstance.name).join(', ');
-                worksheet2.getCell(rowIndex, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.action.name + ' (' + outputListString + ')';
+                worksheet2.getCell(rowIndex + i, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.action.name + ' (' + outputListString + ')';
 
-                worksheet2.getCell(rowIndex, startColumn).border = {
+                worksheet2.getCell(rowIndex + i, startColumn).border = {
                     top: {style: 'thin'},
                     left: {style: 'thin'},
                     bottom: {style: 'thin'},
                     right: {style: 'thin'}
                 }
 
-                worksheet2.getCell(rowIndex, startColumn).fill = {
+                worksheet2.getCell(rowIndex + i, startColumn).fill = {
                     type: 'pattern',
                     pattern: 'solid',
                     fgColor: {argb: 'E0E0E0'},
                 };
 
-                worksheet2.getCell(rowIndex, startColumn).alignment = {vertical: 'middle', horizontal: 'center'};
+                worksheet2.getCell(rowIndex + i, startColumn).alignment = {vertical: 'middle', horizontal: 'center'};
             }
+            rowIndex = rowIndex + currentAction.capacity - 1;
         }
     }
 
