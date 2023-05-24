@@ -133,7 +133,7 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
         //writes activity and further information in cells depending on start and end date
         if (rowIndex !== null) {
             for(let i = 0; i < currentAction.capacity; i++){
-                rowIndex = rowIndex + i;
+                rowIndex = rowIndex + 1;
                 const startColumn = currentAction.start + 2;
                 const endColumn = currentAction.end + 1;
                 worksheet2.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
