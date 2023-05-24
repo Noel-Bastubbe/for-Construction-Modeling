@@ -13,6 +13,6 @@ export class DataObjectReference {
     }
 
     public isMatchedBy (executionDataObjectInstance: StateInstance) {
-        return this.dataclass === executionDataObjectInstance.dataObjectInstance.dataclass && this.state === executionDataObjectInstance.state;
+        return this.dataclass === executionDataObjectInstance.instance.dataclass && this.state === executionDataObjectInstance.state;
     }
 }

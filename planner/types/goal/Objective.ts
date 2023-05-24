@@ -18,7 +18,7 @@ export class Objective {
             return false;
         }
         for (let objectiveObject of this.objectiveObjects) {
-            if (!executionState.allExecutionDataObjectInstances().some(stateInstance => objectiveObject.isMatchedBy(stateInstance))) {
+            if (!executionState.allStateInstances().some(stateInstance => objectiveObject.isMatchedBy(stateInstance))) {
                 return false;
             }
         }

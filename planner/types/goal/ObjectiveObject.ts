@@ -11,8 +11,8 @@ export class ObjectiveObject {
     }
 
     public isMatchedBy(stateInstance: StateInstance) {
-        return this.instance.dataclass == stateInstance.dataObjectInstance.dataclass
-            && this.instance.name == stateInstance.dataObjectInstance.name
+        return this.instance.dataclass == stateInstance.instance.dataclass
+            && this.instance.name == stateInstance.instance.name
             && this.states.includes(stateInstance.state);
     }
 }

@@ -73,17 +73,17 @@ export class Activity {
 
     private getExecutionActionForInput(inputList: StateInstance[], resource: Resource | null, executionState: ExecutionState) {
         let outputList = this.getOutputForInput(inputList, executionState);
-        let addedLinks = this.getAddedLinks(inputList.map(input => input.dataObjectInstance), outputList.map(output => output.dataObjectInstance));
+        let addedLinks = this.getAddedLinks(inputList.map(input => input.instance), outputList.map(output => output.instance));
         return new Action(this, 0, resource, inputList, outputList, addedLinks);
     }
 
     private getOutputForInput(inputList: StateInstance[], executionState: ExecutionState): StateInstance[] {
         return this.outputSet.set.map(output => {
             let instance: StateInstance | undefined = inputList.find(executionDataObjectInstance =>
-                executionDataObjectInstance.dataObjectInstance.dataclass === output.dataclass
+                executionDataObjectInstance.instance.dataclass === output.dataclass
             );
             if (instance) {
-                return new StateInstance(instance.dataObjectInstance, output.state);
+                return new StateInstance(instance.instance, output.state);
             } else {
                 let newDataObjectInstance: Instance = executionState.getNewDataObjectInstanceOfClass(output.dataclass);
                 return new StateInstance(newDataObjectInstance, output.state);

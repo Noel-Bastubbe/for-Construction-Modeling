@@ -30,13 +30,13 @@ export class ExecutionState {
         this.objectives = objectives;
     }
 
-    public allExecutionDataObjectInstances(): StateInstance[] {
+    public allStateInstances(): StateInstance[] {
         return this.availableExecutionDataObjectInstances.concat(this.blockedExecutionDataObjectInstances);
     }
 
     public getNewDataObjectInstanceOfClass(dataclass: Dataclass): Instance {
-        let name: string = (this.allExecutionDataObjectInstances().filter(executionDataObjectInstance =>
-            executionDataObjectInstance.dataObjectInstance.dataclass === dataclass
+        let name: string = (this.allStateInstances().filter(executionDataObjectInstance =>
+            executionDataObjectInstance.instance.dataclass === dataclass
         ).length + 1).toString();
         return new Instance(name, dataclass);
     }
