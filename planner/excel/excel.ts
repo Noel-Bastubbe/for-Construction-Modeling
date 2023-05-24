@@ -6,15 +6,15 @@ export const exportExecutionPlan = async (log: Schedule) => {
 
     let resources = log.resources;
     let workSpaces = log.workSpaces;
-    let actionList = log.scheduledActions;
+    let scheduledActions = log.scheduledActions;
 
     //sorts actions by start date
-    actionList = actionList.sort((action1, action2) => {
+    scheduledActions = scheduledActions.sort((action1, action2) => {
         return action1.start - action2.start;
     });
 
     //get deadline(=highest end number of all actions)
-    let deadline = Math.max(...actionList.map(o => o.end));
+    let deadline = Math.max(...scheduledActions.map(o => o.end));
 
     //Execution Plan (work places)
     const worksheet1 = workbook.addWorksheet('Execution Plan (work places)');
@@ -37,8 +37,8 @@ export const exportExecutionPlan = async (log: Schedule) => {
     });
 
     //loops through all actions and fills excel sheet
-    for (let i = 0; i < actionList.length; i++) {
-        let currentAction = actionList[i]
+    for (let i = 0; i < scheduledActions.length; i++) {
+        let currentAction = scheduledActions[i]
 
         //gets row (work space) in which action has to be written
         for (let i = 0; i < currentAction.outputList.length; i++) {
@@ -122,8 +122,8 @@ export const exportExecutionPlan = async (log: Schedule) => {
     });
 
     //loops through all actions and fills excel sheet
-    for (let i = 0; i < actionList.length; i++) {
-        let currentAction = actionList[i]
+    for (let i = 0; i < scheduledActions.length; i++) {
+        let currentAction = scheduledActions[i]
 
         //gets row (resource) in which action has to be written
         const resourceForActivity = currentAction.resource;
@@ -141,7 +141,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
                 const startColumn = currentAction.start + 2;
                 const endColumn = currentAction.end + 1;
                 worksheet2.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
-                let outputListString = currentAction.outputList.map(dataObjectInstance => dataObjectInstance.dataclass.name + ' ' + dataObjectInstance.name).join(', ');
+                let outputListString = currentAction.outputList.map(instance => instance.dataclass.name + ' ' + instance.name).join(', ');
                 worksheet2.getCell(rowIndex, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.activity.name + ' (' + outputListString + ')';
 
                 worksheet2.getCell(rowIndex, startColumn).border = {
