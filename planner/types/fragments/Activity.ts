@@ -6,7 +6,7 @@ import {ExecutionState} from "../executionState/ExecutionState";
 import {Role} from "../Role";
 import {cartesianProduct} from "../../Util";
 import {InstanceLink} from "../executionState/InstanceLink";
-import {ExecutionDataObjectInstance} from "../executionState/ExecutionDataObjectInstance";
+import {StateInstance} from "../executionState/StateInstance";
 
 export class Activity {
     name: string;
@@ -33,7 +33,7 @@ export class Activity {
         let executionActions: Action[] = [];
 
         if (this.inputSet.set.length > 0) {
-            let possibleInstances: ExecutionDataObjectInstance[][] = [];
+            let possibleInstances: StateInstance[][] = [];
             for (let dataObjectReference of this.inputSet.set) {
                 let matchingInstances = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance =>
                     dataObjectReference.isMatchedBy(executionDataObjectInstance)
@@ -54,22 +54,22 @@ export class Activity {
         return executionActions;
     }
 
-    private getExecutionActionForInput(inputList: ExecutionDataObjectInstance[], resource: Resource, executionState: ExecutionState) {
+    private getExecutionActionForInput(inputList: StateInstance[], resource: Resource, executionState: ExecutionState) {
         let outputList = this.getOutputForInput(inputList, executionState);
         let addedLinks = this.getAddedLinks(inputList.map(input => input.dataObjectInstance), outputList.map(output => output.dataObjectInstance));
         return new Action(this, 0, resource, inputList, outputList, addedLinks);
     }
 
-    private getOutputForInput(inputList: ExecutionDataObjectInstance[], executionState: ExecutionState): ExecutionDataObjectInstance[] {
+    private getOutputForInput(inputList: StateInstance[], executionState: ExecutionState): StateInstance[] {
         return this.outputSet.set.map(output => {
-            let instance: ExecutionDataObjectInstance | undefined = inputList.find(executionDataObjectInstance =>
+            let instance: StateInstance | undefined = inputList.find(executionDataObjectInstance =>
                 executionDataObjectInstance.dataObjectInstance.dataclass === output.dataclass
             );
             if (instance) {
-                return new ExecutionDataObjectInstance(instance.dataObjectInstance, output.state);
+                return new StateInstance(instance.dataObjectInstance, output.state);
             } else {
                 let newDataObjectInstance: Instance = executionState.getNewDataObjectInstanceOfClass(output.dataclass);
-                return new ExecutionDataObjectInstance(newDataObjectInstance, output.state);
+                return new StateInstance(newDataObjectInstance, output.state);
             }
         });
     }

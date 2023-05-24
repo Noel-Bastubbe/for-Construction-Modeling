@@ -3,18 +3,18 @@ import {ExecutionState} from "./ExecutionState";
 import {OutputAction} from "../output/OutputAction";
 import {InstanceLink} from "./InstanceLink";
 import {Activity} from "../fragments/Activity";
-import {ExecutionDataObjectInstance} from "./ExecutionDataObjectInstance";
+import {StateInstance} from "./StateInstance";
 
 export class Action {
     action: Activity;
     runningTime: number;
     resource: Resource | null;
-    inputList: ExecutionDataObjectInstance[];
-    outputList: ExecutionDataObjectInstance[];
+    inputList: StateInstance[];
+    outputList: StateInstance[];
     addedInstanceLinks: InstanceLink[];
 
-    public constructor(action: Activity, runningTime: number, resource: Resource | null, inputList: ExecutionDataObjectInstance[],
-                       outputList: ExecutionDataObjectInstance[], addedInstanceLinks: InstanceLink[]) {
+    public constructor(action: Activity, runningTime: number, resource: Resource | null, inputList: StateInstance[],
+                       outputList: StateInstance[], addedInstanceLinks: InstanceLink[]) {
         this.action = action;
         this.runningTime = runningTime;
         this.resource = resource;
@@ -24,11 +24,11 @@ export class Action {
     }
 
     public start(executionState: ExecutionState): ExecutionState {
-        let changedExecutionDataObjectInstances: ExecutionDataObjectInstance[] = this.getChangedExecutionDataObjectInstances();
-        let availableDataObjects: ExecutionDataObjectInstance[] = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance =>
+        let changedExecutionDataObjectInstances: StateInstance[] = this.getChangedExecutionDataObjectInstances();
+        let availableDataObjects: StateInstance[] = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance =>
             !changedExecutionDataObjectInstances.some(it => it.dataObjectInstance === executionDataObjectInstance.dataObjectInstance)
         );
-        let blockedDataObjects: ExecutionDataObjectInstance[] = executionState.blockedExecutionDataObjectInstances.concat(changedExecutionDataObjectInstances);
+        let blockedDataObjects: StateInstance[] = executionState.blockedExecutionDataObjectInstances.concat(changedExecutionDataObjectInstances);
         let instanceLinks: InstanceLink[] = executionState.instanceLinks;
         let resources: Resource[] = this.getBlockedResources(executionState.resources);
         let time: number = executionState.time;
@@ -67,8 +67,8 @@ export class Action {
     }
 
     private finish(executionState: ExecutionState): ExecutionState {
-        let availableDataObjects: ExecutionDataObjectInstance[] = this.outputList.concat(executionState.availableExecutionDataObjectInstances);
-        let blockedDataObjects: ExecutionDataObjectInstance[] = this.getNewBlockedDataObjects(executionState);
+        let availableDataObjects: StateInstance[] = this.outputList.concat(executionState.availableExecutionDataObjectInstances);
+        let blockedDataObjects: StateInstance[] = this.getNewBlockedDataObjects(executionState);
         let instanceLinks: InstanceLink[] = this.addedInstanceLinks.concat(executionState.instanceLinks);
         let resources: Resource[] = this.getNewResources(executionState);
         let time: number = executionState.time;
@@ -78,8 +78,8 @@ export class Action {
         return new ExecutionState(availableDataObjects, blockedDataObjects, instanceLinks, resources, time, runningActions, actionHistory, objectiveArray);
     }
 
-    private getNewBlockedDataObjects(executionState: ExecutionState): ExecutionDataObjectInstance[] {
-        let changedDataObjectInstances: ExecutionDataObjectInstance[] = this.getChangedExecutionDataObjectInstances();
+    private getNewBlockedDataObjects(executionState: ExecutionState): StateInstance[] {
+        let changedDataObjectInstances: StateInstance[] = this.getChangedExecutionDataObjectInstances();
         return executionState.blockedExecutionDataObjectInstances.filter(executionDataObjectInstance =>
             !changedDataObjectInstances.some(it => it.dataObjectInstance === executionDataObjectInstance.dataObjectInstance)
         );
@@ -106,8 +106,8 @@ export class Action {
         );
     }
 
-    private getChangedExecutionDataObjectInstances(): ExecutionDataObjectInstance[] {
-        let changedExecutionDataObjectInstances: ExecutionDataObjectInstance[] = [];
+    private getChangedExecutionDataObjectInstances(): StateInstance[] {
+        let changedExecutionDataObjectInstances: StateInstance[] = [];
         for (let input of this.inputList) {
             if (this.outputList.some(output => output.dataObjectInstance === input.dataObjectInstance)) {
                 changedExecutionDataObjectInstances.push(input);

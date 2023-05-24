@@ -1,5 +1,5 @@
 import {Instance} from "../executionState/Instance";
-import {ExecutionDataObjectInstance} from "../executionState/ExecutionDataObjectInstance";
+import {StateInstance} from "../executionState/StateInstance";
 
 export class ObjectiveNode {
     dataObjectInstance: Instance;
@@ -10,7 +10,7 @@ export class ObjectiveNode {
         this.states = states;
     }
 
-    public isMatchedBy(executionDataObjectInstance: ExecutionDataObjectInstance) {
+    public isMatchedBy(executionDataObjectInstance: StateInstance) {
         return this.dataObjectInstance.dataclass == executionDataObjectInstance.dataObjectInstance.dataclass
             && this.dataObjectInstance.name == executionDataObjectInstance.dataObjectInstance.name
             && this.states.includes(executionDataObjectInstance.state);

@@ -1,5 +1,5 @@
 import {Resource} from "../Resource";
-import {ExecutionDataObjectInstance} from "./ExecutionDataObjectInstance";
+import {StateInstance} from "./StateInstance";
 import {InstanceLink} from "./InstanceLink";
 import {Action} from "./Action";
 import {OutputAction} from "../output/OutputAction";
@@ -8,8 +8,8 @@ import {Dataclass} from "../Dataclass";
 import {Instance} from "./Instance";
 
 export class ExecutionState {
-    availableExecutionDataObjectInstances: ExecutionDataObjectInstance[];
-    blockedExecutionDataObjectInstances: ExecutionDataObjectInstance[];
+    availableExecutionDataObjectInstances: StateInstance[];
+    blockedExecutionDataObjectInstances: StateInstance[];
     instanceLinks: InstanceLink[];
     resources: Resource[];
     time: number;
@@ -17,7 +17,7 @@ export class ExecutionState {
     runningActions: Action[];
     actionHistory: OutputAction[];
 
-    public constructor(availableDataObjects: ExecutionDataObjectInstance[], blockedDataObjects: ExecutionDataObjectInstance[],
+    public constructor(availableDataObjects: StateInstance[], blockedDataObjects: StateInstance[],
                        instanceLinks: InstanceLink[], resources: Resource[], time: number, runningActions: Action[] = [],
                        actionHistory: OutputAction[] = [], objectives: boolean[] = []) {
         this.availableExecutionDataObjectInstances = availableDataObjects;
@@ -30,7 +30,7 @@ export class ExecutionState {
         this.objectives = objectives;
     }
 
-    public allExecutionDataObjectInstances(): ExecutionDataObjectInstance[] {
+    public allExecutionDataObjectInstances(): StateInstance[] {
         return this.availableExecutionDataObjectInstances.concat(this.blockedExecutionDataObjectInstances);
     }
 

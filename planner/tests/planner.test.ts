@@ -10,7 +10,7 @@ import {Objective} from "../types/goal/Objective";
 import {ObjectiveNode} from "../types/goal/ObjectiveNode";
 import {Goal} from "../types/goal/Goal";
 import {Activity} from "../types/fragments/Activity";
-import {ExecutionDataObjectInstance} from "../types/executionState/ExecutionDataObjectInstance";
+import {StateInstance} from "../types/executionState/StateInstance";
 import {ExecutionLog} from "../types/output/ExecutionLog";
 import {OutputAction} from "../types/output/OutputAction";
 
@@ -24,8 +24,8 @@ let mapleStreet: Instance;
 let bakerStreet: Instance;
 
 // ExecutionDataObjectInstances
-let mapleStreetInit: ExecutionDataObjectInstance;
-let bakerStreetInit: ExecutionDataObjectInstance;
+let mapleStreetInit: StateInstance;
+let bakerStreetInit: StateInstance;
 
 // Roles
 let painter: Role;
@@ -99,8 +99,8 @@ beforeEach(() => {
     bakerStreet = new Instance("house:2", house);
 
     //reset all executionDataObjectInstance
-    mapleStreetInit = new ExecutionDataObjectInstance(mapleStreet, "init");
-    bakerStreetInit = new ExecutionDataObjectInstance(bakerStreet, "init");
+    mapleStreetInit = new StateInstance(mapleStreet, "init");
+    bakerStreetInit = new StateInstance(bakerStreet, "init");
 
     //reset all roles
     painter = new Role("painter");

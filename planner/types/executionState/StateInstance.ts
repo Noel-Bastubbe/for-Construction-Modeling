@@ -1,6 +1,6 @@
 import {Instance} from "./Instance";
 
-export class ExecutionDataObjectInstance {
+export class StateInstance {
     dataObjectInstance: Instance;
     state: string;
 
