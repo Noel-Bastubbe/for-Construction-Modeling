@@ -155,7 +155,6 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
 
                 worksheet2.getCell(rowIndex, startColumn).alignment = {vertical: 'middle', horizontal: 'center'};
             }
-
         }
     }
 
@@ -180,7 +179,6 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
         const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
         column.width = maxLength < 15 ? 15 : maxLength;
     });
-
 
     worksheet2.columns.forEach(column => {
         const lengths = column.values!.map(v => v!.toString().length);
