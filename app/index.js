@@ -26,6 +26,7 @@ import Zip from 'jszip';
 import {appendOverlayListeners} from "./lib/util/HtmlUtil";
 
 import {exportExecutionPlan} from "../dist/excel/excel.js";
+import {parseObjects} from "../planner/parser/ModelObjectParser";
 
 const LOAD_DUMMY = false; // Set to true to load conference example data
 const SHOW_DEBUG_BUTTONS = false; // Set to true to show additional buttons for debugging
