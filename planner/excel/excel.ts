@@ -9,7 +9,7 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
     let actionList = log.actionList;
 
     //sorts actions by start date
-    actionList = actionList.sort((action1, action2) => {
+    actionList = actionList.filter(action => action.action.duration > 0).sort((action1, action2) => {
         return action1.start - action2.start;
     });
 

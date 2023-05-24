@@ -23,6 +23,9 @@ export class ExecutionAction {
     }
 
     public start(executionState: ExecutionState): ExecutionState {
+        if(this.action.duration == 0) {
+            return this.finishInstantAction(executionState);
+        }
         let changedExecutionDataObjectInstances = this.getChangedExecutionDataObjectInstances();
         let availableDataObjects = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance => !changedExecutionDataObjectInstances.some(it => it.dataObjectInstance === executionDataObjectInstance.dataObjectInstance));
         let blockedDataObjects = executionState.blockedExecutionDataObjectInstances.concat(changedExecutionDataObjectInstances);
@@ -77,8 +80,8 @@ export class ExecutionAction {
     }
 
     private getNewBlockedDataObjects(executionState: ExecutionState): ExecutionDataObjectInstance[] {
-        let changedDataObjectInstances = this.getChangedExecutionDataObjectInstances();
-        return executionState.blockedExecutionDataObjectInstances.filter(executionDataObjectInstance => !changedDataObjectInstances.some(it => it.dataObjectInstance === executionDataObjectInstance.dataObjectInstance));
+        let changedExecutionDataObjectInstances = this.getChangedExecutionDataObjectInstances();
+        return executionState.blockedExecutionDataObjectInstances.filter(executionDataObjectInstance => !changedExecutionDataObjectInstances.some(it => it.dataObjectInstance === executionDataObjectInstance.dataObjectInstance));
     }
 
     // private getNewInstanceLinks(executionState: ExecutionState): InstanceLink[] {
@@ -114,5 +117,19 @@ export class ExecutionAction {
             }
         }
         return result;
+    }
+
+    private finishInstantAction(executionState: ExecutionState): ExecutionState {
+        let changedExecutionDataObjectInstances = this.getChangedExecutionDataObjectInstances();
+        let availableDataObjects = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance => !changedExecutionDataObjectInstances.some(it => it.dataObjectInstance === executionDataObjectInstance.dataObjectInstance));
+        availableDataObjects = availableDataObjects.concat(this.outputList);
+        let blockedDataObjects = executionState.blockedExecutionDataObjectInstances.slice();
+        let instanceLinks = executionState.instanceLinks.concat(this.addedInstanceLinks);
+        let resources = executionState.resources.slice();
+        let time = executionState.time;
+        let runningActions = executionState.runningActions.slice();
+        let actionHistory = this.getNewActionHistory(executionState);
+        let objectiveArray = executionState.objectives.slice();
+        return new ExecutionState(availableDataObjects, blockedDataObjects, instanceLinks, resources, time, runningActions, actionHistory, objectiveArray);
     }
 }
