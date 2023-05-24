@@ -9,7 +9,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
     let scheduledActions = log.scheduledActions;
 
     //sorts actions by start date
-    scheduledActions = scheduledActions.sort((action1, action2) => {
+    scheduledActions = scheduledActions.filter(action => action.activity.duration > 0).sort((action1, action2) => {
         return action1.start - action2.start;
     });
 
@@ -137,28 +137,28 @@ export const exportExecutionPlan = async (log: Schedule) => {
         //writes activity and further information in cells depending on start and end date
         if (rowIndex !== null) {
             for(let i = 0; i < currentAction.capacity; i++){
-                rowIndex = rowIndex + 1;
                 const startColumn = currentAction.start + 2;
                 const endColumn = currentAction.end + 1;
-                worksheet2.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
+                worksheet2.mergeCells(rowIndex + i, startColumn, rowIndex + i, endColumn)
                 let outputListString = currentAction.outputList.map(instance => instance.dataclass.name + ' ' + instance.name).join(', ');
-                worksheet2.getCell(rowIndex, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.activity.name + ' (' + outputListString + ')';
+                worksheet2.getCell(rowIndex + i, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.activity.name + ' (' + outputListString + ')';
 
-                worksheet2.getCell(rowIndex, startColumn).border = {
+                worksheet2.getCell(rowIndex + i, startColumn).border = {
                     top: {style: 'thin'},
                     left: {style: 'thin'},
                     bottom: {style: 'thin'},
                     right: {style: 'thin'}
                 }
 
-                worksheet2.getCell(rowIndex, startColumn).fill = {
+                worksheet2.getCell(rowIndex + i, startColumn).fill = {
                     type: 'pattern',
                     pattern: 'solid',
                     fgColor: {argb: 'E0E0E0'},
                 };
 
-                worksheet2.getCell(rowIndex, startColumn).alignment = {vertical: 'middle', horizontal: 'center'};
+                worksheet2.getCell(rowIndex + i, startColumn).alignment = {vertical: 'middle', horizontal: 'center'};
             }
+            rowIndex = rowIndex + currentAction.capacity - 1;
         }
     }
 

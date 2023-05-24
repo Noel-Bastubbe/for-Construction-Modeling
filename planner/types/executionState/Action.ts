@@ -24,6 +24,9 @@ export class Action {
     }
 
     public start(executionState: ExecutionState): ExecutionState {
+        if(this.action.duration == 0) {
+            return this.finishInstantAction(executionState);
+        }
         let changedExecutionDataObjectInstances: StateInstance[] = this.getChangedExecutionDataObjectInstances();
         let availableDataObjects: StateInstance[] = executionState.availableStateInstances.filter(executionDataObjectInstance =>
             !changedExecutionDataObjectInstances.some(it => it.instance === executionDataObjectInstance.instance)
@@ -114,5 +117,19 @@ export class Action {
             }
         }
         return changedExecutionDataObjectInstances;
+    }
+
+    private finishInstantAction(executionState: ExecutionState): ExecutionState {
+        let changedExecutionDataObjectInstances = this.getChangedExecutionDataObjectInstances();
+        let availableDataObjects = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance => !changedExecutionDataObjectInstances.some(it => it.dataObjectInstance === executionDataObjectInstance.dataObjectInstance));
+        availableDataObjects = availableDataObjects.concat(this.outputList);
+        let blockedDataObjects = executionState.blockedExecutionDataObjectInstances.slice();
+        let instanceLinks = executionState.instanceLinks.concat(this.addedInstanceLinks);
+        let resources = executionState.resources.slice();
+        let time = executionState.time;
+        let runningActions = executionState.runningActions.slice();
+        let actionHistory = this.getNewActionHistory(executionState);
+        let objectiveArray = executionState.objectives.slice();
+        return new ExecutionState(availableDataObjects, blockedDataObjects, instanceLinks, resources, time, runningActions, actionHistory, objectiveArray);
     }
 }
