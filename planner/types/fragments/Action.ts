@@ -1,6 +1,6 @@
 import {IOSet} from "./IOSet";
 import {Resource} from "../Resource";
-import {DataObjectInstance} from "../executionState/DataObjectInstance";
+import {Instance} from "../executionState/Instance";
 import {ExecutionAction} from "../executionState/ExecutionAction";
 import {ExecutionState} from "../executionState/ExecutionState";
 import {Role} from "../Role";
@@ -68,7 +68,7 @@ export class Action {
             if (instance) {
                 return new ExecutionDataObjectInstance(instance.dataObjectInstance, output.state);
             } else {
-                let newDataObjectInstance: DataObjectInstance = executionState.getNewDataObjectInstanceOfClass(output.dataclass);
+                let newDataObjectInstance: Instance = executionState.getNewDataObjectInstanceOfClass(output.dataclass);
                 return new ExecutionDataObjectInstance(newDataObjectInstance, output.state);
             }
         });
@@ -78,11 +78,11 @@ export class Action {
         return this.inputSet.isSatisfiedBy(executionState.availableExecutionDataObjectInstances) && executionState.resources.some(resource => resource.satisfies(this.role, this.NoP));
     }
 
-    private getAddedLinks(inputList: DataObjectInstance[], outputList: DataObjectInstance[]): InstanceLink[] {
+    private getAddedLinks(inputList: Instance[], outputList: Instance[]): InstanceLink[] {
         let addedLinks: InstanceLink[] = [];
-        let addedObjects: DataObjectInstance[] = this.getAddedObjects(inputList, outputList);
-        let readObjects: DataObjectInstance[] = inputList.filter(inputEntry => !outputList.find(outputEntry => inputEntry.dataclass === outputEntry.dataclass));
-        let allObjects: DataObjectInstance[] = outputList.concat(readObjects);
+        let addedObjects: Instance[] = this.getAddedObjects(inputList, outputList);
+        let readObjects: Instance[] = inputList.filter(inputEntry => !outputList.find(outputEntry => inputEntry.dataclass === outputEntry.dataclass));
+        let allObjects: Instance[] = outputList.concat(readObjects);
 
         for (let addedObject of addedObjects) {
             for (let object of allObjects) {
@@ -95,7 +95,7 @@ export class Action {
         return addedLinks;
     }
 
-    private getAddedObjects(inputList: DataObjectInstance[], outputList: DataObjectInstance[]) {
+    private getAddedObjects(inputList: Instance[], outputList: Instance[]) {
         return outputList.filter(outputEntry => !inputList.find(inputEntry => inputEntry.dataclass === outputEntry.dataclass));
     }
 }

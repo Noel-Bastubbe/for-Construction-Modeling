@@ -1,10 +1,10 @@
-import {DataObjectInstance} from "./DataObjectInstance";
+import {Instance} from "./Instance";
 
 export class ExecutionDataObjectInstance {
-    dataObjectInstance: DataObjectInstance;
+    dataObjectInstance: Instance;
     state: string;
 
-    public constructor(dataObjectInstance: DataObjectInstance, state: string) {
+    public constructor(dataObjectInstance: Instance, state: string) {
         this.dataObjectInstance = dataObjectInstance;
         this.state = state;
     }

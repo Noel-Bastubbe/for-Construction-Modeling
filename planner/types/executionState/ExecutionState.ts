@@ -5,7 +5,7 @@ import {ExecutionAction} from "./ExecutionAction";
 import {OutputAction} from "../output/OutputAction";
 import {Action} from "../fragments/Action";
 import {Dataclass} from "../Dataclass";
-import {DataObjectInstance} from "./DataObjectInstance";
+import {Instance} from "./Instance";
 
 export class ExecutionState {
     availableExecutionDataObjectInstances: ExecutionDataObjectInstance[];
@@ -34,11 +34,11 @@ export class ExecutionState {
         return this.availableExecutionDataObjectInstances.concat(this.blockedExecutionDataObjectInstances);
     }
 
-    public getNewDataObjectInstanceOfClass(dataclass: Dataclass): DataObjectInstance {
+    public getNewDataObjectInstanceOfClass(dataclass: Dataclass): Instance {
         let name: string = (this.allExecutionDataObjectInstances().filter(executionDataObjectInstance =>
             executionDataObjectInstance.dataObjectInstance.dataclass === dataclass
         ).length + 1).toString();
-        return new DataObjectInstance(name, dataclass);
+        return new Instance(name, dataclass);
     }
 
     public getSuccessors(actions: Action[]): ExecutionState[] {

@@ -1,4 +1,4 @@
-import {DataObjectInstance} from "../types/executionState/DataObjectInstance";
+import {Instance} from "../types/executionState/Instance";
 import {ExecutionState} from "../types/executionState/ExecutionState";
 import {IOSet} from "../types/fragments/IOSet";
 import {DataObjectReference} from "../types/fragments/DataObjectReference";
@@ -20,8 +20,8 @@ let wall: Dataclass;
 let cable: Dataclass;
 
 // Instances
-let mapleStreet: DataObjectInstance;
-let bakerStreet: DataObjectInstance;
+let mapleStreet: Instance;
+let bakerStreet: Instance;
 
 // ExecutionDataObjectInstances
 let mapleStreetInit: ExecutionDataObjectInstance;
@@ -95,8 +95,8 @@ beforeEach(() => {
     cable = new Dataclass("cable");
 
     //reset all instances
-    mapleStreet = new DataObjectInstance("house:1", house);
-    bakerStreet = new DataObjectInstance("house:2", house);
+    mapleStreet = new Instance("house:1", house);
+    bakerStreet = new Instance("house:2", house);
 
     //reset all executionDataObjectInstance
     mapleStreetInit = new ExecutionDataObjectInstance(mapleStreet, "init");

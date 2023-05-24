@@ -1,10 +1,10 @@
-import {DataObjectInstance} from "./DataObjectInstance";
+import {Instance} from "./Instance";
 
 export class InstanceLink {
-    first: DataObjectInstance;
-    second: DataObjectInstance;
+    first: Instance;
+    second: Instance;
 
-    public constructor(first: DataObjectInstance, second: DataObjectInstance) {
+    public constructor(first: Instance, second: Instance) {
         this.first = first;
         this.second = second;
     }
