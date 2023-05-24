@@ -43,7 +43,7 @@ export class ExecutionState {
 
     public getSuccessors(activities: Activity[]): ExecutionState[] {
         let successors: ExecutionState[] = [];
-        let actions: Action[] = activities.map(activity => activity.getExecutionActions(this)).flat();
+        let actions: Action[] = activities.map(activity => activity.getActions(this)).flat();
         actions.forEach(action => {
             let newState: ExecutionState = action.start(this);
             successors.push(newState);
