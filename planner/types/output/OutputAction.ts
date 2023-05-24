@@ -1,9 +1,9 @@
 import {Instance} from "../executionState/Instance";
 import {Resource} from "../Resource";
-import {Action} from "../fragments/Action";
+import {Activity} from "../fragments/Activity";
 
 export class OutputAction {
-    action: Action;
+    action: Activity;
     start: number;
     end: number;
     resource: Resource | null;
@@ -11,7 +11,7 @@ export class OutputAction {
     inputList: Instance[];
     outputList: Instance[];
 
-    public constructor(action: Action, start: number, end: number, resource: Resource | null, capacity: number, inputList: Instance[], outputList: Instance[]) {
+    public constructor(action: Activity, start: number, end: number, resource: Resource | null, capacity: number, inputList: Instance[], outputList: Instance[]) {
         this.action = action;
         this.start = start;
         this.end = end;

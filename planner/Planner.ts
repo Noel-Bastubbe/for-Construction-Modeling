@@ -1,4 +1,4 @@
-import {Action} from "./types/fragments/Action";
+import {Activity} from "./types/fragments/Activity";
 import {ExecutionState} from "./types/executionState/ExecutionState";
 import {ExecutionLog} from "./types/output/ExecutionLog";
 import {Goal} from "./types/goal/Goal";
@@ -6,9 +6,9 @@ import {Goal} from "./types/goal/Goal";
 export class Planner {
     startState: ExecutionState;
     goal: Goal;
-    actions: Action[];
+    actions: Activity[];
 
-    public constructor(startState: ExecutionState, goal: Goal, actions: Action[]) {
+    public constructor(startState: ExecutionState, goal: Goal, actions: Activity[]) {
         this.startState = startState;
         this.goal = goal;
         this.actions = actions;

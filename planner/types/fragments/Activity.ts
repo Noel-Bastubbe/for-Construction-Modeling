@@ -8,7 +8,7 @@ import {cartesianProduct} from "../../Util";
 import {InstanceLink} from "../executionState/InstanceLink";
 import {ExecutionDataObjectInstance} from "../executionState/ExecutionDataObjectInstance";
 
-export class Action {
+export class Activity {
     name: string;
     duration: number;
     NoP: number;

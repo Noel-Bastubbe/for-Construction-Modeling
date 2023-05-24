@@ -9,7 +9,7 @@ import {Planner} from "../Planner";
 import {Objective} from "../types/goal/Objective";
 import {ObjectiveNode} from "../types/goal/ObjectiveNode";
 import {Goal} from "../types/goal/Goal";
-import {Action} from "../types/fragments/Action";
+import {Activity} from "../types/fragments/Activity";
 import {ExecutionDataObjectInstance} from "../types/executionState/ExecutionDataObjectInstance";
 import {ExecutionLog} from "../types/output/ExecutionLog";
 import {OutputAction} from "../types/output/OutputAction";
@@ -67,8 +67,8 @@ let outputSetLay: IOSet;
 let outputSetBuyCables: IOSet;
 
 // Activities
-let paint: Action;
-let tile: Action;
+let paint: Activity;
+let tile: Activity;
 
 // ObjectiveNodes
 let objectiveNode: ObjectiveNode;
@@ -83,7 +83,7 @@ let objective2: Objective;
 let goal: Goal;
 
 // Project State
-let actions: Action[];
+let actions: Activity[];
 let resources: Resource[];
 let currentState: ExecutionState;
 
@@ -153,8 +153,8 @@ beforeEach(() => {
     goal = new Goal([objective]);
 
     //reset all actions
-    paint = new Action("paint", 1, 1, painter, inputSetPaint, outputSetPaint);
-    tile = new Action("tile", 1, 1, tiler, inputSetTile, outputSetTile);
+    paint = new Activity("paint", 1, 1, painter, inputSetPaint, outputSetPaint);
+    tile = new Activity("tile", 1, 1, tiler, inputSetTile, outputSetTile);
 
     //reset all project states
     actions = [paint];

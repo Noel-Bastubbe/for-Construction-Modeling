@@ -2,18 +2,18 @@ import {Resource} from "../Resource";
 import {ExecutionState} from "./ExecutionState";
 import {OutputAction} from "../output/OutputAction";
 import {InstanceLink} from "./InstanceLink";
-import {Action} from "../fragments/Action";
+import {Activity} from "../fragments/Activity";
 import {ExecutionDataObjectInstance} from "./ExecutionDataObjectInstance";
 
 export class ExecutionAction {
-    action: Action;
+    action: Activity;
     runningTime: number;
     resource: Resource | null;
     inputList: ExecutionDataObjectInstance[];
     outputList: ExecutionDataObjectInstance[];
     addedInstanceLinks: InstanceLink[];
 
-    public constructor(action: Action, runningTime: number, resource: Resource | null, inputList: ExecutionDataObjectInstance[],
+    public constructor(action: Activity, runningTime: number, resource: Resource | null, inputList: ExecutionDataObjectInstance[],
                        outputList: ExecutionDataObjectInstance[], addedInstanceLinks: InstanceLink[]) {
         this.action = action;
         this.runningTime = runningTime;

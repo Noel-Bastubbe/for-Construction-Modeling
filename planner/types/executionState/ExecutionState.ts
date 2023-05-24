@@ -3,7 +3,7 @@ import {ExecutionDataObjectInstance} from "./ExecutionDataObjectInstance";
 import {InstanceLink} from "./InstanceLink";
 import {ExecutionAction} from "./ExecutionAction";
 import {OutputAction} from "../output/OutputAction";
-import {Action} from "../fragments/Action";
+import {Activity} from "../fragments/Activity";
 import {Dataclass} from "../Dataclass";
 import {Instance} from "./Instance";
 
@@ -41,7 +41,7 @@ export class ExecutionState {
         return new Instance(name, dataclass);
     }
 
-    public getSuccessors(actions: Action[]): ExecutionState[] {
+    public getSuccessors(actions: Activity[]): ExecutionState[] {
         let successors: ExecutionState[] = [];
         let executionActions: ExecutionAction[] = actions.map(action => action.getExecutionActions(this)).flat();
         executionActions.forEach(executionAction => {
