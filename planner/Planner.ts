@@ -20,7 +20,7 @@ export class Planner {
         while (queue.length > 0) {
             let node = queue.shift();
             if (this.goal.isFulfilledBy(node!)) {
-                return new Schedule(node!.actionHistory, node!.allExecutionDataObjectInstances().map(executionDataObjectInstance =>
+                return new Schedule(node!.actionHistory, node!.allStateInstances().map(executionDataObjectInstance =>
                     executionDataObjectInstance.dataObjectInstance), node!.resources
                 );
             }

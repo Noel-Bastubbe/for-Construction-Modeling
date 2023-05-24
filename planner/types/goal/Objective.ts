@@ -18,7 +18,7 @@ export class Objective {
             return false;
         }
         for (let dataObjectNode of this.dataObjectNodes) {
-            if (!executionState.allExecutionDataObjectInstances().some(executionDataObjectInstance => dataObjectNode.isMatchedBy(executionDataObjectInstance))) {
+            if (!executionState.allStateInstances().some(executionDataObjectInstance => dataObjectNode.isMatchedBy(executionDataObjectInstance))) {
                 return false;
             }
         }

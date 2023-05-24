@@ -195,7 +195,7 @@ describe('generate plan', () => {
         objective = new Objective([objectiveNode, objectiveNode3], []);
         goal = new Goal([objective]);
 
-        currentState.availableExecutionDataObjectInstances = [mapleStreetInit, bakerStreetInit];
+        currentState.availableStateInstances = [mapleStreetInit, bakerStreetInit];
         let planner = new Planner(currentState, goal, [paint, tile]);
         expect(planner.generatePlan()).toEqual(executionLog);
     });

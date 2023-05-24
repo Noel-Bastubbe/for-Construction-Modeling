@@ -25,10 +25,10 @@ export class Action {
 
     public start(executionState: ExecutionState): ExecutionState {
         let changedStateInstances: StateInstance[] = this.getChangedStateInstances();
-        let availableStateInstances: StateInstance[] = executionState.availableExecutionDataObjectInstances.filter(stateInstance =>
+        let availableStateInstances: StateInstance[] = executionState.availableStateInstances.filter(stateInstance =>
             !changedStateInstances.some(it => it.dataObjectInstance === stateInstance.dataObjectInstance)
         );
-        let blockedStateInstances: StateInstance[] = executionState.blockedExecutionDataObjectInstances.concat(changedStateInstances);
+        let blockedStateInstances: StateInstance[] = executionState.blockedStateInstances.concat(changedStateInstances);
         let instanceLinks: InstanceLink[] = executionState.instanceLinks;
         let resources: Resource[] = this.getBlockedResources(executionState.resources);
         let time: number = executionState.time;
@@ -60,14 +60,14 @@ export class Action {
             let action: Action = new Action(this.activity, this.runningTime + 1, this.resource, this.inputList, this.outputList, this.addedInstanceLinks);
             let runningActions: Action[] = executionState.runningActions.filter(action => action !== this);
             runningActions.push(action);
-            return new ExecutionState(executionState.availableExecutionDataObjectInstances, executionState.blockedExecutionDataObjectInstances,
+            return new ExecutionState(executionState.availableStateInstances, executionState.blockedStateInstances,
                 executionState.instanceLinks, executionState.resources, executionState.time, runningActions, executionState.actionHistory, executionState.objectives
             );
         }
     }
 
     private finish(executionState: ExecutionState): ExecutionState {
-        let availableStateInstances: StateInstance[] = this.outputList.concat(executionState.availableExecutionDataObjectInstances);
+        let availableStateInstances: StateInstance[] = this.outputList.concat(executionState.availableStateInstances);
         let blockedStateInstances: StateInstance[] = this.getNewBlockedStateInstances(executionState);
         let instanceLinks: InstanceLink[] = this.addedInstanceLinks.concat(executionState.instanceLinks);
         let resources: Resource[] = this.getNewResources(executionState);
@@ -80,7 +80,7 @@ export class Action {
 
     private getNewBlockedStateInstances(executionState: ExecutionState): StateInstance[] {
         let changedStateInstances: StateInstance[] = this.getChangedStateInstances();
-        return executionState.blockedExecutionDataObjectInstances.filter(stateInstance =>
+        return executionState.blockedStateInstances.filter(stateInstance =>
             !changedStateInstances.some(it => it.dataObjectInstance === stateInstance.dataObjectInstance)
         );
     }

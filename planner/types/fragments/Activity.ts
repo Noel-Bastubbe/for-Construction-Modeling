@@ -62,7 +62,7 @@ export class Activity {
     private getPossibleInputs(executionState: ExecutionState): any[] {
         let possibleInstances: StateInstance[][] = [];
         for (let dataObjectReference of this.inputSet.set) {
-            let matchingInstances = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance =>
+            let matchingInstances = executionState.availableStateInstances.filter(executionDataObjectInstance =>
                 dataObjectReference.isMatchedBy(executionDataObjectInstance)
             );
             possibleInstances.push(matchingInstances);
@@ -85,7 +85,7 @@ export class Activity {
             if (instance) {
                 return new StateInstance(instance.dataObjectInstance, output.state);
             } else {
-                let newDataObjectInstance: Instance = executionState.getNewDataObjectInstanceOfClass(output.dataclass);
+                let newDataObjectInstance: Instance = executionState.getNewInstanceOfClass(output.dataclass);
                 return new StateInstance(newDataObjectInstance, output.state);
             }
         });

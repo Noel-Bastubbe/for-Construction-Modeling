@@ -8,8 +8,8 @@ import {Dataclass} from "../Dataclass";
 import {Instance} from "./Instance";
 
 export class ExecutionState {
-    availableExecutionDataObjectInstances: StateInstance[];
-    blockedExecutionDataObjectInstances: StateInstance[];
+    availableStateInstances: StateInstance[];
+    blockedStateInstances: StateInstance[];
     instanceLinks: InstanceLink[];
     resources: Resource[];
     time: number;
@@ -17,11 +17,11 @@ export class ExecutionState {
     runningActions: Action[];
     actionHistory: ScheduledAction[];
 
-    public constructor(availableDataObjects: StateInstance[], blockedDataObjects: StateInstance[],
+    public constructor(availableStateInstances: StateInstance[], blockedStateInstances: StateInstance[],
                        instanceLinks: InstanceLink[], resources: Resource[], time: number, runningActions: Action[] = [],
                        actionHistory: ScheduledAction[] = [], objectives: boolean[] = []) {
-        this.availableExecutionDataObjectInstances = availableDataObjects;
-        this.blockedExecutionDataObjectInstances = blockedDataObjects;
+        this.availableStateInstances = availableStateInstances;
+        this.blockedStateInstances = blockedStateInstances;
         this.instanceLinks = instanceLinks;
         this.resources = resources;
         this.time = time;
@@ -30,22 +30,22 @@ export class ExecutionState {
         this.objectives = objectives;
     }
 
-    public allExecutionDataObjectInstances(): StateInstance[] {
-        return this.availableExecutionDataObjectInstances.concat(this.blockedExecutionDataObjectInstances);
+    public allStateInstances(): StateInstance[] {
+        return this.availableStateInstances.concat(this.blockedStateInstances);
     }
 
-    public getNewDataObjectInstanceOfClass(dataclass: Dataclass): Instance {
-        let name: string = (this.allExecutionDataObjectInstances().filter(executionDataObjectInstance =>
-            executionDataObjectInstance.dataObjectInstance.dataclass === dataclass
+    public getNewInstanceOfClass(dataclass: Dataclass): Instance {
+        let name: string = (this.allStateInstances().filter(stateInstances =>
+            stateInstances.dataObjectInstance.dataclass === dataclass
         ).length + 1).toString();
         return new Instance(name, dataclass);
     }
 
-    public getSuccessors(actions: Activity[]): ExecutionState[] {
+    public getSuccessors(activities: Activity[]): ExecutionState[] {
         let successors: ExecutionState[] = [];
-        let executionActions: Action[] = actions.map(action => action.getExecutionActions(this)).flat();
-        executionActions.forEach(executionAction => {
-            let newState: ExecutionState = executionAction.start(this);
+        let actions: Action[] = activities.map(activity => activity.getExecutionActions(this)).flat();
+        actions.forEach(action => {
+            let newState: ExecutionState = action.start(this);
             successors.push(newState);
         });
         successors.push(this.wait());
@@ -53,7 +53,7 @@ export class ExecutionState {
     }
 
     private wait(): ExecutionState {
-        let newState: ExecutionState = new ExecutionState(this.availableExecutionDataObjectInstances, this.blockedExecutionDataObjectInstances, this.instanceLinks, this.resources,
+        let newState: ExecutionState = new ExecutionState(this.availableStateInstances, this.blockedStateInstances, this.instanceLinks, this.resources,
             this.time + 1, this.runningActions, this.actionHistory, this.objectives
         );
         this.runningActions.forEach(action => {
