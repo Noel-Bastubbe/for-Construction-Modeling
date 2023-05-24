@@ -1,7 +1,7 @@
 import {Resource} from "../Resource";
 import {ExecutionDataObjectInstance} from "./ExecutionDataObjectInstance";
 import {InstanceLink} from "./InstanceLink";
-import {ExecutionAction} from "./ExecutionAction";
+import {Action} from "./Action";
 import {OutputAction} from "../output/OutputAction";
 import {Activity} from "../fragments/Activity";
 import {Dataclass} from "../Dataclass";
@@ -14,11 +14,11 @@ export class ExecutionState {
     resources: Resource[];
     time: number;
     objectives: boolean[] = [];
-    runningActions: ExecutionAction[];
+    runningActions: Action[];
     actionHistory: OutputAction[];
 
     public constructor(availableDataObjects: ExecutionDataObjectInstance[], blockedDataObjects: ExecutionDataObjectInstance[],
-                       instanceLinks: InstanceLink[], resources: Resource[], time: number, runningActions: ExecutionAction[] = [],
+                       instanceLinks: InstanceLink[], resources: Resource[], time: number, runningActions: Action[] = [],
                        actionHistory: OutputAction[] = [], objectives: boolean[] = []) {
         this.availableExecutionDataObjectInstances = availableDataObjects;
         this.blockedExecutionDataObjectInstances = blockedDataObjects;
@@ -43,7 +43,7 @@ export class ExecutionState {
 
     public getSuccessors(actions: Activity[]): ExecutionState[] {
         let successors: ExecutionState[] = [];
-        let executionActions: ExecutionAction[] = actions.map(action => action.getExecutionActions(this)).flat();
+        let executionActions: Action[] = actions.map(action => action.getExecutionActions(this)).flat();
         executionActions.forEach(executionAction => {
             let newState: ExecutionState = executionAction.start(this);
             successors.push(newState);

@@ -5,7 +5,7 @@ import {InstanceLink} from "./InstanceLink";
 import {Activity} from "../fragments/Activity";
 import {ExecutionDataObjectInstance} from "./ExecutionDataObjectInstance";
 
-export class ExecutionAction {
+export class Action {
     action: Activity;
     runningTime: number;
     resource: Resource | null;
@@ -32,7 +32,7 @@ export class ExecutionAction {
         let instanceLinks: InstanceLink[] = executionState.instanceLinks;
         let resources: Resource[] = this.getBlockedResources(executionState.resources);
         let time: number = executionState.time;
-        let runningActions: ExecutionAction[] = executionState.runningActions.concat([this]);
+        let runningActions: Action[] = executionState.runningActions.concat([this]);
         let actionHistory: OutputAction[] = executionState.actionHistory;
         let objectiveArray: boolean[] = executionState.objectives.slice();
         return new ExecutionState(availableDataObjects, blockedDataObjects, instanceLinks, resources, time, runningActions, actionHistory, objectiveArray);
@@ -57,8 +57,8 @@ export class ExecutionAction {
         if (this.canFinish()) {
             return this.finish(executionState);
         } else {
-            let action: ExecutionAction = new ExecutionAction(this.action, this.runningTime + 1, this.resource, this.inputList, this.outputList, this.addedInstanceLinks);
-            let runningActions: ExecutionAction[] = executionState.runningActions.filter(action => action !== this);
+            let action: Action = new Action(this.action, this.runningTime + 1, this.resource, this.inputList, this.outputList, this.addedInstanceLinks);
+            let runningActions: Action[] = executionState.runningActions.filter(action => action !== this);
             runningActions.push(action);
             return new ExecutionState(executionState.availableExecutionDataObjectInstances, executionState.blockedExecutionDataObjectInstances,
                 executionState.instanceLinks, executionState.resources, executionState.time, runningActions, executionState.actionHistory, executionState.objectives
@@ -72,7 +72,7 @@ export class ExecutionAction {
         let instanceLinks: InstanceLink[] = this.addedInstanceLinks.concat(executionState.instanceLinks);
         let resources: Resource[] = this.getNewResources(executionState);
         let time: number = executionState.time;
-        let runningActions: ExecutionAction[] = executionState.runningActions.filter(action => action !== this);
+        let runningActions: Action[] = executionState.runningActions.filter(action => action !== this);
         let actionHistory: OutputAction[] = this.getNewActionHistory(executionState);
         let objectiveArray: boolean[] = executionState.objectives.slice();
         return new ExecutionState(availableDataObjects, blockedDataObjects, instanceLinks, resources, time, runningActions, actionHistory, objectiveArray);

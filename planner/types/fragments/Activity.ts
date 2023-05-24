@@ -1,7 +1,7 @@
 import {IOSet} from "./IOSet";
 import {Resource} from "../Resource";
 import {Instance} from "../executionState/Instance";
-import {ExecutionAction} from "../executionState/ExecutionAction";
+import {Action} from "../executionState/Action";
 import {ExecutionState} from "../executionState/ExecutionState";
 import {Role} from "../Role";
 import {cartesianProduct} from "../../Util";
@@ -25,12 +25,12 @@ export class Activity {
         this.outputSet = outputSet;
     }
 
-    public getExecutionActions(executionState: ExecutionState): ExecutionAction[] {
+    public getExecutionActions(executionState: ExecutionState): Action[] {
         if (!this.isExecutable(executionState)) {
             return [];
         }
         let possibleResources: Resource[] = executionState.resources.filter(resource => resource.satisfies(this.role, this.NoP));
-        let executionActions: ExecutionAction[] = [];
+        let executionActions: Action[] = [];
 
         if (this.inputSet.set.length > 0) {
             let possibleInstances: ExecutionDataObjectInstance[][] = [];
@@ -57,7 +57,7 @@ export class Activity {
     private getExecutionActionForInput(inputList: ExecutionDataObjectInstance[], resource: Resource, executionState: ExecutionState) {
         let outputList = this.getOutputForInput(inputList, executionState);
         let addedLinks = this.getAddedLinks(inputList.map(input => input.dataObjectInstance), outputList.map(output => output.dataObjectInstance));
-        return new ExecutionAction(this, 0, resource, inputList, outputList, addedLinks);
+        return new Action(this, 0, resource, inputList, outputList, addedLinks);
     }
 
     private getOutputForInput(inputList: ExecutionDataObjectInstance[], executionState: ExecutionState): ExecutionDataObjectInstance[] {
