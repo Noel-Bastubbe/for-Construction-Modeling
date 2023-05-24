@@ -2,7 +2,7 @@ import {OutputAction} from "./OutputAction";
 import {Instance} from "../executionState/Instance";
 import {Resource} from "../Resource";
 
-export class ExecutionLog {
+export class Schedule {
     actionList: OutputAction[];
     workSpaces: Instance[];
     resources: Resource[];

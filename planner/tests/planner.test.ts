@@ -11,7 +11,7 @@ import {ObjectiveNode} from "../types/goal/ObjectiveNode";
 import {Goal} from "../types/goal/Goal";
 import {Activity} from "../types/fragments/Activity";
 import {StateInstance} from "../types/executionState/StateInstance";
-import {ExecutionLog} from "../types/output/ExecutionLog";
+import {Schedule} from "../types/output/Schedule";
 import {OutputAction} from "../types/output/OutputAction";
 
 // Dataclasses
@@ -166,7 +166,7 @@ describe('generate plan', () => {
 
     test('plan one activity', () => {
         let outputAction = new OutputAction(paint, 0, 1, picasso, 1, [mapleStreet], [mapleStreet]);
-        let executionLog = new ExecutionLog([outputAction], [mapleStreet], resources);
+        let executionLog = new Schedule([outputAction], [mapleStreet], resources);
 
         let planner = new Planner(currentState, goal, [paint]);
 
@@ -177,7 +177,7 @@ describe('generate plan', () => {
         let resources = [picasso, michelangelo];
         let outputAction = new OutputAction(paint, 0, 1, picasso, 1, [mapleStreet], [mapleStreet]);
         let outputAction2 = new OutputAction(tile, 1, 2, michelangelo, 1, [mapleStreet], [mapleStreet]);
-        let executionLog = new ExecutionLog([outputAction, outputAction2], [mapleStreet], resources);
+        let executionLog = new Schedule([outputAction, outputAction2], [mapleStreet], resources);
 
         objective2 = new Objective([objectiveNode2], []);
         goal = new Goal([objective, objective2]);
@@ -190,7 +190,7 @@ describe('generate plan', () => {
     test('plan one activity on two objects', () => {
         let outputAction = new OutputAction(paint, 0, 1, picasso, 1, [mapleStreet], [mapleStreet]);
         let outputAction2 = new OutputAction(paint, 1, 2, picasso, 1, [bakerStreet], [bakerStreet]);
-        let executionLog = new ExecutionLog([outputAction, outputAction2], [bakerStreet, mapleStreet], resources);
+        let executionLog = new Schedule([outputAction, outputAction2], [bakerStreet, mapleStreet], resources);
 
         objective = new Objective([objectiveNode, objectiveNode3], []);
         goal = new Goal([objective]);

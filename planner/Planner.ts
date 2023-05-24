@@ -1,6 +1,6 @@
 import {Activity} from "./types/fragments/Activity";
 import {ExecutionState} from "./types/executionState/ExecutionState";
-import {ExecutionLog} from "./types/output/ExecutionLog";
+import {Schedule} from "./types/output/Schedule";
 import {Goal} from "./types/goal/Goal";
 
 export class Planner {
@@ -14,20 +14,20 @@ export class Planner {
         this.actions = actions;
     }
 
-    public generatePlan(): ExecutionLog {
+    public generatePlan(): Schedule {
         this.setUpStartState(this.startState);
         let queue: ExecutionState[] = [this.startState];
         while (queue.length > 0) {
             let node = queue.shift();
             if (this.goal.isFulfilledBy(node!)) {
-                return new ExecutionLog(node!.actionHistory, node!.allExecutionDataObjectInstances().map(executionDataObjectInstance =>
+                return new Schedule(node!.actionHistory, node!.allExecutionDataObjectInstances().map(executionDataObjectInstance =>
                     executionDataObjectInstance.dataObjectInstance), node!.resources
                 );
             }
             let newNodes = node!.getSuccessors(this.actions);
             queue.push(...newNodes);
         }
-        return new ExecutionLog();
+        return new Schedule();
     }
 
     private setUpStartState(startState: ExecutionState) {

@@ -1,7 +1,7 @@
 import Excel from 'exceljs';
-import {ExecutionLog} from "../types/output/ExecutionLog";
+import {Schedule} from "../types/output/Schedule";
 
-export const exportExecutionPlan = async (log: ExecutionLog) => {
+export const exportExecutionPlan = async (log: Schedule) => {
     const workbook = new Excel.Workbook();
 
     let resources = log.resources;
