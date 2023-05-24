@@ -36,7 +36,7 @@ export class ExecutionState {
 
     public getNewInstanceOfClass(dataclass: Dataclass): Instance {
         let name: string = (this.allStateInstances().filter(stateInstances =>
-            stateInstances.dataObjectInstance.dataclass === dataclass
+            stateInstances.instance.dataclass === dataclass
         ).length + 1).toString();
         return new Instance(name, dataclass);
     }

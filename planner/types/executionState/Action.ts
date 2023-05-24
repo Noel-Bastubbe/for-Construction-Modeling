@@ -26,7 +26,7 @@ export class Action {
     public start(executionState: ExecutionState): ExecutionState {
         let changedStateInstances: StateInstance[] = this.getChangedStateInstances();
         let availableStateInstances: StateInstance[] = executionState.availableStateInstances.filter(stateInstance =>
-            !changedStateInstances.some(it => it.dataObjectInstance === stateInstance.dataObjectInstance)
+            !changedStateInstances.some(it => it.instance === stateInstance.instance)
         );
         let blockedStateInstances: StateInstance[] = executionState.blockedStateInstances.concat(changedStateInstances);
         let instanceLinks: InstanceLink[] = executionState.instanceLinks;
@@ -81,7 +81,7 @@ export class Action {
     private getNewBlockedStateInstances(executionState: ExecutionState): StateInstance[] {
         let changedStateInstances: StateInstance[] = this.getChangedStateInstances();
         return executionState.blockedStateInstances.filter(stateInstance =>
-            !changedStateInstances.some(it => it.dataObjectInstance === stateInstance.dataObjectInstance)
+            !changedStateInstances.some(it => it.instance === stateInstance.instance)
         );
     }
 
@@ -100,8 +100,8 @@ export class Action {
         let oldScheduledActions = executionState.actionHistory;
         return oldScheduledActions.concat(
             new ScheduledAction(this.activity, executionState.time - this.activity.duration, executionState.time, this.resource, this.activity.NoP,
-                this.inputList.map(stateInstance => stateInstance.dataObjectInstance),
-                this.outputList.map(stateInstance => stateInstance.dataObjectInstance)
+                this.inputList.map(stateInstance => stateInstance.instance),
+                this.outputList.map(stateInstance => stateInstance.instance)
             )
         );
     }
@@ -109,7 +109,7 @@ export class Action {
     private getChangedStateInstances(): StateInstance[] {
         let changedStateInstances: StateInstance[] = [];
         for (let input of this.inputList) {
-            if (this.outputList.some(output => output.dataObjectInstance === input.dataObjectInstance)) {
+            if (this.outputList.some(output => output.instance === input.instance)) {
                 changedStateInstances.push(input);
             }
         }
