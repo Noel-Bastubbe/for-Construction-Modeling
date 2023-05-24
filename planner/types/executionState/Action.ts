@@ -121,7 +121,7 @@ export class Action {
 
     private finishInstantAction(executionState: ExecutionState): ExecutionState {
         let changedExecutionDataObjectInstances = this.getChangedExecutionDataObjectInstances();
-        let availableDataObjects = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance => !changedExecutionDataObjectInstances.some(it => it.dataObjectInstance === executionDataObjectInstance.dataObjectInstance));
+        let availableDataObjects = executionState.availableStateInstances.filter(executionDataObjectInstance => !changedExecutionDataObjectInstances.some(it => it.instance === executionDataObjectInstance.instance));
         availableDataObjects = availableDataObjects.concat(this.outputList);
         let blockedDataObjects = executionState.blockedExecutionDataObjectInstances.slice();
         let instanceLinks = executionState.instanceLinks.concat(this.addedInstanceLinks);
