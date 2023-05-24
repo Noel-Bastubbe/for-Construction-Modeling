@@ -38,16 +38,30 @@ export default class TaskLabelHandler extends CommandInterceptor {
 
                 const updateRoleSelection = () => {
                     this._roleDropdown.getEntries().forEach(entry => entry.setSelected(activity.role === entry.option));
+                    populateNameDropdown();
                 }
 
                 const populateNameDropdown = () => {
-                    this._nameDropdown.populate(
+                    const existingNameEntries = this._nameDropdown.getInputValue();
+                    console.log(existingNameEntries);
+                    if(existingNameEntries == ""){
+                        this._nameDropdown.populate(
                         [],
                         (name, element) => {
                             this.updateName(name, element);
                             },
                         element
                     );
+                    }else {
+                        this._nameDropdown.populate(
+                            existingNameEntries,
+                            (name, element) => {
+                                this.updateName(name, element);
+                                },
+                            element
+                        );
+                    }
+                    
                     this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",activity.name);
                 }
                 const populateDurationDropdown = () => {
