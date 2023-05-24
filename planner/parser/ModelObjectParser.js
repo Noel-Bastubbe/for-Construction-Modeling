@@ -21,15 +21,15 @@ export class ModelObjectParser {
         this.dataclasses = this.parseDataclasses(dataModeler);
         this.roles = this.parseRoles(roleModeler);
         this.resources = this.parseResources(resourceModeler, this.roles);
-        this.actions = this.parseActions(fragmentModeler, this.dataclasses, this.roles);
-        this.dataObjectInstances = this.parseDataObjectInstances(objectiveModeler, this.dataclasses);
-        this.currentState = this.parseCurrentState(objectiveModeler, resourceModeler, this.resources, this.dataObjectInstances);
-        this.objectives = this.parseObjectives(objectiveModeler, dependencyModeler, this.dataObjectInstances);
+        this.activities = this.parseActivities(fragmentModeler, this.dataclasses, this.roles);
+        this.instances = this.parseInstances(objectiveModeler, this.dataclasses);
+        this.currentState = this.parseCurrentState(objectiveModeler, resourceModeler, this.resources, this.instances);
+        this.objectives = this.parseObjectives(objectiveModeler, dependencyModeler, this.instances);
         this.goal = new Goal(this.objectives);
     }
 
     createPlanner() {
-        return new Planner(this.currentState, this.goal, this.actions);
+        return new Planner(this.currentState, this.goal, this.activities);
     }
 
     parseDataclasses(dataModeler) {
@@ -66,14 +66,14 @@ export class ModelObjectParser {
         return resources
     }
 
-    parseDataObjectInstances(objectiveModeler, dataclasses) {
-        let dataObjectInstances = [];
+    parseInstances(objectiveModeler, dataclasses) {
+        let instances = [];
         let modelDataObjectInstances = objectiveModeler._definitions.get('objectInstances');
 
         for (let instance of modelDataObjectInstances.filter(element => is(element, 'om:ObjectInstance'))) {
-            dataObjectInstances.push(new DataObjectInstance(instance.id, instance.name, dataclasses.find(element => element.id === instance.classRef.id)))
+            instances.push(new Instance(instance.id, instance.name, dataclasses.find(element => element.id === instance.classRef.id)))
         }
-        return dataObjectInstances
+        return instances
     }
 
     parseObjectives(objectiveModeler, dependencyModeler, dataObjectInstances) {
@@ -85,24 +85,24 @@ export class ModelObjectParser {
             let objectiveBoardId = modelObjectives[i].id;
             let objectiveId = objectiveModeler._definitions.get('rootBoards').find(element => element.plane.get('boardElement').id === objectiveBoardId).objectiveRef.id;
 
-            let objectiveNodes = [];
+            let objectiveObjects = [];
             for (let object of modelObjectives[i].get('boardElements').filter((element) => is(element, 'om:Object'))) {
-                objectiveNodes.push(new ObjectiveNode(object.id, dataObjectInstances.find(element => element.id === object.instance.id && element.dataclass.id === object.classRef.id), object.states.map(element => element.name)));
+                objectiveObjects.push(new ObjectiveObject(object.id, dataObjectInstances.find(element => element.id === object.instance.id && element.dataclass.id === object.classRef.id), object.states.map(element => element.name)));
             }
             let objectiveLinks = [];
             for (let link of modelObjectives[i].get('boardElements').filter((element) => is(element, 'om:Link'))) {
-                objectiveLinks.push(new NodeLink(link.id, objectiveNodes.find(element => element.dataObjectInstance.id === link.sourceRef.instance.id && element.dataObjectInstance.dataclass.id === link.sourceRef.classRef.id), objectiveNodes.find(element => element.dataObjectInstance.id === link.targetRef.instance.id && element.dataObjectInstance.dataclass.id === link.targetRef.classRef.id)));
+                objectiveLinks.push(new ObjectiveLink(link.id, objectiveObjects.find(element => element.dataObjectInstance.id === link.sourceRef.instance.id && element.dataObjectInstance.dataclass.id === link.sourceRef.classRef.id), objectiveObjects.find(element => element.dataObjectInstance.id === link.targetRef.instance.id && element.dataObjectInstance.dataclass.id === link.targetRef.classRef.id)));
             }
 
             if (objectiveId === 'start_state') {
-                objectives.push(new Objective(objectiveId, objectiveNodes, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
+                objectives.push(new Objective(objectiveId, objectiveObjects, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
             } else {
                 let previousObjectiveId = dependencyLinks.find(element => element.targetObjective.id === objectiveId).sourceObjective.id;
                 let index = objectives.findIndex(element => element.id === previousObjectiveId);
                 if (index === -1) {
-                    objectives.push(new Objective(objectiveId, objectiveNodes, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
+                    objectives.push(new Objective(objectiveId, objectiveObjects, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
                 } else {
-                    objectives.splice(index + 1, 0, new Objective(objectiveId, objectiveNodes, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
+                    objectives.splice(index + 1, 0, new Objective(objectiveId, objectiveObjects, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
                 }
             }
         }
@@ -112,24 +112,24 @@ export class ModelObjectParser {
     parseCurrentState(objectiveModeler, resourceModeler, resources, dataObjectInstances) {
         let startState = objectiveModeler._definitions.get('rootElements').find(element => element.id === "Board");
 
-        let executionDataObjectInstances = [];
+        let stateInstances = [];
         for (let executionDataObjectInstance of startState.get('boardElements').filter((element) => is(element, 'om:Object'))) {
-            executionDataObjectInstances.push(new ExecutionDataObjectInstance(dataObjectInstances.find(element => element.id === executionDataObjectInstance.instance.id && element.dataclass.id === executionDataObjectInstance.classRef.id), executionDataObjectInstance.states[0].name));
+            stateInstances.push(new StateInstance(dataObjectInstances.find(element => element.id === executionDataObjectInstance.instance.id && element.dataclass.id === executionDataObjectInstance.classRef.id), executionDataObjectInstance.states[0].name));
         }
         let instanceLinks = [];
         for (let instanceLink of startState.get('boardElements').filter((element) => is(element, 'om:Link'))) {
-            instanceLinks.push(new InstanceLink(executionDataObjectInstances.find(element => element.dataObjectInstance.id === instanceLink.sourceRef.instance.id && element.dataObjectInstance.dataclass.id === instanceLink.sourceRef.classRef.id), executionDataObjectInstances.find(element => element.dataObjectInstance.id === instanceLink.targetRef.instance.id && element.dataObjectInstance.dataclass.id === instanceLink.targetRef.classRef.id)));
+            instanceLinks.push(new InstanceLink(stateInstances.find(element => element.dataObjectInstance.id === instanceLink.sourceRef.instance.id && element.dataObjectInstance.dataclass.id === instanceLink.sourceRef.classRef.id), stateInstances.find(element => element.dataObjectInstance.id === instanceLink.targetRef.instance.id && element.dataObjectInstance.dataclass.id === instanceLink.targetRef.classRef.id)));
         }
-        return new ExecutionState(executionDataObjectInstances, [], instanceLinks, resources, 0, [], [], []);
+        return new ExecutionState(stateInstances, [], instanceLinks, resources, 0, [], [], []);
     }
 
-    parseActions(fragmentModeler, dataclasses, roles) {
-        let actions = [];
-        let modelActions = fragmentModeler._definitions.get('rootElements')[0].get('flowElements');
+    parseActivities(fragmentModeler, dataclasses, roles) {
+        let activities = [];
+        let modelActivities = fragmentModeler._definitions.get('rootElements')[0].get('flowElements').filter(element => is(element, 'bpmn:Task'));
 
-        for (let action of modelActions.filter(element => is(element, 'bpmn:Task'))) {
+        for (let activity of modelActivities) {
             let inputs = [];
-            for (let dataObjectReference of action.get('dataInputAssociations')) {
+            for (let dataObjectReference of activity.get('dataInputAssociations')) {
                 let dataObjectReferences = [];
                 for (let i = 0; i < dataObjectReference.get('sourceRef')[0].states.length; i++) {
                     dataObjectReferences.push(new DataObjectReference(dataclasses.find(element => element.id === dataObjectReference.get('sourceRef')[0].dataclass.id), dataObjectReference.get('sourceRef')[0].states[i].name, false))
@@ -139,15 +139,15 @@ export class ModelObjectParser {
             inputs = cartesianProduct(...inputs);
 
             let outputSet = [];
-            for (let dataObjectReference of action.get('dataOutputAssociations')) {
+            for (let dataObjectReference of activity.get('dataOutputAssociations')) {
                 outputSet.push(new DataObjectReference(dataclasses.find(element => element.id === dataObjectReference.get('targetRef').dataclass.id), dataObjectReference.get('targetRef').states[0].name, false));
             }
 
             for (let input of inputs) {
-                actions.push(new Action(action.name, parseInt(action.duration) || 0, parseInt(action.NoP), roles.find(element => element.id === action.role.id), new IOSet(input), new IOSet(outputSet)))
+                activities.push(new Activity(activity.name, parseInt(activity.duration) || 0, parseInt(activity.NoP), roles.find(element => element.id === activity.role.id), new IOSet([].concat(input)), new IOSet(outputSet)))
             }
         }
-        return actions;
+        return activities;
     }
 
 }
