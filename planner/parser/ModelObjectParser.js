@@ -16,135 +16,138 @@ import {Planner} from "../../dist/Planner";
 import {Dataclass} from "../../dist/types/Dataclass";
 import {cartesianProduct} from "../../dist/Util";
 
-export function parseObjects(dataModeler, fragmentModeler, objectiveModeler, dependencyModeler, roleModeler, resourceModeler) {
-    let currentState = getCurrentState(dataModeler, objectiveModeler, resourceModeler, roleModeler);
-    let goal = new Goal(getObjectives(dataModeler, objectiveModeler, dependencyModeler));
-    let actions = getActions(dataModeler, fragmentModeler, roleModeler);
-
-    return new Planner(currentState, goal, actions);
-}
-
-function getDataclasses(dataModeler) {
-    let dataclasses = [];
-    let modelDataclasses = dataModeler._definitions.get('rootElements').map(element => element.get('boardElements')).flat();
-
-    for (let dataclass of modelDataclasses.filter(element => is(element, 'od:Class'))) {
-        dataclasses.push(new Dataclass(dataclass.name));
+export class ModelObjectParser {
+    constructor(dataModeler, fragmentModeler, objectiveModeler, dependencyModeler, roleModeler, resourceModeler) {
+        this.dataclasses = this.parseDataclasses(dataModeler);
+        this.roles = this.parseRoles(roleModeler);
+        this.resources = this.parseResources(resourceModeler, this.roles);
+        this.actions = this.parseActions(fragmentModeler, this.dataclasses, this.roles);
+        this.dataObjectInstances = this.parseDataObjectInstances(objectiveModeler, this.dataclasses);
+        this.currentState = this.parseCurrentState(objectiveModeler, resourceModeler, this.resources, this.dataObjectInstances);
+        this.objectives = this.parseObjectives(objectiveModeler, dependencyModeler, this.dataObjectInstances);
+        this.goal = new Goal(this.objectives);
     }
-    return dataclasses;
-}
 
-function getRoles(roleModeler) {
-    let roles = [];
-    let modelRoles = roleModeler._definitions.get('rootElements').map(element => element.get('boardElements')).flat();
-
-    for (let role of modelRoles.filter(element => is(element, 'rom:Role'))) {
-        roles.push(new Role(role.name));
+    createPlanner() {
+        return new Planner(this.currentState, this.goal, this.actions);
     }
-    return roles;
-}
 
-function getResources(resourceModeler, roleModeler) {
-    let roles = getRoles(roleModeler);
-    let resources = [];
-    let modelResources = resourceModeler._definitions.get('rootElements').map(element => element.get('boardElements')).flat();
+    parseDataclasses(dataModeler) {
+        let dataclasses = [];
+        let modelDataclasses = dataModeler._definitions.get('rootElements').map(element => element.get('boardElements')).flat();
 
-    for (let resource of modelResources.filter(element => is(element, 'rem:Resource'))) {
-        let rolePlanReferences = [];
-        for (let roleModelReference of resource.roles) {
-            rolePlanReferences.push(roles.find(element => element.name === roleModelReference.name));
+        for (let dataclass of modelDataclasses.filter(element => is(element, 'od:Class'))) {
+            dataclasses.push(new Dataclass(dataclass.name));
         }
-        resources.push(new Resource(resource.name, rolePlanReferences, parseInt(resource.capacity)));
+        return dataclasses;
     }
-    return resources
-}
 
-function getDataObjectInstances(dataModeler, objectiveModeler) {
-    let dataclasses = getDataclasses(dataModeler);
-    let dataObjectInstances = [];
-    let modelDataObjectInstances = objectiveModeler._definitions.get('objectInstances');
+    parseRoles(roleModeler) {
+        let roles = [];
+        let modelRoles = roleModeler._definitions.get('rootElements').map(element => element.get('boardElements')).flat();
 
-    for (let instance of modelDataObjectInstances.filter(element => is(element, 'om:ObjectInstance'))) {
-        dataObjectInstances.push(new DataObjectInstance(instance.name, dataclasses.find(element => element.name === instance.classRef.name)))
+        for (let role of modelRoles.filter(element => is(element, 'rom:Role'))) {
+            roles.push(new Role(role.name));
+        }
+        return roles;
     }
-    return dataObjectInstances
-}
 
-function getObjectives(dataModeler, objectiveModeler, dependencyModeler) {
-    let dataObjectInstances = getDataObjectInstances(dataModeler, objectiveModeler);
-    let objectives = [];
-    let dependencyLinks = dependencyModeler._definitions.get('goals')[0].get('Elements').filter(element => is(element, 'dep:Dependency'));
-    let modelObjectives = objectiveModeler._definitions.get('rootElements');
+    parseResources(resourceModeler, roles) {
+        let resources = [];
+        let modelResources = resourceModeler._definitions.get('rootElements').map(element => element.get('boardElements')).flat();
 
-    for (let i = 0; i < modelObjectives.length; i++) {
-        let objectiveBoardId = modelObjectives[i].id;
-        let objectiveId = objectiveModeler._definitions.get('rootBoards').find(element => element.plane.get('boardElement').id === objectiveBoardId).objectiveRef.id;
-
-        let objectiveNodes = [];
-        for (let object of modelObjectives[i].get('boardElements').filter((element) => is(element, 'om:Object'))) {
-            objectiveNodes.push(new ObjectiveNode(dataObjectInstances.find(element => element.name === object.instance.name && element.dataclass.name === object.classRef.name), object.states.map(element => element.name)));
+        for (let resource of modelResources.filter(element => is(element, 'rem:Resource'))) {
+            let rolePlanReferences = [];
+            for (let roleModelReference of resource.roles) {
+                rolePlanReferences.push(roles.find(element => element.name === roleModelReference.name));
+            }
+            resources.push(new Resource(resource.name, rolePlanReferences, parseInt(resource.capacity)));
         }
-        let objectiveLinks = [];
-        for (let link of modelObjectives[i].get('boardElements').filter((element) => is(element, 'om:Link'))) {
-            objectiveLinks.push(new NodeLink(objectiveNodes.find(element => element.dataObjectInstance.name === link.sourceRef.instance.name && element.dataObjectInstance.dataclass.name === link.sourceRef.classRef.name), objectiveNodes.find(element => element.dataObjectInstance.name === link.targetRef.instance.name && element.dataObjectInstance.dataclass.name === link.targetRef.classRef.name)));
-        }
+        return resources
+    }
 
-        if (objectiveId === 'start_state') {
-            objectives.push(new Objective(objectiveId, objectiveNodes, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
-        } else {
-            let previousObjectiveId = dependencyLinks.find(element => element.targetObjective.id === objectiveId).sourceObjective.id;
-            let index = objectives.findIndex(element => element.id === previousObjectiveId);
-            if (index === -1) {
+    parseDataObjectInstances(objectiveModeler, dataclasses) {
+        let dataObjectInstances = [];
+        let modelDataObjectInstances = objectiveModeler._definitions.get('objectInstances');
+
+        for (let instance of modelDataObjectInstances.filter(element => is(element, 'om:ObjectInstance'))) {
+            dataObjectInstances.push(new DataObjectInstance(instance.name, dataclasses.find(element => element.name === instance.classRef.name)))
+        }
+        return dataObjectInstances
+    }
+
+    parseObjectives(objectiveModeler, dependencyModeler, dataObjectInstances) {
+        let objectives = [];
+        let dependencyLinks = dependencyModeler._definitions.get('goals')[0].get('Elements').filter(element => is(element, 'dep:Dependency'));
+        let modelObjectives = objectiveModeler._definitions.get('rootElements');
+
+        for (let i = 0; i < modelObjectives.length; i++) {
+            let objectiveBoardId = modelObjectives[i].id;
+            let objectiveId = objectiveModeler._definitions.get('rootBoards').find(element => element.plane.get('boardElement').id === objectiveBoardId).objectiveRef.id;
+
+            let objectiveNodes = [];
+            for (let object of modelObjectives[i].get('boardElements').filter((element) => is(element, 'om:Object'))) {
+                objectiveNodes.push(new ObjectiveNode(dataObjectInstances.find(element => element.name === object.instance.name && element.dataclass.name === object.classRef.name), object.states.map(element => element.name)));
+            }
+            let objectiveLinks = [];
+            for (let link of modelObjectives[i].get('boardElements').filter((element) => is(element, 'om:Link'))) {
+                objectiveLinks.push(new NodeLink(objectiveNodes.find(element => element.dataObjectInstance.name === link.sourceRef.instance.name && element.dataObjectInstance.dataclass.name === link.sourceRef.classRef.name), objectiveNodes.find(element => element.dataObjectInstance.name === link.targetRef.instance.name && element.dataObjectInstance.dataclass.name === link.targetRef.classRef.name)));
+            }
+
+            if (objectiveId === 'start_state') {
                 objectives.push(new Objective(objectiveId, objectiveNodes, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
             } else {
-                objectives.splice(index + 1, 0, new Objective(objectiveId, objectiveNodes, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
+                let previousObjectiveId = dependencyLinks.find(element => element.targetObjective.id === objectiveId).sourceObjective.id;
+                let index = objectives.findIndex(element => element.id === previousObjectiveId);
+                if (index === -1) {
+                    objectives.push(new Objective(objectiveId, objectiveNodes, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
+                } else {
+                    objectives.splice(index + 1, 0, new Objective(objectiveId, objectiveNodes, objectiveLinks, parseInt(objectiveModeler._definitions.get('rootBoards')[i].objectiveRef?.date)));
+                }
             }
         }
+        return objectives
     }
-    return objectives
-}
 
-function getCurrentState(dataModeler, objectiveModeler, resourceModeler, roleModeler) {
-    let dataObjectInstances = getDataObjectInstances(dataModeler, objectiveModeler);
-    let resources = getResources(resourceModeler, roleModeler);
-    let startState = objectiveModeler._definitions.get('rootElements').find(element => element.id === "Board");
+    parseCurrentState(objectiveModeler, resourceModeler, resources, dataObjectInstances) {
+        let startState = objectiveModeler._definitions.get('rootElements').find(element => element.id === "Board");
 
-    let executionDataObjectInstances = [];
-    for (let executionDataObjectInstance of startState.get('boardElements').filter((element) => is(element, 'om:Object'))) {
-        executionDataObjectInstances.push(new ExecutionDataObjectInstance(dataObjectInstances.find(element => element.name === executionDataObjectInstance.instance.name && element.dataclass.name === executionDataObjectInstance.classRef.name), executionDataObjectInstance.states[0].name));
+        let executionDataObjectInstances = [];
+        for (let executionDataObjectInstance of startState.get('boardElements').filter((element) => is(element, 'om:Object'))) {
+            executionDataObjectInstances.push(new ExecutionDataObjectInstance(dataObjectInstances.find(element => element.name === executionDataObjectInstance.instance.name && element.dataclass.name === executionDataObjectInstance.classRef.name), executionDataObjectInstance.states[0].name));
+        }
+        let instanceLinks = [];
+        for (let instanceLink of startState.get('boardElements').filter((element) => is(element, 'om:Link'))) {
+            instanceLinks.push(new InstanceLink(executionDataObjectInstances.find(element => element.dataObjectInstance.name === instanceLink.sourceRef.instance.name && element.dataObjectInstance.dataclass.name === instanceLink.sourceRef.classRef.name), executionDataObjectInstances.find(element => element.dataObjectInstance.name === instanceLink.targetRef.instance.name && element.dataObjectInstance.dataclass.name === instanceLink.targetRef.classRef.name)));
+        }
+        return new ExecutionState(executionDataObjectInstances, [], instanceLinks, resources, 0, [], [], []);
     }
-    let instanceLinks = [];
-    for (let instanceLink of startState.get('boardElements').filter((element) => is(element, 'om:Link'))) {
-        instanceLinks.push(new InstanceLink(executionDataObjectInstances.find(element => element.dataObjectInstance.name === instanceLink.sourceRef.instance.name && element.dataObjectInstance.dataclass.name === instanceLink.sourceRef.classRef.name), executionDataObjectInstances.find(element => element.dataObjectInstance.name === instanceLink.targetRef.instance.name && element.dataObjectInstance.dataclass.name === instanceLink.targetRef.classRef.name)));
-    }
-    return new ExecutionState(executionDataObjectInstances, [], instanceLinks, resources, 0, [], [], []);
-}
 
-function getActions(dataModeler, fragmentModeler, roleModeler) {
-    let dataclasses = getDataclasses(dataModeler);
-    let roles = getRoles(roleModeler);
-    let actions = [];
-    let modelActions = fragmentModeler._definitions.get('rootElements')[0].get('flowElements');
+    parseActions(fragmentModeler, dataclasses, roles) {
+        let actions = [];
+        let modelActions = fragmentModeler._definitions.get('rootElements')[0].get('flowElements');
 
-    for (let action of modelActions.filter(element => is(element, 'bpmn:Task'))) {
-        let inputs = [];
-        for (let dataObjectReference of action.get('dataInputAssociations')) {
-            let dataObjectReferences = [];
-            for (let i = 0; i < dataObjectReference.get('sourceRef')[0].states.length; i++) {
-                dataObjectReferences.push(new DataObjectReference(dataclasses.find(element => element.name === dataObjectReference.get('sourceRef')[0].dataclass.name), dataObjectReference.get('sourceRef')[0].states[i].name, false))
+        for (let action of modelActions.filter(element => is(element, 'bpmn:Task'))) {
+            let inputs = [];
+            for (let dataObjectReference of action.get('dataInputAssociations')) {
+                let dataObjectReferences = [];
+                for (let i = 0; i < dataObjectReference.get('sourceRef')[0].states.length; i++) {
+                    dataObjectReferences.push(new DataObjectReference(dataclasses.find(element => element.name === dataObjectReference.get('sourceRef')[0].dataclass.name), dataObjectReference.get('sourceRef')[0].states[i].name, false))
+                }
+                inputs.push(dataObjectReferences);
             }
-            inputs.push(dataObjectReferences);
-        }
-        inputs = cartesianProduct(...inputs);
+            inputs = cartesianProduct(...inputs);
 
-        let outputSet = [];
-        for (let dataObjectReference of action.get('dataOutputAssociations')) {
-            outputSet.push(new DataObjectReference(dataclasses.find(element => element.name === dataObjectReference.get('targetRef').dataclass.name), dataObjectReference.get('targetRef').states[0].name, false));
-        }
+            let outputSet = [];
+            for (let dataObjectReference of action.get('dataOutputAssociations')) {
+                outputSet.push(new DataObjectReference(dataclasses.find(element => element.name === dataObjectReference.get('targetRef').dataclass.name), dataObjectReference.get('targetRef').states[0].name, false));
+            }
 
-        for (let input of inputs) {
-            actions.push(new Action(action.name, parseInt(action.duration), parseInt(action.NoP), roles.find(element => element.name === action.role.name), new IOSet(input), new IOSet(outputSet)))
+            for (let input of inputs) {
+                actions.push(new Action(action.name, parseInt(action.duration), parseInt(action.NoP), roles.find(element => element.name === action.role.name), new IOSet(input), new IOSet(outputSet)))
+            }
         }
+        return actions;
     }
-    return actions;
+
 }
