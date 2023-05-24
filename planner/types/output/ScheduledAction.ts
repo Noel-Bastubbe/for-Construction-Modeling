@@ -2,7 +2,7 @@ import {Instance} from "../executionState/Instance";
 import {Resource} from "../Resource";
 import {Activity} from "../fragments/Activity";
 
-export class OutputAction {
+export class ScheduledAction {
     action: Activity;
     start: number;
     end: number;

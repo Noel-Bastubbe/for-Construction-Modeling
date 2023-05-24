@@ -1,13 +1,13 @@
-import {OutputAction} from "./OutputAction";
+import {ScheduledAction} from "./ScheduledAction";
 import {Instance} from "../executionState/Instance";
 import {Resource} from "../Resource";
 
 export class Schedule {
-    actionList: OutputAction[];
+    actionList: ScheduledAction[];
     workSpaces: Instance[];
     resources: Resource[];
 
-    public constructor(actionList: OutputAction[] = [], workSpaces: Instance[] = [], resources: Resource[] = []) {
+    public constructor(actionList: ScheduledAction[] = [], workSpaces: Instance[] = [], resources: Resource[] = []) {
         this.actionList = actionList;
         this.workSpaces = workSpaces
         this.resources = resources;

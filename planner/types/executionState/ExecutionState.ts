@@ -2,7 +2,7 @@ import {Resource} from "../Resource";
 import {StateInstance} from "./StateInstance";
 import {InstanceLink} from "./InstanceLink";
 import {Action} from "./Action";
-import {OutputAction} from "../output/OutputAction";
+import {ScheduledAction} from "../output/ScheduledAction";
 import {Activity} from "../fragments/Activity";
 import {Dataclass} from "../Dataclass";
 import {Instance} from "./Instance";
@@ -15,11 +15,11 @@ export class ExecutionState {
     time: number;
     objectives: boolean[] = [];
     runningActions: Action[];
-    actionHistory: OutputAction[];
+    actionHistory: ScheduledAction[];
 
     public constructor(availableDataObjects: StateInstance[], blockedDataObjects: StateInstance[],
                        instanceLinks: InstanceLink[], resources: Resource[], time: number, runningActions: Action[] = [],
-                       actionHistory: OutputAction[] = [], objectives: boolean[] = []) {
+                       actionHistory: ScheduledAction[] = [], objectives: boolean[] = []) {
         this.availableExecutionDataObjectInstances = availableDataObjects;
         this.blockedExecutionDataObjectInstances = blockedDataObjects;
         this.instanceLinks = instanceLinks;

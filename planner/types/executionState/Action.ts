@@ -1,6 +1,6 @@
 import {Resource} from "../Resource";
 import {ExecutionState} from "./ExecutionState";
-import {OutputAction} from "../output/OutputAction";
+import {ScheduledAction} from "../output/ScheduledAction";
 import {InstanceLink} from "./InstanceLink";
 import {Activity} from "../fragments/Activity";
 import {StateInstance} from "./StateInstance";
@@ -33,7 +33,7 @@ export class Action {
         let resources: Resource[] = this.getBlockedResources(executionState.resources);
         let time: number = executionState.time;
         let runningActions: Action[] = executionState.runningActions.concat([this]);
-        let actionHistory: OutputAction[] = executionState.actionHistory;
+        let actionHistory: ScheduledAction[] = executionState.actionHistory;
         let objectiveArray: boolean[] = executionState.objectives.slice();
         return new ExecutionState(availableDataObjects, blockedDataObjects, instanceLinks, resources, time, runningActions, actionHistory, objectiveArray);
     }
@@ -73,7 +73,7 @@ export class Action {
         let resources: Resource[] = this.getNewResources(executionState);
         let time: number = executionState.time;
         let runningActions: Action[] = executionState.runningActions.filter(action => action !== this);
-        let actionHistory: OutputAction[] = this.getNewActionHistory(executionState);
+        let actionHistory: ScheduledAction[] = this.getNewActionHistory(executionState);
         let objectiveArray: boolean[] = executionState.objectives.slice();
         return new ExecutionState(availableDataObjects, blockedDataObjects, instanceLinks, resources, time, runningActions, actionHistory, objectiveArray);
     }
@@ -96,10 +96,10 @@ export class Action {
         });
     }
 
-    private getNewActionHistory(executionState: ExecutionState): OutputAction[] {
+    private getNewActionHistory(executionState: ExecutionState): ScheduledAction[] {
         let oldActionHistory = executionState.actionHistory;
         return oldActionHistory.concat(
-            new OutputAction(this.action, executionState.time - this.action.duration, executionState.time, this.resource, this.action.NoP,
+            new ScheduledAction(this.action, executionState.time - this.action.duration, executionState.time, this.resource, this.action.NoP,
                 this.inputList.map(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance),
                 this.outputList.map(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance)
             )
