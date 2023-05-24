@@ -56,7 +56,11 @@ export const exportExecutionPlan = async (log: ExecutionLog) => {
                 const startColumn = currentAction.start + 2;
                 const endColumn = currentAction.end + 1;
                 worksheet1.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
-                worksheet1.getCell(rowIndex, startColumn).value = currentAction.resource?.name + ' (' + currentAction.capacity + ')' + ': ' + currentAction.action.name;
+                if (currentAction.resource) {
+                    worksheet1.getCell(rowIndex, startColumn).value = currentAction.resource?.name + ' (' + currentAction.capacity + ')' + ': ' + currentAction.action.name;
+                } else {
+                    worksheet1.getCell(rowIndex, startColumn).value = currentAction.action.name;
+                }
 
                 worksheet1.getCell(rowIndex, startColumn).border = {
                     top: {style: 'thin'},
