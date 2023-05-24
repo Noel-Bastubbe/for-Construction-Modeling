@@ -6,7 +6,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
 
     let resources = log.resources;
     let workSpaces = log.workSpaces;
-    let actionList = log.actionList;
+    let actionList = log.scheduledActions;
 
     //sorts actions by start date
     actionList = actionList.sort((action1, action2) => {
@@ -57,9 +57,9 @@ export const exportExecutionPlan = async (log: Schedule) => {
                 const endColumn = currentAction.end + 1;
                 worksheet1.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
                 if (currentAction.resource) {
-                    worksheet1.getCell(rowIndex, startColumn).value = currentAction.resource?.name + ' (' + currentAction.capacity + ')' + ': ' + currentAction.action.name;
+                    worksheet1.getCell(rowIndex, startColumn).value = currentAction.resource?.name + ' (' + currentAction.capacity + ')' + ': ' + currentAction.activity.name;
                 } else {
-                    worksheet1.getCell(rowIndex, startColumn).value = currentAction.action.name;
+                    worksheet1.getCell(rowIndex, startColumn).value = currentAction.activity.name;
                 }
 
                 worksheet1.getCell(rowIndex, startColumn).border = {
@@ -142,7 +142,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
                 const endColumn = currentAction.end + 1;
                 worksheet2.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
                 let outputListString = currentAction.outputList.map(dataObjectInstance => dataObjectInstance.dataclass.name + ' ' + dataObjectInstance.name).join(', ');
-                worksheet2.getCell(rowIndex, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.action.name + ' (' + outputListString + ')';
+                worksheet2.getCell(rowIndex, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.activity.name + ' (' + outputListString + ')';
 
                 worksheet2.getCell(rowIndex, startColumn).border = {
                     top: {style: 'thin'},

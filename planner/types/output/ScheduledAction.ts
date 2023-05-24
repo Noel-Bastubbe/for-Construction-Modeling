@@ -3,7 +3,7 @@ import {Resource} from "../Resource";
 import {Activity} from "../fragments/Activity";
 
 export class ScheduledAction {
-    action: Activity;
+    activity: Activity;
     start: number;
     end: number;
     resource: Resource | null;
@@ -11,8 +11,8 @@ export class ScheduledAction {
     inputList: Instance[];
     outputList: Instance[];
 
-    public constructor(action: Activity, start: number, end: number, resource: Resource | null, capacity: number, inputList: Instance[], outputList: Instance[]) {
-        this.action = action;
+    public constructor(activity: Activity, start: number, end: number, resource: Resource | null, capacity: number, inputList: Instance[], outputList: Instance[]) {
+        this.activity = activity;
         this.start = start;
         this.end = end;
         this.resource = resource;

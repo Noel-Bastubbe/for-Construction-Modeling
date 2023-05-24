@@ -3,13 +3,13 @@ import {Instance} from "../executionState/Instance";
 import {Resource} from "../Resource";
 
 export class Schedule {
-    actionList: ScheduledAction[];
-    workSpaces: Instance[];
+    scheduledActions: ScheduledAction[];
+    workSpaces: Instance[]; //hier noch umbenennen?
     resources: Resource[];
 
-    public constructor(actionList: ScheduledAction[] = [], workSpaces: Instance[] = [], resources: Resource[] = []) {
-        this.actionList = actionList;
-        this.workSpaces = workSpaces
+    public constructor(scheduledActions: ScheduledAction[] = [], workSpaces: Instance[] = [], resources: Resource[] = []) {
+        this.scheduledActions = scheduledActions;
+        this.workSpaces = workSpaces;
         this.resources = resources;
     }
 }
