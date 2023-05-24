@@ -1,11 +1,13 @@
 import {Role} from "./Role";
 
 export class Resource {
+    id: string;
     name: string;
     roles: Role[];
     capacity: number;
 
-    public constructor(name: string, roles: Role[] = [], capacity: number) {
+    public constructor(id:string, name: string, roles: Role[] = [], capacity: number) {
+        this.id = id;
         this.name = name;
         this.roles = roles;
         this.capacity = capacity;

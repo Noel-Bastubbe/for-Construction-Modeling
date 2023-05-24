@@ -111,13 +111,13 @@ let currentState: ExecutionState;
 
 beforeEach(() => {
     //reset all dataclasses
-    house = new Dataclass("house");
-    wall = new Dataclass("wall");
-    cable = new Dataclass("cable");
+    house = new Dataclass("1", "house");
+    wall = new Dataclass("2", "wall");
+    cable = new Dataclass("3","cable");
 
     //reset all instances
-    mapleStreet = new DataObjectInstance("house:1", house);
-    bakerStreet = new DataObjectInstance("house:2", house);
+    mapleStreet = new DataObjectInstance("1", "house:1", house);
+    bakerStreet = new DataObjectInstance("2", "house:2", house);
     // mapleStreetPainted = new DataObjectInstance("house:1", house, "painted");
     // mapleStreetTiled = new DataObjectInstance("house:1", house, "tiled");
     // mapleStreetPlastered = new DataObjectInstance("house:1", house, "plastered");
@@ -137,16 +137,16 @@ beforeEach(() => {
     // wallSouthMapleStreetLink = new InstanceLink(wallSouthStanding,mapleStreetPlastered);
 
     //reset all roles
-    painter = new Role("painter");
-    tiler = new Role("tiler");
-    electrician = new Role("electrician");
-    builder = new Role("builder");
+    painter = new Role("1", "painter");
+    tiler = new Role("2", "tiler");
+    electrician = new Role("3", "electrician");
+    builder = new Role("4", "builder");
 
     //reset all resources
-    picasso = new Resource("Picasso", [painter], 1);
-    michelangelo = new Resource("Michelangelo", [tiler], 1);
-    tesla = new Resource("Tesla", [electrician], 1);
-    bob = new Resource("Bob",[builder],1);
+    picasso = new Resource("1", "Picasso", [painter], 1);
+    michelangelo = new Resource("2", "Michelangelo", [tiler], 1);
+    tesla = new Resource("3", "Tesla", [electrician], 1);
+    bob = new Resource("4", "Bob",[builder],1);
 
     //reset all dataObjectReferences
     houseInit = new DataObjectReference(house,"init",false);
@@ -176,9 +176,9 @@ beforeEach(() => {
     outputSetBuyCables = new IOSet([cableAvailable]);
 
     //reset ObjectiveNodes
-    objectiveNode = new ObjectiveNode(mapleStreet, ["painted"]);
-    objectiveNode2 = new ObjectiveNode(mapleStreet, ["tiled"]);
-    objectiveNode3 = new ObjectiveNode(bakerStreet, ["painted"]);
+    objectiveNode = new ObjectiveNode("1", mapleStreet, ["painted"]);
+    objectiveNode2 = new ObjectiveNode("2", mapleStreet, ["tiled"]);
+    objectiveNode3 = new ObjectiveNode("3", bakerStreet, ["painted"]);
 
     //reset Objectives
     objective = new Objective("",[objectiveNode], []);

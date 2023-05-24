@@ -2,10 +2,12 @@ import {DataObjectInstance} from "../executionState/DataObjectInstance";
 import {ExecutionDataObjectInstance} from "../executionState/ExecutionDataObjectInstance";
 
 export class ObjectiveNode {
+    id: string;
     dataObjectInstance: DataObjectInstance;
     states: string[];
 
-    public constructor(dataObjectInstance: DataObjectInstance, states: string[]) {
+    public constructor(id: string, dataObjectInstance: DataObjectInstance, states: string[]) {
+        this.id = id;
         this.dataObjectInstance = dataObjectInstance;
         this.states = states;
     }
