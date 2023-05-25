@@ -5,7 +5,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
     const workbook = new Excel.Workbook();
 
     let resources = log.resources;
-    let workSpaces = log.workSpaces;
+    let workSpaces = log.instances;
     let scheduledActions = log.scheduledActions;
 
     //sorts actions by start date

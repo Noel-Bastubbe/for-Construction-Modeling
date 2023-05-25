@@ -4,12 +4,12 @@ import {Resource} from "../Resource";
 
 export class Schedule {
     scheduledActions: ScheduledAction[];
-    workSpaces: Instance[]; //hier noch umbenennen?
+    instances: Instance[];
     resources: Resource[];
 
-    public constructor(scheduledActions: ScheduledAction[] = [], workSpaces: Instance[] = [], resources: Resource[] = []) {
+    public constructor(scheduledActions: ScheduledAction[] = [], instances: Instance[] = [], resources: Resource[] = []) {
         this.scheduledActions = scheduledActions;
-        this.workSpaces = workSpaces;
+        this.instances = instances;
         this.resources = resources;
     }
 }
