@@ -1,5 +1,5 @@
 import inherits from 'inherits';
-import { groupBy, without, findIndex } from 'min-dash'
+import {findIndex, groupBy, without} from 'min-dash'
 
 import Diagram from 'diagram-js';
 
@@ -30,8 +30,7 @@ import OlcAutoPlaceModule from './auto-place';
 
 import OlcModdle from './moddle';
 import OlcEvents from './OlcEvents';
-import { nextPosition, root, is } from '../util/Util';
-import OmModeler from "../objectivemodeler/OmModeler";
+import {is, nextPosition, root} from '../util/Util';
 
 var emptyDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -136,6 +135,7 @@ export default function OlcModeler(options) {
 inherits(OlcModeler, Diagram);
 
 OlcModeler.prototype.id = "OLC";
+OlcModeler.prototype.rank = 7;
 
 OlcModeler.prototype.name = function (constructionMode) {
   if (constructionMode) {

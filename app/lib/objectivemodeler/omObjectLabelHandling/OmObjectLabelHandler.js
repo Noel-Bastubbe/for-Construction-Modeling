@@ -1,4 +1,5 @@
 import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
+import {without} from 'min-dash';
 import CommonEvents from "../../common/CommonEvents";
 import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
@@ -38,7 +39,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                 let currentOlc = undefined;
 
                 const updateStateSelection = () => {
-                    this._stateDropdown.getEntries().forEach(entry => entry.setSelected(omObject.state === entry.option));
+                    this._stateDropdown.getEntries().forEach(entry => entry.setSelected(omObject.states?.find(state => state === entry.option)));
                 }
 
                 const updateInstanceSelection = () => {
@@ -49,7 +50,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                     this._stateDropdown.populate(
                         states,
                         (state, element) => {
-                            this.updateState(state, element);
+                            this.updateStates(state, element);
                             updateStateSelection();
                         },
                         element
@@ -134,7 +135,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                     }
                     if (newStateInput !== '') {
                         const newState = this.createState(newStateInput, currentOlc);
-                        this.updateState(newState, element);
+                        this.updateStates(newState, element);
                         needUpdate = true;
                     }
                     if (newInstanceInput !== '') {
@@ -210,12 +211,12 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
         });
     }
 
-    updateState(newState, element) {
+    updateStates(newState, element) {
         const omObject = element.businessObject;
-        if (omObject.state === newState) {
-            omObject.state = undefined;
+        if(omObject.get('states').includes(newState)) {
+            omObject.states = without(omObject.get('states'), newState);
         } else {
-            omObject.state = newState;
+            omObject.states.push(newState);
         }
         this._eventBus.fire('element.changed', {
             element

@@ -1,12 +1,10 @@
-import {
-    assign
-  } from 'min-dash';
-  
-  import DepModdle from './DepModdle';
-  
-  import DepDescriptors from './dep.json';
-  
-  var packages = {
+import {assign} from 'min-dash';
+
+import DepModdle from './DepModdle';
+
+import DepDescriptors from './dep.json';
+
+var packages = {
     dep: DepDescriptors
   };
   

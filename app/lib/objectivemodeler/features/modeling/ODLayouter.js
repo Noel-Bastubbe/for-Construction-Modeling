@@ -1,22 +1,14 @@
 import inherits from 'inherits';
 
-import {
-  assign
-} from 'min-dash';
+import {assign} from 'min-dash';
 
 import BaseLayouter from 'diagram-js/lib/layout/BaseLayouter';
 
-import {
-  repairConnection,
-  withoutRedundantPoints
-} from 'diagram-js/lib/layout/ManhattanLayout';
+import {repairConnection, withoutRedundantPoints} from 'diagram-js/lib/layout/ManhattanLayout';
 
-import {
-  getMid,
-  getOrientation
-} from 'diagram-js/lib/layout/LayoutUtil';
+import {getMid, getOrientation} from 'diagram-js/lib/layout/LayoutUtil';
 
-import { is } from '../../util/ModelUtil';
+import {is} from '../../util/ModelUtil';
 
 export default function ODLayouter() {}
 

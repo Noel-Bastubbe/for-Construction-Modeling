@@ -1,6 +1,6 @@
-import { getNewShapePosition } from '../../auto-place/ODAutoPlaceUtil';
+import {getNewShapePosition} from '../../auto-place/ODAutoPlaceUtil';
 
-import { getMid } from 'diagram-js/lib/layout/LayoutUtil';
+import {getMid} from 'diagram-js/lib/layout/LayoutUtil';
 
 var HIGH_PRIORITY = 2000;
 

@@ -1,17 +1,12 @@
-import {
-  assign,
-  forEach
-} from 'min-dash';
+import {assign, forEach} from 'min-dash';
 
 import inherits from 'inherits';
 
-import { is } from '../../util/ModelUtil';
+import {is} from '../../util/ModelUtil';
 
 import BaseElementFactory from 'diagram-js/lib/core/ElementFactory';
 
-import {
-  DEFAULT_LABEL_SIZE
-} from '../../util/LabelUtil';
+import {DEFAULT_LABEL_SIZE} from '../../util/LabelUtil';
 
 
 /**

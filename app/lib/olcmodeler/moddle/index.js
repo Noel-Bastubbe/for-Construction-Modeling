@@ -1,12 +1,10 @@
-import {
-    assign
-  } from 'min-dash';
-  
-  import OlcModdle from './OlcModdle';
-  
-  import OlcDescriptors from './olc.json';
-  
-  var packages = {
+import {assign} from 'min-dash';
+
+import OlcModdle from './OlcModdle';
+
+import OlcDescriptors from './olc.json';
+
+var packages = {
     olc: OlcDescriptors
   };
   

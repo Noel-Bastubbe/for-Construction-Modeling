@@ -1,20 +1,18 @@
 import inherits from 'inherits';
 
-import { assign, isObject } from 'min-dash';
+import {assign, isObject} from 'min-dash';
 
-import { append as svgAppend, attr as svgAttr, classes as svgClasses, create as svgCreate } from 'tiny-svg';
+import {append as svgAppend, attr as svgAttr, classes as svgClasses, create as svgCreate} from 'tiny-svg';
 
-import { createLine } from 'diagram-js/lib/util/RenderUtil';
+import {createLine} from 'diagram-js/lib/util/RenderUtil';
 import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 
-import { getLabel } from '../features/label-editing/LabelUtil';
+import {getLabel} from '../features/label-editing/LabelUtil';
 
-import { getBusinessObject, is } from '../util/ModelUtil';
-import {
-  query as domQuery
-} from 'min-dom';
+import {getBusinessObject, is} from '../util/ModelUtil';
+import {query as domQuery} from 'min-dom';
 
-import { getFillColor, getRectPath, getSemantic, getStrokeColor } from './ODRendererUtil';
+import {getFillColor, getRectPath, getSemantic, getStrokeColor} from './ODRendererUtil';
 import Ids from 'ids';
 
 var RENDERER_IDS = new Ids();
@@ -140,7 +138,7 @@ export default function ODRenderer(
   function renderAttributes(parentGfx, element) {
     let semantic = getSemantic(element);
     let label = "state: "
-    label += semantic.state?.name || "no State"
+    label += semantic.states?.map(state => state.name).join(", ") || "any"
     renderLabel(parentGfx, label, {
       box: {
         height: element.height + 30,
@@ -179,7 +177,12 @@ export default function ODRenderer(
 
   function renderTitelLabel(parentGfx, element) {
     let semantic = getSemantic(element);
-    let text = `${semantic.classRef?.name} : ${semantic.instance?.name}`;
+    let text;
+    if (semantic.instance !== undefined) {
+      text = `${semantic.instance.name} : ${semantic.classRef?.name}`;
+    } else {
+      text = ` : ${semantic.classRef?.name}`;
+    }
     renderLabel(parentGfx, text, {
       box: {
         height: 30,

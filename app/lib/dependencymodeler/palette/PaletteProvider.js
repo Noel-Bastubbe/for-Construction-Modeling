@@ -1,6 +1,4 @@
-import {
-  assign
-} from 'min-dash';
+import {assign} from 'min-dash';
 
 //TODO rename prefix
 export default function PaletteProvider(

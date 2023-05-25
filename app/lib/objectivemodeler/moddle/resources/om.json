@@ -30,10 +30,11 @@
       ],
       "properties": [
         {
-          "name": "state",
+          "name": "states",
+          "isMany": true,
           "isAttr": true,
-          "isReference": true,
-          "type": "olc:State"
+          "type": "olc:State",
+          "isReference": true
         },
         {
           "name": "links",

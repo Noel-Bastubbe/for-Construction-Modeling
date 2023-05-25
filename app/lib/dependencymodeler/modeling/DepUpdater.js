@@ -2,9 +2,7 @@ import inherits from 'inherits';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 
-import {
-  remove as collectionRemove
-} from 'diagram-js/lib/util/Collections';
+import {remove as collectionRemove} from 'diagram-js/lib/util/Collections';
 
 
 export default function DepUpdater(eventBus, connectionDocking) {

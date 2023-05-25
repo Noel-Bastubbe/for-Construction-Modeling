@@ -1,4 +1,4 @@
-import { isAny } from '../modeling/util/ModelingUtil';
+import {isAny} from '../modeling/util/ModelingUtil';
 
 function getLabelAttr(semantic) {
   if (semantic.labelAttribute) {
@@ -17,7 +17,6 @@ export function getLabel(element) {
     return semantic[attr] || '';
   }
 }
-
 
 export function setLabel(element, text) {
   var semantic = element.businessObject,

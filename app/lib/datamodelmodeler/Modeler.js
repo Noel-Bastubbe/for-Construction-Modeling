@@ -30,8 +30,7 @@ import PaletteModule from './features/palette';
 import ResizeModule from 'diagram-js/lib/features/resize';
 import SpaceToolBehaviorModule from './behavior';
 import SnappingModule from './features/snapping';
-import { nextPosition } from '../util/Util';
-import OmModeler from "../objectivemodeler/OmModeler";
+import {nextPosition} from '../util/Util';
 
 var initialDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -127,6 +126,7 @@ Modeler.prototype._modules = [].concat(
 );
 
 Modeler.prototype.id = "DM";
+Modeler.prototype.rank = 2;
 
 Modeler.prototype.name = function (constructionMode) {
   if (constructionMode) {

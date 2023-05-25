@@ -1,5 +1,5 @@
-import { forEach } from 'min-dash';
-import { is } from '../../util/Util';
+import {forEach} from 'min-dash';
+import {is} from '../../util/Util';
 
 const CLASS_MIN_DIMENSIONS = { width: 105, height: 73 };
 

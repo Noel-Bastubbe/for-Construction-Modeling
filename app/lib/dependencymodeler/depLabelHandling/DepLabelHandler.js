@@ -1,5 +1,4 @@
 import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
-import CommonEvents from "../../common/CommonEvents";
 import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
 import {is} from "../../util/Util";
@@ -33,10 +32,6 @@ export default class DepLabelHandler extends CommandInterceptor {
             if (is(element, 'dep:Objective') && element.businessObject.id !== 'start_state') {
                 const objective = element.businessObject;
                 this._dropdownContainer.currentElement = element;
-
-                if (element.businessObject.id === 'final_state') {
-                    this._dropdownContainer.removeChild(this._nameDropdown);
-                }
 
                 const populateNameDropdown = () => {
                     this._nameDropdown.populate(
@@ -89,9 +84,8 @@ export default class DepLabelHandler extends CommandInterceptor {
                     } else if (!this._dropdownContainer.contains(event.target)) {
                         return false;
                     } else if (event.target.classList.contains('dd-dropdown-entry')) {
-                        this._classDropdown.clearInput();
-                        this._instanceDropdown.clearInput();
-                        this._stateDropdown.clearInput();
+                        this._nameDropdown.clearInput();
+                        this._timeDropdown.clearInput();
                     } else if (event.target.tagName !== 'INPUT' || !event.target.value) {
                         this._dropdownContainer.confirm();
                     }
@@ -102,9 +96,6 @@ export default class DepLabelHandler extends CommandInterceptor {
                     if (this._overlayId) {
                         this._overlays.remove(this._overlayId);
                         this._overlayId = undefined;
-                    }
-                    if (element.businessObject.id === 'final_state') {
-                        this._dropdownContainer.insertBefore(this._nameDropdown,this._timeDropdown);
                     }
                     this._dropdownContainer.currentElement = undefined;
                     this._currentDropdownTarget = undefined;
@@ -138,7 +129,7 @@ export default class DepLabelHandler extends CommandInterceptor {
         this._eventBus.fire('element.changed', {
             element
         });
-        this._eventBus.fire(CommonEvents.OBJECTIVE_RENAMED, {
+        this._eventBus.fire(ObjectiveEvents.OBJECTIVE_RENAMED, {
             objective: element
         });
     }

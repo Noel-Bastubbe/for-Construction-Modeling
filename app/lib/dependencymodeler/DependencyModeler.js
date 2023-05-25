@@ -1,5 +1,5 @@
 import inherits from 'inherits';
-import { groupBy} from 'min-dash'
+import {groupBy} from 'min-dash'
 
 import Diagram from 'diagram-js';
 
@@ -29,16 +29,13 @@ import DepModelingModule from './modeling';
 import DepAutoPlaceModule from './auto-place';
 
 import DepModdle from './moddle';
-import { nextPosition, root } from '../util/Util';
-import OmModeler from "../objectivemodeler/OmModeler";
-import Modeler from "../datamodelmodeler/Modeler";
+import {nextPosition, root} from '../util/Util';
 
 var emptyDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
 <dep:definitions xmlns:olc="http://bptlab/schema/olc" xmlns:olcDi="http://bptlab/schema/olcDi">
   <dep:goal id="MainGoal">
     <dep:objective id="start_state" type="dep:Objective" name="Start State" x="465" y="293" />
-    <dep:objective id="final_state" type="dep:Objective" name="Final State" x="765" y="293" />
   </dep:goal>
 </dep:definitions>`;
 
@@ -111,6 +108,7 @@ export default function DependencyModeler(options) {
 inherits(DependencyModeler, Diagram);
 
 DependencyModeler.prototype.id = "DEP";
+DependencyModeler.prototype.rank = 4;
 
     DependencyModeler.prototype.name = function (constructionMode) {
   if (constructionMode) {

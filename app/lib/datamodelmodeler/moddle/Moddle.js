@@ -1,8 +1,8 @@
-import { isString, assign } from 'min-dash';
+import {assign, isString} from 'min-dash';
 
-import { Moddle } from 'moddle';
+import {Moddle} from 'moddle';
 
-import { Reader, Writer } from 'moddle-xml';
+import {Reader, Writer} from 'moddle-xml';
 
 /**
  * A sub class of {@link Moddle} with support for import and export of Postit-js xml files.

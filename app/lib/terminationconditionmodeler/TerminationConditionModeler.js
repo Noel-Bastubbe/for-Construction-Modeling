@@ -1,12 +1,11 @@
 import $ from 'jquery';
-import { without } from 'min-dash';
-import { formatStates, type, is } from '../util/Util';
+import {without} from 'min-dash';
+import {formatStates, is, type} from '../util/Util';
 import getDropdown from '../util/Dropdown';
 import EventBus from 'diagram-js/lib/core/EventBus'
 import TerminationConditionEvents from './TerminationConditionEvents';
 import TerminationConditionModdle from './TerminationConditionModdle';
 import CommonEvents from '../common/CommonEvents';
-import OlcModeler from "../olcmodeler/OlcModeler";
 
 const NAMESPACE = 'tc';
 
@@ -28,6 +27,7 @@ export default function TerminationConditionModeler(container) {
 }
 
 TerminationConditionModeler.prototype.id = "TC";
+TerminationConditionModeler.prototype.rank = 8;
 
 TerminationConditionModeler.prototype.name = function (constructionMode) {
     if (constructionMode) {
@@ -126,7 +126,11 @@ TerminationConditionModeler.prototype.createLiteralElement = function (parentEle
     parentElement.append(element);
 
     classElement.dropdown = getDropdown();
+    classElement.dropdown.classList.remove("dd-dropdown-menu");
+    classElement.dropdown.classList.add("dd-dropdown-menu-termination-condition");
     stateElement.dropdown = getDropdown();
+    stateElement.dropdown.classList.remove("dd-dropdown-menu");
+    stateElement.dropdown.classList.add("dd-dropdown-menu-termination-condition");
 
     this.populateLiteral(literal, element);
 

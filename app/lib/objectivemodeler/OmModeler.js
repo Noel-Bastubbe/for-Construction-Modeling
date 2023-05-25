@@ -36,21 +36,16 @@ import SnappingModule from './features/snapping';
 import SpaceToolBehaviorModule from './behavior';
 import {nextPosition} from '../util/Util';
 import {is} from "bpmn-js/lib/util/ModelUtil";
-import modeling from './features/modeling';
-import Modeler from "../datamodelmodeler/Modeler";
+import {without} from 'min-dash';
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
-<od:definitions xmlns:od="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
-    <od:odBoard id="Board" />
+<om:definitions xmlns:om="http://tk/schema/od" xmlns:odDi="http://tk/schema/odDi">
+    <om:odBoard id="Board" />
     <odDi:odRootBoard id="StartBoard" name="Start State" objectiveRef="start_state">
         <odDi:odPlane id="Plane" boardElement="Board" />
     </odDi:odRootBoard>
-    <od:odBoard id="Board2" />
-    <odDi:odRootBoard id="FinalBoard" name="Final State" objectiveRef="final_state">
-        <odDi:odPlane id="Plane2" boardElement="Board" />
-    </odDi:odRootBoard>
-</od:definitions>`;
+</om:definitions>`;
 
 export default function OmModeler(options) {
     BaseModeler.call(this, options);
@@ -139,6 +134,7 @@ OmModeler.prototype._modules = [].concat(
 );
 
 OmModeler.prototype.id = "OM";
+OmModeler.prototype.rank = 3;
 
 OmModeler.prototype.name = function (constructionMode) {
     if (constructionMode) {
@@ -271,7 +267,7 @@ OmModeler.prototype.handleStateRenamed = function (olcState) {
 OmModeler.prototype.handleStateDeleted = function (olcState) {
     let changedVisual = this.getVisualsInState(olcState);
     this.getObjectsInState(olcState).forEach(element => {
-        element.state = undefined;
+        element.states = without(element.states, olcState);
     });
     changedVisual.forEach(element =>
         this.get('eventBus').fire('element.changed', {
@@ -317,7 +313,7 @@ OmModeler.prototype.getVisualsInState = function (olcState) {
     return this.get('elementRegistry').filter(element =>
         is(element, 'om:Object') &&
         olcState.id &&
-        element.businessObject.state?.id === olcState.id
+        element.businessObject.states.some(state => state.id === olcState.id)
     );
 }
 
@@ -326,7 +322,7 @@ OmModeler.prototype.getObjectsInState = function (olcState) {
     let objects = objectives.map(objective => objective.get('boardElements')).flat(1).filter((element) =>
         is(element, 'om:Object') &&
         olcState.id &&
-        element.state?.id === olcState.id);
+        element.states.some(state => state.id === olcState.id));
     return objects;
 }
 

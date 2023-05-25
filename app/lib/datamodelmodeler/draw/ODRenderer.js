@@ -1,20 +1,18 @@
 import inherits from 'inherits';
 
-import { assign, isObject } from 'min-dash';
+import {assign, isObject} from 'min-dash';
 
-import { append as svgAppend, attr as svgAttr, classes as svgClasses, create as svgCreate } from 'tiny-svg';
+import {append as svgAppend, attr as svgAttr, classes as svgClasses, create as svgCreate} from 'tiny-svg';
 
-import { createLine } from 'diagram-js/lib/util/RenderUtil';
+import {createLine} from 'diagram-js/lib/util/RenderUtil';
 import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 
-import { getLabel } from '../features/label-editing/LabelUtil';
+import {getLabel} from '../features/label-editing/LabelUtil';
 
-import { getBusinessObject, is } from '../util/ModelUtil';
-import {
-  query as domQuery
-} from 'min-dom';
+import {getBusinessObject, is} from '../util/ModelUtil';
+import {query as domQuery} from 'min-dom';
 
-import { getFillColor, getRectPath, getSemantic, getStrokeColor } from './ODRendererUtil';
+import {getFillColor, getRectPath, getSemantic, getStrokeColor} from './ODRendererUtil';
 import Ids from 'ids';
 
 var RENDERER_IDS = new Ids();
@@ -221,7 +219,7 @@ export default function ODRenderer(
 
   function addMarker(id, options) {
     var attrs = assign({
-      fill: 'black',  
+      fill: 'black',
       strokeWidth: 1,
       strokeLinecap: 'round',
       strokeDasharray: 'none'
@@ -279,9 +277,9 @@ export default function ODRenderer(
     addMarker(id, {
       element: linkEnd,
       ref: { x: 11, y: 10 },
-      scale: 1, 
+      scale: 1,
       attrs: {
-        fill: fill, 
+        fill: fill,
         stroke: stroke
       }
     });
@@ -310,16 +308,16 @@ export default function ODRenderer(
           stroke = getStrokeColor(element, defaultStrokeColor);
 
       var attrs = {
-        strokeLinejoin: 'round',   
-        stroke: getStrokeColor(element, defaultStrokeColor) 
+        strokeLinejoin: 'round',
+        stroke: getStrokeColor(element, defaultStrokeColor)
       };
- 
+
       if (element.businessObject.inheritance == true) {
         var attrs = {
-          strokeLinejoin: 'round',   
-          markerEnd: marker('white', 'black'),  
-          stroke: getStrokeColor(element, defaultStrokeColor) 
-        };   
+          strokeLinejoin: 'round',
+          markerEnd: marker('white', 'black'),
+          stroke: getStrokeColor(element, defaultStrokeColor)
+        };
       }
 
       return drawPath(parentGfx, pathData, attrs);

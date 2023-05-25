@@ -1,14 +1,11 @@
-import { is } from '../../util/ModelUtil';
+import {is} from '../../util/ModelUtil';
+
+import {asTRBL, getMid,} from 'diagram-js/lib/layout/LayoutUtil';
 
 import {
-  getMid,
-  asTRBL,
-} from 'diagram-js/lib/layout/LayoutUtil';
-
-import {
-  findFreePosition,
-  generateGetNextPosition,
-  getConnectedDistance
+    findFreePosition,
+    generateGetNextPosition,
+    getConnectedDistance
 } from 'diagram-js/lib/features/auto-place/AutoPlaceUtil';
 
 

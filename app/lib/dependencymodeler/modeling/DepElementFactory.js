@@ -1,6 +1,4 @@
-import {
-    assign
-} from 'min-dash';
+import {assign} from 'min-dash';
 import inherits from 'inherits';
 import BaseElementFactory from 'diagram-js/lib/core/ElementFactory';
 import Ids from 'ids';

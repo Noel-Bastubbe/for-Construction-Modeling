@@ -1,30 +1,16 @@
-import {
-  assign,
-  find,
-  isNumber,
-  omit
-} from 'min-dash';
+import {assign, find, isNumber, omit} from 'min-dash';
 
-import {
-  domify,
-  query as domQuery,
-  remove as domRemove
-} from 'min-dom';
+import {domify, event as domEvent, query as domQuery, remove as domRemove} from 'min-dom';
 
-import {
-  innerSVG
-} from 'tiny-svg';
+import {innerSVG} from 'tiny-svg';
 
 import Diagram from 'diagram-js';
 import Moddle from './moddle';
 
 import inherits from 'inherits';
 
-import {
-  importOdDiagram
-} from './import/Importer';
-
-
+import {importOdDiagram} from './import/Importer';
+import {BPMNIO_IMG, open as openPoweredBy} from './util/PoweredByUtil';
 
 
 /**
@@ -717,15 +703,6 @@ function findRootBoard(definitions, boardId) {
 }
 
 /* <project-logo> */
-
-import {
-  open as openPoweredBy,
-  BPMNIO_IMG
-} from './util/PoweredByUtil';
-
-import {
-  event as domEvent
-} from 'min-dom';
 
 /**
  * Adds the project logo to the diagram container as

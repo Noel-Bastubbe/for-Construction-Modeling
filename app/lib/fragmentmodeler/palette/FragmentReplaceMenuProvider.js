@@ -1,4 +1,4 @@
-import { is } from '../../util/Util';
+import {is} from '../../util/Util';
 
 export default function FragmentReplaceMenuProvider(popupMenu) {
     popupMenu.registerProvider('bpmn-replace', this);

@@ -1,20 +1,10 @@
 import inherits from 'inherits';
 
-import {
-  isObject,
-  assign
-} from 'min-dash';
+import {assign, isObject} from 'min-dash';
 
-import {
-  query as domQuery
-} from 'min-dom';
+import {query as domQuery} from 'min-dom';
 
-import {
-  append as svgAppend,
-  attr as svgAttr,
-  create as svgCreate,
-  classes as svgClasses
-} from 'tiny-svg';
+import {append as svgAppend, attr as svgAttr, classes as svgClasses, create as svgCreate} from 'tiny-svg';
 
 import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 import TextUtil from 'diagram-js/lib/util/Text';
@@ -22,12 +12,9 @@ import TextUtil from 'diagram-js/lib/util/Text';
 import Ids from 'ids';
 
 import {is} from '../../util/Util';
+import {componentsToPath} from 'diagram-js/lib/util/RenderUtil';
 
 var RENDERER_IDS = new Ids();
-
-import {
-  componentsToPath
-} from 'diagram-js/lib/util/RenderUtil';
 
 var DEFAULT_FILL_OPACITY = .95;
 var DEFAULT_TEXT_SIZE = 16;

@@ -3,16 +3,18 @@ import BpmnModeler from 'bpmn-js/lib/Modeler';
 import fragmentPaletteModule from './palette';
 import customModelingModule from './modeling';
 import bpmnExtension from './moddle/bpmnextension.json';
-import { is } from 'bpmn-js/lib/util/ModelUtil';
-import { without } from 'min-dash';
-import DependencyModeler from "../dependencymodeler/DependencyModeler";
-import Modeler from "../datamodelmodeler/Modeler";
+import {is} from 'bpmn-js/lib/util/ModelUtil';
+import {without} from 'min-dash';
+import taskLabelHandling from "./taskLabelHandling";
+import taskRenderer from "./draw";
 
 
 export default function FragmentModeler(options) {
     const customModules = [
         fragmentPaletteModule,
         customModelingModule,
+        taskRenderer,
+        taskLabelHandling,
         {
             fragmentModeler: ['value', this]
         }
@@ -40,6 +42,7 @@ export default function FragmentModeler(options) {
 inherits(FragmentModeler, BpmnModeler);
 
 FragmentModeler.prototype.id = "FM";
+FragmentModeler.prototype.rank = 1;
 
 FragmentModeler.prototype.name = function (constructionMode) {
     if (constructionMode) {
@@ -51,6 +54,27 @@ FragmentModeler.prototype.name = function (constructionMode) {
 
 FragmentModeler.prototype.handleOlcListChanged = function (olcs, dryRun=false) {
     this._olcs = olcs;
+}
+
+FragmentModeler.prototype.handleRoleListChanged = function (roles, dryRun=false) {
+    this._roles = roles;
+}
+
+FragmentModeler.prototype.handleRoleRenamed = function (role) {
+    this.getTasksWithRole(role).forEach((element) =>
+        this.get('eventBus').fire('element.changed', {
+            element
+        })
+    );
+}
+
+FragmentModeler.prototype.handleRoleDeleted = function (role) {
+    this.getTasksWithRole(role).forEach((element, gfx) => {
+        element.businessObject.role = undefined;
+        this.get('eventBus').fire('element.changed', {
+            element
+        });
+    });
 }
 
 FragmentModeler.prototype.handleStateRenamed = function (olcState) {
@@ -99,6 +123,15 @@ FragmentModeler.prototype.getDataObjectReferencesOfClass = function (clazz) {
         clazz.id &&
         element.businessObject.dataclass?.id === clazz.id
     );
+}
+
+FragmentModeler.prototype.getTasksWithRole = function (role) {
+    let list =  this.get('elementRegistry').filter((element, gfx) =>
+        is(element, 'bpmn:Task') &&
+        role.id &&
+        element.businessObject.role?.id === role.id
+    );
+    return list;
 }
 
 FragmentModeler.prototype.startDoCreation = function(event, elementShape, dataclass, isIncoming) {

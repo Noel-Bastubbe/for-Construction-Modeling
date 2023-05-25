@@ -1,8 +1,6 @@
-import {
-  remove as svgRemove
-} from 'tiny-svg';
-import { is } from '../../util/ModelUtil';
-import { getLabelAttr } from './LabelUtil';
+import {remove as svgRemove} from 'tiny-svg';
+import {is} from '../../util/ModelUtil';
+import {getLabelAttr} from './LabelUtil';
 
 var MARKER_HIDDEN = 'djs-element-hidden';
 

@@ -1,13 +1,8 @@
-import {
-  assign,
-  isArray,
-} from 'min-dash';
+import {assign, isArray,} from 'min-dash';
 
-import {
-  hasPrimaryModifier
-} from 'diagram-js/lib/util/Mouse';
+import {hasPrimaryModifier} from 'diagram-js/lib/util/Mouse';
 
-import { is } from '../../util/ModelUtil';
+import {is} from '../../util/ModelUtil';
 
 
 /**
@@ -32,7 +27,7 @@ export default function ContextPadProvider(
 
   this._rules = rules;
   this._translate = translate;
-  this._popupMenu = popupMenu; 
+  this._popupMenu = popupMenu;
 
   if (config.autoPlace !== false) {
     this._autoPlace = injector.get('autoPlace', false);
@@ -78,7 +73,7 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
     _translate: translate,
     _connect: connect,
     _elementFactory: elementFactory,
-    _elementRegistry: elementRegistry, 
+    _elementRegistry: elementRegistry,
     _autoPlace: autoPlace,
     _create: create,
     _popupMenu: popupMenu,
@@ -141,7 +136,7 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
           className: 'bpmn-icon-screw-wrench',
           title: translate('Change type'),
           action: {
-            click: changeToInheritance 
+            click: changeToInheritance
           }
     }});
   }

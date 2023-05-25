@@ -1,6 +1,4 @@
-import {
-  getMid
-} from 'diagram-js/lib/layout/LayoutUtil';
+import {getMid} from 'diagram-js/lib/layout/LayoutUtil';
 
 import lineIntersect from './util/LineIntersect';
 
