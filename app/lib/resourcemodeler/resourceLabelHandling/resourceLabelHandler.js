@@ -188,9 +188,6 @@ export default class ResourceLabelHandler extends CommandInterceptor {
         this._eventBus.fire('element.changed', {
             element
         });
-        this._eventBus.fire(CommonEvents.OBJECTIVE_RENAMED, {
-            objective: element
-        });
     }
 
     updateCapacity(newCapacity, element) {
