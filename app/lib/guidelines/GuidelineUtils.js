@@ -1,4 +1,4 @@
-import {is} from '../datamodelmodeler/util/ModelUtil';
+import {is} from '../frequentlyUsedFiles/util/ModelUtil.js';
 
 export function getConnectedElements(element) {
 

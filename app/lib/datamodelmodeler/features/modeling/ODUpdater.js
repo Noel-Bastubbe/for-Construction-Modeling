@@ -6,7 +6,7 @@ import {remove as collectionRemove} from 'diagram-js/lib/util/Collections';
 
 import {Label} from 'diagram-js/lib/model';
 
-import {getBusinessObject, is} from '../../util/ModelUtil';
+import {getBusinessObject, is} from '../../../frequentlyUsedFiles/util/ModelUtil.js';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 import {getLabelElementId} from '../../util/LabelUtil';

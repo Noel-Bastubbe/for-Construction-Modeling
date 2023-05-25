@@ -1,6 +1,6 @@
 import inherits from 'inherits';
 
-import {getBusinessObject, is} from '../../../util/ModelUtil';
+import {getBusinessObject, is} from '../../../../frequentlyUsedFiles/util/ModelUtil.js';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 

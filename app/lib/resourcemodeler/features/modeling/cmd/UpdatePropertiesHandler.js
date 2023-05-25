@@ -1,6 +1,6 @@
 import {assign, forEach, keys, reduce} from 'min-dash';
 
-import {getBusinessObject} from '../../../util/ModelUtil';
+import {getBusinessObject} from '../../../../frequentlyUsedFiles/util/ModelUtil.js';
 
 var ID = 'id',
     DI = 'di';

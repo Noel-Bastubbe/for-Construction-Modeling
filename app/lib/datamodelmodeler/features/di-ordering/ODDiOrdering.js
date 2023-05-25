@@ -1,5 +1,5 @@
-import {getDi} from '../../draw/ODRendererUtil';
-import {getBusinessObject} from '../../util/ModelUtil';
+import {getDi} from '../../../frequentlyUsedFiles/draw/RendererUtil.js';
+import {getBusinessObject} from '../../../frequentlyUsedFiles/util/ModelUtil.js';
 
 import {filter, map} from 'min-dash';
 

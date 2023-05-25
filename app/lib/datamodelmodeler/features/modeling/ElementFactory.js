@@ -2,7 +2,7 @@ import {assign, forEach} from 'min-dash';
 
 import inherits from 'inherits';
 
-import {is} from '../../util/ModelUtil';
+import {is} from '../../../frequentlyUsedFiles/util/ModelUtil.js';
 
 import BaseElementFactory from 'diagram-js/lib/core/ElementFactory';
 

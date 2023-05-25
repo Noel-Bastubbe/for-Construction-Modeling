@@ -1,9 +1,9 @@
-import {getBusinessObject} from '../../util/ModelUtil';
+import {getBusinessObject} from '../../../frequentlyUsedFiles/util/ModelUtil.js';
 
 import {filter, map} from 'min-dash';
 
 import {selfAndAllChildren} from 'diagram-js/lib/util/Elements';
-import {getDi} from "../../draw/REMRendererUtil";
+import {getDi} from "../../../frequentlyUsedFiles/draw/RendererUtil.js";
 
 
 var HIGH_PRIORITY = 2000;

@@ -2,7 +2,7 @@ import {assign, sortBy} from 'min-dash';
 
 import inherits from 'inherits';
 
-import {getBusinessObject, is} from '../../../util/ModelUtil';
+import {getBusinessObject, is} from '../../../../frequentlyUsedFiles/util/ModelUtil.js';
 
 import {
     getExternalLabelMid,

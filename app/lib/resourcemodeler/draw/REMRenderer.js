@@ -9,12 +9,12 @@ import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 
 import {getLabel} from '../features/label-editing/LabelUtil';
 
-import {getBusinessObject, is} from '../util/ModelUtil';
+import {getBusinessObject, is} from '../../frequentlyUsedFiles/util/ModelUtil.js';
 import {
     query as domQuery
 } from 'min-dom';
 
-import {getFillColor, getRectPath, getSemantic, getStrokeColor} from './REMRendererUtil';
+import {getFillColor, getRectPath, getSemantic, getStrokeColor} from '../../frequentlyUsedFiles/draw/RendererUtil.js';
 import Ids from 'ids';
 
 var RENDERER_IDS = new Ids();

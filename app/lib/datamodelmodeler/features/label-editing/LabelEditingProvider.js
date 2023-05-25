@@ -5,7 +5,7 @@ import {getLabel, getLabelAttr} from './LabelUtil';
 import {isAny} from '../modeling/util/ModelingUtil';
 
 import {getExternalLabelMid, hasExternalLabel, isLabel, isLabelExternal} from '../../util/LabelUtil';
-import {is} from '../../util/ModelUtil';
+import {is} from '../../../frequentlyUsedFiles/util/ModelUtil.js';
 
 
 export default function LabelEditingProvider(
