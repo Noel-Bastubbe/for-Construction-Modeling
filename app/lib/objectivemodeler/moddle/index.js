@@ -3,7 +3,7 @@ import {assign} from 'min-dash';
 import Moddle from './Moddle';
 
 import ODDescriptors from './resources/om.json';
-import DiDescriptors from './resources/odDi.json';
+import DiDescriptors from '../../frequentlyUsedFiles/moddle/odDi.json';
 import DcDescriptors from '../../frequentlyUsedFiles/moddle/dc.json';
 
 var packages = {
