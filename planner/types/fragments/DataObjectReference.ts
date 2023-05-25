@@ -12,7 +12,7 @@ export class DataObjectReference {
         this.isList = isList;
     }
 
-    public isMatchedBy (stateInstance: StateInstance) {
-        return this.dataclass === stateInstance.instance.dataclass && this.state === stateInstance.state;
+    public isMatchedBy (executionDataObjectInstance: StateInstance) {
+        return this.dataclass === executionDataObjectInstance.instance.dataclass && this.state === executionDataObjectInstance.state;
     }
 }

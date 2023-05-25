@@ -25,8 +25,8 @@ import conferenceTerminationCondition from '../resources/conferenceModel/termina
 import Zip from 'jszip';
 import {appendOverlayListeners} from "./lib/util/HtmlUtil";
 
-import {parseObjects} from "../planner/parser/ModelObjectParser";
 import {exportExecutionPlan} from "../dist/excel/excel.js";
+import {ModelObjectParser} from "../planner/parser/ModelObjectParser";
 
 const constructionMode = false; // Set to true for renaming modelers for user study and removing termination condition modeler
 const LOAD_DUMMY = false; // Set to true to load conference example data
@@ -221,7 +221,8 @@ async function importFromZip(zipData) {
 }
 
 export async function planButtonAction() {
-    const planner = parseObjects(dataModeler, fragmentModeler, objectiveModeler, roleModeler, resourceModeler);
+    const modelObjectParser = new ModelObjectParser(dataModeler, fragmentModeler, objectiveModeler, dependencyModeler, roleModeler, resourceModeler);
+    const planner = modelObjectParser.createPlanner();
     let executionLog = planner.generatePlan();
     let blob = await exportExecutionPlan(executionLog);
 

@@ -6,16 +6,16 @@ import {Activity} from "../fragments/Activity";
 import {StateInstance} from "./StateInstance";
 
 export class Action {
-    activity: Activity;
+    action: Activity;
     runningTime: number;
     resource: Resource | null;
     inputList: StateInstance[];
     outputList: StateInstance[];
     addedInstanceLinks: InstanceLink[];
 
-    public constructor(activity: Activity, runningTime: number, resource: Resource | null, inputList: StateInstance[],
+    public constructor(action: Activity, runningTime: number, resource: Resource | null, inputList: StateInstance[],
                        outputList: StateInstance[], addedInstanceLinks: InstanceLink[]) {
-        this.activity = activity;
+        this.action = action;
         this.runningTime = runningTime;
         this.resource = resource;
         this.inputList = inputList;
@@ -24,18 +24,21 @@ export class Action {
     }
 
     public start(executionState: ExecutionState): ExecutionState {
-        let changedStateInstances: StateInstance[] = this.getChangedStateInstances();
-        let availableStateInstances: StateInstance[] = executionState.availableStateInstances.filter(stateInstance =>
-            !changedStateInstances.some(it => it.instance === stateInstance.instance)
+        if(this.action.duration == 0) {
+            return this.finishInstantAction(executionState);
+        }
+        let changedExecutionDataObjectInstances: StateInstance[] = this.getChangedExecutionDataObjectInstances();
+        let availableDataObjects: StateInstance[] = executionState.availableStateInstances.filter(executionDataObjectInstance =>
+            !changedExecutionDataObjectInstances.some(it => it.instance === executionDataObjectInstance.instance)
         );
-        let blockedStateInstances: StateInstance[] = executionState.blockedStateInstances.concat(changedStateInstances);
+        let blockedDataObjects: StateInstance[] = executionState.blockedExecutionDataObjectInstances.concat(changedExecutionDataObjectInstances);
         let instanceLinks: InstanceLink[] = executionState.instanceLinks;
         let resources: Resource[] = this.getBlockedResources(executionState.resources);
         let time: number = executionState.time;
         let runningActions: Action[] = executionState.runningActions.concat([this]);
         let actionHistory: ScheduledAction[] = executionState.actionHistory;
         let objectiveArray: boolean[] = executionState.objectives.slice();
-        return new ExecutionState(availableStateInstances, blockedStateInstances, instanceLinks, resources, time, runningActions, actionHistory, objectiveArray);
+        return new ExecutionState(availableDataObjects, blockedDataObjects, instanceLinks, resources, time, runningActions, actionHistory, objectiveArray);
     }
 
     private getBlockedResources(resources: Resource[]): Resource[] {
@@ -43,13 +46,13 @@ export class Action {
             return resources;
         }
         let result: Resource[] = resources.filter(resource => resource !== this.resource);
-        let changedResource: Resource = new Resource(this.resource.name, this.resource.roles, this.resource.capacity - this.activity.NoP);
+        let changedResource: Resource = new Resource(this.resource.id, this.resource.name, this.resource.roles, this.resource.capacity - this.action.NoP);
         result.push(changedResource);
         return result;
     }
 
     private canFinish(): boolean {
-        return this.runningTime + 1 == this.activity.duration;
+        return this.runningTime + 1 == this.action.duration;
     }
 
 
@@ -57,31 +60,31 @@ export class Action {
         if (this.canFinish()) {
             return this.finish(executionState);
         } else {
-            let action: Action = new Action(this.activity, this.runningTime + 1, this.resource, this.inputList, this.outputList, this.addedInstanceLinks);
+            let action: Action = new Action(this.action, this.runningTime + 1, this.resource, this.inputList, this.outputList, this.addedInstanceLinks);
             let runningActions: Action[] = executionState.runningActions.filter(action => action !== this);
             runningActions.push(action);
-            return new ExecutionState(executionState.availableStateInstances, executionState.blockedStateInstances,
+            return new ExecutionState(executionState.availableStateInstances, executionState.blockedExecutionDataObjectInstances,
                 executionState.instanceLinks, executionState.resources, executionState.time, runningActions, executionState.actionHistory, executionState.objectives
             );
         }
     }
 
     private finish(executionState: ExecutionState): ExecutionState {
-        let availableStateInstances: StateInstance[] = this.outputList.concat(executionState.availableStateInstances);
-        let blockedStateInstances: StateInstance[] = this.getNewBlockedStateInstances(executionState);
+        let availableDataObjects: StateInstance[] = this.outputList.concat(executionState.availableStateInstances);
+        let blockedDataObjects: StateInstance[] = this.getNewBlockedDataObjects(executionState);
         let instanceLinks: InstanceLink[] = this.addedInstanceLinks.concat(executionState.instanceLinks);
         let resources: Resource[] = this.getNewResources(executionState);
         let time: number = executionState.time;
         let runningActions: Action[] = executionState.runningActions.filter(action => action !== this);
-        let actionHistory: ScheduledAction[] = this.getNewScheduledActions(executionState);
+        let actionHistory: ScheduledAction[] = this.getNewActionHistory(executionState);
         let objectiveArray: boolean[] = executionState.objectives.slice();
-        return new ExecutionState(availableStateInstances, blockedStateInstances, instanceLinks, resources, time, runningActions, actionHistory, objectiveArray);
+        return new ExecutionState(availableDataObjects, blockedDataObjects, instanceLinks, resources, time, runningActions, actionHistory, objectiveArray);
     }
 
-    private getNewBlockedStateInstances(executionState: ExecutionState): StateInstance[] {
-        let changedStateInstances: StateInstance[] = this.getChangedStateInstances();
-        return executionState.blockedStateInstances.filter(stateInstance =>
-            !changedStateInstances.some(it => it.instance === stateInstance.instance)
+    private getNewBlockedDataObjects(executionState: ExecutionState): StateInstance[] {
+        let changedDataObjectInstances: StateInstance[] = this.getChangedExecutionDataObjectInstances();
+        return executionState.blockedExecutionDataObjectInstances.filter(executionDataObjectInstance =>
+            !changedDataObjectInstances.some(it => it.instance === executionDataObjectInstance.instance)
         );
     }
 
@@ -89,30 +92,44 @@ export class Action {
         let oldResources: Resource[] = executionState.resources;
         return oldResources.map(resource => {
             if (resource.name === this.resource?.name && resource.roles === this.resource?.roles) {
-                return new Resource(resource.name, resource.roles, resource.capacity + this.activity.NoP);
+                return new Resource(resource.id, resource.name, resource.roles, resource.capacity + this.action.NoP);
             } else {
                 return resource;
             }
         });
     }
 
-    private getNewScheduledActions(executionState: ExecutionState): ScheduledAction[] {
-        let oldScheduledActions = executionState.actionHistory;
-        return oldScheduledActions.concat(
-            new ScheduledAction(this.activity, executionState.time - this.activity.duration, executionState.time, this.resource, this.activity.NoP,
-                this.inputList.map(stateInstance => stateInstance.instance),
-                this.outputList.map(stateInstance => stateInstance.instance)
+    private getNewActionHistory(executionState: ExecutionState): ScheduledAction[] {
+        let oldActionHistory = executionState.actionHistory;
+        return oldActionHistory.concat(
+            new ScheduledAction(this.action, executionState.time - this.action.duration, executionState.time, this.resource, this.action.NoP,
+                this.inputList.map(executionDataObjectInstance => executionDataObjectInstance.instance),
+                this.outputList.map(executionDataObjectInstance => executionDataObjectInstance.instance)
             )
         );
     }
 
-    private getChangedStateInstances(): StateInstance[] {
-        let changedStateInstances: StateInstance[] = [];
+    private getChangedExecutionDataObjectInstances(): StateInstance[] {
+        let changedExecutionDataObjectInstances: StateInstance[] = [];
         for (let input of this.inputList) {
             if (this.outputList.some(output => output.instance === input.instance)) {
-                changedStateInstances.push(input);
+                changedExecutionDataObjectInstances.push(input);
             }
         }
-        return changedStateInstances;
+        return changedExecutionDataObjectInstances;
+    }
+
+    private finishInstantAction(executionState: ExecutionState): ExecutionState {
+        let changedExecutionDataObjectInstances = this.getChangedExecutionDataObjectInstances();
+        let availableDataObjects = executionState.availableStateInstances.filter(executionDataObjectInstance => !changedExecutionDataObjectInstances.some(it => it.instance === executionDataObjectInstance.instance));
+        availableDataObjects = availableDataObjects.concat(this.outputList);
+        let blockedDataObjects = executionState.blockedExecutionDataObjectInstances.slice();
+        let instanceLinks = executionState.instanceLinks.concat(this.addedInstanceLinks);
+        let resources = executionState.resources.slice();
+        let time = executionState.time;
+        let runningActions = executionState.runningActions.slice();
+        let actionHistory = this.getNewActionHistory(executionState);
+        let objectiveArray = executionState.objectives.slice();
+        return new ExecutionState(availableDataObjects, blockedDataObjects, instanceLinks, resources, time, runningActions, actionHistory, objectiveArray);
     }
 }
