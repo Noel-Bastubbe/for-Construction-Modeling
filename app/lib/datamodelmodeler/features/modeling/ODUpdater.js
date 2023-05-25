@@ -1,25 +1,15 @@
-import {
-  assign,
-  forEach
-} from 'min-dash';
+import {assign, forEach} from 'min-dash';
 
 import inherits from 'inherits';
 
-import {
-  remove as collectionRemove
-} from 'diagram-js/lib/util/Collections';
+import {remove as collectionRemove} from 'diagram-js/lib/util/Collections';
 
-import {
-  Label
-} from 'diagram-js/lib/model';
+import {Label} from 'diagram-js/lib/model';
 
-import {
-  getBusinessObject,
-  is
-} from '../../util/ModelUtil';
+import {getBusinessObject, is} from '../../util/ModelUtil';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
-import { getLabelElementId } from '../../util/LabelUtil';
+import {getLabelElementId} from '../../util/LabelUtil';
 
 /**
  * A handler responsible for updating the underlying OD XML + DI
@@ -168,6 +158,13 @@ export default function ODUpdater(
   eventBus.on('shape.changed', function(event) {
     if (event.element.type === 'label') {
       updateBounds({ context: { shape: event.element } });
+    }
+  });
+
+  eventBus.on('element.changed', function(event) {
+    if(event.element.type === 'od:Association') {
+      eventBus.fire('element.changed', { element: event.element.labels[0] });
+      eventBus.fire('element.changed', { element: event.element.labels[1] });
     }
   });
 
