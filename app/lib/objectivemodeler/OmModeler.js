@@ -33,7 +33,7 @@ import OmObjectDropdown from './omObjectLabelHandling';
 import PaletteModule from './features/palette';
 import ResizeModule from 'diagram-js/lib/features/resize';
 import SnappingModule from './features/snapping';
-import SpaceToolBehaviorModule from '../frequentlyUsedFiles/behavior/index.js';
+import SpaceToolBehaviorModule from './behavior';
 import {nextPosition} from '../util/Util';
 import {is} from "bpmn-js/lib/util/ModelUtil";
 import {without} from 'min-dash';
