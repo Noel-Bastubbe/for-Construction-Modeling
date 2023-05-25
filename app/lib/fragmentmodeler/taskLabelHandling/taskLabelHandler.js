@@ -38,24 +38,18 @@ export default class TaskLabelHandler extends CommandInterceptor {
 
                 const updateRoleSelection = () => {
                     this._roleDropdown.getEntries().forEach(entry => entry.setSelected(activity.role === entry.option));
-                    populateNameDropdown();
                 }
 
                 const populateNameDropdown = () => {
-                    const existingName = activity.name || ""; 
-                    console.log(existingName);
-                    const existingNameEntries = existingName ? [existingName] : []; 
-                    
                     this._nameDropdown.populate(
-                        existingNameEntries,
+                        [],
                         (name, element) => {
                             this.updateName(name, element);
-                        },
+                            },
                         element
                     );
-                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "text", existingName);
-                };
-                
+                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",activity.name);
+                }
                 const populateDurationDropdown = () => {
                     this._durationDropdown.populate(
                         [],
@@ -125,10 +119,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                     } else if (!this._dropdownContainer.contains(event.target)) {
                         return false;
                     } else if (event.target.classList.contains('dd-dropdown-entry')) {
-                        this._nameDropdown.clearInput();
-                        this._durationDropdown.clearInput();
                         this._roleDropdown.clearInput();
-                        this._NoPDropdown.clearInput();
                     } else if (event.target.tagName !== 'INPUT' || !event.target.value) {
                         this._dropdownContainer.confirm();
                     }
