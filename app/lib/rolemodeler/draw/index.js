@@ -1,5 +1,5 @@
 import ROMRenderer from './ROMRenderer';
-import TextRenderer from './TextRenderer';
+import TextRenderer from '../../frequentlyUsedFiles/draw/TextRenderer.js';
 
 export default {
   __init__: [ 'romRenderer' ],
