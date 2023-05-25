@@ -28,8 +28,8 @@ export class Action {
             return this.finishInstantAction(executionState);
         }
         let changedExecutionDataObjectInstances: StateInstance[] = this.getChangedExecutionDataObjectInstances();
-        let availableDataObjects: StateInstance[] = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance =>
-            !changedExecutionDataObjectInstances.some(it => it.dataObjectInstance === executionDataObjectInstance.dataObjectInstance)
+        let availableDataObjects: StateInstance[] = executionState.availableStateInstances.filter(executionDataObjectInstance =>
+            !changedExecutionDataObjectInstances.some(it => it.instance === executionDataObjectInstance.instance)
         );
         let blockedDataObjects: StateInstance[] = executionState.blockedExecutionDataObjectInstances.concat(changedExecutionDataObjectInstances);
         let instanceLinks: InstanceLink[] = executionState.instanceLinks;
@@ -63,14 +63,14 @@ export class Action {
             let action: Action = new Action(this.action, this.runningTime + 1, this.resource, this.inputList, this.outputList, this.addedInstanceLinks);
             let runningActions: Action[] = executionState.runningActions.filter(action => action !== this);
             runningActions.push(action);
-            return new ExecutionState(executionState.availableExecutionDataObjectInstances, executionState.blockedExecutionDataObjectInstances,
+            return new ExecutionState(executionState.availableStateInstances, executionState.blockedExecutionDataObjectInstances,
                 executionState.instanceLinks, executionState.resources, executionState.time, runningActions, executionState.actionHistory, executionState.objectives
             );
         }
     }
 
     private finish(executionState: ExecutionState): ExecutionState {
-        let availableDataObjects: StateInstance[] = this.outputList.concat(executionState.availableExecutionDataObjectInstances);
+        let availableDataObjects: StateInstance[] = this.outputList.concat(executionState.availableStateInstances);
         let blockedDataObjects: StateInstance[] = this.getNewBlockedDataObjects(executionState);
         let instanceLinks: InstanceLink[] = this.addedInstanceLinks.concat(executionState.instanceLinks);
         let resources: Resource[] = this.getNewResources(executionState);
@@ -84,7 +84,7 @@ export class Action {
     private getNewBlockedDataObjects(executionState: ExecutionState): StateInstance[] {
         let changedDataObjectInstances: StateInstance[] = this.getChangedExecutionDataObjectInstances();
         return executionState.blockedExecutionDataObjectInstances.filter(executionDataObjectInstance =>
-            !changedDataObjectInstances.some(it => it.dataObjectInstance === executionDataObjectInstance.dataObjectInstance)
+            !changedDataObjectInstances.some(it => it.instance === executionDataObjectInstance.instance)
         );
     }
 
@@ -103,8 +103,8 @@ export class Action {
         let oldActionHistory = executionState.actionHistory;
         return oldActionHistory.concat(
             new ScheduledAction(this.action, executionState.time - this.action.duration, executionState.time, this.resource, this.action.NoP,
-                this.inputList.map(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance),
-                this.outputList.map(executionDataObjectInstance => executionDataObjectInstance.dataObjectInstance)
+                this.inputList.map(executionDataObjectInstance => executionDataObjectInstance.instance),
+                this.outputList.map(executionDataObjectInstance => executionDataObjectInstance.instance)
             )
         );
     }
@@ -112,7 +112,7 @@ export class Action {
     private getChangedExecutionDataObjectInstances(): StateInstance[] {
         let changedExecutionDataObjectInstances: StateInstance[] = [];
         for (let input of this.inputList) {
-            if (this.outputList.some(output => output.dataObjectInstance === input.dataObjectInstance)) {
+            if (this.outputList.some(output => output.instance === input.instance)) {
                 changedExecutionDataObjectInstances.push(input);
             }
         }
@@ -121,7 +121,7 @@ export class Action {
 
     private finishInstantAction(executionState: ExecutionState): ExecutionState {
         let changedExecutionDataObjectInstances = this.getChangedExecutionDataObjectInstances();
-        let availableDataObjects = executionState.availableExecutionDataObjectInstances.filter(executionDataObjectInstance => !changedExecutionDataObjectInstances.some(it => it.dataObjectInstance === executionDataObjectInstance.dataObjectInstance));
+        let availableDataObjects = executionState.availableStateInstances.filter(executionDataObjectInstance => !changedExecutionDataObjectInstances.some(it => it.instance === executionDataObjectInstance.instance));
         availableDataObjects = availableDataObjects.concat(this.outputList);
         let blockedDataObjects = executionState.blockedExecutionDataObjectInstances.slice();
         let instanceLinks = executionState.instanceLinks.concat(this.addedInstanceLinks);

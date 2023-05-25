@@ -13,7 +13,7 @@ export class ObjectiveLink {
     }
 
     public isMatchedBy(instanceLink: InstanceLink) {
-        return (this.first.dataObjectInstance === instanceLink.first && this.second.dataObjectInstance === instanceLink.second)
-            || (this.second.dataObjectInstance === instanceLink.first && this.first.dataObjectInstance === instanceLink.second);
+        return (this.first.instance === instanceLink.first && this.second.instance === instanceLink.second)
+            || (this.second.instance === instanceLink.first && this.first.instance === instanceLink.second);
     }
 }

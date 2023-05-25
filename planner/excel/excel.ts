@@ -5,16 +5,16 @@ export const exportExecutionPlan = async (log: Schedule) => {
     const workbook = new Excel.Workbook();
 
     let resources = log.resources;
-    let workSpaces = log.workSpaces;
-    let actionList = log.actionList;
+    let workSpaces = log.instances;
+    let scheduledActions = log.scheduledActions;
 
     //sorts actions by start date
-    actionList = actionList.filter(action => action.action.duration > 0).sort((action1, action2) => {
+    scheduledActions = scheduledActions.filter(action => action.activity.duration > 0).sort((action1, action2) => {
         return action1.start - action2.start;
     });
 
     //get deadline(=highest end number of all actions)
-    let deadline = Math.max(...actionList.map(o => o.end));
+    let deadline = Math.max(...scheduledActions.map(o => o.end));
 
     //Execution Plan (work places)
     const worksheet1 = workbook.addWorksheet('Execution Plan (work places)');
@@ -37,8 +37,8 @@ export const exportExecutionPlan = async (log: Schedule) => {
     });
 
     //loops through all actions and fills excel sheet
-    for (let i = 0; i < actionList.length; i++) {
-        let currentAction = actionList[i]
+    for (let i = 0; i < scheduledActions.length; i++) {
+        let currentAction = scheduledActions[i]
 
         //gets row (work space) in which action has to be written
         for (let i = 0; i < currentAction.outputList.length; i++) {
@@ -57,9 +57,9 @@ export const exportExecutionPlan = async (log: Schedule) => {
                 const endColumn = currentAction.end + 1;
                 worksheet1.mergeCells(rowIndex, startColumn, rowIndex, endColumn)
                 if (currentAction.resource) {
-                    worksheet1.getCell(rowIndex, startColumn).value = currentAction.resource?.name + ' (' + currentAction.capacity + ')' + ': ' + currentAction.action.name;
+                    worksheet1.getCell(rowIndex, startColumn).value = currentAction.resource?.name + ' (' + currentAction.capacity + ')' + ': ' + currentAction.activity.name;
                 } else {
-                    worksheet1.getCell(rowIndex, startColumn).value = currentAction.action.name;
+                    worksheet1.getCell(rowIndex, startColumn).value = currentAction.activity.name;
                 }
 
                 worksheet1.getCell(rowIndex, startColumn).border = {
@@ -122,8 +122,8 @@ export const exportExecutionPlan = async (log: Schedule) => {
     });
 
     //loops through all actions and fills excel sheet
-    for (let i = 0; i < actionList.length; i++) {
-        let currentAction = actionList[i]
+    for (let i = 0; i < scheduledActions.length; i++) {
+        let currentAction = scheduledActions[i]
 
         //gets row (resource) in which action has to be written
         const resourceForActivity = currentAction.resource;
@@ -140,8 +140,8 @@ export const exportExecutionPlan = async (log: Schedule) => {
                 const startColumn = currentAction.start + 2;
                 const endColumn = currentAction.end + 1;
                 worksheet2.mergeCells(rowIndex + i, startColumn, rowIndex + i, endColumn)
-                let outputListString = currentAction.outputList.map(dataObjectInstance => dataObjectInstance.dataclass.name + ' ' + dataObjectInstance.name).join(', ');
-                worksheet2.getCell(rowIndex + i, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.action.name + ' (' + outputListString + ')';
+                let outputListString = currentAction.outputList.map(instance => instance.dataclass.name + ' ' + instance.name).join(', ');
+                worksheet2.getCell(rowIndex + i, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.activity.name + ' (' + outputListString + ')';
 
                 worksheet2.getCell(rowIndex + i, startColumn).border = {
                     top: {style: 'thin'},

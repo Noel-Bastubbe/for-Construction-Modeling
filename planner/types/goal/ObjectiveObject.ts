@@ -3,18 +3,18 @@ import {StateInstance} from "../executionState/StateInstance";
 
 export class ObjectiveObject {
     id: string;
-    dataObjectInstance: Instance;
+    instance: Instance;
     states: string[];
 
-    public constructor(id: string, dataObjectInstance: Instance, states: string[]) {
+    public constructor(id: string, instance: Instance, states: string[]) {
         this.id = id;
-        this.dataObjectInstance = dataObjectInstance;
+        this.instance = instance;
         this.states = states;
     }
 
-    public isMatchedBy(executionDataObjectInstance: StateInstance) {
-        return this.dataObjectInstance.dataclass == executionDataObjectInstance.dataObjectInstance.dataclass
-            && this.dataObjectInstance.name == executionDataObjectInstance.dataObjectInstance.name
-            && this.states.includes(executionDataObjectInstance.state);
+    public isMatchedBy(stateInstance: StateInstance) {
+        return this.instance.dataclass == stateInstance.instance.dataclass
+            && this.instance.name == stateInstance.instance.name
+            && this.states.includes(stateInstance.state);
     }
 }

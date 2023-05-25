@@ -6,12 +6,12 @@ import {Goal} from "./types/goal/Goal";
 export class Planner {
     startState: ExecutionState;
     goal: Goal;
-    actions: Activity[];
+    activities: Activity[];
 
-    public constructor(startState: ExecutionState, goal: Goal, actions: Activity[]) {
+    public constructor(startState: ExecutionState, goal: Goal, activities: Activity[]) {
         this.startState = startState;
         this.goal = goal;
-        this.actions = actions;
+        this.activities = activities;
     }
 
     public generatePlan(): Schedule {
@@ -20,11 +20,11 @@ export class Planner {
         while (queue.length > 0) {
             let node = queue.shift();
             if (this.goal.isFulfilledBy(node!)) {
-                return new Schedule(node!.actionHistory, node!.allExecutionDataObjectInstances().map(executionDataObjectInstance =>
-                    executionDataObjectInstance.dataObjectInstance), node!.resources
+                return new Schedule(node!.actionHistory, node!.allStateInstances().map(stateInstance =>
+                    stateInstance.instance), node!.resources
                 );
             }
-            let newNodes = node!.getSuccessors(this.actions);
+            let newNodes = node!.getSuccessors(this.activities);
             queue.push(...newNodes);
         }
         return new Schedule();

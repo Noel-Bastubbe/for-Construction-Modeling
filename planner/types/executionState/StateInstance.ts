@@ -1,11 +1,11 @@
 import {Instance} from "./Instance";
 
 export class StateInstance {
-    dataObjectInstance: Instance;
+    instance: Instance;
     state: string;
 
     public constructor(dataObjectInstance: Instance, state: string) {
-        this.dataObjectInstance = dataObjectInstance;
+        this.instance = dataObjectInstance;
         this.state = state;
     }
 }

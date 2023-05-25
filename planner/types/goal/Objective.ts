@@ -4,14 +4,14 @@ import {ExecutionState} from "../executionState/ExecutionState";
 
 export class Objective {
     id: string;
-    dataObjectNodes: ObjectiveObject[];
+    objectiveObjects: ObjectiveObject[];
     objectiveLinks: ObjectiveLink[];
     deadline: number | null;
 
-    public constructor(id: string, dataObjectNodes: ObjectiveObject[], links: ObjectiveLink[], deadline: number | null = null) {
+    public constructor(id: string, objectiveObjects: ObjectiveObject[], objectiveLinks: ObjectiveLink[], deadline: number | null = null) {
         this.id = id;
-        this.dataObjectNodes = dataObjectNodes;
-        this.objectiveLinks = links;
+        this.objectiveObjects = objectiveObjects;
+        this.objectiveLinks = objectiveLinks;
         this.deadline = deadline;
     }
 
@@ -19,8 +19,8 @@ export class Objective {
         if (this.deadline && executionState.time > this.deadline) {
             return false;
         }
-        for (let dataObjectNode of this.dataObjectNodes) {
-            if (!executionState.allExecutionDataObjectInstances().some(executionDataObjectInstance => dataObjectNode.isMatchedBy(executionDataObjectInstance))) {
+        for (let objectiveObject of this.objectiveObjects) {
+            if (!executionState.allStateInstances().some(stateInstance => objectiveObject.isMatchedBy(stateInstance))) {
                 return false;
             }
         }
