@@ -1,9 +1,9 @@
 import {Resource} from "../types/Resource";
 import {Role} from "../types/Role";
 
-let painter = new Role("painter");
-let picasso = new Resource("Picasso", [painter], 1);
-let tiler = new Role("tiler");
+let painter = new Role("1", "painter");
+let picasso = new Resource("1", "Picasso", [painter], 1);
+let tiler = new Role("2", "tiler");
 
 describe('satisfies', () => {
 

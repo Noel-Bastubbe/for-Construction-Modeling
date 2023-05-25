@@ -38,7 +38,7 @@ export class ExecutionState {
         let name: string = (this.allExecutionDataObjectInstances().filter(executionDataObjectInstance =>
             executionDataObjectInstance.dataObjectInstance.dataclass === dataclass
         ).length + 1).toString();
-        return new Instance(name, dataclass);
+        return new Instance(dataclass.name.toString() + "_" + name.toString(), name, dataclass);
     }
 
     public getSuccessors(actions: Activity[]): ExecutionState[] {

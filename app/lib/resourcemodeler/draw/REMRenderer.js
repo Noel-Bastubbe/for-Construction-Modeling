@@ -145,7 +145,7 @@ export default function REMRenderer(
       text += semantic.capacity;
     }
     text += '\nAvailability: ';
-    if (semantic.availabilityStart && semantic.availabilityEnd) {
+    if (!isNaN(parseInt(semantic.availabilityStart,10)) && !isNaN(parseInt(semantic.availabilityEnd, 10))) {
       text += semantic.availabilityStart + " - " + semantic.availabilityEnd;
     }
     text += '\nRoles: ';
