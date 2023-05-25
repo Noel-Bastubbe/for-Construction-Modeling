@@ -2,10 +2,12 @@ import {Instance} from "../executionState/Instance";
 import {StateInstance} from "../executionState/StateInstance";
 
 export class ObjectiveObject {
+    id: string;
     instance: Instance;
     states: string[];
 
-    public constructor(instance: Instance, states: string[]) {
+    public constructor(id: string, instance: Instance, states: string[]) {
+        this.id = id;
         this.instance = instance;
         this.states = states;
     }

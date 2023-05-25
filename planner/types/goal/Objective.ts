@@ -3,11 +3,13 @@ import {ObjectiveLink} from "./ObjectiveLink";
 import {ExecutionState} from "../executionState/ExecutionState";
 
 export class Objective {
+    id: string;
     objectiveObjects: ObjectiveObject[];
     objectiveLinks: ObjectiveLink[];
     deadline: number | null;
 
-    public constructor(objectiveObjects: ObjectiveObject[], objectiveLinks: ObjectiveLink[], deadline: number | null = null) {
+    public constructor(id: string, objectiveObjects: ObjectiveObject[], objectiveLinks: ObjectiveLink[], deadline: number | null = null) {
+        this.id = id;
         this.objectiveObjects = objectiveObjects;
         this.objectiveLinks = objectiveLinks;
         this.deadline = deadline;
