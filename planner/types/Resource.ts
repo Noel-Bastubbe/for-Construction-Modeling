@@ -8,7 +8,7 @@ export class Resource {
     availabilityStart: number;
     availabilityEnd: number;
 
-    public constructor(id:string, name: string, roles: Role[] = [], capacity: number, availabilityStart: number = 0, availabilityEnd: number = Infinity) {
+    public constructor(id: string, name: string, roles: Role[] = [], capacity: number, availabilityStart: number = 0, availabilityEnd: number = Infinity) {
         this.id = id;
         this.name = name;
         this.roles = roles;
@@ -18,6 +18,6 @@ export class Resource {
     }
 
     public satisfies(role: Role, NoP: number, time: number, duration: number): boolean {
-            return this.roles.includes(role) && NoP <= this.capacity && time >= this.availabilityStart && time + duration - 1 <= this.availabilityEnd;
+        return this.roles.includes(role) && NoP <= this.capacity && time >= this.availabilityStart && time + duration - 1 <= this.availabilityEnd;
     }
 }
