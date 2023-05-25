@@ -25,34 +25,34 @@ export class Activity {
         this.outputSet = outputSet;
     }
 
-    public getExecutionActions(executionState: ExecutionState): Action[] {
+    public getActions(executionState: ExecutionState): Action[] {
 
-        let executionActions: Action[] = [];
+        let actions: Action[] = [];
         let needsInput: boolean = this.inputSet.set.length > 0;
         let needsResources: boolean = this.role != null;
 
         if (!needsInput && !needsResources) {
-            executionActions.push(this.getExecutionActionForInput([], null, executionState));
+            actions.push(this.getActionForInput([], null, executionState));
         } else if (!needsInput && needsResources) {
             let possibleResources: Resource[] = this.getPossibleResources(executionState);
             for (let resource of possibleResources) {
-                executionActions.push(this.getExecutionActionForInput([], resource, executionState));
+                actions.push(this.getActionForInput([], resource, executionState));
             }
         } else if (needsInput && !needsResources) {
             let inputs: any[] = this.getPossibleInputs(executionState);
             for (let input of inputs) {
-                executionActions.push(this.getExecutionActionForInput([].concat(input), null, executionState));
+                actions.push(this.getActionForInput([].concat(input), null, executionState));
             }
         } else {
             let inputs: any[] = this.getPossibleInputs(executionState);
             let possibleResources: Resource[] = this.getPossibleResources(executionState);
             for (let input of inputs) {
                 for (let resource of possibleResources) {
-                    executionActions.push(this.getExecutionActionForInput([].concat(input), resource, executionState));
+                    actions.push(this.getActionForInput([].concat(input), resource, executionState));
                 }
             }
         }
-        return executionActions;
+        return actions;
     }
 
     private getPossibleResources(executionState: ExecutionState) {
@@ -60,18 +60,18 @@ export class Activity {
     }
 
     private getPossibleInputs(executionState: ExecutionState): any[] {
-        let possibleInstances: StateInstance[][] = [];
+        let possibleStateInstances: StateInstance[][] = [];
         for (let dataObjectReference of this.inputSet.set) {
-            let matchingInstances = executionState.availableStateInstances.filter(executionDataObjectInstance =>
-                dataObjectReference.isMatchedBy(executionDataObjectInstance)
+            let matchingStateInstances = executionState.availableStateInstances.filter(stateInstance =>
+                dataObjectReference.isMatchedBy(stateInstance)
             );
-            possibleInstances.push(matchingInstances);
+            possibleStateInstances.push(matchingStateInstances);
         }
-        return cartesianProduct(...possibleInstances);
+        return cartesianProduct(...possibleStateInstances);
     }
 
 
-    private getExecutionActionForInput(inputList: StateInstance[], resource: Resource | null, executionState: ExecutionState) {
+    private getActionForInput(inputList: StateInstance[], resource: Resource | null, executionState: ExecutionState) {
         let outputList = this.getOutputForInput(inputList, executionState);
         let addedLinks = this.getAddedLinks(inputList.map(input => input.instance), outputList.map(output => output.instance));
         return new Action(this, 0, resource, inputList, outputList, addedLinks);
@@ -79,28 +79,28 @@ export class Activity {
 
     private getOutputForInput(inputList: StateInstance[], executionState: ExecutionState): StateInstance[] {
         return this.outputSet.set.map(output => {
-            let instance: StateInstance | undefined = inputList.find(executionDataObjectInstance =>
-                executionDataObjectInstance.instance.dataclass === output.dataclass
+            let stateInstance: StateInstance | undefined = inputList.find(stateInstance =>
+                stateInstance.instance.dataclass === output.dataclass
             );
-            if (instance) {
-                return new StateInstance(instance.instance, output.state);
+            if (stateInstance) {
+                return new StateInstance(stateInstance.instance, output.state);
             } else {
-                let newDataObjectInstance: Instance = executionState.getNewDataObjectInstanceOfClass(output.dataclass);
-                return new StateInstance(newDataObjectInstance, output.state);
+                let newInstance: Instance = executionState.getNewInstanceOfClass(output.dataclass);
+                return new StateInstance(newInstance, output.state);
             }
         });
     }
 
     private getAddedLinks(inputList: Instance[], outputList: Instance[]): InstanceLink[] {
         let addedLinks: InstanceLink[] = [];
-        let addedObjects: Instance[] = this.getAddedObjects(inputList, outputList);
-        let readObjects: Instance[] = inputList.filter(inputEntry => !outputList.find(outputEntry => inputEntry.dataclass === outputEntry.dataclass));
-        let allObjects: Instance[] = outputList.concat(readObjects);
+        let addedInstances: Instance[] = this.getAddedInstances(inputList, outputList);
+        let readInstances: Instance[] = inputList.filter(inputEntry => !outputList.find(outputEntry => inputEntry.dataclass === outputEntry.dataclass));
+        let allInstances: Instance[] = outputList.concat(readInstances);
 
-        for (let addedObject of addedObjects) {
-            for (let object of allObjects) {
-                if (addedObject != object) {
-                    addedLinks.push(new InstanceLink(addedObject, object));
+        for (let addedInstance of addedInstances) {
+            for (let instance of allInstances) {
+                if (addedInstance != instance) {
+                    addedLinks.push(new InstanceLink(addedInstance, instance));
                 }
             }
         }
@@ -108,7 +108,7 @@ export class Activity {
         return addedLinks;
     }
 
-    private getAddedObjects(inputList: Instance[], outputList: Instance[]) {
+    private getAddedInstances(inputList: Instance[], outputList: Instance[]) {
         return outputList.filter(outputEntry => !inputList.find(inputEntry => inputEntry.dataclass === outputEntry.dataclass));
     }
 }

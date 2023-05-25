@@ -4,8 +4,8 @@ export class StateInstance {
     instance: Instance;
     state: string;
 
-    public constructor(dataObjectInstance: Instance, state: string) {
-        this.instance = dataObjectInstance;
+    public constructor(instance: Instance, state: string) {
+        this.instance = instance;
         this.state = state;
     }
 }
