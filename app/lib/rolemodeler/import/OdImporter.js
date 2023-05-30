@@ -6,7 +6,7 @@ import {getExternalLabelBounds, isLabelExternal} from '../util/LabelUtil';
 
 import {getLabel} from '../features/label-editing/LabelUtil';
 
-import {elementToString} from './Util';
+import {elementToString} from '../../frequentlyUsedFiles/import/Util.js';
 import {getMid} from 'diagram-js/lib/layout/LayoutUtil';
 
 
