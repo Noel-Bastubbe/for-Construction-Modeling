@@ -6,7 +6,7 @@ import {
     has
   } from 'min-dash';
     
-  import { getPropertyNames } from '../copy-paste/ModdleCopy';
+  import { getPropertyNames } from '../../../frequentlyUsedFiles/features/copy-paste/ModdleCopy.js';
   
   /**
    * @typedef {import('../modeling/ODFactory').default} ODFactory
