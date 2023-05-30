@@ -9,9 +9,11 @@ export const exportExecutionPlan = async (log: Schedule) => {
     let scheduledActions = log.scheduledActions;
 
     //sorts actions by start date
-    scheduledActions = scheduledActions.filter(action => action.activity.duration > 0).sort((action1, action2) => {
+    scheduledActions = scheduledActions.sort((action1, action2) => {
         return action1.start - action2.start;
     });
+
+    let scheduledActionsWithDuration = scheduledActions.filter(action => action.activity.duration > 0);
 
     //get deadline(=highest end number of all actions)
     let deadline = Math.max(...scheduledActions.map(o => o.end));
@@ -37,8 +39,8 @@ export const exportExecutionPlan = async (log: Schedule) => {
     });
 
     //loops through all actions and fills excel sheet
-    for (let i = 0; i < scheduledActions.length; i++) {
-        let currentAction = scheduledActions[i]
+    for (let i = 0; i < scheduledActionsWithDuration.length; i++) {
+        let currentAction = scheduledActionsWithDuration[i]
 
         //gets row (work space) in which action has to be written
         for (let i = 0; i < currentAction.outputList.length; i++) {
@@ -128,8 +130,8 @@ export const exportExecutionPlan = async (log: Schedule) => {
     });
 
     //loops through all actions and fills excel sheet
-    for (let i = 0; i < scheduledActions.length; i++) {
-        let currentAction = scheduledActions[i]
+    for (let i = 0; i < scheduledActionsWithDuration.length; i++) {
+        let currentAction = scheduledActionsWithDuration[i]
 
         //gets row (resource) in which action has to be written
         const resourceForActivity = currentAction.resource;
