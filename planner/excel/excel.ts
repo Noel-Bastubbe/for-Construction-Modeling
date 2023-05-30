@@ -18,8 +18,8 @@ export const exportExecutionPlan = async (log: Schedule) => {
 
     //Execution Plan (work places)
     const worksheet1 = workbook.addWorksheet('Execution Plan (work places)');
-    worksheet1.getCell(1, 1).value = 'Work place';
 
+    worksheet1.getCell(1, 1).value = 'Work place';
     //creates the time axis: first creates array with all numbers from 1 up to deadline, then writes the time units (1,...,deadline) as headers in the sheet
     let columnHeaders: Array<number> = [];
     for (let index = 0; index <= deadline; index++) {
@@ -95,6 +95,12 @@ export const exportExecutionPlan = async (log: Schedule) => {
     };
     worksheet1.getRow(1).font = {size: 14, bold: true};
     worksheet1.getColumn(1).font = {size: 14, bold: true};
+
+    worksheet1.columns.forEach(column => {
+        const lengths = column.values!.map(v => v!.toString().length);
+        const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+        column.width = maxLength < 15 ? 15 : maxLength;
+    });
 
 
     //Execution Plan (resources)
@@ -178,17 +184,62 @@ export const exportExecutionPlan = async (log: Schedule) => {
     worksheet2.getRow(1).font = {size: 14, bold: true};
     worksheet2.getColumn(1).font = {size: 14, bold: true};
 
-    worksheet1.columns.forEach(column => {
-        const lengths = column.values!.map(v => v!.toString().length);
-        const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
-        column.width = maxLength < 15 ? 15 : maxLength;
-    });
-
     worksheet2.columns.forEach(column => {
         const lengths = column.values!.map(v => v!.toString().length);
         const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
         column.width = maxLength < 20 ? 20 : maxLength;
     });
+
+    //Execution Plan (all actions)
+    const worksheet3 = workbook.addWorksheet('Execution Plan (all actions)');
+
+    worksheet3.getCell(1, 1).value = 'Action';
+    worksheet3.getCell(1, 2).value = 'Input';
+    worksheet3.getCell(1, 3).value = 'Output';
+    worksheet3.getCell(1, 4).value = 'Start Time';
+    worksheet3.getCell(1, 5).value = 'End Time';
+    worksheet3.getCell(1, 6).value = 'Role';
+    worksheet3.getCell(1, 7).value = 'Resource';
+    worksheet3.getCell(1, 8).value = 'Capacity';
+
+    //loops through all actions and fills excel sheet
+    for (let i = 0; i < scheduledActions.length; i++) {
+        let currentAction = scheduledActions[i]
+
+        //writes activity and further information in cells, ordered by start date
+        worksheet3.getCell(i + 2, 1).value = currentAction.activity.name;
+        //TODO
+        worksheet3.getCell(i + 2, 2).value = currentAction.inputList.map(instance => instance.dataclass.name + ':' + instance.name + '[' /*+ instance.*/ + ']').join(', ');
+        worksheet3.getCell(i + 2, 3).value = currentAction.outputList.map(instance => instance.dataclass.name + ':' + instance.name).join(', ');
+        worksheet3.getCell(i + 2, 4).value = currentAction.start;
+        worksheet3.getCell(i + 2, 5).value = currentAction.end;
+        worksheet3.getCell(i + 2, 6).value = currentAction.activity.role?.name;
+        worksheet3.getCell(i + 2, 7).value = currentAction.resource?.name;
+        worksheet3.getCell(i + 2, 8).value = currentAction.capacity;
+    }
+
+    //styling
+    worksheet3.columns.forEach(it => {
+        it.border = {
+            left: {style: "thick"}
+        }
+    });
+    worksheet3.getRow(1).border = {
+        bottom: {style: "thick"}
+    };
+    worksheet3.getCell(1, 1).border = {
+        right: {style: "thick"},
+        bottom: {style: "thick"}
+    };
+    worksheet3.getRow(1).font = {size: 14, bold: true};
+    worksheet3.getColumn(1).font = {size: 14, bold: true};
+
+    worksheet3.columns.forEach(column => {
+        const lengths = column.values!.map(v => v!.toString().length);
+        const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+        column.width = maxLength < 20 ? 20 : maxLength;
+    });
+
 
     const buffer = await workbook.xlsx.writeBuffer();
     // Create a Blob from the buffer
