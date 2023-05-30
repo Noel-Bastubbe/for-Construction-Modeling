@@ -42,7 +42,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
 
         //gets row (work space) in which action has to be written
         for (let i = 0; i < currentAction.outputList.length; i++) {
-            const workSpaceForActivity = currentAction.outputList[i].dataclass.name + ' ' + currentAction.outputList[i].name;
+            const workSpaceForActivity = currentAction.outputList[i].instance.dataclass.name + ' ' + currentAction.outputList[i].instance.name;
             let rowIndex = null;
             worksheet1.eachRow((row, rowNumber) => {
                 if (row.getCell(1).value === workSpaceForActivity) {
@@ -146,7 +146,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
                 const startColumn = currentAction.start + 2;
                 const endColumn = currentAction.end + 1;
                 worksheet2.mergeCells(rowIndex + i, startColumn, rowIndex + i, endColumn)
-                let outputListString = currentAction.outputList.map(instance => instance.dataclass.name + ' ' + instance.name).join(', ');
+                let outputListString = currentAction.outputList.map(stateInstance => stateInstance.instance.dataclass.name + ' ' + stateInstance.instance.name).join(', ');
                 worksheet2.getCell(rowIndex + i, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.activity.name + ' (' + outputListString + ')';
 
                 worksheet2.getCell(rowIndex + i, startColumn).border = {
@@ -208,9 +208,8 @@ export const exportExecutionPlan = async (log: Schedule) => {
 
         //writes activity and further information in cells, ordered by start date
         worksheet3.getCell(i + 2, 1).value = currentAction.activity.name;
-        //TODO
-        worksheet3.getCell(i + 2, 2).value = currentAction.inputList.map(instance => instance.dataclass.name + ':' + instance.name + '[' /*+ instance.*/ + ']').join(', ');
-        worksheet3.getCell(i + 2, 3).value = currentAction.outputList.map(instance => instance.dataclass.name + ':' + instance.name).join(', ');
+        worksheet3.getCell(i + 2, 2).value = currentAction.inputList.map(stateInstance => stateInstance.instance.dataclass.name + ':' + stateInstance.instance.name + '[' + stateInstance.state + ']').join(', ');
+        worksheet3.getCell(i + 2, 3).value = currentAction.outputList.map(stateInstance => stateInstance.instance.dataclass.name + ':' + stateInstance.instance.name + '[' + stateInstance.state + ']').join(', ');
         worksheet3.getCell(i + 2, 4).value = currentAction.start;
         worksheet3.getCell(i + 2, 5).value = currentAction.end;
         worksheet3.getCell(i + 2, 6).value = currentAction.activity.role?.name;
@@ -219,20 +218,22 @@ export const exportExecutionPlan = async (log: Schedule) => {
     }
 
     //styling
-    worksheet3.columns.forEach(it => {
-        it.border = {
-            left: {style: "thick"}
-        }
-    });
     worksheet3.getRow(1).border = {
         bottom: {style: "thick"}
     };
-    worksheet3.getCell(1, 1).border = {
-        right: {style: "thick"},
-        bottom: {style: "thick"}
-    };
+
     worksheet3.getRow(1).font = {size: 14, bold: true};
     worksheet3.getColumn(1).font = {size: 14, bold: true};
+
+    for(let i = 1; i <= scheduledActions.length + 1; i++){
+        if(i % 2 === 0){
+            worksheet3.getRow(i).fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: {argb: 'E0E0E0'},
+            };
+        }
+    }
 
     worksheet3.columns.forEach(column => {
         const lengths = column.values!.map(v => v!.toString().length);

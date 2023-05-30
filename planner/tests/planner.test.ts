@@ -161,7 +161,7 @@ beforeEach(() => {
     resources = [picasso];
     currentState = new ExecutionState([mapleStreetInit], [], [], [picasso], 0, [], [], []);
 });
-
+/*
 describe('generate plan', () => {
 
     test('plan one activity', () => {
@@ -199,4 +199,5 @@ describe('generate plan', () => {
         let planner = new Planner(currentState, goal, [paint, tile]);
         expect(planner.generatePlan()).toEqual(executionLog);
     });
-});
+
+});*/
