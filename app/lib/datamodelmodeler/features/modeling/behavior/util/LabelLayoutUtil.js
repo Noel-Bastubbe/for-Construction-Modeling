@@ -1,6 +1,6 @@
 import {getAngle, getDistancePointPoint, rotateVector} from '../../../../../frequentlyUsedFiles/features/modeling/behavior/util/GeometricUtil';
 
-import {getAttachment} from './LineAttachmentUtil';
+import {getAttachment} from '../../../../../frequentlyUsedFiles/features/modeling/behavior/util/LineAttachmentUtil';
 
 import {roundPoint} from 'diagram-js/lib/layout/LayoutUtil';
 

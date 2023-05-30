@@ -1,6 +1,6 @@
 import {getMid} from 'diagram-js/lib/layout/LayoutUtil';
 
-import lineIntersect from '../../../../datamodelmodeler/features/modeling/behavior/util/LineIntersect';
+import lineIntersect from '../behavior/util/LineIntersect.js';
 
 
 /**
