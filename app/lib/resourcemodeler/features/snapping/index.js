@@ -1,4 +1,4 @@
-import ODCreateMoveSnapping from './ODCreateMoveSnapping';
+import ODCreateMoveSnapping from '../../../frequentlyUsedFiles/features/snapping/ODCreateMoveSnapping.js';
 import SnappingModule from 'diagram-js/lib/features/snapping';
 import ObjectConnectSnapping from './ObjectConnectSnapping';
 
