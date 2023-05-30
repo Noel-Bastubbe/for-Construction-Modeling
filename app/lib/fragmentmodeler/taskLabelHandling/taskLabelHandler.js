@@ -37,6 +37,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 this._dropdownContainer.currentElement = element;
 
                 const updateRoleSelection = () => {
+                    //this._rolesDropdown.getEntries().forEach(entry => entry.setSelected(resource.roles?.find(role => role === entry.option)));
                     this._roleDropdown.getEntries().forEach(entry => entry.setSelected(activity.role === entry.option));
                 }
 
@@ -65,6 +66,9 @@ export default class TaskLabelHandler extends CommandInterceptor {
                         this._fragmentModeler._roles || [],
                         (role, element) => {
                             this.updateRole(role, element);
+                            if(element.businessObject.role === undefined){
+                                this._NoPDropdown.clearInput()
+                            }
                             updateRoleSelection();
                         },
                         element
@@ -179,7 +183,13 @@ export default class TaskLabelHandler extends CommandInterceptor {
     }
 
     updateRole(newRole, element) {
-        element.businessObject.role = newRole;
+        const fmObject = element.businessObject;
+        if (fmObject.role === newRole) {
+            fmObject.role = undefined;
+            fmObject.NoP = undefined;
+        } else {
+            fmObject.role = newRole;
+        }
         this._eventBus.fire('element.changed', {
             element
         });
