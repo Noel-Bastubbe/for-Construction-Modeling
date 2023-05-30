@@ -8,7 +8,7 @@ import {getExternalLabelMid, hasExternalLabel, isLabel, isLabelExternal} from '.
 
 import {getLabel} from '../../label-editing/LabelUtil';
 
-import {getLabelAdjustment} from './util/LabelLayoutUtil';
+import {getLabelAdjustment} from '../../../../frequentlyUsedFiles/features/modeling/behavior/util/LabelLayoutUtil.js';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 
