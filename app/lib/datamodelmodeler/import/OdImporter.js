@@ -215,7 +215,6 @@ OdImporter.prototype.addLabel = function (semantic, element) {
         labelTarget: element,
         labelAttribute: semantic.labelAttribute,
         type: 'label',
-        // hidden: element.hidden || !getLabel(element),
         hidden: element.hidden || false,
         x: Math.round(bounds.x),
         y: Math.round(bounds.y),

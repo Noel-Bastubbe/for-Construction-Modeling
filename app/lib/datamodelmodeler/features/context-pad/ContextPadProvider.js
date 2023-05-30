@@ -127,21 +127,6 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
     });
   }
 
-  /*
-  if (element.type === 'od:Association') {
-
-    assign(actions, {
-      'change': {
-          group: 'edit',
-          className: 'bpmn-icon-screw-wrench',
-          title: translate('Change type'),
-          action: {
-            click: changeToInheritance
-          }
-    }});
-  }
-  */
-
   createDeleteEntry(actions);
   
   if (element.type === 'od:Class') {
@@ -151,10 +136,6 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
   }
 
   return actions;
-
-  function changeToInheritance() {
-
-  }
 
   function removeElement() {
     modeling.removeElements([ element ]);

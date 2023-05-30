@@ -85,13 +85,7 @@ import {
   ReplaceMenuProvider.prototype.getPopupMenuEntries = function(target) {
   
     var businessObject = target.businessObject;
-  
-    var rules = this._rules;
-  
-    if (isArray(target) || !rules.allowed('shape.replace', { element: target })) {
-      return {};
-    }
-  
+
     if (is(businessObject, 'od:Association')) {
       return this._createConnectionEntries(target, replaceOptions.CONNECTION);
     }

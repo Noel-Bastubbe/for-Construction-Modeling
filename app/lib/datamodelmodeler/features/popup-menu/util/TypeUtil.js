@@ -1,11 +1,6 @@
 import {
     getBusinessObject
   } from '../../../util/ModelUtil';
-  
-  /*import {
-    isExpanded
-  } from '../../../util/DiUtil';
-  */
 
   /**
    * @typedef {import('../../../model/Types').Element} Element
@@ -42,12 +37,6 @@ import {
         // coherse to <false>
         !!target.triggeredByEvent === !!businessObject.triggeredByEvent
       );
-  
-      /*var isExpandedEqual = (
-        target.isExpanded === undefined ||
-        target.isExpanded === isExpanded(element)
-      );
-      */
   
       return !isTypeEqual || !isEventDefinitionEqual || !isTriggeredByEventEqual /*|| !isExpandedEqual*/;
     };
