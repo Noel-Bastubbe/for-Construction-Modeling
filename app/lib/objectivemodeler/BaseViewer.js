@@ -10,7 +10,7 @@ import Moddle from './moddle';
 import inherits from 'inherits';
 
 import {importOdDiagram} from './import/Importer';
-import {BPMNIO_IMG, open as openPoweredBy} from './util/PoweredByUtil';
+import {BPMNIO_IMG, open as openPoweredBy} from '../frequentlyUsedFiles/util/PoweredByUtil.js';
 
 
 /**
