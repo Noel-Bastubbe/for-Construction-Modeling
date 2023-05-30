@@ -1,5 +1,5 @@
 import AdaptiveLabelPositioningBehavior from './AdaptiveLabelPositioningBehavior';
-import AppendBehavior from './AppendBehavior';
+import AppendBehavior from '../../../../frequentlyUsedFiles/features/modeling/behavior/AppendBehavior';
 import FixHoverBehavior from '../../../../frequentlyUsedFiles/features/modeling/behavior/FixHoverBehavior';
 import ImportDockingFix from '../../../../frequentlyUsedFiles/features/modeling/behavior/ImportDockingFix';
 import LabelBehavior from './LabelBehavior';
