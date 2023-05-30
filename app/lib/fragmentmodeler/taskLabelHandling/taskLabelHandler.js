@@ -37,7 +37,6 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 this._dropdownContainer.currentElement = element;
 
                 const updateRoleSelection = () => {
-                    //this._rolesDropdown.getEntries().forEach(entry => entry.setSelected(resource.roles?.find(role => role === entry.option)));
                     this._roleDropdown.getEntries().forEach(entry => entry.setSelected(activity.role === entry.option));
                 }
 
