@@ -25,7 +25,7 @@ import {getMid, roundPoint} from 'diagram-js/lib/layout/LayoutUtil';
 
 import {delta} from 'diagram-js/lib/util/PositionUtil';
 
-import {getDistancePointLine, perpendicularFoot} from './util/GeometricUtil';
+import {getDistancePointLine, perpendicularFoot} from '../../../../frequentlyUsedFiles/features/modeling/behavior/util/GeometricUtil.js';
 
 var DEFAULT_LABEL_DIMENSIONS = {
   width: 90,

@@ -1,4 +1,4 @@
-import {getAngle, getDistancePointPoint, rotateVector} from './GeometricUtil';
+import {getAngle, getDistancePointPoint, rotateVector} from '../../../../../frequentlyUsedFiles/features/modeling/behavior/util/GeometricUtil';
 
 import {getAttachment} from './LineAttachmentUtil';
 
