@@ -123,7 +123,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
     //writes resources in first column
     let index = 2;
     resources.forEach((value) => {
-        for(let i = 0; i < value.capacity; i++){
+        for (let i = 0; i < value.capacity; i++) {
             worksheet2.getCell(index + i, 1).value = value.name;
         }
         index += value.capacity;
@@ -144,7 +144,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
 
         //writes activity and further information in cells depending on start and end date
         if (rowIndex !== null) {
-            for(let i = 0; i < currentAction.capacity; i++){
+            for (let i = 0; i < currentAction.capacity; i++) {
                 const startColumn = currentAction.start + 2;
                 const endColumn = currentAction.end + 1;
                 worksheet2.mergeCells(rowIndex + i, startColumn, rowIndex + i, endColumn)
@@ -227,8 +227,8 @@ export const exportExecutionPlan = async (log: Schedule) => {
     worksheet3.getRow(1).font = {size: 14, bold: true};
     worksheet3.getColumn(1).font = {size: 14, bold: true};
 
-    for(let i = 1; i <= scheduledActions.length + 1; i++){
-        if(i % 2 === 0){
+    for (let i = 1; i <= scheduledActions.length + 1; i++) {
+        if (i % 2 === 0) {
             worksheet3.getRow(i).fill = {
                 type: 'pattern',
                 pattern: 'solid',
