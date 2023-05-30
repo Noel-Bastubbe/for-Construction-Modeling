@@ -108,7 +108,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                         this.updateRole(newRole,element);
                         populateRoleDropdown();
                     }
-                    if (newNoPInput !== activity.NoP && newNoPInput > 0) {
+                    if (newNoPInput !== activity.NoP && newNoPInput > 0 && activity.role !== undefined) {
                         this.updateNoP(newNoPInput,element);
                         populateNoPDropdown();
                     }
