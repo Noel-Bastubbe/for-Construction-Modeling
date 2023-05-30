@@ -1,5 +1,5 @@
 import AutoPlaceBehavior from './AutoPlaceBehavior';
-import LayoutConnectionBehavior from './LayoutConnectionBehavior';
+import LayoutConnectionBehavior from '../../../../frequentlyUsedFiles/features/grid-snapping/LayoutConnectionBehavior.js';
 
 export default {
   __init__: [
