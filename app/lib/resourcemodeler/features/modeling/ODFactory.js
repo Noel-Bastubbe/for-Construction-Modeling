@@ -1,6 +1,6 @@
 import {assign, map, pick,} from 'min-dash';
 
-import {isAny} from './util/ModelingUtil';
+import {isAny} from '../../../frequentlyUsedFiles/features/modeling/ModelingUtil.js';
 
 import {is} from '../../../frequentlyUsedFiles/util/ModelUtil.js';
 

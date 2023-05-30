@@ -7,7 +7,7 @@ import {is} from '../../../frequentlyUsedFiles/util/ModelUtil.js';
 import {isLabel} from '../../util/LabelUtil';
 
 import RuleProvider from 'diagram-js/lib/features/rules/RuleProvider';
-import {isAny} from '../modeling/util/ModelingUtil';
+import {isAny} from '../../../frequentlyUsedFiles/features/modeling/ModelingUtil.js';
 
 
 /**

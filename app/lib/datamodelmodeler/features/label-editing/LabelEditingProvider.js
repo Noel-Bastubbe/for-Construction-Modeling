@@ -2,7 +2,7 @@ import {assign} from 'min-dash';
 
 import {getLabel, getLabelAttr} from './LabelUtil';
 
-import {isAny} from '../modeling/util/ModelingUtil';
+import {isAny} from '../../../frequentlyUsedFiles/features/modeling/ModelingUtil.js';
 
 import {getExternalLabelMid, hasExternalLabel, isLabel, isLabelExternal} from '../../util/LabelUtil';
 import {is} from '../../../frequentlyUsedFiles/util/ModelUtil.js';

@@ -2,7 +2,7 @@ import {mid, setSnapped} from 'diagram-js/lib/features/snapping/SnapUtil';
 
 import {isCmd} from 'diagram-js/lib/features/keyboard/KeyboardUtil';
 
-import {isAny} from '../modeling/util/ModelingUtil';
+import {isAny} from '../../../frequentlyUsedFiles/features/modeling/ModelingUtil.js';
 
 import {some} from 'min-dash';
 

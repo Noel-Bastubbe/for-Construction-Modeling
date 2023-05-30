@@ -2,7 +2,7 @@ import inherits from 'inherits';
 
 import OrderingProvider from 'diagram-js/lib/features/ordering/OrderingProvider';
 
-import {isAny} from '../modeling/util/ModelingUtil';
+import {isAny} from '../../../frequentlyUsedFiles/features/modeling/ModelingUtil.js';
 
 import {find, findIndex} from 'min-dash';
 
