@@ -40,7 +40,7 @@ ODFactory.prototype._ensureId = function(element) {
 
 ODFactory.prototype.create = function(type, attrs) {
   if (type === 'od:Association') {
-    attrs = assign({sourceCardinality: '0..*', targetCardinality: '0..*'}, attrs);
+    attrs = assign({sourceCardinality: '0..*', targetCardinality: '0..*', inheritance: false}, attrs);
   }
   var element = this._model.create(type, attrs || {});
   if (type === 'od:Class') {

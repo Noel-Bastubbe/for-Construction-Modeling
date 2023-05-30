@@ -103,8 +103,8 @@ export class Action {
         let oldActionHistory = executionState.scheduledActions;
         return oldActionHistory.concat(
             new ScheduledAction(this.activity, executionState.time - this.activity.duration, executionState.time, this.resource, this.activity.NoP,
-                this.inputList.map(stateInstance => stateInstance.instance),
-                this.outputList.map(stateInstance => stateInstance.instance)
+                this.inputList.slice(),
+                this.outputList.slice()
             )
         );
     }

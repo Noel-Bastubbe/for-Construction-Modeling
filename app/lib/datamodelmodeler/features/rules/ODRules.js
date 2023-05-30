@@ -194,11 +194,11 @@ function nonExistingOrLabel(element) {
   return !element || isLabel(element);
 }
 
-
-function canConnect(source, target) {
+  function canConnect(source, target) {
   if (nonExistingOrLabel(source) || nonExistingOrLabel(target)) {
     return null;
   }
+
   if (canConnectLink(source, target)) {
     return { type: 'od:Association' };
   }

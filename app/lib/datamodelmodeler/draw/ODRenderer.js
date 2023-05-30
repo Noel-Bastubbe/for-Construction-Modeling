@@ -270,16 +270,16 @@ export default function ODRenderer(
     return str.replace(/[^0-9a-zA-z]+/g, '_');
   }
 
-  function createMarker(id, type, fill, stroke) {
+  function createMarker(id, fill, stroke) {
     var linkEnd = svgCreate('path');
     svgAttr(linkEnd, { d: 'M 1 5 L 11 10 L 1 15 Z' });
 
     addMarker(id, {
       element: linkEnd,
       ref: { x: 11, y: 10 },
-      scale: 0.5,
+      scale: 1,
       attrs: {
-        fill: stroke,
+        fill: fill,
         stroke: stroke
       }
     });
@@ -311,6 +311,15 @@ export default function ODRenderer(
         strokeLinejoin: 'round',
         stroke: getStrokeColor(element, defaultStrokeColor)
       };
+
+      if (element.businessObject.inheritance == true) {
+        var attrs = {
+          strokeLinejoin: 'round',
+          markerEnd: marker('white', 'black'),
+          stroke: getStrokeColor(element, defaultStrokeColor)
+        };
+      }
+
       return drawPath(parentGfx, pathData, attrs);
     },
     'od:TextBox': function(parentGfx, element) {

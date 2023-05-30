@@ -45,7 +45,7 @@ export default function ObjectConnectSnapping(eventBus) {
     }
 
     if (hover && isAnyType(canExecute, [
-      'od:Association',
+      'od:Association'
     ])) {
       context.connectionStart = mid(start);
 
