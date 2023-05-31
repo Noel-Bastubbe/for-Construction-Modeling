@@ -1,8 +1,6 @@
 import {is} from '../../util/Util';
 
-// TODO candidate for common module
 import {asTRBL, getMid,} from 'diagram-js/lib/layout/LayoutUtil';
-
 import {
     findFreePosition,
     generateGetNextPosition,
@@ -13,14 +11,13 @@ export function getNewShapePosition(source, element) {
 	if (is(element, 'dep:Objective')) {
 		return getFlowNodePosition(source, element);
 	}
-}
+};
 
 /**
  * Always try to place element right of source;
  * compute actual distance from previous nodes in flow.
  */
 export function getFlowNodePosition(source, element) {
-
 	const sourceTrbl = asTRBL(source);
 	const sourceMid = getMid(source);
 
@@ -47,7 +44,7 @@ export function getFlowNodePosition(source, element) {
 	};
 
 	return findFreePosition(source, element, position, generateGetNextPosition(nextPositionDirection));
-}
+};
 
 function getVerticalDistance(orientation, minDistance) {
 	if (orientation.indexOf('top') != -1) {
@@ -57,4 +54,4 @@ function getVerticalDistance(orientation, minDistance) {
 	} else {
 		return 0;
 	}
-}
+};

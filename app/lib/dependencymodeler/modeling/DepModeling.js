@@ -1,5 +1,4 @@
 import inherits from 'inherits';
-
 import BaseModeling from 'diagram-js/lib/features/modeling/Modeling';
 
 export default function DepModeling(eventBus, elementFactory, commandStack) {
@@ -17,7 +16,7 @@ export default function DepModeling(eventBus, elementFactory, commandStack) {
         }
         context.descriptor.businessObject = elementFactory.createBusinessObject(copiedBusinessObject.$type, newAttrs);
     });
-}
+};
 
 inherits(DepModeling, BaseModeling);
 
@@ -45,14 +44,10 @@ DepModeling.prototype.getHandlers = function () {
 
 function UpdateLabelHandler() {
 
-}
+};
 
 UpdateLabelHandler.prototype.execute = function (context) {
     var { element, newLabel } = context;
     element.businessObject.name = newLabel;
     return element;
-}
-
-UpdateLabelHandler.prototype.revert = function (context) {
-    //TODO implement at some point
-}
+};

@@ -1,14 +1,14 @@
 import {assign} from 'min-dash';
 import inherits from 'inherits';
-import BaseElementFactory from 'diagram-js/lib/core/ElementFactory';
 import Ids from 'ids';
+import BaseElementFactory from 'diagram-js/lib/core/ElementFactory';
 
 export default function DepElementFactory(moddle, elementRegistry) {
     BaseElementFactory.call(this);
     this._moddle = moddle;
     this._elementRegistry = elementRegistry;
     this._ids = new Ids();
-}
+};
 
 inherits(DepElementFactory, BaseElementFactory);
 
@@ -28,6 +28,7 @@ DepElementFactory.prototype.createBusinessObject = function (type, attrs) {
     } else if(this._ids.assigned(element.id)) {
         throw new Error('Cannot create element, id "' + element.id + '" already exists');
     }
+
     return element;
 };
 
@@ -36,14 +37,13 @@ DepElementFactory.prototype.baseCreateShape = BaseElementFactory.prototype.creat
 
 DepElementFactory.prototype.createShape = function(attrs) {
     attrs = assign(this.defaultSizeForType(attrs.type), attrs);
+
     return this.baseCreateShape(attrs);
-}
+};
 
 DepElementFactory.prototype.create = function (elementType, attrs) {
-
     attrs = attrs || {};
     attrs = assign(this.defaultSizeForType(attrs.type), attrs);
-
     var businessObject = attrs.businessObject;
 
     if (!businessObject) {
@@ -55,7 +55,6 @@ DepElementFactory.prototype.create = function (elementType, attrs) {
         delete businessAttrs.height;
         businessObject = this.createBusinessObject(businessAttrs.type, businessAttrs);
     }
-
     attrs = assign({
         businessObject: businessObject,
         id: businessObject.id
@@ -64,6 +63,6 @@ DepElementFactory.prototype.create = function (elementType, attrs) {
     return this.baseCreate(elementType, attrs);
 };
 
-DepElementFactory.prototype.defaultSizeForType = function (type) {
+DepElementFactory.prototype.defaultSizeForType = function () {
     return { width: 100, height: 100 };
-}
+};

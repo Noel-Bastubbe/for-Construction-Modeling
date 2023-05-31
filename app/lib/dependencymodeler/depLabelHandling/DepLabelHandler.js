@@ -1,8 +1,9 @@
-import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
 import getDropdown from "../../util/Dropdown";
 import {appendOverlayListeners} from "../../util/HtmlUtil";
 import {is} from "../../util/Util";
 import ObjectiveEvents from "../../objectivemodeler/ObjectiveEvents";
+
+import CommandInterceptor from "diagram-js/lib/command/CommandInterceptor";
 
 export default class DepLabelHandler extends CommandInterceptor {
     constructor(eventBus, modeling, directEditing, overlays, dependencyModeler) {
@@ -42,7 +43,7 @@ export default class DepLabelHandler extends CommandInterceptor {
                         element
                     );
                     this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",objective.name);
-                }
+                };
                 const populateTimeDropdown = () => {
                     this._timeDropdown.populate(
                         [],
@@ -52,11 +53,11 @@ export default class DepLabelHandler extends CommandInterceptor {
                         element
                     );
                     this._timeDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",objective.date);
-                }
+                };
                 populateNameDropdown();
                 populateTimeDropdown();
 
-                this._dropdownContainer.confirm = (event) => {
+                this._dropdownContainer.confirm = () => {
                     const newNameInput = this._nameDropdown.getInputValue();
                     const newTimeInput = this._timeDropdown.getInputValue();
                     let needUpdate = false;
@@ -74,7 +75,7 @@ export default class DepLabelHandler extends CommandInterceptor {
                         this._nameDropdown.focusInput();
                         this._timeDropdown.focusInput();
                     }
-                }
+                };
 
                 let shouldBlockNextClick = e.type === 'create.end';
                 this._dropdownContainer.handleClick = (event) => {
@@ -90,7 +91,7 @@ export default class DepLabelHandler extends CommandInterceptor {
                         this._dropdownContainer.confirm();
                     }
                     return true;
-                }
+                };
 
                 this._dropdownContainer.close = () => {
                     if (this._overlayId) {
@@ -99,7 +100,7 @@ export default class DepLabelHandler extends CommandInterceptor {
                     }
                     this._dropdownContainer.currentElement = undefined;
                     this._currentDropdownTarget = undefined;
-                }
+                };
 
                 const closeOverlay = appendOverlayListeners(this._dropdownContainer);
                 eventBus.once('element.contextmenu', event => {
@@ -122,7 +123,7 @@ export default class DepLabelHandler extends CommandInterceptor {
                 this._currentDropdownTarget = element.businessObject;
             }
         });
-    }
+    };
 
     updateName(newName, element) {
         element.businessObject.name = newName;
@@ -132,15 +133,15 @@ export default class DepLabelHandler extends CommandInterceptor {
         this._eventBus.fire(ObjectiveEvents.OBJECTIVE_RENAMED, {
             objective: element
         });
-    }
+    };
 
     updateTime(newTime, element) {
         element.businessObject.date = newTime;
         this._eventBus.fire('element.changed', {
             element
         });
-    }
-}
+    };
+};
 
 DepLabelHandler.$inject = [
     'eventBus',

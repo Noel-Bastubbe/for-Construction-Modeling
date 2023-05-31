@@ -1,20 +1,15 @@
 import inherits from 'inherits';
-
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
-
 import {remove as collectionRemove} from 'diagram-js/lib/util/Collections';
 
-
 export default function DepUpdater(eventBus, connectionDocking) {
-
     CommandInterceptor.call(this, eventBus);
     this._connectionDocking = connectionDocking;
     self = this;
 
-    // connection cropping //////////////////////
+    // connection cropping 
     // crop connection ends during create/update
     function cropConnection(e) {
-
         var context = e.context,
             hints = context.hints || {},
             connection = context.connection;
@@ -23,7 +18,7 @@ export default function DepUpdater(eventBus, connectionDocking) {
             connection.waypoints = self.connectionWaypoints(connection.source, connection.target);
             context.cropped = true;
         }
-    }
+    };
 
     this.executed([
         'connection.layout',
@@ -74,7 +69,7 @@ export default function DepUpdater(eventBus, connectionDocking) {
         businessObject.set('x', x);
         businessObject.set('y', y);
     });
-}
+};
 
 function reflectiveEdge(element) {
     var { x, y, width, height } = element;
@@ -87,17 +82,16 @@ function reflectiveEdge(element) {
         { x: topRight.x + dx, y: topRight.y + dy },
         { x: centerP.x + dx, y: centerP.y + dy }
     ];
-}
+};
 
 function linkToBusinessObjectParent(element) {
     var parentShape = element.parent;
-
     var businessObject = element.businessObject,
         parentBusinessObject = parentShape && parentShape.businessObject;
 
     parentBusinessObject.get('Elements').push(businessObject);
     businessObject.$parent = parentBusinessObject;
-}
+};
 
 function removeFromBusinessObjectParent(element) {
     var businessObject = element.businessObject,
@@ -105,7 +99,7 @@ function removeFromBusinessObjectParent(element) {
 
     collectionRemove(parentBusinessObject.get('Elements'), businessObject);
     businessObject.$parent = undefined;
-}
+;}
 
 inherits(DepUpdater, CommandInterceptor);
 
@@ -114,13 +108,12 @@ DepUpdater.$inject = [
     'connectionDocking'
 ];
 
-//TODO move to common utils
 function center(shape) {
     return {
       x: shape.x + shape.width / 2,
       y: shape.y + shape.height / 2
     };
-}
+};
 
 DepUpdater.prototype.connectionWaypoints = function(source, target) {
     var connection = {source, target};
@@ -132,4 +125,4 @@ DepUpdater.prototype.connectionWaypoints = function(source, target) {
     }
     connection.waypoints = this._connectionDocking.getCroppedWaypoints(connection);
     return connection.waypoints;
-}
+};

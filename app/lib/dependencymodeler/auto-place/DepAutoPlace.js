@@ -7,7 +7,7 @@ export default function AutoPlace(eventBus) {
 
         return getNewShapePosition(source, shape);
     });
-}
+};
 
 AutoPlace.$inject = [
     'eventBus'

@@ -1,35 +1,31 @@
+import DepLabelHandling from "./depLabelHandling";
+import DepPaletteModule from './palette';
+import DepDrawModule from './draw';
+import DepRulesModule from './rules';
+import DepModelingModule from './modeling';
+import DepAutoPlaceModule from './auto-place';
+import DepModdle from './moddle';
+import {nextPosition, root} from '../util/Util';
+import KeyboardModule from '../common/keyboard';
+import EditorActionsModule from '../common/editor-actions';
+
 import inherits from 'inherits';
-import {groupBy} from 'min-dash'
-
+import {groupBy} from 'min-dash';
 import Diagram from 'diagram-js';
-
 import ConnectModule from 'diagram-js/lib/features/connect';
 import ConnectionPreviewModule from 'diagram-js/lib/features/connection-preview';
 import ContextPadModule from 'diagram-js/lib/features/context-pad';
 import CreateModule from 'diagram-js/lib/features/create';
-import DepLabelHandling from "./depLabelHandling";
 import LassoToolModule from 'diagram-js/lib/features/lasso-tool';
 import ModelingModule from 'diagram-js/lib/features/modeling';
 import MoveCanvasModule from 'diagram-js/lib/navigation/movecanvas';
 import MoveModule from 'diagram-js/lib/features/move';
 import OutlineModule from 'diagram-js/lib/features/outline';
 import PaletteModule from 'diagram-js/lib/features/palette';
-// import ResizeModule from 'diagram-js/lib/features/resize';
 import RulesModule from 'diagram-js/lib/features/rules';
 import SelectionModule from 'diagram-js/lib/features/selection';
 import ZoomScrollModule from 'diagram-js/lib/navigation/zoomscroll';
-import EditorActionsModule from '../common/editor-actions';
 import CopyPasteModule from 'diagram-js/lib/features/copy-paste';
-import KeyboardModule from '../common/keyboard';
-
-import DepPaletteModule from './palette';
-import DepDrawModule from './draw';
-import DepRulesModule from './rules';
-import DepModelingModule from './modeling';
-import DepAutoPlaceModule from './auto-place';
-
-import DepModdle from './moddle';
-import {nextPosition, root} from '../util/Util';
 
 var emptyDiagram =
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -47,7 +43,6 @@ var emptyDiagram =
  * @return {Diagram}
  */
 export default function DependencyModeler(options) {
-
   const {
     container,
     additionalModules = [],
@@ -103,24 +98,24 @@ export default function DependencyModeler(options) {
   Diagram.call(this, diagramOptions);
   
   this.get('eventBus').fire('attach'); // Needed for key listeners to work
-}
+};
 
 inherits(DependencyModeler, Diagram);
 
 DependencyModeler.prototype.id = "DEP";
 DependencyModeler.prototype.rank = 4;
 
-    DependencyModeler.prototype.name = function (constructionMode) {
+DependencyModeler.prototype.name = function (constructionMode) {
   if (constructionMode) {
     return "Timeline";
   } else {
     return "Dependency Model";
   }
-}
+};
 
 DependencyModeler.prototype.createNew = function () {
   return this.importXML(emptyDiagram);
-}
+};
 
 DependencyModeler.prototype.show = function (goal) {
   this.clear();
@@ -157,7 +152,7 @@ DependencyModeler.prototype.show = function (goal) {
       canvas.addConnection(transitionVisual, diagramRoot);
     });
   }
-}
+};
 
 DependencyModeler.prototype.createObjective = function (name) {
   const modeling = this.get('modeling');
@@ -172,19 +167,19 @@ DependencyModeler.prototype.createObjective = function (name) {
     y: parseInt(y)
   }, { x, y }, diagramRoot);
   return shape.businessObject;
-}
+};
 
 DependencyModeler.prototype.deleteObjective = function (objective) {
   const modeling = this.get('modeling');
   const objectiveVisual = this.get('elementRegistry').get(objective.id);
   modeling.removeElements([objectiveVisual]);
-}
+};
 
 DependencyModeler.prototype.renameObjective = function (objective, name) {
     const modeling = this.get('modeling');
     const objectiveVisual = this.get('elementRegistry').get(objective.id);
     modeling.updateLabel(objectiveVisual, name);
-}
+};
 
 DependencyModeler.prototype.createDependency = function (sourceState, targetState) {
   const modeling = this.get('modeling');
@@ -199,10 +194,9 @@ DependencyModeler.prototype.createDependency = function (sourceState, targetStat
   });
 
   return transitionVisual.businessObject;
-}
+};
 
 DependencyModeler.prototype.importXML = function (xml) {
-
   var self = this;
 
   return new Promise(function (resolve, reject) {
@@ -212,12 +206,10 @@ DependencyModeler.prototype.importXML = function (xml) {
     xml = self._emit('import.parse.start', { xml: xml }) || xml;
 
     self.get('moddle').fromXML(xml).then(function (result) {
-
       var definitions = result.rootElement;
       var references = result.references;
       var parseWarnings = result.warnings;
       var elementsById = result.elementsById;
-
       var context = {
         references: references,
         elementsById: elementsById,
@@ -242,12 +234,10 @@ DependencyModeler.prototype.importXML = function (xml) {
       self._emit('import.parse.failed', {
         error: err
       });
-
       self._emit('import.done', { error: err, warnings: err.warnings });
 
       return reject(err);
     });
-
   });
 };
 
@@ -259,18 +249,14 @@ DependencyModeler.prototype.importDefinitions = function (definitions) {
   this._goal = definitions.get('goals')[0];
   this.show(this._goal);
   this._emit('import.render.complete', {});
-}
+};
 
 DependencyModeler.prototype.saveXML = function (options) {
-
   options = options || {};
-
   var self = this;
-
   var definitions = this._definitions;
 
   return new Promise(function (resolve, reject) {
-
     if (!definitions) {
       var err = new Error('no xml loaded');
 
@@ -283,9 +269,7 @@ DependencyModeler.prototype.saveXML = function (options) {
     }) || definitions;
 
     self.get('moddle').toXML(definitions, options).then(function (result) {
-
       var xml = result.xml;
-
       try {
         xml = self._emit('saveXML.serialized', {
           error: null,
@@ -321,4 +305,4 @@ DependencyModeler.prototype.ensureElementIsOnCanvas = function (element) {
       throw 'Cannot display element. Is not part of a known goal.';
     }
   }
-}
+};

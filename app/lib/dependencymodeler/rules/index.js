@@ -1,6 +1,6 @@
-import RulesModule from 'diagram-js/lib/features/rules';
-
 import DepRuleProvider from './DepRuleProvider';
+
+import RulesModule from 'diagram-js/lib/features/rules';
 
 export default {
   __depends__: [
