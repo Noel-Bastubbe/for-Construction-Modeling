@@ -156,13 +156,13 @@ export class ModelObjectParser {
         }
         let instanceLinks = [];
         for (let instanceLink of startState.get('boardElements').filter(element => is(element, 'om:Link'))) {
-            instanceLinks.push(new InstanceLink(stateInstances.find(stateInstance =>
-                    stateInstance.instance.id === instanceLink.sourceRef.instance.id &&
-                    stateInstance.instance.dataclass.id === instanceLink.sourceRef.classRef.id).instance,
-                stateInstances.find(stateInstance =>
-                    stateInstance.instance.id === instanceLink.targetRef.instance.id &&
-                    stateInstance.instance.dataclass.id === instanceLink.targetRef.classRef.id
-                ).instance
+            instanceLinks.push(new InstanceLink(instances.find(instance =>
+                    instance.id === instanceLink.sourceRef.instance.id &&
+                    instance.dataclass.id === instanceLink.sourceRef.classRef.id),
+                instances.find(instance =>
+                    instance.id === instanceLink.targetRef.instance.id &&
+                    instance.dataclass.id === instanceLink.targetRef.classRef.id
+                )
             ));
         }
         return new ExecutionState(stateInstances, [], instanceLinks, resources, 0, [], [], []);
