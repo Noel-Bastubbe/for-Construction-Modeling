@@ -43,9 +43,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 const populateNameDropdown = () => {
                     this._nameDropdown.populate(
                         [],
-                        (name, element) => {
-                            this.updateName(name, element);
-                            },
+                        () => {},
                         element
                     );
                     this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",activity.name);
@@ -53,9 +51,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 const populateDurationDropdown = () => {
                     this._durationDropdown.populate(
                         [],
-                        (duration, element) => {
-                            this.updateDuration(duration, element);
-                        },
+                        () => {},
                         element
                     );
                     this._durationDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.duration, "0");
@@ -78,9 +74,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 const populateNoPDropdown = () => {
                     this._NoPDropdown.populate(
                         [],
-                        (NoP, element) => {
-                            this.updateNoP(NoP, element);
-                        },
+                        () => {},
                         element
                     );
                     this._NoPDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.NoP);

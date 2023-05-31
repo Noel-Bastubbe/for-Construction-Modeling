@@ -46,9 +46,7 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                 const populateNameDropdown = () => {
                     this._nameDropdown.populate(
                         [],
-                        (state, element) => {
-                            this.updateName(state, element);
-                            },
+                        () => {},
                         element
                     );
                     this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",resource.name);
@@ -57,9 +55,7 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                 const populateCapacityDropdown = () => {
                     this._capacityDropdown.populate(
                         [],
-                        (state, element) => {
-                            this.updateCapacity(state, element);
-                        },
+                        () => {},
                         element
                     );
                     this._capacityDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.capacity);
@@ -81,9 +77,7 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                 const populateAvailabilityStartDropdown = () => {
                     this._availabilityStartDropdown.populate(
                         [],
-                        (state, element) => {
-                            this.updateavailabilityStart(state, element);
-                        },
+                        () => {},
                         element
                     );
                     this._availabilityStartDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.availabilityStart, "0");
@@ -92,9 +86,7 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                 const populateAvailabilityEndDropdown = () => {
                     this._availabilityEndDropdown.populate(
                         [],
-                        (state, element) => {
-                            this.updateavailabilityEnd(state, element);
-                        },
+                        () => {},
                         element
                     );
                     this._availabilityEndDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.availabilityEnd, "0");
