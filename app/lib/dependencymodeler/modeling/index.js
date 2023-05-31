@@ -1,7 +1,7 @@
 import DepUpdater from './DepUpdater';
 import DepElementFactory from './DepElementFactory';
 import DepLabelEditing from './DepLabelEditing';
-import DepModeling from './DepModeling';
+import Modeling from '../../common/modeling/Modeling';
 
 import CommandModule from 'diagram-js/lib/command';
 import DirectEditingModule from 'diagram-js-direct-editing';
@@ -20,6 +20,7 @@ export default {
   elementFactory: [ 'type', DepElementFactory ],
   depUpdater: [ 'type', DepUpdater ],
   depLabelEditing: ['type', DepLabelEditing],
-  modeling: ['type', DepModeling],
+  modeling: ['type', Modeling],
+
   connectionDocking: [ 'type', CroppingConnectionDocking ]
 };

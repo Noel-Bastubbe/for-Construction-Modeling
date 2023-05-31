@@ -2,13 +2,13 @@ import {assign, sortBy} from 'min-dash';
 
 import inherits from 'inherits';
 
-import {getBusinessObject, is} from '../../../util/ModelUtil';
+import {getBusinessObject, is} from '../../../../common/util/ModelUtil';
 
 import {getExternalLabelMid, hasExternalLabel, isLabel, isLabelExternal} from '../../../util/LabelUtil';
 
 import {getLabel} from '../../label-editing/LabelUtil';
 
-import {getLabelAdjustment} from './util/LabelLayoutUtil';
+import {getLabelAdjustment} from '../../../../common/features/modeling/behavior/util/LabelLayoutUtil';
 
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 
@@ -18,7 +18,7 @@ import {getMid, roundPoint} from 'diagram-js/lib/layout/LayoutUtil';
 
 import {delta} from 'diagram-js/lib/util/PositionUtil';
 
-import {getDistancePointLine, perpendicularFoot} from './util/GeometricUtil';
+import {getDistancePointLine, perpendicularFoot} from '../../../../common/features/modeling/behavior/util/GeometricUtil';
 
 var DEFAULT_LABEL_DIMENSIONS = {
   width: 90,

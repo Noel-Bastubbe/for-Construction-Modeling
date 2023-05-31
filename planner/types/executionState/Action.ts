@@ -46,7 +46,7 @@ export class Action {
             return resources;
         }
         let blockedResources: Resource[] = resources.filter(resource => resource !== this.resource);
-        let changedResource: Resource = new Resource(this.resource.id, this.resource.name, this.resource.roles, this.resource.capacity - this.activity.NoP);
+        let changedResource: Resource = new Resource(this.resource.id, this.resource.name, this.resource.roles, this.resource.capacity - this.activity.NoP, this.resource.availabilityStart, this.resource.availabilityEnd);
         blockedResources.push(changedResource);
         return blockedResources;
     }
@@ -92,7 +92,7 @@ export class Action {
         let oldResources: Resource[] = executionState.resources;
         return oldResources.map(resource => {
             if (resource.name === this.resource?.name && resource.roles === this.resource?.roles) {
-                return new Resource(resource.id, resource.name, resource.roles, resource.capacity + this.activity.NoP);
+                return new Resource(resource.id, resource.name, resource.roles, resource.capacity + this.activity.NoP, resource.availabilityStart, resource.availabilityEnd);
             } else {
                 return resource;
             }

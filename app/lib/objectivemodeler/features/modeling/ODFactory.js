@@ -1,8 +1,8 @@
 import {assign, map, pick,} from 'min-dash';
 
-import {isAny} from './util/ModelingUtil';
+import {isAny} from '../../../common/features/modeling/ModelingUtil';
 
-import {is} from '../../util/ModelUtil';
+import {is} from '../../../common/util/ModelUtil';
 
 
 export default function ODFactory(moddle) {

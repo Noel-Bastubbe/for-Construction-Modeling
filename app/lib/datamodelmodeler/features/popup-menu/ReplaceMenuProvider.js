@@ -1,11 +1,7 @@
 import {
     getBusinessObject,
     is
-  } from '../../util/ModelUtil';
-  
-  import {
-    isDifferentType
-  } from './util/TypeUtil';
+  } from '../../../common/util/ModelUtil';
   
   import {
     forEach,
