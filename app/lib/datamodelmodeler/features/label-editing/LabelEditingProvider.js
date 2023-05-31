@@ -2,10 +2,10 @@ import {assign} from 'min-dash';
 
 import {getLabel, getLabelAttr} from './LabelUtil';
 
-import {isAny} from '../../../frequentlyUsedFiles/features/modeling/ModelingUtil.js';
+import {isAny} from '../../../common/features/modeling/ModelingUtil.js';
 
 import {getExternalLabelMid, hasExternalLabel, isLabel, isLabelExternal} from '../../util/LabelUtil';
-import {is} from '../../../frequentlyUsedFiles/util/ModelUtil.js';
+import {is} from '../../../common/util/ModelUtil.js';
 
 
 export default function LabelEditingProvider(

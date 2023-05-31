@@ -1,7 +1,7 @@
 import AdaptiveLabelPositioningBehavior from './AdaptiveLabelPositioningBehavior';
-import AppendBehavior from '../../../../frequentlyUsedFiles/features/modeling/behavior/AppendBehavior';
-import FixHoverBehavior from '../../../../frequentlyUsedFiles/features/modeling/behavior/FixHoverBehavior';
-import ImportDockingFix from '../../../../frequentlyUsedFiles/features/modeling/behavior/ImportDockingFix';
+import AppendBehavior from '../../../../common/features/modeling/behavior/AppendBehavior';
+import FixHoverBehavior from '../../../../common/features/modeling/behavior/FixHoverBehavior';
+import ImportDockingFix from '../../../../common/features/modeling/behavior/ImportDockingFix';
 import LabelBehavior from './LabelBehavior';
 import UnclaimIdBehavior from './UnclaimIdBehavior';
 

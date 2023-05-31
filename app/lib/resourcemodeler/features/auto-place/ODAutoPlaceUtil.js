@@ -1,4 +1,4 @@
-import {is} from '../../../frequentlyUsedFiles/util/ModelUtil.js';
+import {is} from '../../../common/util/ModelUtil.js';
 
 import {asTRBL, getMid,} from 'diagram-js/lib/layout/LayoutUtil';
 

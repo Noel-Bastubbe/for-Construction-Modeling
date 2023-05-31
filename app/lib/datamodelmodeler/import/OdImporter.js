@@ -1,12 +1,12 @@
 import {assign} from 'min-dash';
 
-import {is} from '../../frequentlyUsedFiles/util/ModelUtil.js';
+import {is} from '../../common/util/ModelUtil.js';
 
 import {getExternalLabelBounds} from '../util/LabelUtil';
 
 import {getLabel} from '../features/label-editing/LabelUtil';
 
-import {elementToString} from '../../frequentlyUsedFiles/import/Util.js';
+import {elementToString} from '../../common/import/Util.js';
 import {getMid} from 'diagram-js/lib/layout/LayoutUtil';
 
 

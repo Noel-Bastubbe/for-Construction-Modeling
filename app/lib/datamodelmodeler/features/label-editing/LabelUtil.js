@@ -1,4 +1,4 @@
-import {isAny} from '../../../frequentlyUsedFiles/features/modeling/ModelingUtil.js';
+import {isAny} from '../../../common/features/modeling/ModelingUtil.js';
 
 export function getLabelAttr(element) {
   var semantic = element.businessObject;

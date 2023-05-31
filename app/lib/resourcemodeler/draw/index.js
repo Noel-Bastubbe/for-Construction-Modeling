@@ -1,5 +1,5 @@
 import REMRenderer from './REMRenderer';
-import TextRenderer from '../../frequentlyUsedFiles/draw/TextRenderer.js';
+import TextRenderer from '../../common/draw/TextRenderer.js';
 
 export default {
   __init__: [ 'remRenderer' ],

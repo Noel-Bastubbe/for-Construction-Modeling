@@ -1,4 +1,4 @@
-import ODDiOrdering from '../../../frequentlyUsedFiles/features/di-ordering/ODDiOrdering';
+import ODDiOrdering from '../../../common/features/di-ordering/ODDiOrdering';
 
 export default {
   __init__: [

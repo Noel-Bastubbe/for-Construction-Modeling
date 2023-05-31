@@ -1,4 +1,4 @@
-import {getBusinessObject} from '../../../frequentlyUsedFiles/util/ModelUtil.js';
+import {getBusinessObject} from '../../../common/util/ModelUtil.js';
 
 import {forEach, isArray, isUndefined, omit, reduce} from 'min-dash';
 

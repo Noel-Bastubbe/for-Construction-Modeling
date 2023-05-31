@@ -1,7 +1,7 @@
 import {
     getBusinessObject,
     is
-  } from '../../../frequentlyUsedFiles/util/ModelUtil.js';
+  } from '../../../common/util/ModelUtil.js';
   
   import {
     forEach,

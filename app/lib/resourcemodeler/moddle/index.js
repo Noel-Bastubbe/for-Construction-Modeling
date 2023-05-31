@@ -3,8 +3,8 @@ import {assign} from 'min-dash';
 import Moddle from './Moddle';
 
 import ODDescriptors from './resources/rem.json';
-import DiDescriptors from '../../frequentlyUsedFiles/moddle/odDi.json';
-import DcDescriptors from '../../frequentlyUsedFiles/moddle/dc.json';
+import DiDescriptors from '../../common/moddle/odDi.json';
+import DcDescriptors from '../../common/moddle/dc.json';
 
 var packages = {
   rem: ODDescriptors,

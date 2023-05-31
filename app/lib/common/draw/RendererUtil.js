@@ -1,6 +1,6 @@
 import {componentsToPath} from 'diagram-js/lib/util/RenderUtil';
 
-import {getBusinessObject} from '../../frequentlyUsedFiles/util/ModelUtil.js';
+import {getBusinessObject} from '../../common/util/ModelUtil.js';
 
 
 // element utils //////////////////////

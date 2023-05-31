@@ -1,4 +1,4 @@
-import {isAny} from '../../../frequentlyUsedFiles/features/modeling/ModelingUtil.js';
+import {isAny} from '../../../common/features/modeling/ModelingUtil.js';
 
 function getLabelAttr(semantic) {
   if (semantic.labelAttribute) {
