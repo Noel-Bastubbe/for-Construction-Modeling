@@ -200,7 +200,7 @@ export class ModelObjectParser {
 
             for (let inputSet of inputSets) {
                 activities.push(new Activity(activity.name, getNumber(activity.duration, 0),
-                    getNumber(activity.NoP, 1), roles.find(role => role.id === activity.role.id),
+                    getNumber(activity.NoP, 1), roles.find(role => role.id === activity.role?.id),
                     new IOSet([].concat(inputSet)), new IOSet(outputSet))
                 );
             }
