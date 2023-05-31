@@ -6,7 +6,7 @@ import {
   getLabel
 } from './LabelUtil';
 
-import { isAny } from '../../../common/features/modeling/ModelingUtil.js';
+import { isAny } from '../../../common/features/modeling/ModelingUtil';
 
 import {
   getExternalLabelMid,

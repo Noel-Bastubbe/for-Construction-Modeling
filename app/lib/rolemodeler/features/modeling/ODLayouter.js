@@ -8,7 +8,7 @@ import {repairConnection, withoutRedundantPoints} from 'diagram-js/lib/layout/Ma
 
 import {getMid, getOrientation} from 'diagram-js/lib/layout/LayoutUtil';
 
-import {is} from '../../../common/util/ModelUtil.js';
+import {is} from '../../../common/util/ModelUtil';
 
 export default function ODLayouter() {}
 

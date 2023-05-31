@@ -2,7 +2,7 @@ import inherits from 'inherits';
 
 import BaseModeling from 'diagram-js/lib/features/modeling/Modeling';
 
-import UpdatePropertiesHandler from '../../../common/features/modeling/cmd/UpdatePropertiesHandler.js';
+import UpdatePropertiesHandler from '../../../common/features/modeling/cmd/UpdatePropertiesHandler';
 import UpdateCanvasRootHandler from '../../../common/features/modeling/cmd/UpdateCanvasRootHandler';
 import IdClaimHandler from '../../../common/features/modeling/cmd/IdClaimHandler';
 

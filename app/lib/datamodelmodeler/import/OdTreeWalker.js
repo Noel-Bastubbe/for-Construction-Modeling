@@ -2,7 +2,7 @@ import {find, forEach} from 'min-dash';
 
 import Refs from 'object-refs';
 
-import {elementToString} from '../../common/import/Util.js';
+import {elementToString} from '../../common/import/Util';
 
 var diRefs = new Refs(
   { name: 'boardElement', enumerable: true },

@@ -5,7 +5,7 @@ import CroppingConnectionDocking from 'diagram-js/lib/layout/CroppingConnectionD
 import DepUpdater from './DepUpdater';
 import DepElementFactory from './DepElementFactory';
 import DepLabelEditing from './DepLabelEditing';
-import Modeling from '../../common/modeling/Modeling.js';
+import Modeling from '../../common/modeling/Modeling';
 
 
 export default {

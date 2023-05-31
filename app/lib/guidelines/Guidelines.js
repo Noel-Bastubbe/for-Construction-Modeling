@@ -1,4 +1,4 @@
-import {is} from '../common/util/ModelUtil.js';
+import {is} from '../common/util/ModelUtil';
 import {type} from '../util/Util';
 import {
     getClassDependencies,

@@ -1,4 +1,4 @@
-import {is} from '../common/util/ModelUtil.js';
+import {is} from '../common/util/ModelUtil';
 
 export function getConnectedElements(element) {
 

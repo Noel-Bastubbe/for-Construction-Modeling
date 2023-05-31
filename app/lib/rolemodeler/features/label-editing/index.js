@@ -3,7 +3,7 @@ import ResizeModule from 'diagram-js/lib/features/resize';
 import DirectEditingModule from 'diagram-js-direct-editing';
 
 import LabelEditingProvider from './LabelEditingProvider';
-import LabelEditingPreview from '../../../common/features/label-editing/LabelEditingPreview.js';
+import LabelEditingPreview from '../../../common/features/label-editing/LabelEditingPreview';
 
 
 export default {
