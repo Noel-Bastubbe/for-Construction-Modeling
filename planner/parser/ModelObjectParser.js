@@ -156,12 +156,12 @@ export class ModelObjectParser {
         }
         let instanceLinks = [];
         for (let instanceLink of startState.get('boardElements').filter(element => is(element, 'om:Link'))) {
-            instanceLinks.push(new InstanceLink(stateInstances.find(stateInstance =>
-                    stateInstance.instance.id === instanceLink.sourceRef.instance.id &&
-                    stateInstance.instance.dataclass.id === instanceLink.sourceRef.classRef.id),
-                stateInstances.find(stateInstance =>
-                    stateInstance.instance.id === instanceLink.targetRef.instance.id &&
-                    stateInstance.instance.dataclass.id === instanceLink.targetRef.classRef.id
+            instanceLinks.push(new InstanceLink(instances.find(instance =>
+                    instance.id === instanceLink.sourceRef.instance.id &&
+                    instance.dataclass.id === instanceLink.sourceRef.classRef.id),
+                instances.find(instance =>
+                    instance.id === instanceLink.targetRef.instance.id &&
+                    instance.dataclass.id === instanceLink.targetRef.classRef.id
                 )
             ));
         }
@@ -200,7 +200,7 @@ export class ModelObjectParser {
 
             for (let inputSet of inputSets) {
                 activities.push(new Activity(activity.name, getNumber(activity.duration, 0),
-                    getNumber(activity.NoP, 1), roles.find(role => role.id === activity.role.id),
+                    getNumber(activity.NoP, 1), roles.find(role => role.id === activity.role?.id),
                     new IOSet([].concat(inputSet)), new IOSet(outputSet))
                 );
             }

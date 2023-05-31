@@ -37,9 +37,7 @@ export default class DepLabelHandler extends CommandInterceptor {
                 const populateNameDropdown = () => {
                     this._nameDropdown.populate(
                         [],
-                        (state, element) => {
-                            this.updateName(state, element);
-                            },
+                        {},
                         element
                     );
                     this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",objective.name);
@@ -47,9 +45,7 @@ export default class DepLabelHandler extends CommandInterceptor {
                 const populateTimeDropdown = () => {
                     this._timeDropdown.populate(
                         [],
-                        (olc, element) => {
-                            this.updateTime(olc.classRef, element);
-                        },
+                        () => {},
                         element
                     );
                     this._timeDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",objective.date);
@@ -57,9 +53,9 @@ export default class DepLabelHandler extends CommandInterceptor {
                 populateNameDropdown();
                 populateTimeDropdown();
 
-                this._dropdownContainer.confirm = () => {
-                    const newNameInput = this._nameDropdown.getInputValue();
-                    const newTimeInput = this._timeDropdown.getInputValue();
+                this._dropdownContainer.confirm = (event) => {
+                    const newNameInput = this._nameDropdown.getInputValue().trim();
+                    const newTimeInput = this._timeDropdown.getInputValue().trim();
                     let needUpdate = false;
                     if (newNameInput !== '' && newNameInput !== objective.name) {
                         this.updateName(newNameInput,element);
