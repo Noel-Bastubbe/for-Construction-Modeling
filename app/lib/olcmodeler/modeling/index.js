@@ -5,7 +5,7 @@ import CroppingConnectionDocking from 'diagram-js/lib/layout/CroppingConnectionD
 import OlcUpdater from './OlcUpdater';
 import OlcElementFactory from './OlcElementFactory';
 import OlcLabelEditing from './OlcLabelEditing';
-import OlcModeling from './OlcModeling';
+import Modeling from '../../common/modeling/Modeling.js';
 
 
 export default {
@@ -21,7 +21,7 @@ export default {
   elementFactory: [ 'type', OlcElementFactory ],
   olcUpdater: [ 'type', OlcUpdater ],
   olcLabelEditing: ['type', OlcLabelEditing],
-  modeling: ['type', OlcModeling],
+  modeling: ['type', Modeling],
 
   connectionDocking: [ 'type', CroppingConnectionDocking ]
 };
