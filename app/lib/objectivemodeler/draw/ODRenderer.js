@@ -137,7 +137,7 @@ export default function ODRenderer(
 
   function renderAttributes(parentGfx, element) {
     let semantic = getSemantic(element);
-    let label = "state: "
+    let label = "states: "
     label += semantic.states?.map(state => state.name).join(", ") || "any"
     renderLabel(parentGfx, label, {
       box: {
