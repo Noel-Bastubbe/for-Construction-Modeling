@@ -149,7 +149,7 @@ TerminationConditionModeler.prototype.populateLiteral = function (literal, eleme
         );
         classElement.dropdown.addCreateElementInput(event => {
             const clazz = this.eventBus.fire(CommonEvents.DATACLASS_CREATION_REQUESTED, {
-                name: classElement.dropdown.getInputValue()
+                name: classElement.dropdown.getInputValue().trim()
             });
             const olc = this.getClassList().filter(olc => olc.classRef === clazz)[0];
             this.changeClass(olc, literal);
@@ -177,7 +177,7 @@ TerminationConditionModeler.prototype.populateLiteral = function (literal, eleme
         );
         stateElement.dropdown.addCreateElementInput(event => {
             const state = this.eventBus.fire(CommonEvents.STATE_CREATION_REQUESTED, {
-                name: stateElement.dropdown.getInputValue(),
+                name: stateElement.dropdown.getInputValue().trim(),
                 olc: literal.class
             });
             this.toggleState(state, literal);

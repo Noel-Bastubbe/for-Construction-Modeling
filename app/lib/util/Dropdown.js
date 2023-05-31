@@ -16,14 +16,14 @@ export default function getDropdown(name = "") {
     ) {
         this.innerHTML = "";
 
-        if (name != "") {
+        if (name !== "") {
             const dropdownTitle = document.createElement("div");
             dropdownTitle.classList.add("dd-dropdown-title");
             dropdownTitle.innerHTML = name;
             this.appendChild(dropdownTitle);
         }
         
-        if(this.className != "dd-dropdown-menu-warnings"){
+        if(this.className !== "dd-dropdown-menu-warnings"){
             var dropdownContent = document.createElement("div");
             dropdownContent.classList.add("dd-dropdown-content");
             this.appendChild(dropdownContent);
