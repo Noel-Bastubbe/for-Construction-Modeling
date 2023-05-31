@@ -57,8 +57,8 @@ export default class DepLabelHandler extends CommandInterceptor {
                 populateTimeDropdown();
 
                 this._dropdownContainer.confirm = (event) => {
-                    const newNameInput = this._nameDropdown.getInputValue();
-                    const newTimeInput = this._timeDropdown.getInputValue();
+                    const newNameInput = this._nameDropdown.getInputValue().trim();
+                    const newTimeInput = this._timeDropdown.getInputValue().trim();
                     let needUpdate = false;
                     if (newNameInput !== '' && newNameInput !== objective.name) {
                         this.updateName(newNameInput,element);

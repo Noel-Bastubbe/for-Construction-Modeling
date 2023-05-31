@@ -101,7 +101,7 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
             selectObjectiveMenu.hide();
         });
         selectObjectiveMenu.addCreateElementInput(() => {
-            var objectiveName = selectObjectiveMenu.getInputValue();
+            var objectiveName = selectObjectiveMenu.getInputValue().trim();
             if (objectiveName && objectiveName.length > 0) {
                 eventBus.fire(ObjectiveEvents.OBJECTIVE_CREATION_REQUESTED, {
                     name: objectiveName

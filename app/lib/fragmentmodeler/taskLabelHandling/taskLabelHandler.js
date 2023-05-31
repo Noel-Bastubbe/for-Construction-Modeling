@@ -91,10 +91,10 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 populateNoPDropdown();
 
                 this._dropdownContainer.confirm = (event) => {
-                    const newNameInput = this._nameDropdown.getInputValue();
-                    const newDurationInput = this._durationDropdown.getInputValue();
-                    const newRoleInput = this._roleDropdown.getInputValue();
-                    const newNoPInput = this._NoPDropdown.getInputValue();
+                    const newNameInput = this._nameDropdown.getInputValue().trim();
+                    const newDurationInput = this._durationDropdown.getInputValue().trim();
+                    const newRoleInput = this._roleDropdown.getInputValue().trim();
+                    const newNoPInput = this._NoPDropdown.getInputValue().trim();
                     if (newNameInput !== '' && newNameInput !== activity.name) {
                         this.updateName(newNameInput,element);
                         populateNameDropdown();

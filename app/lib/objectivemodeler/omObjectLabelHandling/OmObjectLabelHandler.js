@@ -123,9 +123,9 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                 populateClassDropdown();
 
                 this._dropdownContainer.confirm = (event) => {
-                    const newClassInput = this._classDropdown.getInputValue();
-                    const newStateInput = this._stateDropdown.getInputValue();
-                    const newInstanceInput = this._instanceDropdown.getInputValue();
+                    const newClassInput = this._classDropdown.getInputValue().trim();
+                    const newStateInput = this._stateDropdown.getInputValue().trim();
+                    const newInstanceInput = this._instanceDropdown.getInputValue().trim();
                     let needUpdate = false;
                     if (newClassInput !== '') {
                         const newClass = this.createDataclass(newClassInput);
