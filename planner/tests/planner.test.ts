@@ -22,10 +22,16 @@ let cable: Dataclass;
 // Instances
 let mapleStreet: Instance;
 let bakerStreet: Instance;
+let wallStreet: Instance;
+let bakerStreetWall: Instance;
+let wallStreetWall: Instance;
 
 // ExecutionDataObjectInstances
 let mapleStreetInit: StateInstance;
 let bakerStreetInit: StateInstance;
+let wallStreetInit: StateInstance;
+let bakerStreetWallAvailable: StateInstance;
+let wallStreetWallAvailable: StateInstance;
 
 // Roles
 let painter: Role;
@@ -61,13 +67,10 @@ let outputSetPutWalls: IOSet;
 let inputSetTile: IOSet;
 let outputSetTile: IOSet;
 
-let inputSetLay: IOSet;
-let outputSetLay: IOSet;
-
-let outputSetBuyCables: IOSet;
-
 // Activities
 let paint: Activity;
+let plaster: Activity;
+let putWalls: Activity;
 let tile: Activity;
 
 // ObjectiveObjects
@@ -83,7 +86,6 @@ let objective2: Objective;
 let goal: Goal;
 
 // Project State
-let activities: Activity[];
 let resources: Resource[];
 let currentState: ExecutionState;
 
@@ -95,12 +97,18 @@ beforeEach(() => {
     cable = new Dataclass("3","cable");
 
     //reset all instances
-    mapleStreet = new Instance("1", "house:1", house);
-    bakerStreet = new Instance("2", "house:2", house);
+    mapleStreet = new Instance("house_1", "1", house);
+    bakerStreet = new Instance("house_2", "2", house);
+    wallStreet = new Instance("house_3", "3", house);
+    bakerStreetWall = new Instance("wall_1", "1",wall);
+    wallStreetWall = new Instance("wall_2", "2",wall);
 
     //reset all stateInstance
     mapleStreetInit = new StateInstance(mapleStreet, "init");
     bakerStreetInit = new StateInstance(bakerStreet, "init");
+    wallStreetInit = new StateInstance(wallStreet, "init");
+    bakerStreetWallAvailable = new StateInstance(bakerStreetWall,"available");
+    wallStreetWallAvailable = new StateInstance(wallStreetWall,"available");
 
     //reset all roles
     painter = new Role("1", "painter");
@@ -136,36 +144,34 @@ beforeEach(() => {
     inputSetTile = new IOSet([housePainted]);
     outputSetTile = new IOSet([houseTiled]);
 
-    inputSetLay = new IOSet([housePainted, cableAvailable]);
-    outputSetLay = new IOSet([]);
-
-    outputSetBuyCables = new IOSet([cableAvailable]);
-
     //reset ObjectiveObjects
-    objectiveObject = new ObjectiveObject("1", mapleStreet, ["painted"]);
-    objectiveObject2 = new ObjectiveObject("2", mapleStreet, ["tiled"]);
-    objectiveObject3 = new ObjectiveObject("3", bakerStreet, ["painted"]);
+    objectiveObject = new ObjectiveObject("house_1", mapleStreet, ["painted"]);
+    objectiveObject2 = new ObjectiveObject("house_2", mapleStreet, ["tiled"]);
+    objectiveObject3 = new ObjectiveObject("house_3", bakerStreet, ["painted"]);
 
     //reset objectives
-    objective = new Objective("", [objectiveObject], []);
+    objective = new Objective("1", [objectiveObject], []);
 
     //reset goal
     goal = new Goal([objective]);
 
     //reset all activities
     paint = new Activity("paint", 1, 1, painter, inputSetPaint, outputSetPaint);
+    plaster = new Activity("plaster",1,1,painter,inputSetPlaster,outputSetPlaster);
+    putWalls = new Activity("put Walls", 1, 1, builder, inputSetPutWalls, outputSetPutWalls);
     tile = new Activity("tile", 1, 1, tiler, inputSetTile, outputSetTile);
 
     //reset all project states
-    activities = [paint];
-    resources = [picasso];
-    currentState = new ExecutionState([mapleStreetInit], [], [], [picasso], 0, [], [], []);
+    resources = [michelangelo, bob, picasso];
+    currentState = new ExecutionState([mapleStreetInit], [], [], resources,
+        0, [], [], []);
 });
 
 describe('generate plan', () => {
 
     test('plan one activity', () => {
-        let outputAction = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreet], [mapleStreet]);
+        let outputAction = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreet],
+            [mapleStreet]);
         let executionLog = new Schedule([outputAction], [mapleStreet], resources);
 
         let planner = new Planner(currentState, goal, [paint]);
@@ -175,8 +181,10 @@ describe('generate plan', () => {
 
     test('plan two activities', () => {
         let resources = [picasso, michelangelo];
-        let outputAction = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreet], [mapleStreet]);
-        let outputAction2 = new ScheduledAction(tile, 1, 2, michelangelo, 1, [mapleStreet], [mapleStreet]);
+        let outputAction = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreet],
+            [mapleStreet]);
+        let outputAction2 = new ScheduledAction(tile, 1, 2, michelangelo, 1, [mapleStreet],
+            [mapleStreet]);
         let executionLog = new Schedule([outputAction, outputAction2], [mapleStreet], resources);
 
         objective2 = new Objective("2", [objectiveObject2], []);
@@ -188,15 +196,45 @@ describe('generate plan', () => {
     });
 
     test('plan one activity on two objects', () => {
-        let outputAction = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreet], [mapleStreet]);
-        let outputAction2 = new ScheduledAction(paint, 1, 2, picasso, 1, [bakerStreet], [bakerStreet]);
-        let executionLog = new Schedule([outputAction, outputAction2], [bakerStreet, mapleStreet], resources);
+        let outputAction = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreet],
+            [mapleStreet]);
+        let outputAction2 = new ScheduledAction(paint, 1, 2, picasso, 1, [bakerStreet],
+            [bakerStreet]);
+        let executionLog = new Schedule([outputAction, outputAction2], [bakerStreet, mapleStreet],
+            resources);
 
         objective = new Objective("1", [objectiveObject, objectiveObject3], []);
         goal = new Goal([objective]);
 
         currentState.availableStateInstances = [mapleStreetInit, bakerStreetInit];
         let planner = new Planner(currentState, goal, [paint, tile]);
+        expect(planner.generatePlan()).toEqual(executionLog);
+    });
+
+    test('plan activities which create new instances', () => {
+        let outputAction1 = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreet],
+            [mapleStreet]);
+        let outputAction2 = new ScheduledAction(putWalls, 0, 1, bob, 1, [bakerStreetWall],
+            [bakerStreetWall]);
+        let outputAction3 = new ScheduledAction(plaster, 1, 2, picasso, 1, [bakerStreetWall],
+            [bakerStreet]);
+        let outputAction4 = new ScheduledAction(tile, 1, 2, michelangelo, 1, [mapleStreet],
+            [mapleStreet]);
+        let outputAction5 = new ScheduledAction(plaster, 2, 3, picasso, 1, [bakerStreetWall],
+            [wallStreet]);
+        let executionLog = new Schedule(
+            [outputAction1, outputAction2, outputAction3, outputAction4, outputAction5],
+            [wallStreet, mapleStreet, bakerStreet, bakerStreetWall, wallStreetWall],
+            [bob,michelangelo,picasso]);
+
+        let house1tiled = new ObjectiveObject("4",mapleStreet,["tiled"]);
+        let house3plastered = new ObjectiveObject("5",wallStreet,["plastered"]);
+
+        objective = new Objective("1", [house1tiled, house3plastered], []);
+        goal = new Goal([objective]);
+
+        currentState.availableStateInstances = [mapleStreetInit, bakerStreetWallAvailable, wallStreetWallAvailable];
+        let planner = new Planner(currentState, goal, [paint, plaster, putWalls, tile]);
         expect(planner.generatePlan()).toEqual(executionLog);
     });
 });
