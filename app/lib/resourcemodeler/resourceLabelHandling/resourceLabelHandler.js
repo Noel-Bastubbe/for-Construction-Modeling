@@ -107,11 +107,11 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                 populateAvailabilityEndDropdown();
 
                 this._dropdownContainer.confirm = (event) => {
-                    const newNameInput = this._nameDropdown.getInputValue();
-                    const newCapacityInput = this._capacityDropdown.getInputValue();
-                    const newRoleInput = this._rolesDropdown.getInputValue();
-                    const newAvailabilityStartInput = this._availabilityStartDropdown.getInputValue();
-                    const newAvailabilityEndInput = this._availabilityEndDropdown.getInputValue();
+                    const newNameInput = this._nameDropdown.getInputValue().trim();
+                    const newCapacityInput = this._capacityDropdown.getInputValue().trim();
+                    const newRoleInput = this._rolesDropdown.getInputValue().trim();
+                    const newAvailabilityStartInput = this._availabilityStartDropdown.getInputValue().trim();
+                    const newAvailabilityEndInput = this._availabilityEndDropdown.getInputValue().trim();
 
                     if (newNameInput !== '' && newNameInput !== resource.name) {
                         this.updateName(newNameInput,element);

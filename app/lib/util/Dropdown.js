@@ -137,7 +137,7 @@ export default function getDropdown(name = "") {
         const createNewElementEditor = document.createElement("input");
         createNewElementEditor.type = type;
         createNewElementEditor.min = minValue;
-        if (value) {
+        if (value != null) {
             createNewElementEditor.value = value;
         } else {
             createNewElementEditor.placeholder = "Create new";
