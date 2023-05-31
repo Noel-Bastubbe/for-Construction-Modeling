@@ -8,7 +8,7 @@ export default function DepElementFactory(moddle, elementRegistry) {
     this._moddle = moddle;
     this._elementRegistry = elementRegistry;
     this._ids = new Ids();
-};
+}
 
 inherits(DepElementFactory, BaseElementFactory);
 
@@ -30,7 +30,7 @@ DepElementFactory.prototype.createBusinessObject = function (type, attrs) {
     }
 
     return element;
-};
+}
 
 DepElementFactory.prototype.baseCreate = BaseElementFactory.prototype.create;
 DepElementFactory.prototype.baseCreateShape = BaseElementFactory.prototype.createShape;
@@ -39,7 +39,7 @@ DepElementFactory.prototype.createShape = function(attrs) {
     attrs = assign(this.defaultSizeForType(attrs.type), attrs);
 
     return this.baseCreateShape(attrs);
-};
+}
 
 DepElementFactory.prototype.create = function (elementType, attrs) {
     attrs = attrs || {};
@@ -61,8 +61,8 @@ DepElementFactory.prototype.create = function (elementType, attrs) {
     }, attrs);
 
     return this.baseCreate(elementType, attrs);
-};
+}
 
 DepElementFactory.prototype.defaultSizeForType = function () {
     return { width: 100, height: 100 };
-};
+}

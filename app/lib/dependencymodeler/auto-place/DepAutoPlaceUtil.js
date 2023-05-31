@@ -11,7 +11,7 @@ export function getNewShapePosition(source, element) {
 	if (is(element, 'dep:Objective')) {
 		return getFlowNodePosition(source, element);
 	}
-};
+}
 
 /**
  * Always try to place element right of source;
@@ -44,7 +44,7 @@ export function getFlowNodePosition(source, element) {
 	};
 
 	return findFreePosition(source, element, position, generateGetNextPosition(nextPositionDirection));
-};
+}
 
 function getVerticalDistance(orientation, minDistance) {
 	if (orientation.indexOf('top') != -1) {
@@ -54,4 +54,4 @@ function getVerticalDistance(orientation, minDistance) {
 	} else {
 		return 0;
 	}
-};
+}

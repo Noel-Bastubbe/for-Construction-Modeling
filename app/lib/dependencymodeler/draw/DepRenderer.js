@@ -58,7 +58,7 @@ export default function DepRenderer(eventBus, styles, canvas, priority) {
     svgAppend(parentGfx, circle);
 
     return circle;
-  };
+  }
 
   function drawPath(parentGfx, d, attrs) {
     attrs = computeStyle(attrs, [ 'no-fill' ], {
@@ -72,7 +72,7 @@ export default function DepRenderer(eventBus, styles, canvas, priority) {
     svgAppend(parentGfx, path);
 
     return path;
-  };
+  }
 
   function renderLabel(parentGfx, label, options) {
     options = assign({
@@ -86,7 +86,7 @@ export default function DepRenderer(eventBus, styles, canvas, priority) {
     svgAppend(parentGfx, text);
 
     return text;
-  };
+  }
 
   function createPathFromConnection(connection) {
     var waypoints = connection.waypoints;
@@ -96,7 +96,7 @@ export default function DepRenderer(eventBus, styles, canvas, priority) {
     }
 
     return pathData;
-  };
+  }
   
   function marker(fill, stroke) {
     var id = '-' + colorEscape(fill) + '-' + colorEscape(stroke) + '-' + rendererId;
@@ -105,12 +105,12 @@ export default function DepRenderer(eventBus, styles, canvas, priority) {
     }
   
     return 'url(#' + id + ')';
-  };
+  }
   
   function colorEscape(str) {
     // only allow characters and numbers
     return str.replace(/[^0-9a-zA-z]+/g, '_');
-  };
+  }
   
   function createMarker(id, type, fill, stroke) {
     var linkEnd = svgCreate('path');
@@ -125,7 +125,7 @@ export default function DepRenderer(eventBus, styles, canvas, priority) {
         stroke: stroke
       }
     });
-  };
+  }
   
   function addMarker(id, options) {
     var attrs = assign({
@@ -165,7 +165,7 @@ export default function DepRenderer(eventBus, styles, canvas, priority) {
   
     svgAppend(defs, marker);
     markers[id] = marker;
-  };
+  }
 
   this.handlers = {
     'dep:Objective': function (parentGfx, element) {
@@ -208,7 +208,7 @@ export default function DepRenderer(eventBus, styles, canvas, priority) {
       return drawPath(parentGfx, pathData, attrs);
     },
   };
-};
+}
 
 inherits(DepRenderer, BaseRenderer);
 
@@ -220,19 +220,19 @@ DepRenderer.$inject = [
 
 DepRenderer.prototype.canRender = function (element) {
   return is(element, 'dep:Objective') || is(element, 'dep:Dependency');
-};
+}
 
 DepRenderer.prototype.drawShape = function (parentGfx, element) {
   var type = element.type;
   var handler = this.handlers[type];
   return handler(parentGfx, element);
-};
+}
 
 DepRenderer.prototype.drawConnection = DepRenderer.prototype.drawShape;
 
 DepRenderer.prototype.getShapePath = function (element) {
   return getCirclePath(element);
-};
+}
 
 // Utility
 function getCirclePath(shape) {
@@ -250,4 +250,4 @@ function getCirclePath(shape) {
   ];
 
   return componentsToPath(circlePath);
-};
+}

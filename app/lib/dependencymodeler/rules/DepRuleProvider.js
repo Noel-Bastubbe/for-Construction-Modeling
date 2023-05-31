@@ -6,7 +6,7 @@ import RuleProvider from 'diagram-js/lib/features/rules/RuleProvider';
 export default function DepRuleProvider(eventBus, elementRegistry) {
   this._elementRegistry = elementRegistry;
   RuleProvider.call(this, eventBus);
-};
+}
 
 DepRuleProvider.$inject = [
   'eventBus', 
@@ -43,4 +43,4 @@ DepRuleProvider.prototype.init = function () {
   this.addRule('element.copy', function() {
       return true;
   });
-};
+}

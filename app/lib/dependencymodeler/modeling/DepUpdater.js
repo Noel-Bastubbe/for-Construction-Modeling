@@ -18,7 +18,7 @@ export default function DepUpdater(eventBus, connectionDocking) {
             connection.waypoints = self.connectionWaypoints(connection.source, connection.target);
             context.cropped = true;
         }
-    };
+    }
 
     this.executed([
         'connection.layout',
@@ -69,7 +69,7 @@ export default function DepUpdater(eventBus, connectionDocking) {
         businessObject.set('x', x);
         businessObject.set('y', y);
     });
-};
+}
 
 function reflectiveEdge(element) {
     var { x, y, width, height } = element;
@@ -82,7 +82,7 @@ function reflectiveEdge(element) {
         { x: topRight.x + dx, y: topRight.y + dy },
         { x: centerP.x + dx, y: centerP.y + dy }
     ];
-};
+}
 
 function linkToBusinessObjectParent(element) {
     var parentShape = element.parent;
@@ -91,7 +91,7 @@ function linkToBusinessObjectParent(element) {
 
     parentBusinessObject.get('Elements').push(businessObject);
     businessObject.$parent = parentBusinessObject;
-};
+}
 
 function removeFromBusinessObjectParent(element) {
     var businessObject = element.businessObject,
@@ -99,7 +99,7 @@ function removeFromBusinessObjectParent(element) {
 
     collectionRemove(parentBusinessObject.get('Elements'), businessObject);
     businessObject.$parent = undefined;
-;}
+}
 
 inherits(DepUpdater, CommandInterceptor);
 
@@ -113,7 +113,7 @@ function center(shape) {
       x: shape.x + shape.width / 2,
       y: shape.y + shape.height / 2
     };
-};
+}
 
 DepUpdater.prototype.connectionWaypoints = function(source, target) {
     var connection = {source, target};
@@ -125,4 +125,4 @@ DepUpdater.prototype.connectionWaypoints = function(source, target) {
     }
     connection.waypoints = this._connectionDocking.getCroppedWaypoints(connection);
     return connection.waypoints;
-};
+}

@@ -11,4 +11,4 @@ export default function(additionalPackages, options) {
   var pks = assign({}, packages, additionalPackages);
 
   return new DepModdle(pks, options);
-};
+}

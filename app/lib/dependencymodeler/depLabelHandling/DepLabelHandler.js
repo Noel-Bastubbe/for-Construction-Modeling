@@ -141,7 +141,7 @@ export default class DepLabelHandler extends CommandInterceptor {
             element
         });
     };
-};
+}
 
 DepLabelHandler.$inject = [
     'eventBus',

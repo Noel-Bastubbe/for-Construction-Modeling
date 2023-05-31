@@ -4,7 +4,7 @@ import {Reader, Writer} from 'moddle-xml';
 
 export default function DepModdle(packages, options) {
     Moddle.call(this, packages, options);
-};
+}
 
 DepModdle.prototype = Object.create(Moddle.prototype);
 
@@ -14,7 +14,7 @@ DepModdle.prototype.fromXML = function (xmlStr, options) {
     var rootHandler = reader.handler(typeName);
 
     return reader.fromXML(xmlStr, rootHandler);
-};
+}
 
 DepModdle.prototype.toXML = function (element, options) {
     var writer = new Writer(options);
@@ -29,4 +29,4 @@ DepModdle.prototype.toXML = function (element, options) {
             return reject(err);
         }
     });
-};
+}

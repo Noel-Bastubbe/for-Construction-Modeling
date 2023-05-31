@@ -98,7 +98,7 @@ export default function DependencyModeler(options) {
   Diagram.call(this, diagramOptions);
   
   this.get('eventBus').fire('attach'); // Needed for key listeners to work
-};
+}
 
 inherits(DependencyModeler, Diagram);
 
@@ -111,11 +111,11 @@ DependencyModeler.prototype.name = function (constructionMode) {
   } else {
     return "Dependency Model";
   }
-};
+}
 
 DependencyModeler.prototype.createNew = function () {
   return this.importXML(emptyDiagram);
-};
+}
 
 DependencyModeler.prototype.show = function (goal) {
   this.clear();
@@ -152,7 +152,7 @@ DependencyModeler.prototype.show = function (goal) {
       canvas.addConnection(transitionVisual, diagramRoot);
     });
   }
-};
+}
 
 DependencyModeler.prototype.createObjective = function (name) {
   const modeling = this.get('modeling');
@@ -167,19 +167,19 @@ DependencyModeler.prototype.createObjective = function (name) {
     y: parseInt(y)
   }, { x, y }, diagramRoot);
   return shape.businessObject;
-};
+}
 
 DependencyModeler.prototype.deleteObjective = function (objective) {
   const modeling = this.get('modeling');
   const objectiveVisual = this.get('elementRegistry').get(objective.id);
   modeling.removeElements([objectiveVisual]);
-};
+}
 
 DependencyModeler.prototype.renameObjective = function (objective, name) {
     const modeling = this.get('modeling');
     const objectiveVisual = this.get('elementRegistry').get(objective.id);
     modeling.updateLabel(objectiveVisual, name);
-};
+}
 
 DependencyModeler.prototype.createDependency = function (sourceState, targetState) {
   const modeling = this.get('modeling');
@@ -194,7 +194,7 @@ DependencyModeler.prototype.createDependency = function (sourceState, targetStat
   });
 
   return transitionVisual.businessObject;
-};
+}
 
 DependencyModeler.prototype.importXML = function (xml) {
   var self = this;
@@ -239,7 +239,7 @@ DependencyModeler.prototype.importXML = function (xml) {
       return reject(err);
     });
   });
-};
+}
 
 //TODO handle errors during import
 DependencyModeler.prototype.importDefinitions = function (definitions) {
@@ -249,7 +249,7 @@ DependencyModeler.prototype.importDefinitions = function (definitions) {
   this._goal = definitions.get('goals')[0];
   this.show(this._goal);
   this._emit('import.render.complete', {});
-};
+}
 
 DependencyModeler.prototype.saveXML = function (options) {
   options = options || {};
@@ -290,11 +290,11 @@ DependencyModeler.prototype.saveXML = function (options) {
       return reject(err);
     });
   });
-};
+}
 
 DependencyModeler.prototype._emit = function (type, event) {
   return this.get('eventBus').fire(type, event);
-};
+}
 
 DependencyModeler.prototype.ensureElementIsOnCanvas = function (element) {
   if (!this.get('elementRegistry').get(element.id)) {
@@ -305,4 +305,4 @@ DependencyModeler.prototype.ensureElementIsOnCanvas = function (element) {
       throw 'Cannot display element. Is not part of a known goal.';
     }
   }
-};
+}

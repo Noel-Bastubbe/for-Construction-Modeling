@@ -10,7 +10,7 @@ export default function PaletteProvider(palette, create, elementFactory, spaceTo
   this._translate = translate;
 
   palette.registerProvider(this);
-};
+}
 
 PaletteProvider.$inject = [
   'palette',
@@ -38,7 +38,7 @@ PaletteProvider.prototype.getPaletteEntries = function () {
     function createListener(event) {
       var shape = elementFactory.createShape(assign({type: type}, options));
       create.start(event, shape);
-    };
+    }
 
     return {
       group: group,
@@ -49,7 +49,7 @@ PaletteProvider.prototype.getPaletteEntries = function () {
         click: createListener
       }
     };
-  };
+  }
 
   assign(actions, {
     'hand-tool': {
@@ -103,4 +103,4 @@ PaletteProvider.prototype.getPaletteEntries = function () {
   });
 
   return actions;
-};
+}

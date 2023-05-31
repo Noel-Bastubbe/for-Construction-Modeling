@@ -9,7 +9,7 @@ export default function DepContextPadProvider(connect, contextPad, modeling, ele
   this._elementRegistry = elementRegistry;
 
   contextPad.registerProvider(this);
-};
+}
 
 DepContextPadProvider.$inject = [
   'connect',
@@ -30,21 +30,21 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
 
   function removeElement() {
     modeling.removeElements([element]);
-  };
+  }
 
   function startConnect(event, element, autoActivate) {
     connect.start(event, element, autoActivate);
-  };
+  }
 
   function appendObjective(event, element) {
     const shape = elementFactory.createShape({ type: 'dep:Objective' });
     autoPlace.append(element, shape, { connection: { type: 'dep:Dependency' } });
-  };
+  }
 
   function appendObjectiveStart(event) {
     const shape = elementFactory.createShape({ type: 'dep:Objective' });
     create.start(event, shape, { source: element });
-  };
+  }
 
   const entries = {};
 
@@ -81,4 +81,4 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
   }
 
   return entries;
-};
+}

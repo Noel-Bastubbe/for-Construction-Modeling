@@ -22,7 +22,7 @@ export default function DepLabelEditing(eventBus, canvas, directEditing, command
             directEditing.cancel();
         }
     });
-};
+}
 
 DepLabelEditing.prototype.activate = function (element) {
     var text = element.businessObject.name || '';
@@ -61,7 +61,7 @@ DepLabelEditing.prototype.activate = function (element) {
     };
 
     return context;
-};
+}
 
 DepLabelEditing.prototype.update = function (element, newLabel) {
     if (element.id !== 'start_state') {
@@ -70,7 +70,7 @@ DepLabelEditing.prototype.update = function (element, newLabel) {
             newLabel: newLabel
         });
     }
-};
+}
 
 DepLabelEditing.$inject = [
     'eventBus',
