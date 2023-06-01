@@ -25,6 +25,7 @@ export class Planner {
                 );
             }
             let newNodes = node!.getSuccessors(this.activities);
+            newNodes = this.goal.filterNodes(newNodes);
             queue.push(...newNodes);
         }
         return new Schedule();
