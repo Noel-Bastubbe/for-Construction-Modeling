@@ -2,7 +2,7 @@ import {mid, setSnapped} from 'diagram-js/lib/features/snapping/SnapUtil';
 
 import {isCmd} from 'diagram-js/lib/features/keyboard/KeyboardUtil';
 
-import {isAny} from '../modeling/util/ModelingUtil';
+import {isAny} from '../../../common/features/modeling/ModelingUtil';
 
 import {some} from 'min-dash';
 
@@ -45,7 +45,7 @@ export default function ObjectConnectSnapping(eventBus) {
     }
 
     if (hover && isAnyType(canExecute, [
-      'od:Association',
+      'od:Association'
     ])) {
       context.connectionStart = mid(start);
 

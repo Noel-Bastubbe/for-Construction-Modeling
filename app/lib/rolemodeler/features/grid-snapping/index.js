@@ -1,4 +1,4 @@
-import BpmnGridSnapping from './BpmnGridSnapping';
+import BpmnGridSnapping from '../../../common/features/grid-snapping/BpmnGridSnapping';
 import GridSnappingModule from 'diagram-js/lib/features/grid-snapping';
 
 import GridSnappingBehaviorModule from './behavior';

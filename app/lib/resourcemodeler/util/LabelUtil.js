@@ -1,6 +1,6 @@
 import {assign} from 'min-dash';
 
-import {is} from './ModelUtil';
+import {is} from '../../common/util/ModelUtil';
 
 
 export var DEFAULT_LABEL_SIZE = {

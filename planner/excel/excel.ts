@@ -9,17 +9,19 @@ export const exportExecutionPlan = async (log: Schedule) => {
     let scheduledActions = log.scheduledActions;
 
     //sorts actions by start date
-    scheduledActions = scheduledActions.filter(action => action.activity.duration > 0).sort((action1, action2) => {
+    scheduledActions = scheduledActions.sort((action1, action2) => {
         return action1.start - action2.start;
     });
+
+    let scheduledActionsWithDuration = scheduledActions.filter(action => action.activity.duration > 0);
 
     //get deadline(=highest end number of all actions)
     let deadline = Math.max(...scheduledActions.map(o => o.end));
 
     //Execution Plan (work places)
     const worksheet1 = workbook.addWorksheet('Execution Plan (work places)');
-    worksheet1.getCell(1, 1).value = 'Work place';
 
+    worksheet1.getCell(1, 1).value = 'Work place';
     //creates the time axis: first creates array with all numbers from 1 up to deadline, then writes the time units (1,...,deadline) as headers in the sheet
     let columnHeaders: Array<number> = [];
     for (let index = 0; index <= deadline; index++) {
@@ -37,12 +39,12 @@ export const exportExecutionPlan = async (log: Schedule) => {
     });
 
     //loops through all actions and fills excel sheet
-    for (let i = 0; i < scheduledActions.length; i++) {
-        let currentAction = scheduledActions[i]
+    for (let i = 0; i < scheduledActionsWithDuration.length; i++) {
+        let currentAction = scheduledActionsWithDuration[i]
 
         //gets row (work space) in which action has to be written
         for (let i = 0; i < currentAction.outputList.length; i++) {
-            const workSpaceForActivity = currentAction.outputList[i].dataclass.name + ' ' + currentAction.outputList[i].name;
+            const workSpaceForActivity = currentAction.outputList[i].instance.dataclass.name + ' ' + currentAction.outputList[i].instance.name;
             let rowIndex = null;
             worksheet1.eachRow((row, rowNumber) => {
                 if (row.getCell(1).value === workSpaceForActivity) {
@@ -96,6 +98,12 @@ export const exportExecutionPlan = async (log: Schedule) => {
     worksheet1.getRow(1).font = {size: 14, bold: true};
     worksheet1.getColumn(1).font = {size: 14, bold: true};
 
+    worksheet1.columns.forEach(column => {
+        const lengths = column.values!.map(v => v!.toString().length);
+        const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+        column.width = maxLength < 15 ? 15 : maxLength;
+    });
+
 
     //Execution Plan (resources)
     const worksheet2 = workbook.addWorksheet('Execution Plan (resources)');
@@ -122,8 +130,8 @@ export const exportExecutionPlan = async (log: Schedule) => {
     });
 
     //loops through all actions and fills excel sheet
-    for (let i = 0; i < scheduledActions.length; i++) {
-        let currentAction = scheduledActions[i]
+    for (let i = 0; i < scheduledActionsWithDuration.length; i++) {
+        let currentAction = scheduledActionsWithDuration[i]
 
         //gets row (resource) in which action has to be written
         const resourceForActivity = currentAction.resource;
@@ -140,7 +148,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
                 const startColumn = currentAction.start + 2;
                 const endColumn = currentAction.end + 1;
                 worksheet2.mergeCells(rowIndex + i, startColumn, rowIndex + i, endColumn)
-                let outputListString = currentAction.outputList.map(instance => instance.dataclass.name + ' ' + instance.name).join(', ');
+                let outputListString = currentAction.outputList.map(stateInstance => stateInstance.instance.dataclass.name + ' ' + stateInstance.instance.name).join(', ');
                 worksheet2.getCell(rowIndex + i, startColumn).value = '(' + currentAction.capacity + ')' + ': ' + currentAction.activity.name + ' (' + outputListString + ')';
 
                 worksheet2.getCell(rowIndex + i, startColumn).border = {
@@ -178,17 +186,63 @@ export const exportExecutionPlan = async (log: Schedule) => {
     worksheet2.getRow(1).font = {size: 14, bold: true};
     worksheet2.getColumn(1).font = {size: 14, bold: true};
 
-    worksheet1.columns.forEach(column => {
-        const lengths = column.values!.map(v => v!.toString().length);
-        const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
-        column.width = maxLength < 15 ? 15 : maxLength;
-    });
-
     worksheet2.columns.forEach(column => {
         const lengths = column.values!.map(v => v!.toString().length);
         const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
         column.width = maxLength < 20 ? 20 : maxLength;
     });
+
+    //Execution Plan (all actions)
+    const worksheet3 = workbook.addWorksheet('Execution Plan (all actions)');
+
+    worksheet3.getCell(1, 1).value = 'Action';
+    worksheet3.getCell(1, 2).value = 'Input';
+    worksheet3.getCell(1, 3).value = 'Output';
+    worksheet3.getCell(1, 4).value = 'Start Time';
+    worksheet3.getCell(1, 5).value = 'End Time';
+    worksheet3.getCell(1, 6).value = 'Role';
+    worksheet3.getCell(1, 7).value = 'Resource';
+    worksheet3.getCell(1, 8).value = 'Capacity';
+
+    //loops through all actions and fills excel sheet
+    for (let i = 0; i < scheduledActions.length; i++) {
+        let currentAction = scheduledActions[i]
+
+        //writes activity and further information in cells, ordered by start date
+        worksheet3.getCell(i + 2, 1).value = currentAction.activity.name;
+        worksheet3.getCell(i + 2, 2).value = currentAction.inputList.map(stateInstance => stateInstance.instance.dataclass.name + ':' + stateInstance.instance.name + '[' + stateInstance.state + ']').join(', ');
+        worksheet3.getCell(i + 2, 3).value = currentAction.outputList.map(stateInstance => stateInstance.instance.dataclass.name + ':' + stateInstance.instance.name + '[' + stateInstance.state + ']').join(', ');
+        worksheet3.getCell(i + 2, 4).value = currentAction.start;
+        worksheet3.getCell(i + 2, 5).value = currentAction.end;
+        worksheet3.getCell(i + 2, 6).value = currentAction.activity.role?.name;
+        worksheet3.getCell(i + 2, 7).value = currentAction.resource?.name;
+        worksheet3.getCell(i + 2, 8).value = currentAction.capacity;
+    }
+
+    //styling
+    worksheet3.getRow(1).border = {
+        bottom: {style: "thick"}
+    };
+
+    worksheet3.getRow(1).font = {size: 14, bold: true};
+    worksheet3.getColumn(1).font = {size: 14, bold: true};
+
+    for(let i = 1; i <= scheduledActions.length + 1; i++){
+        if(i % 2 === 0){
+            worksheet3.getRow(i).fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: {argb: 'E0E0E0'},
+            };
+        }
+    }
+
+    worksheet3.columns.forEach(column => {
+        const lengths = column.values!.map(v => v!.toString().length);
+        const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+        column.width = maxLength < 20 ? 20 : maxLength;
+    });
+
 
     const buffer = await workbook.xlsx.writeBuffer();
     // Create a Blob from the buffer

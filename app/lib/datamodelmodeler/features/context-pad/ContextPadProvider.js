@@ -2,7 +2,7 @@ import {assign, isArray,} from 'min-dash';
 
 import {hasPrimaryModifier} from 'diagram-js/lib/util/Mouse';
 
-import {is} from '../../util/ModelUtil';
+import {is} from '../../../common/util/ModelUtil';
 
 
 /**
@@ -11,7 +11,7 @@ import {is} from '../../util/ModelUtil';
 export default function ContextPadProvider(
     config, injector, eventBus, connect, create,
     elementFactory, elementRegistry, contextPad, modeling, rules,
-    translate) {
+    translate, popupMenu) {
 
   config = config || {};
 
@@ -27,6 +27,7 @@ export default function ContextPadProvider(
 
   this._rules = rules;
   this._translate = translate;
+  this._popupMenu = popupMenu;
 
   if (config.autoPlace !== false) {
     this._autoPlace = injector.get('autoPlace', false);
@@ -59,7 +60,8 @@ ContextPadProvider.$inject = [
   'contextPad',
   'modeling',
   'rules',
-  'translate'
+  'translate',
+  'popupMenu'
 ];
 
 
@@ -73,13 +75,56 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
     _elementFactory: elementFactory,
     _elementRegistry: elementRegistry,
     _autoPlace: autoPlace,
-    _create: create
+    _create: create,
+    _popupMenu: popupMenu,
+    _contextPad: contextPad
   } = this;
 
   let actions = {};
 
   if (element.type === 'label') {
     return actions;
+  }
+
+  function getReplaceMenuPosition(element) {
+
+    var Y_OFFSET = 5;
+
+    var pad = contextPad.getPad(element).html;
+
+    var padRect = pad.getBoundingClientRect();
+
+    var pos = {
+      x: padRect.left,
+      y: padRect.bottom + Y_OFFSET
+    };
+
+    return pos;
+  }
+
+  if (!popupMenu.isEmpty(element, 'bpmn-replace')) {
+    // Replace menu entry
+    assign(actions, {
+      'replace': {
+        group: 'edit',
+        className: 'bpmn-icon-screw-wrench',
+        title: translate('Change type'),
+        action: {
+          click: function(event, element) {
+
+            var position = assign(getReplaceMenuPosition(element), {
+              cursor: { x: event.x, y: event.y }
+            });
+
+            popupMenu.open(element, 'bpmn-replace', position, {
+              title: translate('Change element'),
+              width: 300,
+              search: true
+            });
+          }
+        }
+      }
+    });
   }
 
   createDeleteEntry(actions);

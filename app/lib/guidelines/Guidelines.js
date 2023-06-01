@@ -1,4 +1,4 @@
-import {is} from '../datamodelmodeler/util/ModelUtil';
+import {is} from '../common/util/ModelUtil';
 import {type} from '../util/Util';
 import {
     getClassDependencies,

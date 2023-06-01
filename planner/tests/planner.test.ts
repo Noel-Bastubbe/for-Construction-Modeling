@@ -28,7 +28,10 @@ let wallStreetWall: Instance;
 
 // ExecutionDataObjectInstances
 let mapleStreetInit: StateInstance;
+let mapleStreetPainted: StateInstance;
+let mapleStreetTiled: StateInstance;
 let bakerStreetInit: StateInstance;
+let bakerStreetPainted: StateInstance;
 let wallStreetInit: StateInstance;
 let bakerStreetWallAvailable: StateInstance;
 let wallStreetWallAvailable: StateInstance;
@@ -105,7 +108,10 @@ beforeEach(() => {
 
     //reset all stateInstance
     mapleStreetInit = new StateInstance(mapleStreet, "init");
+    mapleStreetPainted = new StateInstance(mapleStreet, "painted");
+    mapleStreetTiled = new StateInstance(mapleStreet, "tiled");
     bakerStreetInit = new StateInstance(bakerStreet, "init");
+    bakerStreetPainted = new StateInstance(bakerStreet, "painted");
     wallStreetInit = new StateInstance(wallStreet, "init");
     bakerStreetWallAvailable = new StateInstance(bakerStreetWall,"available");
     wallStreetWallAvailable = new StateInstance(wallStreetWall,"available");
@@ -170,8 +176,8 @@ beforeEach(() => {
 describe('generate plan', () => {
 
     test('plan one activity', () => {
-        let outputAction = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreet],
-            [mapleStreet]);
+        let outputAction = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreetInit],
+            [mapleStreetPainted]);
         let executionLog = new Schedule([outputAction], [mapleStreet], resources);
 
         let planner = new Planner(currentState, goal, [paint]);
@@ -181,10 +187,10 @@ describe('generate plan', () => {
 
     test('plan two activities', () => {
         let resources = [picasso, michelangelo];
-        let outputAction = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreet],
-            [mapleStreet]);
-        let outputAction2 = new ScheduledAction(tile, 1, 2, michelangelo, 1, [mapleStreet],
-            [mapleStreet]);
+        let outputAction = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreetInit],
+            [mapleStreetPainted]);
+        let outputAction2 = new ScheduledAction(tile, 1, 2, michelangelo, 1, [mapleStreetPainted],
+            [mapleStreetTiled]);
         let executionLog = new Schedule([outputAction, outputAction2], [mapleStreet], resources);
 
         objective2 = new Objective("2", [objectiveObject2], []);
@@ -196,10 +202,10 @@ describe('generate plan', () => {
     });
 
     test('plan one activity on two objects', () => {
-        let outputAction = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreet],
-            [mapleStreet]);
-        let outputAction2 = new ScheduledAction(paint, 1, 2, picasso, 1, [bakerStreet],
-            [bakerStreet]);
+        let outputAction = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreetInit],
+            [mapleStreetPainted]);
+        let outputAction2 = new ScheduledAction(paint, 1, 2, picasso, 1, [bakerStreetInit],
+            [bakerStreetPainted]);
         let executionLog = new Schedule([outputAction, outputAction2], [bakerStreet, mapleStreet],
             resources);
 
