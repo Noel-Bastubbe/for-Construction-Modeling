@@ -105,14 +105,14 @@ beforeEach(() => {
     //reset all dataclasses
     house = new Dataclass("1", "house");
     wall = new Dataclass("2", "wall");
-    cable = new Dataclass("3","cable");
+    cable = new Dataclass("3", "cable");
 
     //reset all instances
     mapleStreet = new Instance("house_1", "1", house);
     bakerStreet = new Instance("house_2", "2", house);
     wallStreet = new Instance("house_3", "3", house);
-    bakerStreetWall = new Instance("wall_1", "1",wall);
-    wallStreetWall = new Instance("wall_2", "2",wall);
+    bakerStreetWall = new Instance("wall_1", "1", wall);
+    wallStreetWall = new Instance("wall_2", "2", wall);
 
     //reset all stateInstance
     mapleStreetInit = new StateInstance(mapleStreet, "init");
@@ -126,10 +126,10 @@ beforeEach(() => {
     wallStreetInit = new StateInstance(wallStreet, "init");
     wallStreetPlastered = new StateInstance(wallStreet, "plastered");
 
-    bakerStreetWallAvailable = new StateInstance(bakerStreetWall,"available");
-    bakerStreetWallStanding = new StateInstance(bakerStreetWall,"standing");
-    wallStreetWallAvailable = new StateInstance(wallStreetWall,"available");
-    wallStreetWallStanding = new StateInstance(wallStreetWall,"standing");
+    bakerStreetWallAvailable = new StateInstance(bakerStreetWall, "available");
+    bakerStreetWallStanding = new StateInstance(bakerStreetWall, "standing");
+    wallStreetWallAvailable = new StateInstance(wallStreetWall, "available");
+    wallStreetWallStanding = new StateInstance(wallStreetWall, "standing");
 
     //reset all roles
     painter = new Role("1", "painter");
@@ -178,7 +178,7 @@ beforeEach(() => {
 
     //reset all activities
     paint = new Activity("paint", 1, 1, painter, inputSetPaint, outputSetPaint);
-    plaster = new Activity("plaster",1,1,painter,inputSetPlaster,outputSetPlaster);
+    plaster = new Activity("plaster", 1, 1, painter, inputSetPlaster, outputSetPlaster);
     putWalls = new Activity("put Walls", 1, 1, builder, inputSetPutWalls, outputSetPutWalls);
     tile = new Activity("tile", 1, 1, tiler, inputSetTile, outputSetTile);
 
@@ -246,10 +246,10 @@ describe('generate plan', () => {
         let executionLog = new Schedule(
             [outputAction1, outputAction2, outputAction3, outputAction4, outputAction5],
             [wallStreet, mapleStreet, bakerStreet, bakerStreetWall, wallStreetWall],
-            [bob,michelangelo,picasso]);
+            [bob, michelangelo, picasso]);
 
-        let house1tiled = new ObjectiveObject("4",mapleStreet,["tiled"]);
-        let house3plastered = new ObjectiveObject("5",wallStreet,["plastered"]);
+        let house1tiled = new ObjectiveObject("4", mapleStreet, ["tiled"]);
+        let house3plastered = new ObjectiveObject("5", wallStreet, ["plastered"]);
 
         objective = new Objective("1", [house1tiled, house3plastered], []);
         goal = new Goal([objective]);
