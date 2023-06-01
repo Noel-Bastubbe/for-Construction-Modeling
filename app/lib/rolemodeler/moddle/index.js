@@ -4,7 +4,7 @@ import Moddle from './Moddle';
 
 import ODDescriptors from './resources/rom.json';
 import DiDescriptors from './resources/odDi.json';
-import DcDescriptors from './resources/dc.json';
+import DcDescriptors from '../../common/moddle/dc.json';
 
 var packages = {
   rom: ODDescriptors,

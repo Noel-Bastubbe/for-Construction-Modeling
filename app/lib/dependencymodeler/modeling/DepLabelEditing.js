@@ -1,4 +1,3 @@
-
 export default function DepLabelEditing(eventBus, canvas, directEditing, commandStack) {
     directEditing.registerProvider(this);
     this._commandStack = commandStack;
@@ -11,14 +10,14 @@ export default function DepLabelEditing(eventBus, canvas, directEditing, command
         'drag.init',
         'element.mousedown',
         'popupMenu.open'
-    ], function (event) {
+    ], function () {
         if (directEditing.isActive()) {
             directEditing.complete();
         }
     });
 
     // cancel on command stack changes (= when some other action is done)
-    eventBus.on(['commandStack.changed'], function (e) {
+    eventBus.on(['commandStack.changed'], function () {
         if (directEditing.isActive()) {
             directEditing.cancel();
         }
@@ -26,39 +25,34 @@ export default function DepLabelEditing(eventBus, canvas, directEditing, command
 }
 
 DepLabelEditing.prototype.activate = function (element) {
-
     var text = element.businessObject.name || '';
-
     var options = {
         centerVertically: true,
         autoResize: true
     };
-    
+
     var canvas = this._canvas; 
     var zoom = canvas.zoom();
     var target = element;
     var bbox = canvas.getAbsoluteBBox(target);
-    
     var mid = {
         x: bbox.x + bbox.width / 2,
         y: bbox.y + bbox.height / 2
     };
-    
+
     var width = 90 * zoom,
     paddingTop = 7 * zoom,
     paddingBottom = 4 * zoom;
-
     var bounds = {
         width: width,
         height: bbox.height + paddingTop + paddingBottom,
         x: mid.x - width / 2,
         y: bbox.y - paddingTop
     };
-    
+
     var style = {
         // TODO make look nice
     };
-
     var context = {
         text: text,
         options: options,
@@ -67,7 +61,7 @@ DepLabelEditing.prototype.activate = function (element) {
     };
 
     return context;
-};
+}
 
 DepLabelEditing.prototype.update = function (element, newLabel) {
     if (element.id !== 'start_state') {
@@ -76,9 +70,7 @@ DepLabelEditing.prototype.update = function (element, newLabel) {
             newLabel: newLabel
         });
     }
-};
-
-
+}
 
 DepLabelEditing.$inject = [
     'eventBus',

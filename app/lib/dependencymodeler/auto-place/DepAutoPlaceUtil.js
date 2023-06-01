@@ -1,8 +1,6 @@
 import {is} from '../../util/Util';
 
-// TODO candidate for common module
 import {asTRBL, getMid,} from 'diagram-js/lib/layout/LayoutUtil';
-
 import {
     findFreePosition,
     generateGetNextPosition,
@@ -20,7 +18,6 @@ export function getNewShapePosition(source, element) {
  * compute actual distance from previous nodes in flow.
  */
 export function getFlowNodePosition(source, element) {
-
 	const sourceTrbl = asTRBL(source);
 	const sourceMid = getMid(source);
 

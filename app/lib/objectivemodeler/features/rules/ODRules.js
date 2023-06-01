@@ -2,12 +2,12 @@ import {every} from 'min-dash';
 
 import inherits from 'inherits';
 
-import {is} from '../../util/ModelUtil';
+import {is} from '../../../common/util/ModelUtil';
 
 import {isLabel} from '../../util/LabelUtil';
 
 import RuleProvider from 'diagram-js/lib/features/rules/RuleProvider';
-import {isAny} from '../modeling/util/ModelingUtil';
+import {isAny} from '../../../common/features/modeling/ModelingUtil';
 
 
 /**

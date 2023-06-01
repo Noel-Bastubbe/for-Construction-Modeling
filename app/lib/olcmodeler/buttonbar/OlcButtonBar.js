@@ -102,7 +102,7 @@ export default function OlcButtonBar(canvas, eventBus, olcModeler) {
             selectOlcMenu.hide();
         });
         selectOlcMenu.addCreateElementInput(event => {
-            var className = selectOlcMenu.getInputValue();
+            var className = selectOlcMenu.getInputValue().trim();
             if (className && className.length > 0) {
                 eventBus.fire(CommonEvents.DATACLASS_CREATION_REQUESTED, {
                     name: className

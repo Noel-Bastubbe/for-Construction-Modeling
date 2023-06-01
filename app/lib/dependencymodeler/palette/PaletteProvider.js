@@ -1,10 +1,6 @@
 import {assign} from 'min-dash';
 
-//TODO rename prefix
-export default function PaletteProvider(
-  palette, create, elementFactory,
-  spaceTool, lassoTool, handTool, globalConnect, translate) {
-
+export default function PaletteProvider(palette, create, elementFactory, spaceTool, lassoTool, handTool, globalConnect, translate) {
   this._create = create;
   this._elementFactory = elementFactory;
   this._spaceTool = spaceTool;
@@ -27,9 +23,7 @@ PaletteProvider.$inject = [
   'translate'
 ];
 
-
-PaletteProvider.prototype.getPaletteEntries = function (element) {
-
+PaletteProvider.prototype.getPaletteEntries = function () {
   var actions = {},
     create = this._create,
     elementFactory = this._elementFactory,
@@ -109,4 +103,4 @@ PaletteProvider.prototype.getPaletteEntries = function (element) {
   });
 
   return actions;
-};
+}

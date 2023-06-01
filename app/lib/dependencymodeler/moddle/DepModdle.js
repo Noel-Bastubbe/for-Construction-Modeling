@@ -1,7 +1,5 @@
 import {assign} from 'min-dash';
-
 import {Moddle} from 'moddle';
-
 import {Reader, Writer} from 'moddle-xml';
 
 export default function DepModdle(packages, options) {
@@ -16,8 +14,7 @@ DepModdle.prototype.fromXML = function (xmlStr, options) {
     var rootHandler = reader.handler(typeName);
 
     return reader.fromXML(xmlStr, rootHandler);
-};
-
+}
 
 DepModdle.prototype.toXML = function (element, options) {
     var writer = new Writer(options);
@@ -25,7 +22,6 @@ DepModdle.prototype.toXML = function (element, options) {
     return new Promise(function (resolve, reject) {
         try {
             var result = writer.toXML(element);
-
             return resolve({
                 xml: result
             });
@@ -33,4 +29,4 @@ DepModdle.prototype.toXML = function (element, options) {
             return reject(err);
         }
     });
-};
+}

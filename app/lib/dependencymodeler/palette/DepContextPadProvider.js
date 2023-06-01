@@ -1,7 +1,6 @@
 import {is} from "../../util/Util";
 
-export default function DepContextPadProvider(connect, contextPad, modeling, elementFactory, create, autoPlace,
-elementRegistry) {
+export default function DepContextPadProvider(connect, contextPad, modeling, elementFactory, create, autoPlace, elementRegistry) {
   this._connect = connect;
   this._modeling = modeling;
   this._elementFactory = elementFactory;
@@ -22,18 +21,12 @@ DepContextPadProvider.$inject = [
   'elementRegistry'
 ];
 
-
 DepContextPadProvider.prototype.getContextPadEntries = function (element) {
   var connect = this._connect,
     modeling = this._modeling,
     elementFactory = this._elementFactory,
     create = this._create,
-    autoPlace = this._autoPlace,
-    elementRegistry = this._elementRegistry;
-
-  var occurencesOfSource  = elementRegistry.filter(function(dependency) {
-    return is(dependency, 'dep:Dependency') && dependency.source === element;
-  });
+    autoPlace = this._autoPlace
 
   function removeElement() {
     modeling.removeElements([element]);
@@ -66,7 +59,6 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
       }
     }
   }
-
   if (is(element, 'dep:Objective')) {
     entries['connect'] = {
       group: 'edit',
@@ -89,4 +81,4 @@ DepContextPadProvider.prototype.getContextPadEntries = function (element) {
   }
 
   return entries;
-};
+}

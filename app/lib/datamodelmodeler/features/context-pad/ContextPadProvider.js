@@ -2,7 +2,7 @@ import {assign, isArray,} from 'min-dash';
 
 import {hasPrimaryModifier} from 'diagram-js/lib/util/Mouse';
 
-import {is} from '../../util/ModelUtil';
+import {is} from '../../../common/util/ModelUtil';
 
 
 /**

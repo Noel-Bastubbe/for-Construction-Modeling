@@ -2,7 +2,7 @@ import {assign, sortBy} from 'min-dash';
 
 import inherits from 'inherits';
 
-import {getBusinessObject, is} from '../../../util/ModelUtil';
+import {getBusinessObject, is} from '../../../../common/util/ModelUtil';
 
 import {
     getExternalLabelMid,
@@ -25,7 +25,7 @@ import {getMid, roundPoint} from 'diagram-js/lib/layout/LayoutUtil';
 
 import {delta} from 'diagram-js/lib/util/PositionUtil';
 
-import {getDistancePointLine, perpendicularFoot} from './util/GeometricUtil';
+import {getDistancePointLine, perpendicularFoot} from '../../../../common/features/modeling/behavior/util/GeometricUtil';
 
 var DEFAULT_LABEL_DIMENSIONS = {
   width: 90,
