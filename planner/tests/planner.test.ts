@@ -30,11 +30,19 @@ let wallStreetWall: Instance;
 let mapleStreetInit: StateInstance;
 let mapleStreetPainted: StateInstance;
 let mapleStreetTiled: StateInstance;
+
 let bakerStreetInit: StateInstance;
 let bakerStreetPainted: StateInstance;
+let bakerStreetPlastered: StateInstance;
+
 let wallStreetInit: StateInstance;
+let wallStreetPlastered: StateInstance;
+
 let bakerStreetWallAvailable: StateInstance;
+let bakerStreetWallStanding: StateInstance;
+
 let wallStreetWallAvailable: StateInstance;
+let wallStreetWallStanding: StateInstance
 
 // Roles
 let painter: Role;
@@ -110,11 +118,18 @@ beforeEach(() => {
     mapleStreetInit = new StateInstance(mapleStreet, "init");
     mapleStreetPainted = new StateInstance(mapleStreet, "painted");
     mapleStreetTiled = new StateInstance(mapleStreet, "tiled");
+
     bakerStreetInit = new StateInstance(bakerStreet, "init");
     bakerStreetPainted = new StateInstance(bakerStreet, "painted");
+    bakerStreetPlastered = new StateInstance(bakerStreet, "plastered");
+
     wallStreetInit = new StateInstance(wallStreet, "init");
+    wallStreetPlastered = new StateInstance(wallStreet, "plastered");
+
     bakerStreetWallAvailable = new StateInstance(bakerStreetWall,"available");
+    bakerStreetWallStanding = new StateInstance(bakerStreetWall,"standing");
     wallStreetWallAvailable = new StateInstance(wallStreetWall,"available");
+    wallStreetWallStanding = new StateInstance(wallStreetWall,"standing");
 
     //reset all roles
     painter = new Role("1", "painter");
@@ -218,16 +233,16 @@ describe('generate plan', () => {
     });
 
     test('plan activities which create new instances', () => {
-        let outputAction1 = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreet],
-            [mapleStreet]);
-        let outputAction2 = new ScheduledAction(putWalls, 0, 1, bob, 1, [bakerStreetWall],
-            [bakerStreetWall]);
-        let outputAction3 = new ScheduledAction(plaster, 1, 2, picasso, 1, [bakerStreetWall],
-            [bakerStreet]);
-        let outputAction4 = new ScheduledAction(tile, 1, 2, michelangelo, 1, [mapleStreet],
-            [mapleStreet]);
-        let outputAction5 = new ScheduledAction(plaster, 2, 3, picasso, 1, [bakerStreetWall],
-            [wallStreet]);
+        let outputAction1 = new ScheduledAction(paint, 0, 1, picasso, 1, [mapleStreetInit],
+            [mapleStreetPainted]);
+        let outputAction2 = new ScheduledAction(putWalls, 0, 1, bob, 1, [bakerStreetWallAvailable],
+            [bakerStreetWallStanding]);
+        let outputAction3 = new ScheduledAction(plaster, 1, 2, picasso, 1, [bakerStreetWallStanding],
+            [bakerStreetPlastered]);
+        let outputAction4 = new ScheduledAction(tile, 1, 2, michelangelo, 1, [mapleStreetPainted],
+            [mapleStreetTiled]);
+        let outputAction5 = new ScheduledAction(plaster, 2, 3, picasso, 1, [bakerStreetWallStanding],
+            [wallStreetPlastered]);
         let executionLog = new Schedule(
             [outputAction1, outputAction2, outputAction3, outputAction4, outputAction5],
             [wallStreet, mapleStreet, bakerStreet, bakerStreetWall, wallStreetWall],
