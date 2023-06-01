@@ -39,7 +39,7 @@ export default function ODCopyPaste(odFactory, eventBus, moddleCopy) {
 
     descriptor.type = element.type;
 
-    copyProperties(businessObject, descriptor, ['classRef','instance','state']);
+    copyProperties(businessObject, descriptor, ['classRef','instance','states']);
 
     descriptor.di = {};
 
@@ -111,7 +111,7 @@ export default function ODCopyPaste(odFactory, eventBus, moddleCopy) {
     // resolve references e.g. default sequence flow
     resolveReferences(descriptor, cache);
 
-    copyProperties(descriptor, newBusinessObject, ['classRef','instance','state']);
+    copyProperties(descriptor, newBusinessObject, ['classRef','instance','states']);
 
     removeProperties(descriptor, 'oldBusinessObject');
   });
