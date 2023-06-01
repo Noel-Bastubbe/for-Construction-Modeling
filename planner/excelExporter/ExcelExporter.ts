@@ -38,7 +38,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
         worksheet1.getCell(index + 2, 1).value = value.dataclass.name + ' ' + value.name;
     });
 
-    //loops through all actions and fills excel sheet
+    //loops through all actions and fills excelExporter sheet
     for (let i = 0; i < scheduledActionsWithDuration.length; i++) {
         let currentAction = scheduledActionsWithDuration[i]
 
@@ -129,7 +129,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
         index += value.capacity;
     });
 
-    //loops through all actions and fills excel sheet
+    //loops through all actions and fills excelExporter sheet
     for (let i = 0; i < scheduledActionsWithDuration.length; i++) {
         let currentAction = scheduledActionsWithDuration[i]
 
@@ -204,7 +204,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
     worksheet3.getCell(1, 7).value = 'Resource';
     worksheet3.getCell(1, 8).value = 'Capacity';
 
-    //loops through all actions and fills excel sheet
+    //loops through all actions and fills excelExporter sheet
     for (let i = 0; i < scheduledActions.length; i++) {
         let currentAction = scheduledActions[i]
 
