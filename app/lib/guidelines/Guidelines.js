@@ -32,8 +32,8 @@ SEVERITY.filter = function(lambda) {
 
 export default [
     {
-       title : 'TC2: Include all relevant data objects in the Termination Condition',
-       id : 'TC2',
+        title : 'TC2: Include all relevant data objects in the Termination Condition',
+        id : 'TC2',
        getViolations(mediator) {
            const hook = mediator.terminationConditionModelerHook;
            const literals = hook.modeler.getLiterals();
@@ -47,7 +47,7 @@ export default [
            }
        },
        severity : SEVERITY.ERROR,
-       link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Termination-Condition#tc2---include-all-relevant-data-objects-in-the-goal-state'
+       link : 'https://github.com/bptlab/fCM-design-support/wiki/Goal-State#gs2---include-all-relevant-data-objects-in-the-goal-state'
     },
     {
         title: 'F9: Do not use gateways at the beginning of a fragment',
@@ -61,7 +61,7 @@ export default [
             }));
         },
         severity: SEVERITY.ERROR,
-        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragments#f9---do-not-use-gateways-at-the-beginning-of-a-fragment'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Fragments#f9---do-not-use-gateways-at-the-beginning-of-a-fragment'
     },
     {
         title: 'F3: Use at least one activity for a fragment',
@@ -82,7 +82,7 @@ export default [
             }));
         },
         severity: SEVERITY.ERROR,
-        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragments#f3---use-at-least-one-activity-for-a-fragment'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Fragments#f3---use-at-least-one-activity-for-a-fragment'
     },
     {
         title: 'F11: Label notations elements',
@@ -96,7 +96,7 @@ export default [
             }));
         },
         severity: SEVERITY.ERROR,
-        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragments#f11---label-notation-elements'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Fragments#f11---label-notation-elements'
     },
     {
         title: 'F11.1: No empty states for data objects',
@@ -111,7 +111,7 @@ export default [
             }));
         },
         severity: SEVERITY.WARNING,
-        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragments#f11---label-notation-elements'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Fragments#f11---label-notation-elements'
     },
     {
         title : 'Use states instead of attributes for important data changes',
@@ -125,7 +125,7 @@ export default [
             }));
         },
         severity : SEVERITY.INFORMATION,
-        link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Model#d5---use-states-instead-of-attributes-for-important-data-changes'
+        link : 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d5---use-states-instead-of-attributes-for-important-data-changes'
     },
     {
         title: 'F4: Use data objects to model pre- and postconditions',
@@ -152,7 +152,7 @@ export default [
             }));
         },
         severity: SEVERITY.WARNING,
-        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragments#f4---use-data-objects-to-model-pre--and-postconditions'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Fragments#f4---use-data-objects-to-model-pre--and-postconditions'
     },
     {
         title: 'F6A: Use at least one start event',
@@ -170,7 +170,7 @@ export default [
             }
         },
         severity: SEVERITY.ERROR,
-        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragments#f6---use-start-events-only-in-initial-fragments'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Fragments#f6---use-start-events-only-in-initial-fragments'
     },
     {
         title: 'F6B: Use multiple start events carefully',
@@ -188,7 +188,7 @@ export default [
             }
         },
         severity: SEVERITY.INFORMATION,
-        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragments#f6---use-start-events-only-in-initial-fragments'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Fragments#f6---use-start-events-only-in-initial-fragments'
     },
     {
         title: 'F6C: Start fragment does not create case class',
@@ -227,7 +227,7 @@ export default [
             });
         },
         severity: SEVERITY.ERROR,
-        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragments#f6---use-start-events-only-in-initial-fragments'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Fragments#f6---use-start-events-only-in-initial-fragments'
     },    
     {
         title : 'Have each fragment state transition in olc',
@@ -316,7 +316,7 @@ export default [
             });
         },
         severity : SEVERITY.ERROR,
-        link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Consistency#c3---use-state-labels-and-state-transitions-of-data-objects-consistently-in-olcs-and-fragments'
+        link : 'https://github.com/bptlab/fCM-design-support/wiki/Consistency#c3---use-state-labels-and-state-transitions-of-data-objects-consistently-in-olcs-and-fragments'
     },
     {
         title: 'C5: Provide existential objects',
@@ -363,7 +363,7 @@ export default [
             });
         },
         severity: SEVERITY.ERROR,
-        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Consistency#c5---provide-context-data-objects-from-data-model-on-data-object-creation-in-fragments'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Consistency#c5---provide-context-data-objects-from-data-model-on-data-object-creation-in-fragments'
     },
     {
         title : 'Specify a Case Class.',
@@ -394,7 +394,7 @@ export default [
             }
         },
         severity : SEVERITY.ERROR,
-        link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Model#d2---specify-a-case-class'
+        link : 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d2---specify-a-case-class'
     },
     {
         title : 'Connect the Case Class to Every Other Class.',
@@ -423,7 +423,7 @@ export default [
 
         },
         severity : SEVERITY.ERROR,
-        link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Model#d3---connect-the-case-class-to-every-other-class'
+        link : 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d3---connect-the-case-class-to-every-other-class'
     },
     {
         title: 'Check if all Objectives are reachable from the Start State.',
@@ -471,7 +471,7 @@ export default [
             }
         },
         severity: SEVERITY.WARNING,
-        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep2---check-if-all-objectives-are-reachable-from-the-start-state'
+        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep2---link-every-objectives-to-at-least-one-other-objective'
     },
     {
         title : 'Connect the Start State to one other Objective.',
