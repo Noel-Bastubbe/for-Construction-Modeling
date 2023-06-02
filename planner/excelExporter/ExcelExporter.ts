@@ -38,7 +38,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
         worksheet1.getCell(index + 2, 1).value = value.dataclass.name + ' ' + value.name;
     });
 
-    //loops through all actions and fills excel sheet
+    //loops through all actions and fills excelExporter sheet
     for (let i = 0; i < scheduledActionsWithDuration.length; i++) {
         let currentAction = scheduledActionsWithDuration[i]
 
@@ -123,13 +123,13 @@ export const exportExecutionPlan = async (log: Schedule) => {
     //writes resources in first column
     let index = 2;
     resources.forEach((value) => {
-        for(let i = 0; i < value.capacity; i++){
+        for (let i = 0; i < value.capacity; i++) {
             worksheet2.getCell(index + i, 1).value = value.name;
         }
         index += value.capacity;
     });
 
-    //loops through all actions and fills excel sheet
+    //loops through all actions and fills excelExporter sheet
     for (let i = 0; i < scheduledActionsWithDuration.length; i++) {
         let currentAction = scheduledActionsWithDuration[i]
 
@@ -144,7 +144,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
 
         //writes activity and further information in cells depending on start and end date
         if (rowIndex !== null) {
-            for(let i = 0; i < currentAction.capacity; i++){
+            for (let i = 0; i < currentAction.capacity; i++) {
                 const startColumn = currentAction.start + 2;
                 const endColumn = currentAction.end + 1;
                 worksheet2.mergeCells(rowIndex + i, startColumn, rowIndex + i, endColumn)
@@ -204,7 +204,7 @@ export const exportExecutionPlan = async (log: Schedule) => {
     worksheet3.getCell(1, 7).value = 'Resource';
     worksheet3.getCell(1, 8).value = 'Capacity';
 
-    //loops through all actions and fills excel sheet
+    //loops through all actions and fills excelExporter sheet
     for (let i = 0; i < scheduledActions.length; i++) {
         let currentAction = scheduledActions[i]
 
@@ -227,8 +227,8 @@ export const exportExecutionPlan = async (log: Schedule) => {
     worksheet3.getRow(1).font = {size: 14, bold: true};
     worksheet3.getColumn(1).font = {size: 14, bold: true};
 
-    for(let i = 1; i <= scheduledActions.length + 1; i++){
-        if(i % 2 === 0){
+    for (let i = 1; i <= scheduledActions.length + 1; i++) {
+        if (i % 2 === 0) {
             worksheet3.getRow(i).fill = {
                 type: 'pattern',
                 pattern: 'solid',
