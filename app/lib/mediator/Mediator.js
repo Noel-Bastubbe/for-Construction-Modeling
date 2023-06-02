@@ -287,7 +287,7 @@ Mediator.prototype.renamedState = function (olcState) {
 // === Data Modeler Hook
 Mediator.prototype.DataModelerHook = function (eventBus, dataModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, dataModeler, 'Data Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Model');
+    AbstractHook.call(this, dataModeler, 'Data Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Modeler');
     this.mediator.dataModelerHook = this;
     this.eventBus = eventBus;
 
@@ -368,7 +368,7 @@ Mediator.prototype.DataModelerHook.isHook = true;
 // === Dependency Modeler Hook
 Mediator.prototype.DependencyModelerHook = function (eventBus, dependencyModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, dependencyModeler, 'Dependency Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model');
+    AbstractHook.call(this, dependencyModeler, 'Dependency Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Modeler');
     this.mediator.dependencyModelerHook = this;
     this.eventBus = eventBus;
 
@@ -434,7 +434,7 @@ Mediator.prototype.DependencyModelerHook.isHook = true;
 // === Fragment Modeler Hook
 Mediator.prototype.FragmentModelerHook = function (eventBus, fragmentModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, fragmentModeler, 'Fragments', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragments');
+    AbstractHook.call(this, fragmentModeler, 'Fragments', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragment-Modeler');
     this.mediator.fragmentModelerHook = this;
     this.eventBus = eventBus;
 
@@ -480,7 +480,7 @@ Mediator.prototype.FragmentModelerHook.isHook = true;
 // === Objective Modeler Hook
 Mediator.prototype.ObjectiveModelerHook = function (eventBus, objectiveModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, objectiveModeler, 'Objective Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Objective-Model');
+    AbstractHook.call(this, objectiveModeler, 'Objective Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Objective-Modeler');
     this.mediator.objectiveModelerHook = this;
     this.eventBus = eventBus;
 
@@ -610,7 +610,7 @@ Mediator.prototype.ObjectiveModelerHook.isHook = true;
 // === Olc Modeler Hook
 Mediator.prototype.OlcModelerHook = function (eventBus, olcModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, olcModeler, 'OLCs', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Object-Lifecycle-(OLC)');
+    AbstractHook.call(this, olcModeler, 'OLCs', 'https://github.com/bptlab/fCM-design-support/wiki/Object-Lifecycle-%28OLC%29');
     this.mediator.olcModelerHook = this;
     this.eventBus = eventBus;
 
@@ -706,7 +706,7 @@ Mediator.prototype.ResourceModelerHook = function (eventBus, resourceModeler) {
         this,
         resourceModeler,
         "Resource Model",
-        "https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Resource-Model"
+        "https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Resource-Modeler"
     );
     this.mediator.resourceModelerHook = this;
     this.eventBus = eventBus;
@@ -797,7 +797,7 @@ Mediator.prototype.ResourceModelerHook.isHook = true;
 // === Role Modeler Hook
 Mediator.prototype.RoleModelerHook = function (eventBus, roleModeler) {
     CommandInterceptor.call(this, eventBus);
-    AbstractHook.call(this, roleModeler, 'Role Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Role-Model');
+    AbstractHook.call(this, roleModeler, 'Role Model', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Role-Modeler');
     this.mediator.roleModelerHook = this;
     this.eventBus = eventBus;
 
@@ -875,7 +875,7 @@ Mediator.prototype.RoleModelerHook.isHook = true;
 
 // ===  Termination Condition Modeler Hook
 Mediator.prototype.TerminationConditionModelerHook = function (terminationConditionModeler) {
-    AbstractHook.call(this, terminationConditionModeler, 'Termination Condition', 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Termination-Condition');
+    AbstractHook.call(this, terminationConditionModeler, 'Termination Condition', 'https://github.com/bptlab/fCM-design-support/wiki/Goal-State');
     this.mediator.terminationConditionModelerHook = this;
     this.eventBus = terminationConditionModeler.eventBus;
 
