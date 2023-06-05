@@ -35,6 +35,9 @@ export default function FragmentModeler(options) {
     // See https://github.com/bpmn-io/bpmn-js/blob/212af3bb51840465e5809345ea3bb3da86656be3/lib/features/copy-paste/ModdleCopy.js#L218
     this.get('eventBus').on('moddleCopy.canCopyProperty', function(context) {
         if (context.propertyName === 'dataclass' || context.propertyName === 'states' || context.propertyName === 'role') {
+            if(context.propertyName != null && context.propertyName === 'states') {
+                return context.property.slice();
+            }
             return context.property;
         }
     });
