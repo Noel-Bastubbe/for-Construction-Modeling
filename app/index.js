@@ -25,7 +25,7 @@ import conferenceTerminationCondition from '../resources/conferenceModel/termina
 import Zip from 'jszip';
 import {appendOverlayListeners} from "./lib/util/HtmlUtil";
 
-import {exportExecutionPlan} from "../dist/excelExporter/excelExporter.js";
+import {exportExecutionPlan} from "../dist/excelExporter/ExcelExporter.js";
 import {ModelObjectParser} from "../planner/parser/ModelObjectParser";
 
 const constructionMode = false; // Set to true for renaming modelers for user study and removing termination condition modeler
