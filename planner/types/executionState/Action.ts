@@ -24,7 +24,7 @@ export class Action {
     }
 
     public start(executionState: ExecutionState): ExecutionState {
-        if(this.activity.duration == 0) {
+        if (this.activity.duration == 0) {
             return this.finishInstantAction(executionState);
         }
         let changedStateInstances: StateInstance[] = this.getChangedExecutionDataObjectInstances();

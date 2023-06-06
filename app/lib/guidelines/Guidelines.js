@@ -47,7 +47,7 @@ export default [
             }
         },
         severity: SEVERITY.ERROR,
-       link : 'https://github.com/bptlab/fCM-design-support/wiki/Goal-State#gs2---include-all-relevant-data-objects-in-the-goal-state'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Goal-State#gs2---include-all-relevant-data-objects-in-the-goal-state'
     },
     {
         title: 'F9: Do not use gateways at the beginning of a fragment',
@@ -125,7 +125,7 @@ export default [
             }));
         },
         severity: SEVERITY.INFORMATION,
-        link : 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d5---use-states-instead-of-attributes-for-important-data-changes'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d5---use-states-instead-of-attributes-for-important-data-changes'
     },
     {
         title: 'F4: Use data objects to model pre- and postconditions',
@@ -335,7 +335,7 @@ export default [
             });
         },
         severity: SEVERITY.ERROR,
-        link : 'https://github.com/bptlab/fCM-design-support/wiki/Consistency#c3---use-state-labels-and-state-transitions-of-data-objects-consistently-in-olcs-and-fragments'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Consistency#c3---use-state-labels-and-state-transitions-of-data-objects-consistently-in-olcs-and-fragments'
     },
     {
         title: 'C5: Provide existential objects',
@@ -416,7 +416,7 @@ export default [
             }
         },
         severity: SEVERITY.ERROR,
-        link : 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d2---specify-a-case-class'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d2---specify-a-case-class'
     },
     {
         title: 'Connect the Case Class to Every Other Class.',
@@ -445,7 +445,7 @@ export default [
 
         },
         severity: SEVERITY.ERROR,
-        link : 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d3---connect-the-case-class-to-every-other-class'
+        link: 'https://github.com/bptlab/fCM-design-support/wiki/Data-Model#d3---connect-the-case-class-to-every-other-class'
     },
     {
         title: 'Check if all Objectives are reachable from the Start State.',
