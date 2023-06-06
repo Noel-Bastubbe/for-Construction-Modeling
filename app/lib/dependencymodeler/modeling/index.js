@@ -1,12 +1,11 @@
-import CommandModule from 'diagram-js/lib/command';
-import DirectEditingModule from 'diagram-js-direct-editing';
-import CroppingConnectionDocking from 'diagram-js/lib/layout/CroppingConnectionDocking';
-
 import DepUpdater from './DepUpdater';
 import DepElementFactory from './DepElementFactory';
 import DepLabelEditing from './DepLabelEditing';
-import Modeling from '../../common/modeling/Modeling';
+import Modeling from './Modeling';
 
+import CommandModule from 'diagram-js/lib/command';
+import DirectEditingModule from 'diagram-js-direct-editing';
+import CroppingConnectionDocking from 'diagram-js/lib/layout/CroppingConnectionDocking';
 
 export default {
   __init__: [

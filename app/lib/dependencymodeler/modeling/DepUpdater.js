@@ -1,20 +1,15 @@
 import inherits from 'inherits';
-
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
-
 import {remove as collectionRemove} from 'diagram-js/lib/util/Collections';
 
-
 export default function DepUpdater(eventBus, connectionDocking) {
-
     CommandInterceptor.call(this, eventBus);
     this._connectionDocking = connectionDocking;
     self = this;
 
-    // connection cropping //////////////////////
+    // connection cropping 
     // crop connection ends during create/update
     function cropConnection(e) {
-
         var context = e.context,
             hints = context.hints || {},
             connection = context.connection;
@@ -91,7 +86,6 @@ function reflectiveEdge(element) {
 
 function linkToBusinessObjectParent(element) {
     var parentShape = element.parent;
-
     var businessObject = element.businessObject,
         parentBusinessObject = parentShape && parentShape.businessObject;
 
@@ -114,7 +108,6 @@ DepUpdater.$inject = [
     'connectionDocking'
 ];
 
-//TODO move to common utils
 function center(shape) {
     return {
       x: shape.x + shape.width / 2,

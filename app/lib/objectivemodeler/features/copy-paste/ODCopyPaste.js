@@ -3,27 +3,31 @@ import {getBusinessObject} from '../../../common/util/ModelUtil';
 import {forEach, isArray, isUndefined, omit, reduce} from 'min-dash';
 
 function copyProperties(source, target, properties) {
-  if (!isArray(properties)) {
-    properties = [ properties ];
-  }
-
-  forEach(properties, function(property) {
-    if (!isUndefined(source[property])) {
-      target[property] = source[property];
+    if (!isArray(properties)) {
+        properties = [properties];
     }
-  });
+
+    forEach(properties, function (property) {
+        if (!isUndefined(source[property])) {
+            if (property != null && property === 'states') {
+                target[property] = source[property].slice();
+            } else {
+                target[property] = source[property];
+            }
+        }
+    });
 }
 
 function removeProperties(element, properties) {
-  if (!isArray(properties)) {
-    properties = [ properties ];
-  }
-
-  forEach(properties, function(property) {
-    if (element[property]) {
-      delete element[property];
+    if (!isArray(properties)) {
+        properties = [properties];
     }
-  });
+
+    forEach(properties, function (property) {
+        if (element[property]) {
+            delete element[property];
+        }
+    });
 }
 
 var LOW_PRIORITY = 750;
@@ -31,102 +35,102 @@ var LOW_PRIORITY = 750;
 
 export default function ODCopyPaste(odFactory, eventBus, moddleCopy) {
 
-  eventBus.on('copyPaste.copyElement', LOW_PRIORITY, function(context) {
-    var descriptor = context.descriptor,
-        element = context.element;
+    eventBus.on('copyPaste.copyElement', LOW_PRIORITY, function (context) {
+        var descriptor = context.descriptor,
+            element = context.element;
 
-    var businessObject = descriptor.oldBusinessObject = getBusinessObject(element);
+        var businessObject = descriptor.oldBusinessObject = getBusinessObject(element);
 
-    descriptor.type = element.type;
+        descriptor.type = element.type;
 
-    copyProperties(businessObject, descriptor, ['classRef','instance','state']);
+        copyProperties(businessObject, descriptor, ['classRef', 'instance', 'states']);
 
-    descriptor.di = {};
+        descriptor.di = {};
 
-    // fill and stroke will be set to DI
-    copyProperties(businessObject.di, descriptor.di, [
-      'fill',
-      'stroke'
-    ]);
+        // fill and stroke will be set to DI
+        copyProperties(businessObject.di, descriptor.di, [
+            'fill',
+            'stroke'
+        ]);
 
-    if (isLabel(descriptor)) {
-      return descriptor;
+        if (isLabel(descriptor)) {
+            return descriptor;
+        }
+
+    });
+
+    var references;
+
+    function resolveReferences(descriptor, cache) {
+        var businessObject = getBusinessObject(descriptor);
+
+        // default sequence flows
+        if (descriptor.default) {
+
+            // relationship cannot be resolved immediately
+            references[descriptor.default] = {
+                element: businessObject,
+                property: 'default'
+            };
+        }
+
+        references = omit(references, reduce(references, function (array, reference, key) {
+            var element = reference.element,
+                property = reference.property;
+
+            if (key === descriptor.id) {
+                element[property] = businessObject;
+
+                array.push(descriptor.id);
+            }
+
+            return array;
+        }, []));
     }
 
-  });
+    eventBus.on('copyPaste.pasteElements', function () {
+        references = {};
+    });
 
-  var references;
+    eventBus.on('copyPaste.pasteElement', function (context) {
+        var cache = context.cache,
+            descriptor = context.descriptor,
+            oldBusinessObject = descriptor.oldBusinessObject,
+            newBusinessObject;
 
-  function resolveReferences(descriptor, cache) {
-    var businessObject = getBusinessObject(descriptor);
+        // do NOT copy business object if external label
+        if (isLabel(descriptor)) {
+            descriptor.businessObject = getBusinessObject(cache[descriptor.labelTarget]);
 
-    // default sequence flows
-    if (descriptor.default) {
+            return;
+        }
 
-      // relationship cannot be resolved immediately
-      references[ descriptor.default ] = {
-        element: businessObject,
-        property: 'default'
-      };
-    }
+        newBusinessObject = odFactory.create(oldBusinessObject.$type);
 
-    references = omit(references, reduce(references, function(array, reference, key) {
-      var element = reference.element,
-          property = reference.property;
+        descriptor.businessObject = moddleCopy.copyElement(
+            oldBusinessObject,
+            newBusinessObject
+        );
 
-      if (key === descriptor.id) {
-        element[ property ] = businessObject;
+        // resolve references e.g. default sequence flow
+        resolveReferences(descriptor, cache);
 
-        array.push(descriptor.id);
-      }
+        copyProperties(descriptor, newBusinessObject, ['classRef', 'instance', 'states']);
 
-      return array;
-    }, []));
-  }
-
-  eventBus.on('copyPaste.pasteElements', function() {
-    references = {};
-  });
-
-  eventBus.on('copyPaste.pasteElement', function(context) {
-    var cache = context.cache,
-        descriptor = context.descriptor,
-        oldBusinessObject = descriptor.oldBusinessObject,
-        newBusinessObject;
-
-    // do NOT copy business object if external label
-    if (isLabel(descriptor)) {
-      descriptor.businessObject = getBusinessObject(cache[ descriptor.labelTarget ]);
-
-      return;
-    }
-
-    newBusinessObject = odFactory.create(oldBusinessObject.$type);
-
-    descriptor.businessObject = moddleCopy.copyElement(
-      oldBusinessObject,
-      newBusinessObject
-    );
-
-    // resolve references e.g. default sequence flow
-    resolveReferences(descriptor, cache);
-
-    copyProperties(descriptor, newBusinessObject, ['classRef','instance','state']);
-
-    removeProperties(descriptor, 'oldBusinessObject');
-  });
+        removeProperties(descriptor, 'oldBusinessObject');
+    });
 
 }
 
 
 ODCopyPaste.$inject = [
-  'odFactory',
-  'eventBus',
-  'moddleCopy'
+    'odFactory',
+    'eventBus',
+    'moddleCopy'
 ];
 
 // helpers //////////
 
 function isLabel(element) {
-  return !!element.labelTarget;
+    return !!element.labelTarget;
 }
