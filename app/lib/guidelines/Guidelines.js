@@ -471,7 +471,7 @@ export default [
             }
         },
         severity: SEVERITY.WARNING,
-        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep2---link-every-objectives-to-at-least-one-other-objective'
+        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep2---link-every-objective-to-at-least-one-other-objective'
     },
     {
         title : 'Connect the Start State to one other Objective.',
