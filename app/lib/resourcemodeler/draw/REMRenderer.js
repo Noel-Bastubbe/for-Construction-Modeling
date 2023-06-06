@@ -10,9 +10,7 @@ import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 import {getLabel} from '../features/label-editing/LabelUtil';
 
 import {getBusinessObject, is} from '../../common/util/ModelUtil';
-import {
-    query as domQuery
-} from 'min-dom';
+import {query as domQuery} from 'min-dom';
 
 import {getFillColor, getRectPath, getSemantic, getStrokeColor} from '../../common/draw/RendererUtil';
 import Ids from 'ids';

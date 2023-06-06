@@ -17,7 +17,7 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
     const exportButton = document.createElement('button');
     exportButton.innerHTML = 'Export ObjectiveModel as Xml'
     exportButton.addEventListener('click', function () {
-        omModeler.saveXML({ format: true }).then(result => {
+        omModeler.saveXML({format: true}).then(result => {
             download('foobar.xml', result.xml);
         });
     });
@@ -78,7 +78,7 @@ export default function OmButtonBar(canvas, eventBus, omModeler) {
     deleteObjectiveButton.title = 'Delete Current Objective';
     deleteObjectiveButton.addEventListener('click', () => {
         var objectiveToDelete = selectObjectiveComponent.value;
-        if( objectiveToDelete.id !== 'StartBoard' && objectiveToDelete.id !== 'FinalBoard') {
+        if (objectiveToDelete.id !== 'StartBoard' && objectiveToDelete.id !== 'FinalBoard') {
             var shouldDelete = eventBus.fire(ObjectiveEvents.OBJECTIVE_DELETION_REQUESTED, {objective: objectiveToDelete});
             if (shouldDelete !== false) {
                 // Deletion was not rejected and not handled somewhere else; should not happen when mediator is involved

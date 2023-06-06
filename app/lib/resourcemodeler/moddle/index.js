@@ -7,13 +7,13 @@ import DiDescriptors from '../../common/moddle/odDi.json';
 import DcDescriptors from '../../common/moddle/dc.json';
 
 var packages = {
-  rem: ODDescriptors,
-  odDi: DiDescriptors,
-  dc: DcDescriptors,
+    rem: ODDescriptors,
+    odDi: DiDescriptors,
+    dc: DcDescriptors,
 };
 
-export default function(additionalPackages, options) {
-  var pks = assign({}, packages, additionalPackages);
+export default function (additionalPackages, options) {
+    var pks = assign({}, packages, additionalPackages);
 
-  return new Moddle(pks, options);
+    return new Moddle(pks, options);
 }

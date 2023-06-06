@@ -33,9 +33,9 @@ export default function FragmentModeler(options) {
 
     //Explicitely allow the copying of references (to objects outside the fragment modeler)
     // See https://github.com/bpmn-io/bpmn-js/blob/212af3bb51840465e5809345ea3bb3da86656be3/lib/features/copy-paste/ModdleCopy.js#L218
-    this.get('eventBus').on('moddleCopy.canCopyProperty', function(context) {
+    this.get('eventBus').on('moddleCopy.canCopyProperty', function (context) {
         if (context.propertyName === 'dataclass' || context.propertyName === 'states' || context.propertyName === 'role') {
-            if(context.propertyName != null && context.propertyName === 'states') {
+            if (context.propertyName != null && context.propertyName === 'states') {
                 return context.property.slice();
             }
             return context.property;
@@ -55,11 +55,11 @@ FragmentModeler.prototype.name = function (constructionMode) {
     }
 }
 
-FragmentModeler.prototype.handleOlcListChanged = function (olcs, dryRun=false) {
+FragmentModeler.prototype.handleOlcListChanged = function (olcs, dryRun = false) {
     this._olcs = olcs;
 }
 
-FragmentModeler.prototype.handleRoleListChanged = function (roles, dryRun=false) {
+FragmentModeler.prototype.handleRoleListChanged = function (roles, dryRun = false) {
     this._roles = roles;
 }
 
@@ -120,7 +120,7 @@ FragmentModeler.prototype.getDataObjectReferencesInState = function (olcState) {
 }
 
 FragmentModeler.prototype.getDataObjectReferencesOfClass = function (clazz) {
-    return this.get('elementRegistry').filter((element, gfx) => 
+    return this.get('elementRegistry').filter((element, gfx) =>
         is(element, 'bpmn:DataObjectReference') &&
         element.type !== 'label' &&
         clazz.id &&
@@ -129,7 +129,7 @@ FragmentModeler.prototype.getDataObjectReferencesOfClass = function (clazz) {
 }
 
 FragmentModeler.prototype.getTasksWithRole = function (role) {
-    let list =  this.get('elementRegistry').filter((element, gfx) =>
+    let list = this.get('elementRegistry').filter((element, gfx) =>
         is(element, 'bpmn:Task') &&
         role.id &&
         element.businessObject.role?.id === role.id
@@ -137,9 +137,9 @@ FragmentModeler.prototype.getTasksWithRole = function (role) {
     return list;
 }
 
-FragmentModeler.prototype.startDoCreation = function(event, elementShape, dataclass, isIncoming) {
+FragmentModeler.prototype.startDoCreation = function (event, elementShape, dataclass, isIncoming) {
     const shape = this.get('elementFactory').createShape({
-        type : 'bpmn:DataObjectReference'
+        type: 'bpmn:DataObjectReference'
     });
     shape.businessObject.dataclass = dataclass;
     shape.businessObject.states = [];

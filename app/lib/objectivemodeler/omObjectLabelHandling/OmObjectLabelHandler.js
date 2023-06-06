@@ -54,7 +54,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                             updateStateSelection();
                         },
                         element
-                        );
+                    );
                 }
 
                 const populateInstanceDropdown = (instances) => {
@@ -109,9 +109,9 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                     this._classDropdown.populate(
                         olcs,
                         (olc, element) => {
-                        this.updateClass(olc.classRef, element);
-                        updateClassSelection();
-                    },
+                            this.updateClass(olc.classRef, element);
+                            updateClassSelection();
+                        },
                         element
                     );
                     this._classDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
@@ -213,7 +213,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
 
     updateStates(newState, element) {
         const omObject = element.businessObject;
-        if(omObject.get('states').includes(newState)) {
+        if (omObject.get('states').includes(newState)) {
             omObject.states = without(omObject.get('states'), newState);
         } else {
             omObject.states.push(newState);

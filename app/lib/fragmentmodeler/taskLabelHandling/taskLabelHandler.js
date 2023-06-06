@@ -43,25 +43,27 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 const populateNameDropdown = () => {
                     this._nameDropdown.populate(
                         [],
-                        () => {},
+                        () => {
+                        },
                         element
                     );
-                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",activity.name);
+                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "text", activity.name);
                 }
                 const populateDurationDropdown = () => {
                     this._durationDropdown.populate(
                         [],
-                        () => {},
+                        () => {
+                        },
                         element
                     );
-                    this._durationDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.duration, "0");
+                    this._durationDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "number", activity.duration, "0");
                 }
                 const populateRoleDropdown = () => {
                     this._roleDropdown.populate(
                         this._fragmentModeler._roles || [],
                         (role, element) => {
                             this.updateRole(role, element);
-                            if(element.businessObject.role === undefined){
+                            if (element.businessObject.role === undefined) {
                                 this._NoPDropdown.clearInput()
                             }
                             updateRoleSelection();
@@ -74,10 +76,11 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 const populateNoPDropdown = () => {
                     this._NoPDropdown.populate(
                         [],
-                        () => {},
+                        () => {
+                        },
                         element
                     );
-                    this._NoPDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.NoP);
+                    this._NoPDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "number", activity.NoP);
                 }
                 populateNameDropdown();
                 populateDurationDropdown();
@@ -90,20 +93,20 @@ export default class TaskLabelHandler extends CommandInterceptor {
                     const newRoleInput = this._roleDropdown.getInputValue().trim();
                     const newNoPInput = this._NoPDropdown.getInputValue().trim();
                     if (newNameInput !== '' && newNameInput !== activity.name) {
-                        this.updateName(newNameInput,element);
+                        this.updateName(newNameInput, element);
                         populateNameDropdown();
                     }
                     if (newDurationInput !== activity.duration && newDurationInput >= 0) {
-                        this.updateDuration(newDurationInput,element);
+                        this.updateDuration(newDurationInput, element);
                         populateDurationDropdown();
                     }
                     if (newRoleInput !== '' && newRoleInput !== activity.role) {
                         let newRole = this.createRole(newRoleInput);
-                        this.updateRole(newRole,element);
+                        this.updateRole(newRole, element);
                         populateRoleDropdown();
                     }
                     if (newNoPInput !== activity.NoP && newNoPInput > 0 && activity.role !== undefined) {
-                        this.updateNoP(newNoPInput,element);
+                        this.updateNoP(newNoPInput, element);
                         populateNoPDropdown();
                     }
                 }

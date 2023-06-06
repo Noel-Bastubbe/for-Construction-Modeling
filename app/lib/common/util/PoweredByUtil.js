@@ -14,63 +14,63 @@ var BPMNIO_LOGO_URL = 'data:image/svg+xml,' + encodeURIComponent(BPMNIO_LOGO_SVG
 export var BPMNIO_IMG = '<img width="52" height="52" src="' + BPMNIO_LOGO_URL + '" />';
 
 function css(attrs) {
-  return attrs.join(';');
+    return attrs.join(';');
 }
 
 var LIGHTBOX_STYLES = css([
-  'z-index: 1001',
-  'position: fixed',
-  'top: 0',
-  'left: 0',
-  'right: 0',
-  'bottom: 0'
+    'z-index: 1001',
+    'position: fixed',
+    'top: 0',
+    'left: 0',
+    'right: 0',
+    'bottom: 0'
 ]);
 
 var BACKDROP_STYLES = css([
-  'width: 100%',
-  'height: 100%',
-  'background: rgba(0,0,0,0.2)'
+    'width: 100%',
+    'height: 100%',
+    'background: rgba(0,0,0,0.2)'
 ]);
 
 var NOTICE_STYLES = css([
-  'position: absolute',
-  'left: 50%',
-  'top: 40%',
-  'margin: 0 -130px',
-  'width: 260px',
-  'padding: 10px',
-  'background: white',
-  'border: solid 1px #AAA',
-  'border-radius: 3px',
-  'font-family: Helvetica, Arial, sans-serif',
-  'font-size: 14px',
-  'line-height: 1.2em'
+    'position: absolute',
+    'left: 50%',
+    'top: 40%',
+    'margin: 0 -130px',
+    'width: 260px',
+    'padding: 10px',
+    'background: white',
+    'border: solid 1px #AAA',
+    'border-radius: 3px',
+    'font-family: Helvetica, Arial, sans-serif',
+    'font-size: 14px',
+    'line-height: 1.2em'
 ]);
 
 var LIGHTBOX_MARKUP =
-  '<div class="bjs-powered-by-lightbox" style="' + LIGHTBOX_STYLES + '">' +
-  '<div class="backdrop" style="' + BACKDROP_STYLES + '"></div>' +
-  '<div class="notice" style="' + NOTICE_STYLES + '">' +
-  '<a href="http://bpmn.io" target="_blank" style="float: left; margin-right: 10px">' +
-  BPMNIO_IMG +
-  '</a>' +
-  'Web-based tooling for BPMN, DMN and CMMN diagrams ' +
-  'powered by <a href="http://bpmn.io" target="_blank">bpmn.io</a>.' +
-  '</div>' +
-  '</div>';
+    '<div class="bjs-powered-by-lightbox" style="' + LIGHTBOX_STYLES + '">' +
+    '<div class="backdrop" style="' + BACKDROP_STYLES + '"></div>' +
+    '<div class="notice" style="' + NOTICE_STYLES + '">' +
+    '<a href="http://bpmn.io" target="_blank" style="float: left; margin-right: 10px">' +
+    BPMNIO_IMG +
+    '</a>' +
+    'Web-based tooling for BPMN, DMN and CMMN diagrams ' +
+    'powered by <a href="http://bpmn.io" target="_blank">bpmn.io</a>.' +
+    '</div>' +
+    '</div>';
 
 
 var lightbox;
 
 export function open() {
 
-  if (!lightbox) {
-    lightbox = domify(LIGHTBOX_MARKUP);
+    if (!lightbox) {
+        lightbox = domify(LIGHTBOX_MARKUP);
 
-    domDelegate.bind(lightbox, '.backdrop', 'click', function(event) {
-      document.body.removeChild(lightbox);
-    });
-  }
+        domDelegate.bind(lightbox, '.backdrop', 'click', function (event) {
+            document.body.removeChild(lightbox);
+        });
+    }
 
-  document.body.appendChild(lightbox);
+    document.body.appendChild(lightbox);
 }

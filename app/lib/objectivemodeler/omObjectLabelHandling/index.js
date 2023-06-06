@@ -1,6 +1,6 @@
 import OmObjectLabelHandler from "./OmObjectLabelHandler";
 
 export default {
-    __init__: [ 'omObjectLabelHandler' ],
-    omObjectLabelHandler: [ 'type', OmObjectLabelHandler ]
+    __init__: ['omObjectLabelHandler'],
+    omObjectLabelHandler: ['type', OmObjectLabelHandler]
 };

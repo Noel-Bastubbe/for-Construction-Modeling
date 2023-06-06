@@ -13,19 +13,19 @@ import ZoomScrollModule from 'diagram-js/lib/navigation/zoomscroll';
  * @param {Resource} options
  */
 export default function NavigatedViewer(options) {
-  Viewer.call(this, options);
+    Viewer.call(this, options);
 }
 
 inherits(NavigatedViewer, Viewer);
 
 
 NavigatedViewer.prototype._navigationModules = [
-  KeyboardMoveModule,
-  MoveCanvasModule,
-  ZoomScrollModule
+    KeyboardMoveModule,
+    MoveCanvasModule,
+    ZoomScrollModule
 ];
 
 NavigatedViewer.prototype._modules = [].concat(
-  Viewer.prototype._modules,
-  NavigatedViewer.prototype._navigationModules
+    Viewer.prototype._modules,
+    NavigatedViewer.prototype._navigationModules
 );

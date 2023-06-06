@@ -31,7 +31,7 @@ DepLabelEditing.prototype.activate = function (element) {
         autoResize: true
     };
 
-    var canvas = this._canvas; 
+    var canvas = this._canvas;
     var zoom = canvas.zoom();
     var target = element;
     var bbox = canvas.getAbsoluteBBox(target);
@@ -41,8 +41,8 @@ DepLabelEditing.prototype.activate = function (element) {
     };
 
     var width = 90 * zoom,
-    paddingTop = 7 * zoom,
-    paddingBottom = 4 * zoom;
+        paddingTop = 7 * zoom,
+        paddingBottom = 4 * zoom;
     var bounds = {
         width: width,
         height: bbox.height + paddingTop + paddingBottom,

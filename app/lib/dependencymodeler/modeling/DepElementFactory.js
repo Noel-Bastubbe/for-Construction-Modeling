@@ -25,7 +25,7 @@ DepElementFactory.prototype.createBusinessObject = function (type, attrs) {
     if (!element.id) {
         const prefix = (element.$type || '').replace(/^[^:]*:/g, '') + '_';
         element.id = this._ids.nextPrefixed(prefix, element);
-    } else if(this._ids.assigned(element.id)) {
+    } else if (this._ids.assigned(element.id)) {
         throw new Error('Cannot create element, id "' + element.id + '" already exists');
     }
 
@@ -35,7 +35,7 @@ DepElementFactory.prototype.createBusinessObject = function (type, attrs) {
 DepElementFactory.prototype.baseCreate = BaseElementFactory.prototype.create;
 DepElementFactory.prototype.baseCreateShape = BaseElementFactory.prototype.createShape;
 
-DepElementFactory.prototype.createShape = function(attrs) {
+DepElementFactory.prototype.createShape = function (attrs) {
     attrs = assign(this.defaultSizeForType(attrs.type), attrs);
 
     return this.baseCreateShape(attrs);
@@ -64,5 +64,5 @@ DepElementFactory.prototype.create = function (elementType, attrs) {
 }
 
 DepElementFactory.prototype.defaultSizeForType = function () {
-    return { width: 100, height: 100 };
+    return {width: 100, height: 100};
 }

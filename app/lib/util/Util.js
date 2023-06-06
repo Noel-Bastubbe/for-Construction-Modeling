@@ -7,7 +7,7 @@ export function getBusinessObject(element) {
     return (element && element.businessObject) || element;
 }
 
-export function formatStates(states, emptyValue='<empty>', mapper= x => x.name || x) {
+export function formatStates(states, emptyValue = '<empty>', mapper = x => x.name || x) {
     return '[' + (states.length > 0 ? states.map(mapper).join(' | ') : emptyValue) + ']';
 }
 
@@ -25,8 +25,8 @@ export function type(element) {
 
 export function nextPosition(modeler, type) {
     const existingStates = modeler.get('elementRegistry').filter(element => is(element, type));
-    const rightBorder = Math.max(... existingStates.map(element => element.x + element.width * 3 / 2));
-    const topBorder = Math.min(... existingStates.map(element => element.y + element.height / 2));
+    const rightBorder = Math.max(...existingStates.map(element => element.x + element.width * 3 / 2));
+    const topBorder = Math.min(...existingStates.map(element => element.y + element.height / 2));
 
     const x = (isFinite(rightBorder) ? rightBorder : 0) + 50;
     const y = isFinite(topBorder) ? topBorder : 0;

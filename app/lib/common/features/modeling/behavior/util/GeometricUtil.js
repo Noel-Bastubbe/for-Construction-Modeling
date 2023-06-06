@@ -5,7 +5,7 @@
  * @return {Float}
  */
 export function vectorLength(v) {
-  return Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2));
+    return Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2));
 }
 
 
@@ -17,9 +17,9 @@ export function vectorLength(v) {
  */
 export function getAngle(line) {
 
-  // return value is between 0, 180 and -180, -0
-  // @janstuemmel: maybe replace return a/b with b/a
-  return Math.atan((line[1].y - line[0].y) / (line[1].x - line[0].x));
+    // return value is between 0, 180 and -180, -0
+    // @janstuemmel: maybe replace return a/b with b/a
+    return Math.atan((line[1].y - line[0].y) / (line[1].x - line[0].x));
 }
 
 
@@ -31,10 +31,10 @@ export function getAngle(line) {
  * @return {Vector}
  */
 export function rotateVector(vector, angle) {
-  return (!angle) ? vector : {
-    x: Math.cos(angle) * vector.x - Math.sin(angle) * vector.y,
-    y: Math.sin(angle) * vector.x + Math.cos(angle) * vector.y
-  };
+    return (!angle) ? vector : {
+        x: Math.cos(angle) * vector.x - Math.sin(angle) * vector.y,
+        y: Math.sin(angle) * vector.x + Math.cos(angle) * vector.y
+    };
 }
 
 
@@ -49,17 +49,17 @@ export function rotateVector(vector, angle) {
  */
 function solveLambaSystem(a, b, c) {
 
-  // the 2d system
-  var system = [
-    { n: a[0] - c[0], lambda: b[0] },
-    { n: a[1] - c[1], lambda: b[1] }
-  ];
+    // the 2d system
+    var system = [
+        {n: a[0] - c[0], lambda: b[0]},
+        {n: a[1] - c[1], lambda: b[1]}
+    ];
 
-  // solve
-  var n = system[0].n * b[0] + system[1].n * b[1],
-      l = system[0].lambda * b[0] + system[1].lambda * b[1];
+    // solve
+    var n = system[0].n * b[0] + system[1].n * b[1],
+        l = system[0].lambda * b[0] + system[1].lambda * b[1];
 
-  return -n / l;
+    return -n / l;
 }
 
 
@@ -72,15 +72,15 @@ function solveLambaSystem(a, b, c) {
  */
 export function perpendicularFoot(point, line) {
 
-  var a = line[0], b = line[1];
+    var a = line[0], b = line[1];
 
-  // relative position of b from a
-  var bd = { x: b.x - a.x, y: b.y - a.y };
+    // relative position of b from a
+    var bd = {x: b.x - a.x, y: b.y - a.y};
 
-  // solve equation system to the parametrized vectors param real value
-  var r = solveLambaSystem([ a.x, a.y ], [ bd.x, bd.y ], [ point.x, point.y ]);
+    // solve equation system to the parametrized vectors param real value
+    var r = solveLambaSystem([a.x, a.y], [bd.x, bd.y], [point.x, point.y]);
 
-  return { x: a.x + r * bd.x, y: a.y + r * bd.y };
+    return {x: a.x + r * bd.x, y: a.y + r * bd.y};
 }
 
 
@@ -93,15 +93,15 @@ export function perpendicularFoot(point, line) {
  */
 export function getDistancePointLine(point, line) {
 
-  var pfPoint = perpendicularFoot(point, line);
+    var pfPoint = perpendicularFoot(point, line);
 
-  // distance vector
-  var connectionVector = {
-    x: pfPoint.x - point.x,
-    y: pfPoint.y - point.y
-  };
+    // distance vector
+    var connectionVector = {
+        x: pfPoint.x - point.x,
+        y: pfPoint.y - point.y
+    };
 
-  return vectorLength(connectionVector);
+    return vectorLength(connectionVector);
 }
 
 
@@ -114,8 +114,8 @@ export function getDistancePointLine(point, line) {
  */
 export function getDistancePointPoint(point1, point2) {
 
-  return vectorLength({
-    x: point1.x - point2.x,
-    y: point1.y - point2.y
-  });
+    return vectorLength({
+        x: point1.x - point2.x,
+        y: point1.y - point2.y
+    });
 }

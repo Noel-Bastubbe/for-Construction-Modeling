@@ -1,16 +1,16 @@
 export default function BpmnGridSnapping(eventBus) {
-  eventBus.on([
-    'create.init',
-    'shape.move.init'
-  ], function(event) {
-    var context = event.context;
+    eventBus.on([
+        'create.init',
+        'shape.move.init'
+    ], function (event) {
+        var context = event.context;
 
-    if (!context.gridSnappingContext) {
-      context.gridSnappingContext = {};
-    }
+        if (!context.gridSnappingContext) {
+            context.gridSnappingContext = {};
+        }
 
-    context.gridSnappingContext.snapLocation = 'top-left';
-  });
+        context.gridSnappingContext.snapLocation = 'top-left';
+    });
 }
 
-BpmnGridSnapping.$inject = [ 'eventBus' ];
+BpmnGridSnapping.$inject = ['eventBus'];

@@ -12,9 +12,9 @@ import {is} from '../../util/ModelUtil';
  * @return {Boolean}
  */
 export function isAny(element, types) {
-  return some(types, function(t) {
-    return is(element, t);
-  });
+    return some(types, function (t) {
+        return is(element, t);
+    });
 }
 
 
@@ -28,15 +28,15 @@ export function isAny(element, types) {
  */
 export function getParent(element, anyType) {
 
-  if (typeof anyType === 'string') {
-    anyType = [ anyType ];
-  }
-
-  while ((element = element.parent)) {
-    if (isAny(element, anyType)) {
-      return element;
+    if (typeof anyType === 'string') {
+        anyType = [anyType];
     }
-  }
 
-  return null;
+    while ((element = element.parent)) {
+        if (isAny(element, anyType)) {
+            return element;
+        }
+    }
+
+    return null;
 }

@@ -1,7 +1,7 @@
 import {find, forEach, has, isArray, isDefined, isObject, matchPattern, reduce, sortBy} from 'min-dash';
 
 var DISALLOWED_PROPERTIES = [
-  'boardElements'
+    'boardElements'
 ];
 
 /**
@@ -48,49 +48,49 @@ var DISALLOWED_PROPERTIES = [
  * @param {PostitModdle} moddle
  */
 export default function ModdleCopy(eventBus, odFactory, moddle) {
-  this._odFactory = odFactory;
-  this._eventBus = eventBus;
-  this._moddle = moddle;
+    this._odFactory = odFactory;
+    this._eventBus = eventBus;
+    this._moddle = moddle;
 
-  // copy extension elements last
-  eventBus.on('moddleCopy.canCopyProperties', function(context) {
-    var propertyNames = context.propertyNames;
+    // copy extension elements last
+    eventBus.on('moddleCopy.canCopyProperties', function (context) {
+        var propertyNames = context.propertyNames;
 
-    if (!propertyNames || !propertyNames.length) {
-      return;
-    }
+        if (!propertyNames || !propertyNames.length) {
+            return;
+        }
 
-    return sortBy(propertyNames, function(propertyName) {
-      return propertyName === 'extensionElements';
+        return sortBy(propertyNames, function (propertyName) {
+            return propertyName === 'extensionElements';
+        });
     });
-  });
 
-  // default check whether property can be copied
-  eventBus.on('moddleCopy.canCopyProperty', function(context) {
-    var parent = context.parent,
-        parentDescriptor = isObject(parent) && parent.$descriptor,
-        propertyName = context.propertyName;
+    // default check whether property can be copied
+    eventBus.on('moddleCopy.canCopyProperty', function (context) {
+        var parent = context.parent,
+            parentDescriptor = isObject(parent) && parent.$descriptor,
+            propertyName = context.propertyName;
 
-    if (propertyName && DISALLOWED_PROPERTIES.indexOf(propertyName) !== -1) {
+        if (propertyName && DISALLOWED_PROPERTIES.indexOf(propertyName) !== -1) {
 
-      // disallow copying property
-      return false;
-    }
+            // disallow copying property
+            return false;
+        }
 
-    if (propertyName &&
-      parentDescriptor &&
-      !find(parentDescriptor.properties, matchPattern({ name: propertyName }))) {
+        if (propertyName &&
+            parentDescriptor &&
+            !find(parentDescriptor.properties, matchPattern({name: propertyName}))) {
 
-      // disallow copying property
-      return false;
-    }
-  });
+            // disallow copying property
+            return false;
+        }
+    });
 }
 
 ModdleCopy.$inject = [
-  'eventBus',
-  'odFactory',
-  'moddle'
+    'eventBus',
+    'odFactory',
+    'moddle'
 ];
 
 /**
@@ -102,55 +102,55 @@ ModdleCopy.$inject = [
  *
  * @param {ModdleElement}
  */
-ModdleCopy.prototype.copyElement = function(sourceElement, targetElement, propertyNames) {
-  var self = this;
+ModdleCopy.prototype.copyElement = function (sourceElement, targetElement, propertyNames) {
+    var self = this;
 
-  if (propertyNames && !isArray(propertyNames)) {
-    propertyNames = [ propertyNames ];
-  }
-
-  propertyNames = propertyNames || getPropertyNames(sourceElement.$descriptor);
-
-  var canCopyProperties = this._eventBus.fire('moddleCopy.canCopyProperties', {
-    propertyNames: propertyNames,
-    sourceElement: sourceElement,
-    targetElement: targetElement
-  });
-
-  if (canCopyProperties === false) {
-    return targetElement;
-  }
-
-  if (isArray(canCopyProperties)) {
-    propertyNames = canCopyProperties;
-  }
-
-  // copy properties
-  forEach(propertyNames, function(propertyName) {
-    var sourceProperty;
-
-    if (has(sourceElement, propertyName)) {
-      sourceProperty = sourceElement.get(propertyName);
+    if (propertyNames && !isArray(propertyNames)) {
+        propertyNames = [propertyNames];
     }
 
-    var copiedProperty = self.copyProperty(sourceProperty, targetElement, propertyName);
+    propertyNames = propertyNames || getPropertyNames(sourceElement.$descriptor);
 
-    var canSetProperty = self._eventBus.fire('moddleCopy.canSetCopiedProperty', {
-      parent: targetElement,
-      property: copiedProperty,
-      propertyName: propertyName
+    var canCopyProperties = this._eventBus.fire('moddleCopy.canCopyProperties', {
+        propertyNames: propertyNames,
+        sourceElement: sourceElement,
+        targetElement: targetElement
     });
 
-    if (canSetProperty === false) {
-      return;
+    if (canCopyProperties === false) {
+        return targetElement;
     }
 
-    if (isDefined(copiedProperty)) {
-      targetElement.set(propertyName, copiedProperty);
+    if (isArray(canCopyProperties)) {
+        propertyNames = canCopyProperties;
     }
-  });
 
-  return targetElement;
+    // copy properties
+    forEach(propertyNames, function (propertyName) {
+        var sourceProperty;
+
+        if (has(sourceElement, propertyName)) {
+            sourceProperty = sourceElement.get(propertyName);
+        }
+
+        var copiedProperty = self.copyProperty(sourceProperty, targetElement, propertyName);
+
+        var canSetProperty = self._eventBus.fire('moddleCopy.canSetCopiedProperty', {
+            parent: targetElement,
+            property: copiedProperty,
+            propertyName: propertyName
+        });
+
+        if (canSetProperty === false) {
+            return;
+        }
+
+        if (isDefined(copiedProperty)) {
+            targetElement.set(propertyName, copiedProperty);
+        }
+    });
+
+    return targetElement;
 };
 
 /**
@@ -162,83 +162,83 @@ ModdleCopy.prototype.copyElement = function(sourceElement, targetElement, proper
  *
  * @returns {*}
  */
-ModdleCopy.prototype.copyProperty = function(property, parent, propertyName) {
-  var self = this;
+ModdleCopy.prototype.copyProperty = function (property, parent, propertyName) {
+    var self = this;
 
-  // allow others to copy property
-  var copiedProperty = this._eventBus.fire('moddleCopy.canCopyProperty', {
-    parent: parent,
-    property: property,
-    propertyName: propertyName
-  });
+    // allow others to copy property
+    var copiedProperty = this._eventBus.fire('moddleCopy.canCopyProperty', {
+        parent: parent,
+        property: property,
+        propertyName: propertyName
+    });
 
-  // return if copying is NOT allowed
-  if (copiedProperty === false) {
-    return;
-  }
-
-  if (copiedProperty) {
-    if (isObject(copiedProperty) && copiedProperty.$type && !copiedProperty.$parent) {
-      copiedProperty.$parent = parent;
+    // return if copying is NOT allowed
+    if (copiedProperty === false) {
+        return;
     }
 
-    return copiedProperty;
-  }
+    if (copiedProperty) {
+        if (isObject(copiedProperty) && copiedProperty.$type && !copiedProperty.$parent) {
+            copiedProperty.$parent = parent;
+        }
 
-  var propertyDescriptor = this._moddle.getPropertyDescriptor(parent, propertyName);
+        return copiedProperty;
+    }
 
-  // do NOT copy Ids and references
-  if (propertyDescriptor.isId || propertyDescriptor.isReference) {
-    return;
-  }
+    var propertyDescriptor = this._moddle.getPropertyDescriptor(parent, propertyName);
 
-  // copy arrays
-  if (isArray(property)) {
-    return reduce(property, function(childProperties, childProperty) {
+    // do NOT copy Ids and references
+    if (propertyDescriptor.isId || propertyDescriptor.isReference) {
+        return;
+    }
 
-      // recursion
-      copiedProperty = self.copyProperty(childProperty, parent, propertyName);
+    // copy arrays
+    if (isArray(property)) {
+        return reduce(property, function (childProperties, childProperty) {
 
-      // copying might NOT be allowed
-      if (copiedProperty) {
+            // recursion
+            copiedProperty = self.copyProperty(childProperty, parent, propertyName);
+
+            // copying might NOT be allowed
+            if (copiedProperty) {
+                copiedProperty.$parent = parent;
+
+                return childProperties.concat(copiedProperty);
+            }
+
+            return childProperties;
+        }, []);
+    }
+
+    // copy model elements
+    if (isObject(property) && property.$type) {
+        if (this._moddle.getElementDescriptor(property).isGeneric) {
+            return;
+        }
+
+        copiedProperty = self._odFactory.create(property.$type);
+
         copiedProperty.$parent = parent;
 
-        return childProperties.concat(copiedProperty);
-      }
+        // recursion
+        copiedProperty = self.copyElement(property, copiedProperty);
 
-      return childProperties;
-    }, []);
-  }
-
-  // copy model elements
-  if (isObject(property) && property.$type) {
-    if (this._moddle.getElementDescriptor(property).isGeneric) {
-      return;
+        return copiedProperty;
     }
 
-    copiedProperty = self._odFactory.create(property.$type);
-
-    copiedProperty.$parent = parent;
-
-    // recursion
-    copiedProperty = self.copyElement(property, copiedProperty);
-
-    return copiedProperty;
-  }
-
-  // copy primitive properties
-  return property;
+    // copy primitive properties
+    return property;
 };
 
 // helpers //////////
 
 export function getPropertyNames(descriptor, keepDefaultProperties) {
-  return reduce(descriptor.properties, function(properties, property) {
+    return reduce(descriptor.properties, function (properties, property) {
 
-    if (keepDefaultProperties && property.default) {
-      return properties;
-    }
+        if (keepDefaultProperties && property.default) {
+            return properties;
+        }
 
-    return properties.concat(property.name);
-  }, []);
+        return properties.concat(property.name);
+    }, []);
 }

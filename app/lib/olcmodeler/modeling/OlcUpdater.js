@@ -58,7 +58,7 @@ export default function OlcUpdater(eventBus, connectionDocking) {
         'connection.create'
     ], (event) => {
         var context = event.context,
-            element = context.connection;            
+            element = context.connection;
 
         element.businessObject.sourceState = element.source.businessObject;
         element.businessObject.targetState = element.target.businessObject;
@@ -77,15 +77,15 @@ export default function OlcUpdater(eventBus, connectionDocking) {
 }
 
 function reflectiveEdge(element) {
-    var { x, y, width, height } = element;
+    var {x, y, width, height} = element;
     var centerP = center(element);
-    var topRight = { x: x + width, y: y };
+    var topRight = {x: x + width, y: y};
     var dx = width / 10, dy = height / 10;
     return [
-        { x: centerP.x - dx, y: centerP.y - dy },
-        { x: topRight.x - dx, y: topRight.y - dy },
-        { x: topRight.x + dx, y: topRight.y + dy },
-        { x: centerP.x + dx, y: centerP.y + dy }
+        {x: centerP.x - dx, y: centerP.y - dy},
+        {x: topRight.x - dx, y: topRight.y - dy},
+        {x: topRight.x + dx, y: topRight.y + dy},
+        {x: centerP.x + dx, y: centerP.y + dy}
     ];
 }
 
@@ -117,12 +117,12 @@ OlcUpdater.$inject = [
 //TODO move to common utils
 function center(shape) {
     return {
-      x: shape.x + shape.width / 2,
-      y: shape.y + shape.height / 2
+        x: shape.x + shape.width / 2,
+        y: shape.y + shape.height / 2
     };
 }
 
-OlcUpdater.prototype.connectionWaypoints = function(source, target) {
+OlcUpdater.prototype.connectionWaypoints = function (source, target) {
     var connection = {source, target};
     if (connection.source === connection.target) {
         connection.waypoints = reflectiveEdge(connection.source);

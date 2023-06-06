@@ -4,17 +4,17 @@ import BaseModeling from 'diagram-js/lib/features/modeling/Modeling';
 
 export default function Modeling(eventBus, elementFactory, commandStack) {
     BaseModeling.call(this, eventBus, elementFactory, commandStack);
-    
-    eventBus.on('copyPaste.copyElement', function(context) {
+
+    eventBus.on('copyPaste.copyElement', function (context) {
         context.descriptor.copiedBusinessObject = context.element.businessObject;
         context.descriptor.type = context.descriptor.copiedBusinessObject.$type;
     });
-    
-    eventBus.on('copyPaste.pasteElement', function(context) {
+
+    eventBus.on('copyPaste.pasteElement', function (context) {
         const {copiedBusinessObject} = context.descriptor;
         const newAttrs = {
-            name : copiedBusinessObject.name,
-            date : copiedBusinessObject.date
+            name: copiedBusinessObject.name,
+            date: copiedBusinessObject.date
         }
         context.descriptor.businessObject = elementFactory.createBusinessObject(copiedBusinessObject.$type, newAttrs);
     });
@@ -49,7 +49,7 @@ function UpdateLabelHandler() {
 }
 
 UpdateLabelHandler.prototype.execute = function (context) {
-    var { element, newLabel } = context;
+    var {element, newLabel} = context;
     element.businessObject.name = newLabel;
     return element;
 }

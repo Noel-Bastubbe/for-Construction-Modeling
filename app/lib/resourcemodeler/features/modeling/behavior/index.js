@@ -6,18 +6,18 @@ import LabelBehavior from './LabelBehavior';
 import UnclaimIdBehavior from './UnclaimIdBehavior';
 
 export default {
-  __init__: [
-    'adaptiveLabelPositioningBehavior',
-    'appendBehavior',
-    'fixHoverBehavior',
-    'importDockingFix',
-    'labelBehavior',
-    'unclaimIdBehavior',
-  ],
-  adaptiveLabelPositioningBehavior: [ 'type', AdaptiveLabelPositioningBehavior ],
-  appendBehavior: [ 'type', AppendBehavior ],
-  fixHoverBehavior: [ 'type', FixHoverBehavior ],
-  importDockingFix: [ 'type', ImportDockingFix ],
-  labelBehavior: [ 'type', LabelBehavior ],
-  unclaimIdBehavior: [ 'type', UnclaimIdBehavior ],
+    __init__: [
+        'adaptiveLabelPositioningBehavior',
+        'appendBehavior',
+        'fixHoverBehavior',
+        'importDockingFix',
+        'labelBehavior',
+        'unclaimIdBehavior',
+    ],
+    adaptiveLabelPositioningBehavior: ['type', AdaptiveLabelPositioningBehavior],
+    appendBehavior: ['type', AppendBehavior],
+    fixHoverBehavior: ['type', FixHoverBehavior],
+    importDockingFix: ['type', ImportDockingFix],
+    labelBehavior: ['type', LabelBehavior],
+    unclaimIdBehavior: ['type', UnclaimIdBehavior],
 };

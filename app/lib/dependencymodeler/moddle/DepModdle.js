@@ -10,7 +10,7 @@ DepModdle.prototype = Object.create(Moddle.prototype);
 
 DepModdle.prototype.fromXML = function (xmlStr, options) {
     var typeName = 'dep:Definitions';
-    var reader = new Reader(assign({ model: this, lax: false }, options));
+    var reader = new Reader(assign({model: this, lax: false}, options));
     var rootHandler = reader.handler(typeName);
 
     return reader.fromXML(xmlStr, rootHandler);

@@ -9,23 +9,23 @@ import CreateMoveSnapping from 'diagram-js/lib/features/snapping/CreateMoveSnapp
  * @param {Injector} injector
  */
 export default function ODCreateMoveSnapping(injector) {
-  injector.invoke(CreateMoveSnapping, this);
+    injector.invoke(CreateMoveSnapping, this);
 }
 
 inherits(ODCreateMoveSnapping, CreateMoveSnapping);
 
 ODCreateMoveSnapping.$inject = [
-  'injector'
+    'injector'
 ];
 
-ODCreateMoveSnapping.prototype.initSnap = function(event) {
-  return CreateMoveSnapping.prototype.initSnap.call(this, event);
+ODCreateMoveSnapping.prototype.initSnap = function (event) {
+    return CreateMoveSnapping.prototype.initSnap.call(this, event);
 };
 
-ODCreateMoveSnapping.prototype.addSnapTargetPoints = function(snapPoints, shape, target) {
-  return CreateMoveSnapping.prototype.addSnapTargetPoints.call(this, snapPoints, shape, target);
+ODCreateMoveSnapping.prototype.addSnapTargetPoints = function (snapPoints, shape, target) {
+    return CreateMoveSnapping.prototype.addSnapTargetPoints.call(this, snapPoints, shape, target);
 };
 
-ODCreateMoveSnapping.prototype.getSnapTargets = function(shape, target) {
-  return CreateMoveSnapping.prototype.getSnapTargets.call(this, shape, target);
+ODCreateMoveSnapping.prototype.getSnapTargets = function (shape, target) {
+    return CreateMoveSnapping.prototype.getSnapTargets.call(this, shape, target);
 };

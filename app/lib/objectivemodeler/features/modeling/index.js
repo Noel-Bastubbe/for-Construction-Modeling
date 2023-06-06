@@ -20,27 +20,27 @@ import CroppingConnectionDocking from 'diagram-js/lib/layout/CroppingConnectionD
 
 
 export default {
-  __init__: [
-    'modeling',
-    'odUpdater'
-  ],
-  __depends__: [
-    BehaviorModule,
-    RulesModule,
-    DiOrderingModule,
-    OrderingModule,
-    CommandModule,
-    TooltipsModule,
-    LabelSupportModule,
-    AttachSupportModule,
-    SelectionModule,
-    ChangeSupportModule,
-    SpaceToolModule
-  ],
-  odFactory: [ 'type', ODFactory ],
-  odUpdater: [ 'type', ODUpdater ],
-  elementFactory: [ 'type', ElementFactory ],
-  modeling: [ 'type', Modeling ],
-  layouter: [ 'type', ODLayouter ],
-  connectionDocking: [ 'type', CroppingConnectionDocking ]
+    __init__: [
+        'modeling',
+        'odUpdater'
+    ],
+    __depends__: [
+        BehaviorModule,
+        RulesModule,
+        DiOrderingModule,
+        OrderingModule,
+        CommandModule,
+        TooltipsModule,
+        LabelSupportModule,
+        AttachSupportModule,
+        SelectionModule,
+        ChangeSupportModule,
+        SpaceToolModule
+    ],
+    odFactory: ['type', ODFactory],
+    odUpdater: ['type', ODUpdater],
+    elementFactory: ['type', ElementFactory],
+    modeling: ['type', Modeling],
+    layouter: ['type', ODLayouter],
+    connectionDocking: ['type', CroppingConnectionDocking]
 };

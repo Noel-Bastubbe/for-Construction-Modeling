@@ -40,15 +40,16 @@ export default class DepLabelHandler extends CommandInterceptor {
                         {},
                         element
                     );
-                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",objective.name);
+                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "text", objective.name);
                 };
                 const populateTimeDropdown = () => {
                     this._timeDropdown.populate(
                         [],
-                        () => {},
+                        () => {
+                        },
                         element
                     );
-                    this._timeDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",objective.date);
+                    this._timeDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "number", objective.date);
                 };
                 populateNameDropdown();
                 populateTimeDropdown();
@@ -58,12 +59,12 @@ export default class DepLabelHandler extends CommandInterceptor {
                     const newTimeInput = this._timeDropdown.getInputValue().trim();
                     let needUpdate = false;
                     if (newNameInput !== '' && newNameInput !== objective.name) {
-                        this.updateName(newNameInput,element);
+                        this.updateName(newNameInput, element);
                         populateNameDropdown();
                         needUpdate = true;
                     }
                     if (newTimeInput !== objective.date) {
-                        this.updateTime(newTimeInput,element);
+                        this.updateTime(newTimeInput, element);
                         populateTimeDropdown();
                         needUpdate = true;
                     }

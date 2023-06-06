@@ -5,13 +5,13 @@ import ReplaceMenuProvider from './ReplaceMenuProvider';
 import AutoPlaceModule from '../auto-place';
 
 export default {
-  __depends__: [
-    PopupMenuModule,
-    ReplaceModule,
-    AutoPlaceModule
-  ],
-  __init__: [
-    'replaceMenuProvider'
-  ],
-  replaceMenuProvider: [ 'type', ReplaceMenuProvider ]
+    __depends__: [
+        PopupMenuModule,
+        ReplaceModule,
+        AutoPlaceModule
+    ],
+    __init__: [
+        'replaceMenuProvider'
+    ],
+    replaceMenuProvider: ['type', ReplaceMenuProvider]
 };

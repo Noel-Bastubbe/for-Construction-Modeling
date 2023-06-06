@@ -2,77 +2,77 @@ import {add as collectionAdd, remove as collectionRemove} from 'diagram-js/lib/u
 
 
 export default function UpdateCanvasRootHandler(canvas, modeling) {
-  this._canvas = canvas;
-  this._modeling = modeling;
+    this._canvas = canvas;
+    this._modeling = modeling;
 }
 
 UpdateCanvasRootHandler.$inject = [
-  'canvas',
-  'modeling'
+    'canvas',
+    'modeling'
 ];
 
 
-UpdateCanvasRootHandler.prototype.execute = function(context) {
+UpdateCanvasRootHandler.prototype.execute = function (context) {
 
-  var canvas = this._canvas;
+    var canvas = this._canvas;
 
-  var newRoot = context.newRoot,
-      newRootBusinessObject = newRoot.businessObject,
-      oldRoot = canvas.getRootElement(),
-      oldRootBusinessObject = oldRoot.businessObject,
-      odDefinitions = oldRootBusinessObject.$parent,
-      diPlane = oldRootBusinessObject.di;
+    var newRoot = context.newRoot,
+        newRootBusinessObject = newRoot.businessObject,
+        oldRoot = canvas.getRootElement(),
+        oldRootBusinessObject = oldRoot.businessObject,
+        odDefinitions = oldRootBusinessObject.$parent,
+        diPlane = oldRootBusinessObject.di;
 
-  // (1) replace process old <> new root
-  canvas.setRootElement(newRoot, true);
+    // (1) replace process old <> new root
+    canvas.setRootElement(newRoot, true);
 
-  // (2) update root elements
-  collectionAdd(odDefinitions.rootElements, newRootBusinessObject);
-  newRootBusinessObject.$parent = odDefinitions;
+    // (2) update root elements
+    collectionAdd(odDefinitions.rootElements, newRootBusinessObject);
+    newRootBusinessObject.$parent = odDefinitions;
 
-  collectionRemove(odDefinitions.rootElements, oldRootBusinessObject);
-  oldRootBusinessObject.$parent = null;
+    collectionRemove(odDefinitions.rootElements, oldRootBusinessObject);
+    oldRootBusinessObject.$parent = null;
 
-  // (3) wire di
-  oldRootBusinessObject.di = null;
+    // (3) wire di
+    oldRootBusinessObject.di = null;
 
-  diPlane.boardElement = newRootBusinessObject;
-  newRootBusinessObject.di = diPlane;
+    diPlane.boardElement = newRootBusinessObject;
+    newRootBusinessObject.di = diPlane;
 
-  context.oldRoot = oldRoot;
+    context.oldRoot = oldRoot;
 
-  // TODO(nikku): return changed elements?
-  // return [ newRoot, oldRoot ];
+    // TODO(nikku): return changed elements?
+    // return [ newRoot, oldRoot ];
 };
 
 
-UpdateCanvasRootHandler.prototype.revert = function(context) {
+UpdateCanvasRootHandler.prototype.revert = function (context) {
 
-  var canvas = this._canvas;
+    var canvas = this._canvas;
 
-  var newRoot = context.newRoot,
-      newRootBusinessObject = newRoot.businessObject,
-      oldRoot = context.oldRoot,
-      oldRootBusinessObject = oldRoot.businessObject,
-      odDefinitions = newRootBusinessObject.$parent,
-      diPlane = newRootBusinessObject.di;
+    var newRoot = context.newRoot,
+        newRootBusinessObject = newRoot.businessObject,
+        oldRoot = context.oldRoot,
+        oldRootBusinessObject = oldRoot.businessObject,
+        odDefinitions = newRootBusinessObject.$parent,
+        diPlane = newRootBusinessObject.di;
 
-  // (1) replace process old <> new root
-  canvas.setRootElement(oldRoot, true);
+    // (1) replace process old <> new root
+    canvas.setRootElement(oldRoot, true);
 
-  // (2) update root elements
-  collectionRemove(odDefinitions.rootElements, newRootBusinessObject);
-  newRootBusinessObject.$parent = null;
+    // (2) update root elements
+    collectionRemove(odDefinitions.rootElements, newRootBusinessObject);
+    newRootBusinessObject.$parent = null;
 
-  collectionAdd(odDefinitions.rootElements, oldRootBusinessObject);
-  oldRootBusinessObject.$parent = odDefinitions;
+    collectionAdd(odDefinitions.rootElements, oldRootBusinessObject);
+    oldRootBusinessObject.$parent = odDefinitions;
 
-  // (3) wire di
-  newRootBusinessObject.di = null;
+    // (3) wire di
+    newRootBusinessObject.di = null;
 
-  diPlane.boardElement = oldRootBusinessObject;
-  oldRootBusinessObject.di = diPlane;
+    diPlane.boardElement = oldRootBusinessObject;
+    oldRootBusinessObject.di = diPlane;
 
-  // TODO(nikku): return changed elements?
-  // return [ newRoot, oldRoot ];
+    // TODO(nikku): return changed elements?
+    // return [ newRoot, oldRoot ];
 };

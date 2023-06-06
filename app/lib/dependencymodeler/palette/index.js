@@ -11,20 +11,20 @@ import translate from 'diagram-js/lib/i18n/translate';
 import GlobalConnectModule from 'diagram-js/lib/features/global-connect';
 
 export default {
-  __depends__: [
-    PaletteModule,
-    ContextPadModule,
-    CreateModule,
-    SpaceToolModule,
-    LassoToolModule,
-    HandToolModule,
-    GlobalConnectModule,
-    translate
-  ],
-  __init__: [ 
-    'depContextPadProvider',
-    'paletteProvider'
-  ],
-  paletteProvider: [ 'type', PaletteProvider ],
-  depContextPadProvider: [ 'type', DepContextPadProvider ]
+    __depends__: [
+        PaletteModule,
+        ContextPadModule,
+        CreateModule,
+        SpaceToolModule,
+        LassoToolModule,
+        HandToolModule,
+        GlobalConnectModule,
+        translate
+    ],
+    __init__: [
+        'depContextPadProvider',
+        'paletteProvider'
+    ],
+    paletteProvider: ['type', PaletteProvider],
+    depContextPadProvider: ['type', DepContextPadProvider]
 };

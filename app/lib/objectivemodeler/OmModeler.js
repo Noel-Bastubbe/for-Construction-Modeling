@@ -1,5 +1,5 @@
 import inherits from 'inherits';
-import {findIndex} from 'min-dash'
+import {findIndex, without} from 'min-dash'
 
 import BaseModeler from './BaseModeler';
 
@@ -36,7 +36,6 @@ import SnappingModule from './features/snapping';
 import SpaceToolBehaviorModule from './behavior';
 import {nextPosition} from '../util/Util';
 import {is} from "bpmn-js/lib/util/ModelUtil";
-import {without} from 'min-dash';
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>

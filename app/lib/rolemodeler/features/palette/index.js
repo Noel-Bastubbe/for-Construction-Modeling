@@ -9,15 +9,15 @@ import GlobalConnectModule from 'diagram-js/lib/features/global-connect';
 import PaletteProvider from './PaletteProvider';
 
 export default {
-  __depends__: [
-    PaletteModule,
-    CreateModule,
-    SpaceToolModule,
-    LassoToolModule,
-    HandToolModule,
-    GlobalConnectModule,
-    translate
-  ],
-  __init__: [ 'paletteProvider' ],
-  paletteProvider: [ 'type', PaletteProvider ]
+    __depends__: [
+        PaletteModule,
+        CreateModule,
+        SpaceToolModule,
+        LassoToolModule,
+        HandToolModule,
+        GlobalConnectModule,
+        translate
+    ],
+    __init__: ['paletteProvider'],
+    paletteProvider: ['type', PaletteProvider]
 };

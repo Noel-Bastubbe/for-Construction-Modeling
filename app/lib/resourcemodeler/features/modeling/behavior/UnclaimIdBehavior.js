@@ -14,28 +14,28 @@ import {isLabel} from '../../../util/LabelUtil';
  * @param {Modeling} modeling
  */
 export default function UnclaimIdBehavior(canvas, injector, moddle, modeling) {
-  injector.invoke(CommandInterceptor, this);
+    injector.invoke(CommandInterceptor, this);
 
-  this.preExecute('shape.delete', function(event) {
-    var context = event.context,
-        shape = context.shape,
-        shapeBo = shape.businessObject;
+    this.preExecute('shape.delete', function (event) {
+        var context = event.context,
+            shape = context.shape,
+            shapeBo = shape.businessObject;
 
-    if (isLabel(shape)) {
-      return;
-    }
+        if (isLabel(shape)) {
+            return;
+        }
 
-    modeling.unclaimId(shapeBo.id, shapeBo);
-  });
+        modeling.unclaimId(shapeBo.id, shapeBo);
+    });
 
-  this.preExecute('canvas.updateRoot', function() {
-    var rootElement = canvas.getRootElement(),
-        rootElementBo = rootElement.businessObject;
+    this.preExecute('canvas.updateRoot', function () {
+        var rootElement = canvas.getRootElement(),
+            rootElementBo = rootElement.businessObject;
 
-    moddle.ids.unclaim(rootElementBo.id);
-  });
+        moddle.ids.unclaim(rootElementBo.id);
+    });
 }
 
 inherits(UnclaimIdBehavior, CommandInterceptor);
 
-UnclaimIdBehavior.$inject = [ 'canvas', 'injector', 'moddle', 'modeling' ];
+UnclaimIdBehavior.$inject = ['canvas', 'injector', 'moddle', 'modeling'];

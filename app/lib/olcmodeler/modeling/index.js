@@ -9,19 +9,19 @@ import Modeling from '../../common/modeling/Modeling';
 
 
 export default {
-  __init__: [
-    'modeling',
-    'olcUpdater',
-    'olcLabelEditing'
-  ],
-  __depends__: [
-    CommandModule,
-    DirectEditingModule
-  ],
-  elementFactory: [ 'type', OlcElementFactory ],
-  olcUpdater: [ 'type', OlcUpdater ],
-  olcLabelEditing: ['type', OlcLabelEditing],
-  modeling: ['type', Modeling],
+    __init__: [
+        'modeling',
+        'olcUpdater',
+        'olcLabelEditing'
+    ],
+    __depends__: [
+        CommandModule,
+        DirectEditingModule
+    ],
+    elementFactory: ['type', OlcElementFactory],
+    olcUpdater: ['type', OlcUpdater],
+    olcLabelEditing: ['type', OlcLabelEditing],
+    modeling: ['type', Modeling],
 
-  connectionDocking: [ 'type', CroppingConnectionDocking ]
+    connectionDocking: ['type', CroppingConnectionDocking]
 };

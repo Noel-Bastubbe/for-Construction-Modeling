@@ -8,46 +8,46 @@ import {
 } from './GuidelineUtils';
 
 export const SEVERITY = {
-    ERROR : {
-        cssClass : 'errorElement',
-        label : 'Errors'
+    ERROR: {
+        cssClass: 'errorElement',
+        label: 'Errors'
     },
-    WARNING : {
-        cssClass : 'warningElement',
-        label : 'Warnings'
+    WARNING: {
+        cssClass: 'warningElement',
+        label: 'Warnings'
     },
-    INFORMATION : {
-        cssClass : 'informationElement',
-        label : 'Information'
+    INFORMATION: {
+        cssClass: 'informationElement',
+        label: 'Information'
     }
 }
 const severityKeys = Object.keys(SEVERITY)
 severityKeys.forEach(key => SEVERITY[key].key = key);
-SEVERITY.forEach = function(lambda) {
+SEVERITY.forEach = function (lambda) {
     return severityKeys.map(key => SEVERITY[key]).forEach(lambda);
 }
-SEVERITY.filter = function(lambda) {
+SEVERITY.filter = function (lambda) {
     return severityKeys.map(key => SEVERITY[key]).filter(lambda);
 }
 
 export default [
     {
-       title : 'TC2: Include all relevant data objects in the Termination Condition',
-       id : 'TC2',
-       getViolations(mediator) {
-           const hook = mediator.terminationConditionModelerHook;
-           const literals = hook.modeler.getLiterals();
-           if (literals && literals.length === 0) {
-               return [{
-                   element : hook.getRootObject(),
-                   message : 'Please include at least one data object configuration as literal in the termination condition.'
-               }];
-           } else {
-               return [];
-           }
-       },
-       severity : SEVERITY.ERROR,
-       link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Termination-Condition#tc2---include-all-relevant-data-objects-in-the-goal-state'
+        title: 'TC2: Include all relevant data objects in the Termination Condition',
+        id: 'TC2',
+        getViolations(mediator) {
+            const hook = mediator.terminationConditionModelerHook;
+            const literals = hook.modeler.getLiterals();
+            if (literals && literals.length === 0) {
+                return [{
+                    element: hook.getRootObject(),
+                    message: 'Please include at least one data object configuration as literal in the termination condition.'
+                }];
+            } else {
+                return [];
+            }
+        },
+        severity: SEVERITY.ERROR,
+        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Termination-Condition#tc2---include-all-relevant-data-objects-in-the-goal-state'
     },
     {
         title: 'F9: Do not use gateways at the beginning of a fragment',
@@ -114,18 +114,18 @@ export default [
         link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragments#f11---label-notation-elements'
     },
     {
-        title : 'Use states instead of attributes for important data changes',
-        id : 'D5',
+        title: 'Use states instead of attributes for important data changes',
+        id: 'D5',
         getViolations(mediator) {
             const dataModeler = mediator.dataModelerHook.modeler;
             const clazzes = dataModeler.get('elementRegistry').getAll().filter(element => is(element, 'od:Class'));
             return clazzes.filter(element => element.businessObject.attributeValues).map(clazz => ({
-                element : clazz.businessObject,
-                message : 'Attributes are only used very rarely. Consider using states instead.'
+                element: clazz.businessObject,
+                message: 'Attributes are only used very rarely. Consider using states instead.'
             }));
         },
-        severity : SEVERITY.INFORMATION,
-        link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Model#d5---use-states-instead-of-attributes-for-important-data-changes'
+        severity: SEVERITY.INFORMATION,
+        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Model#d5---use-states-instead-of-attributes-for-important-data-changes'
     },
     {
         title: 'F4: Use data objects to model pre- and postconditions',
@@ -201,7 +201,9 @@ export default [
                 .filter(element => is(element, 'od:Class'))
                 .map(element => element.businessObject)
                 .filter(clazz => clazz.caseClass);
-            if (caseClasses.length === 0) {return [];}
+            if (caseClasses.length === 0) {
+                return [];
+            }
 
             return startEvents.flatMap(startEvent => {
                 const connectedElements = getConnectedElements(startEvent);
@@ -214,10 +216,10 @@ export default [
                     return [{
                         element: startEvent.businessObject,
                         message: 'Please make one of the nodes of this start fragment create an object of one of the case classes: ' + caseClasses.map(clazz => '"' + clazz.name + '"').join(', '),
-                        quickFixes : caseClasses.flatMap(caseClass => connectedElements.filter(element => is(element, 'bpmn:Activity') || is(element, 'bpmn:StartEvent')).map(element => (
+                        quickFixes: caseClasses.flatMap(caseClass => connectedElements.filter(element => is(element, 'bpmn:Activity') || is(element, 'bpmn:StartEvent')).map(element => (
                             {
-                                label : 'Add data object reference that writes case class "' + caseClass.name + '" to node "' + element.businessObject.name + '"',
-                                action : (event) => fragmentModeler.startDoCreation(event, element, caseClass)
+                                label: 'Add data object reference that writes case class "' + caseClass.name + '" to node "' + element.businessObject.name + '"',
+                                action: (event) => fragmentModeler.startDoCreation(event, element, caseClass)
                             }
                         )))
                     }];
@@ -228,10 +230,10 @@ export default [
         },
         severity: SEVERITY.ERROR,
         link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Fragments#f6---use-start-events-only-in-initial-fragments'
-    },    
+    },
     {
-        title : 'Have each fragment state transition in olc',
-        id : 'C3',
+        title: 'Have each fragment state transition in olc',
+        id: 'C3',
         getViolations(mediator) {
             const fragmentModeler = mediator.fragmentModelerHook.modeler;
             const olcModeler = mediator.olcModelerHook.modeler;
@@ -242,21 +244,29 @@ export default [
                 const statesPerClass = {};
                 activity.dataInputAssociations?.map(assoc => assoc.sourceRef[0]).filter(dataObjectReference => dataObjectReference.dataclass && dataObjectReference.states).forEach(dataObjectReference => {
                     if (!statesPerClass[dataObjectReference.dataclass.id]) {
-                        statesPerClass[dataObjectReference.dataclass.id] = {clazz : dataObjectReference.dataclass, incoming : [], outgoing : []};
+                        statesPerClass[dataObjectReference.dataclass.id] = {
+                            clazz: dataObjectReference.dataclass,
+                            incoming: [],
+                            outgoing: []
+                        };
                     }
                     statesPerClass[dataObjectReference.dataclass.id].incoming.push(...dataObjectReference.states);
                 });
                 activity.dataOutputAssociations?.map(assoc => assoc.targetRef).filter(dataObjectReference => dataObjectReference.dataclass && dataObjectReference.states).forEach(dataObjectReference => {
                     if (!statesPerClass[dataObjectReference.dataclass.id]) {
-                        statesPerClass[dataObjectReference.dataclass.id] = {clazz : dataObjectReference.dataclass, incoming : [], outgoing : []};
+                        statesPerClass[dataObjectReference.dataclass.id] = {
+                            clazz: dataObjectReference.dataclass,
+                            incoming: [],
+                            outgoing: []
+                        };
                     }
                     statesPerClass[dataObjectReference.dataclass.id].outgoing.push(...dataObjectReference.states);
                 });
                 const uncovered = Object.keys(statesPerClass).map(classId => {
                     const olc = olcModeler.getOlcByClass(statesPerClass[classId].clazz);
                     const transitionsInOlc = olc.get('Elements').filter(element => is(element, 'olc:Transition'));
-                    
-                    function transitionsMatching (sourceState, targetState) {
+
+                    function transitionsMatching(sourceState, targetState) {
                         return transitionsInOlc.filter(transition => transition.sourceState === sourceState && transition.targetState === targetState);
                     }
 
@@ -273,17 +283,20 @@ export default [
                             return sourceState === targetState || transitionsMatching(sourceState, targetState).length > 0;
                         }).length === 0;
                     });
-                    
+
                     return {
                         classId: classId,
                         uncoveredInputstates,
                         uncoveredOutputstates
                     }
 
-                }).filter(({uncoveredInputstates, uncoveredOutputstates}) => (uncoveredInputstates.length + uncoveredOutputstates.length) > 0);
+                }).filter(({
+                               uncoveredInputstates,
+                               uncoveredOutputstates
+                           }) => (uncoveredInputstates.length + uncoveredOutputstates.length) > 0);
 
                 function stringifyUncovered({uncoveredInputstates, uncoveredOutputstates}) {
-                    return '' 
+                    return ''
                         + (uncoveredInputstates.length > 0 && 'input state(s) ' + uncoveredInputstates.map(state => '"' + state.name + '"').join(', ') || '')
                         + (uncoveredInputstates.length > 0 && uncoveredOutputstates.length > 0 && ' and ' || '')
                         + (uncoveredOutputstates.length > 0 && 'output state(s) ' + uncoveredOutputstates.map(state => '"' + state.name + '"').join(', ') || '')
@@ -296,18 +309,24 @@ export default [
 
                 function transitionToQuickFix(sourceState, targetState) {
                     return {
-                        label : 'Create transition: ' + stringifyTransition(sourceState, targetState) + ' in OLC ' + sourceState.$parent.name,
-                        action : () => mediator.olcModelerHook.modeler.createTransition(sourceState, targetState)
+                        label: 'Create transition: ' + stringifyTransition(sourceState, targetState) + ' in OLC ' + sourceState.$parent.name,
+                        action: () => mediator.olcModelerHook.modeler.createTransition(sourceState, targetState)
                     }
                 }
 
                 if (uncovered.length > 0) {
                     return [{
-                        element : activity,
-                        message : 'Please cover the ' + uncovered.map(stringifyUncovered).join(', ') + ' with valid transitions in the OLC.',
-                        quickFixes : uncovered.flatMap(({classId, uncoveredInputstates, uncoveredOutputstates}) => [
-                            ... uncoveredInputstates.flatMap(sourceState => statesPerClass[classId].outgoing.map(targetState => ({sourceState, targetState}))),
-                            ... uncoveredOutputstates.flatMap(targetState => statesPerClass[classId].incoming.filter(sourceState => !uncoveredInputstates.includes(sourceState)).map(sourceState => ({sourceState, targetState})))
+                        element: activity,
+                        message: 'Please cover the ' + uncovered.map(stringifyUncovered).join(', ') + ' with valid transitions in the OLC.',
+                        quickFixes: uncovered.flatMap(({classId, uncoveredInputstates, uncoveredOutputstates}) => [
+                            ...uncoveredInputstates.flatMap(sourceState => statesPerClass[classId].outgoing.map(targetState => ({
+                                sourceState,
+                                targetState
+                            }))),
+                            ...uncoveredOutputstates.flatMap(targetState => statesPerClass[classId].incoming.filter(sourceState => !uncoveredInputstates.includes(sourceState)).map(sourceState => ({
+                                sourceState,
+                                targetState
+                            })))
                         ].map(({sourceState, targetState}) => transitionToQuickFix(sourceState, targetState)))
                     }];
                 } else {
@@ -315,8 +334,8 @@ export default [
                 }
             });
         },
-        severity : SEVERITY.ERROR,
-        link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Consistency#c3---use-state-labels-and-state-transitions-of-data-objects-consistently-in-olcs-and-fragments'
+        severity: SEVERITY.ERROR,
+        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Consistency#c3---use-state-labels-and-state-transitions-of-data-objects-consistently-in-olcs-and-fragments'
     },
     {
         title: 'C5: Provide existential objects',
@@ -332,9 +351,12 @@ export default [
                 const writtenClasses = new Set(activity.dataOutputAssociations?.filter(assoc => assoc.targetRef.dataclass).map(assoc => assoc.targetRef.dataclass));
                 const readClasses = new Set(activity.dataInputAssociations?.map(assoc => assoc.sourceRef[0].dataclass));
                 const createdClasses = [...writtenClasses].filter(clazz => !readClasses.has(clazz));
-                
+
                 const missingAssociations = createdClasses.flatMap(createdClass => {
-                    return (classDependencies[createdClass.id] || []).filter(contextClass => !writtenClasses.has(contextClass) && !readClasses.has(contextClass)).map(contextClass => ({createdClass, contextClass}));
+                    return (classDependencies[createdClass.id] || []).filter(contextClass => !writtenClasses.has(contextClass) && !readClasses.has(contextClass)).map(contextClass => ({
+                        createdClass,
+                        contextClass
+                    }));
                 });
 
                 function stringifyMissing({createdClass, contextClass}) {
@@ -347,13 +369,13 @@ export default [
                         element: activity,
                         // Maybe we can also add to the error message, which classes are missing their context class?
                         message: 'In activity "' + activity.name + '", please add references to the following context classes: ' + missingAssociations.map(stringifyMissing).join(', '),
-                        quickFixes : missingAssociations.flatMap(({contextClass}) => (
+                        quickFixes: missingAssociations.flatMap(({contextClass}) => (
                             [{
-                                label : 'Add reading data object reference of class \"' + contextClass.name + '\" to activity \"' + activity.name + '\"',
-                                action : (event) => fragmentModeler.startDoCreation(event, activityShape, contextClass, true)
-                            },{
-                                label : 'Add writing data object reference of class \"' + contextClass.name + '\" to activity \"' + activity.name + '\"',
-                                action : (event) => fragmentModeler.startDoCreation(event, activityShape, contextClass)
+                                label: 'Add reading data object reference of class \"' + contextClass.name + '\" to activity \"' + activity.name + '\"',
+                                action: (event) => fragmentModeler.startDoCreation(event, activityShape, contextClass, true)
+                            }, {
+                                label: 'Add writing data object reference of class \"' + contextClass.name + '\" to activity \"' + activity.name + '\"',
+                                action: (event) => fragmentModeler.startDoCreation(event, activityShape, contextClass)
                             }]
                         ))
                     }];
@@ -366,64 +388,64 @@ export default [
         link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Consistency#c5---provide-context-data-objects-from-data-model-on-data-object-creation-in-fragments'
     },
     {
-        title : 'Specify a Case Class.',
-        id : 'D2',
+        title: 'Specify a Case Class.',
+        id: 'D2',
         getViolations(mediator) {
             const hook = mediator.dataModelerHook;
             const dataModeler = hook.modeler;
             const clazzes = dataModeler.get('elementRegistry').getAll().filter(element => is(element, 'od:Class'));
-            
+
             const caseClasses = dataModeler.get('elementRegistry')
                 .filter(element => is(element, 'od:Class'))
                 .map(element => element.businessObject)
                 .filter(clazz => clazz.caseClass);
-            
+
             if (!caseClasses.length) {
                 return [{
-                    element : hook.getRootObject(),
-                    message : 'Please specify a case class.',
-                    quickFixes : clazzes.map(clazz => (
-                            {
-                                label : 'Make class "' + clazz.businessObject.name + '" a case class',
-                                action : (action) => dataModeler.updateProperty(clazz, {caseClass: true})
-                            }
+                    element: hook.getRootObject(),
+                    message: 'Please specify a case class.',
+                    quickFixes: clazzes.map(clazz => (
+                        {
+                            label: 'Make class "' + clazz.businessObject.name + '" a case class',
+                            action: (action) => dataModeler.updateProperty(clazz, {caseClass: true})
+                        }
                     ))
                 }];
             } else {
                 return [];
             }
         },
-        severity : SEVERITY.ERROR,
-        link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Model#d2---specify-a-case-class'
+        severity: SEVERITY.ERROR,
+        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Model#d2---specify-a-case-class'
     },
     {
-        title : 'Connect the Case Class to Every Other Class.',
-        id : 'D3',
+        title: 'Connect the Case Class to Every Other Class.',
+        id: 'D3',
         getViolations(mediator) {
             const dataModeler = mediator.dataModelerHook.modeler;
             const classDependents = getClassDependents(mediator);
             const clazzes = dataModeler.get('elementRegistry')
                 .filter(element => is(element, 'od:Class'))
                 .map(element => element.businessObject);
-            
+
             const caseClasses = clazzes.filter(clazz => clazz.caseClass);
 
             if (!caseClasses.length) {
                 return [];
             }
-            
+
             const connectedWithCaseClass = getConnectedByExistentialAssociation(caseClasses[0], classDependents);
             const notConnectedClasses = clazzes.filter(clazz => connectedWithCaseClass.indexOf(clazz) === -1);
 
             return notConnectedClasses.map(clazz => ({
-                element: clazz,
-                message: 'Please connect class "' + clazz.name + '" to the case class via a path of existential associations.'
-            }
+                    element: clazz,
+                    message: 'Please connect class "' + clazz.name + '" to the case class via a path of existential associations.'
+                }
             ))
 
         },
-        severity : SEVERITY.ERROR,
-        link : 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Model#d3---connect-the-case-class-to-every-other-class'
+        severity: SEVERITY.ERROR,
+        link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Data-Model#d3---connect-the-case-class-to-every-other-class'
     },
     {
         title: 'Check if all Objectives are reachable from the Start State.',
@@ -474,8 +496,8 @@ export default [
         link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep2---check-if-all-objectives-are-reachable-from-the-start-state'
     },
     {
-        title : 'Connect the Start State to one other Objective.',
-        id : 'DEP3',
+        title: 'Connect the Start State to one other Objective.',
+        id: 'DEP3',
         getViolations(mediator) {
             const dependencyModeler = mediator.dependencyModelerHook.modeler;
             const dependencies = dependencyModeler.get('elementRegistry').getAll().filter(element => is(element, 'dep:Dependency'));
@@ -483,14 +505,14 @@ export default [
 
             if (dependenciesFromStartState.length === 0) {
                 return [{
-                    element : mediator.dependencyModelerHook.getRootObject(),
-                    message : 'Please connect the Start State to one other Objective.'
+                    element: mediator.dependencyModelerHook.getRootObject(),
+                    message: 'Please connect the Start State to one other Objective.'
                 }];
             } else {
                 return [];
             }
         },
-        severity : SEVERITY.ERROR,
+        severity: SEVERITY.ERROR,
         link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep3---include-the-start-state-into-the-dependency-graph'
     },
     {
@@ -502,11 +524,11 @@ export default [
             const visited = new Set();
             const stack = new Set();
             const violations = [];
-    
+
             function detectCycle(element) {
                 visited.add(element);
                 stack.add(element);
-    
+
                 const outgoingDependencies = element.outgoing.filter(connection => connection.type === 'dep:Dependency');
                 for (let i = 0; i < outgoingDependencies.length; i++) {
                     const targetElement = outgoingDependencies[i].target;
@@ -519,20 +541,20 @@ export default [
                         });
                     }
                 }
-    
+
                 stack.delete(element);
             }
-    
+
             for (let i = 0; i < elements.length; i++) {
                 const element = elements[i];
                 if (!visited.has(element)) {
                     detectCycle(element);
                 }
             }
-    
+
             return violations;
         },
         severity: SEVERITY.ERROR,
         link: 'https://github.com/Noel-Bastubbe/for-Construction-Modeling/wiki/Dependency-Model#dep4---mind-cyclic-dependencies'
-    }, 
+    },
 ]

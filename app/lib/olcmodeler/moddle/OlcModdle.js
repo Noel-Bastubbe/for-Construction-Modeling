@@ -12,7 +12,7 @@ OlcModdle.prototype = Object.create(Moddle.prototype);
 
 OlcModdle.prototype.fromXML = function (xmlStr, options) {
     var typeName = 'olc:Definitions';
-    var reader = new Reader(assign({ model: this, lax: false }, options));
+    var reader = new Reader(assign({model: this, lax: false}, options));
     var rootHandler = reader.handler(typeName);
 
     return reader.fromXML(xmlStr, rootHandler);

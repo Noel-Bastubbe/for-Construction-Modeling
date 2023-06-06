@@ -4,7 +4,7 @@ export default class FragmentPaletteProvider {
     }
 
     getPaletteEntries(element) {
-        return function(entries) {
+        return function (entries) {
             delete entries['create.subprocess-expanded'];
             delete entries['create.data-store'];
             delete entries['create.group'];

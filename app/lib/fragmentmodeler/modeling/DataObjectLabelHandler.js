@@ -60,7 +60,7 @@ export default class DataObjectLabelHandler extends CommandInterceptor {
                             this._classDropdown.getEntries().forEach(entry => entry.setSelected(entry.option === currentOlc));
                             states = currentOlc.get('Elements').filter(element => is(element, 'olc:State'));
                         }
-                    
+
                         this._stateDropdown.populate(states, (newState, element) => {
                             this.updateState(newState, element);
                             updateStateSelection();
