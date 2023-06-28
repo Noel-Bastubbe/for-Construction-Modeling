@@ -312,7 +312,7 @@ OmModeler.prototype.getVisualsInState = function (olcState) {
     return this.get('elementRegistry').filter(element =>
         is(element, 'om:Object') &&
         olcState.id &&
-        element.businessObject.states.some(state => state.id === olcState.id)
+        element.businessObject.states?.some(state => state.id === olcState.id)
     );
 }
 
@@ -321,7 +321,7 @@ OmModeler.prototype.getObjectsInState = function (olcState) {
     let objects = objectives.map(objective => objective.get('boardElements')).flat(1).filter((element) =>
         is(element, 'om:Object') &&
         olcState.id &&
-        element.states.some(state => state.id === olcState.id));
+        element.states?.some(state => state.id === olcState.id));
     return objects;
 }
 
