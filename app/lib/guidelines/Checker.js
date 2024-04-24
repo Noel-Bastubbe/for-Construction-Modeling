@@ -6,7 +6,8 @@ import {openAsOverlay} from "../util/HtmlUtil";
 import {makeGuidelineLink, makeQuickFixDiv} from "./ErrorBar";
 
 const guidelines = Guidelines;
-const guidelinePerId = {}; guidelines.forEach(guideline => guidelinePerId[guideline.id] = guideline);
+const guidelinePerId = {};
+guidelines.forEach(guideline => guidelinePerId[guideline.id] = guideline);
 
 export default class Checker {
     constructor(mediator, errorBar) {
@@ -32,21 +33,21 @@ export default class Checker {
         this.deactivate();
     }
 
-    activate () {
+    activate() {
         this.active = true;
         this.evaluateAll();
     }
 
-    deactivate () {
+    deactivate() {
         guidelines.forEach(guideline => this.clearViolations(guideline));
         this.active = false;
     }
-    
+
     getViolatedGuidelinesOfSeverity(severity) {
         const violatedGuidelines = Object.keys(this.errorList).map(guidelineId => guidelinePerId[guidelineId]);
         return violatedGuidelines.filter(guideline => guideline.severity === severity);
     }
-    
+
     getViolationsOfSeverity(severity) {
         return this.getViolatedGuidelinesOfSeverity(severity).flatMap(guideline => this.errorList[guideline.id]);
     }
@@ -80,10 +81,12 @@ export default class Checker {
         });
         delete this.errorList[guideline.id];
     }
-    
+
     highlightViolation(element, severity) {
         const gfx = this.getGraphics(element);
-        if (!gfx || this.hiddenSeverities[severity.key]) {return}
+        if (!gfx || this.hiddenSeverities[severity.key]) {
+            return
+        }
         gfx.classList.add(severity.cssClass);
         gfx.classList.add('highlightedElement');
 
@@ -105,7 +108,7 @@ export default class Checker {
         const modeler = hook.modeler;
         element.markerContainer = document.createElement('div');
         element.markerContainer.classList.add('markerContainer');
-        
+
         if (element !== hook.getRootObject()) {
             modeler.get('overlays').add(element.id, 'violationMarkers', {
                 position: {
@@ -116,8 +119,8 @@ export default class Checker {
             });
         } else {
             element.markerContainer.style.bottom = 0;
-            element.markerContainer.style.right = 0; 
-            element.markerContainer.style.position = 'absolute'; 
+            element.markerContainer.style.right = 0;
+            element.markerContainer.style.position = 'absolute';
             this.getGraphics(element).appendChild(element.markerContainer);
         }
     }
@@ -154,7 +157,7 @@ export default class Checker {
     hideDropdowns = () => {
         this.messageDropdown.parentElement?.removeChild(this.messageDropdown);
     }
-    
+
     unhighlightViolation(element, severity) {
         const hook = this.mediator.getHookForElement(element);
         const modeler = hook.modeler;
@@ -171,11 +174,11 @@ export default class Checker {
                     element.markerContainer.removeChild(element.markers[severity.key]);
                     element.markers[severity.key] = undefined;
                 }
-    
+
                 if (SEVERITY.filter(severity => gfx.classList.contains(severity.cssClass)).length === 0) {
                     gfx.classList.remove('highlightedElement');
                     if (element !== hook.getRootObject()) {
-                        modeler.get('overlays').remove({ element: element.id, type: 'violationMarkers' });
+                        modeler.get('overlays').remove({element: element.id, type: 'violationMarkers'});
                     } else {
                         this.getGraphics(element).removeChild(element.markerContainer);
                     }
@@ -218,7 +221,7 @@ export default class Checker {
                             element,
                             artifact,
                             message,
-                            link : guideline.link,
+                            link: guideline.link,
                             quickFixes
                         });
                     });

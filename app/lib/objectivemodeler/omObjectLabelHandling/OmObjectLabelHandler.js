@@ -54,7 +54,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                             updateStateSelection();
                         },
                         element
-                        );
+                    );
                 }
 
                 const populateInstanceDropdown = (instances) => {
@@ -109,9 +109,9 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                     this._classDropdown.populate(
                         olcs,
                         (olc, element) => {
-                        this.updateClass(olc.classRef, element);
-                        updateClassSelection();
-                    },
+                            this.updateClass(olc.classRef, element);
+                            updateClassSelection();
+                        },
                         element
                     );
                     this._classDropdown.addCreateElementInput(event => this._dropdownContainer.confirm());
@@ -123,9 +123,9 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
                 populateClassDropdown();
 
                 this._dropdownContainer.confirm = (event) => {
-                    const newClassInput = this._classDropdown.getInputValue();
-                    const newStateInput = this._stateDropdown.getInputValue();
-                    const newInstanceInput = this._instanceDropdown.getInputValue();
+                    const newClassInput = this._classDropdown.getInputValue().trim();
+                    const newStateInput = this._stateDropdown.getInputValue().trim();
+                    const newInstanceInput = this._instanceDropdown.getInputValue().trim();
                     let needUpdate = false;
                     if (newClassInput !== '') {
                         const newClass = this.createDataclass(newClassInput);
@@ -205,7 +205,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
     updateClass(newClass, element) {
         element.businessObject.classRef = newClass;
         element.businessObject.instance = undefined;
-        element.businessObject.state = undefined;
+        element.businessObject.states = [];
         this._eventBus.fire('element.changed', {
             element
         });
@@ -213,7 +213,7 @@ export default class OmObjectLabelHandler extends CommandInterceptor {
 
     updateStates(newState, element) {
         const omObject = element.businessObject;
-        if(omObject.get('states').includes(newState)) {
+        if (omObject.get('states').includes(newState)) {
             omObject.states = without(omObject.get('states'), newState);
         } else {
             omObject.states.push(newState);

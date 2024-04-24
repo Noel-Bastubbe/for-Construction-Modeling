@@ -43,28 +43,29 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 const populateNameDropdown = () => {
                     this._nameDropdown.populate(
                         [],
-                        (name, element) => {
-                            this.updateName(name, element);
-                            },
+                        () => {
+                        },
                         element
                     );
-                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",activity.name);
+                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "text", activity.name);
                 }
                 const populateDurationDropdown = () => {
                     this._durationDropdown.populate(
                         [],
-                        (duration, element) => {
-                            this.updateDuration(duration, element);
+                        () => {
                         },
                         element
                     );
-                    this._durationDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.duration, "0");
+                    this._durationDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "number", activity.duration, "0");
                 }
                 const populateRoleDropdown = () => {
                     this._roleDropdown.populate(
                         this._fragmentModeler._roles || [],
                         (role, element) => {
                             this.updateRole(role, element);
+                            if (element.businessObject.role === undefined) {
+                                this._NoPDropdown.clearInput()
+                            }
                             updateRoleSelection();
                         },
                         element
@@ -75,12 +76,11 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 const populateNoPDropdown = () => {
                     this._NoPDropdown.populate(
                         [],
-                        (NoP, element) => {
-                            this.updateNoP(NoP, element);
+                        () => {
                         },
                         element
                     );
-                    this._NoPDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",activity.NoP);
+                    this._NoPDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "number", activity.NoP);
                 }
                 populateNameDropdown();
                 populateDurationDropdown();
@@ -88,25 +88,25 @@ export default class TaskLabelHandler extends CommandInterceptor {
                 populateNoPDropdown();
 
                 this._dropdownContainer.confirm = (event) => {
-                    const newNameInput = this._nameDropdown.getInputValue();
-                    const newDurationInput = this._durationDropdown.getInputValue();
-                    const newRoleInput = this._roleDropdown.getInputValue();
-                    const newNoPInput = this._NoPDropdown.getInputValue();
+                    const newNameInput = this._nameDropdown.getInputValue().trim();
+                    const newDurationInput = this._durationDropdown.getInputValue().trim();
+                    const newRoleInput = this._roleDropdown.getInputValue().trim();
+                    const newNoPInput = this._NoPDropdown.getInputValue().trim();
                     if (newNameInput !== '' && newNameInput !== activity.name) {
-                        this.updateName(newNameInput,element);
+                        this.updateName(newNameInput, element);
                         populateNameDropdown();
                     }
                     if (newDurationInput !== activity.duration && newDurationInput >= 0) {
-                        this.updateDuration(newDurationInput,element);
+                        this.updateDuration(newDurationInput, element);
                         populateDurationDropdown();
                     }
                     if (newRoleInput !== '' && newRoleInput !== activity.role) {
                         let newRole = this.createRole(newRoleInput);
-                        this.updateRole(newRole,element);
+                        this.updateRole(newRole, element);
                         populateRoleDropdown();
                     }
-                    if (newNoPInput !== activity.NoP && newNoPInput > 0) {
-                        this.updateNoP(newNoPInput,element);
+                    if (newNoPInput !== activity.NoP && newNoPInput > 0 && activity.role !== undefined) {
+                        this.updateNoP(newNoPInput, element);
                         populateNoPDropdown();
                     }
                 }
@@ -119,10 +119,7 @@ export default class TaskLabelHandler extends CommandInterceptor {
                     } else if (!this._dropdownContainer.contains(event.target)) {
                         return false;
                     } else if (event.target.classList.contains('dd-dropdown-entry')) {
-                        this._nameDropdown.clearInput();
-                        this._durationDropdown.clearInput();
                         this._roleDropdown.clearInput();
-                        this._NoPDropdown.clearInput();
                     } else if (event.target.tagName !== 'INPUT' || !event.target.value) {
                         this._dropdownContainer.confirm();
                     }
@@ -182,7 +179,13 @@ export default class TaskLabelHandler extends CommandInterceptor {
     }
 
     updateRole(newRole, element) {
-        element.businessObject.role = newRole;
+        const fmObject = element.businessObject;
+        if (fmObject.role === newRole) {
+            fmObject.role = undefined;
+            fmObject.NoP = undefined;
+        } else {
+            fmObject.role = newRole;
+        }
         this._eventBus.fire('element.changed', {
             element
         });

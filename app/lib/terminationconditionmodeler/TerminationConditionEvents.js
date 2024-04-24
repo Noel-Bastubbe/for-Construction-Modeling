@@ -1,3 +1,3 @@
 export default {
-    TERMINATIONCONDITION_CHANGED : 'tc.changed',
+    TERMINATIONCONDITION_CHANGED: 'tc.changed',
 }

@@ -19,18 +19,18 @@ import BaseViewer from './BaseViewer';
  * @param {Array<didi.Module>} [options.additionalModules] a list of modules to use with the default modules
  */
 export default function BaseModeler(options) {
-  BaseViewer.call(this, options);
+    BaseViewer.call(this, options);
 
-  // hook ID collection into the modeler
-  this.on('import.parse.complete', function(event) {
-    if (!event.error) {
-      this._collectIds(event.definitions, event.context);
-    }
-  }, this);
+    // hook ID collection into the modeler
+    this.on('import.parse.complete', function (event) {
+        if (!event.error) {
+            this._collectIds(event.definitions, event.context);
+        }
+    }, this);
 
-  this.on('diagram.destroy', function() {
-    this.get('moddle').ids.clear();
-  }, this);
+    this.on('diagram.destroy', function () {
+        this.get('moddle').ids.clear();
+    }, this);
 }
 
 inherits(BaseModeler, BaseViewer);
@@ -41,15 +41,15 @@ inherits(BaseModeler, BaseViewer);
  *
  * @param {Object} options
  */
-BaseModeler.prototype._createModdle = function(options) {
-  var moddle = BaseViewer.prototype._createModdle.call(this, options);
+BaseModeler.prototype._createModdle = function (options) {
+    var moddle = BaseViewer.prototype._createModdle.call(this, options);
 
-  // attach ids to moddle to be able to track
-  // and validated ids in the XML document
-  // tree
-  moddle.ids = new Ids([ 32, 36, 1 ]);
+    // attach ids to moddle to be able to track
+    // and validated ids in the XML document
+    // tree
+    moddle.ids = new Ids([32, 36, 1]);
 
-  return moddle;
+    return moddle;
 };
 
 /**
@@ -59,16 +59,16 @@ BaseModeler.prototype._createModdle = function(options) {
  * @param {ModdleElement} definitions
  * @param {Context} context
  */
-BaseModeler.prototype._collectIds = function(definitions, context) {
+BaseModeler.prototype._collectIds = function (definitions, context) {
 
-  var moddle = definitions.$model,
-      ids = moddle.ids,
-      id;
+    var moddle = definitions.$model,
+        ids = moddle.ids,
+        id;
 
-  // remove references from previous import
-  ids.clear();
+    // remove references from previous import
+    ids.clear();
 
-  for (id in context.elementsById) {
-    ids.claim(id, context.elementsById[id]);
-  }
+    for (id in context.elementsById) {
+        ids.claim(id, context.elementsById[id]);
+    }
 };

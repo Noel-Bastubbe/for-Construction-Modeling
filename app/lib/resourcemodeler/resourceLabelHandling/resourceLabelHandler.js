@@ -46,23 +46,21 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                 const populateNameDropdown = () => {
                     this._nameDropdown.populate(
                         [],
-                        (state, element) => {
-                            this.updateName(state, element);
-                            },
+                        () => {
+                        },
                         element
                     );
-                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"text",resource.name);
+                    this._nameDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "text", resource.name);
                 }
 
                 const populateCapacityDropdown = () => {
                     this._capacityDropdown.populate(
                         [],
-                        (state, element) => {
-                            this.updateCapacity(state, element);
+                        () => {
                         },
                         element
                     );
-                    this._capacityDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.capacity);
+                    this._capacityDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "number", resource.capacity);
                 }
 
                 const populateRolesDropdown = () => {
@@ -81,25 +79,23 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                 const populateAvailabilityStartDropdown = () => {
                     this._availabilityStartDropdown.populate(
                         [],
-                        (state, element) => {
-                            this.updateavailabilityStart(state, element);
+                        () => {
                         },
                         element
                     );
-                    this._availabilityStartDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.availabilityStart, "0");
+                    this._availabilityStartDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "number", resource.availabilityStart, "0");
                 }
 
                 const populateAvailabilityEndDropdown = () => {
                     this._availabilityEndDropdown.populate(
                         [],
-                        (state, element) => {
-                            this.updateavailabilityEnd(state, element);
+                        () => {
                         },
                         element
                     );
-                    this._availabilityEndDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(),"number",resource.availabilityEnd, "0");
+                    this._availabilityEndDropdown.addCreateElementInput(event => this._dropdownContainer.confirm(), "number", resource.availabilityEnd, "0");
                 }
-                
+
                 populateNameDropdown();
                 populateCapacityDropdown();
                 populateRolesDropdown();
@@ -107,31 +103,31 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                 populateAvailabilityEndDropdown();
 
                 this._dropdownContainer.confirm = (event) => {
-                    const newNameInput = this._nameDropdown.getInputValue();
-                    const newCapacityInput = this._capacityDropdown.getInputValue();
-                    const newRoleInput = this._rolesDropdown.getInputValue();
-                    const newAvailabilityStartInput = this._availabilityStartDropdown.getInputValue();
-                    const newAvailabilityEndInput = this._availabilityEndDropdown.getInputValue();
+                    const newNameInput = this._nameDropdown.getInputValue().trim();
+                    const newCapacityInput = this._capacityDropdown.getInputValue().trim();
+                    const newRoleInput = this._rolesDropdown.getInputValue().trim();
+                    const newAvailabilityStartInput = this._availabilityStartDropdown.getInputValue().trim();
+                    const newAvailabilityEndInput = this._availabilityEndDropdown.getInputValue().trim();
 
                     if (newNameInput !== '' && newNameInput !== resource.name) {
-                        this.updateName(newNameInput,element);
+                        this.updateName(newNameInput, element);
                         populateNameDropdown();
                     }
                     if (newCapacityInput !== resource.capacity && newCapacityInput > 0) {
-                        this.updateCapacity(newCapacityInput,element);
+                        this.updateCapacity(newCapacityInput, element);
                         populateCapacityDropdown();
                     }
                     if (newRoleInput !== '' && !this._resourceModeler._roles?.find(role => role.name === newRoleInput)) {
                         let newRole = this.createRole(newRoleInput);
-                        this.updateRoles(newRole,element);
+                        this.updateRoles(newRole, element);
                         populateRolesDropdown();
                     }
                     if (newAvailabilityStartInput !== resource.availabilityStart && newAvailabilityStartInput >= 0) {
-                        this.updateavailabilityStart(newAvailabilityStartInput,element);
+                        this.updateavailabilityStart(newAvailabilityStartInput, element);
                         populateAvailabilityStartDropdown();
                     }
                     if (newAvailabilityEndInput !== resource.availabilityEnd && newAvailabilityEndInput >= 0) {
-                        this.updateavailabilityEnd(newAvailabilityEndInput,element);
+                        this.updateavailabilityEnd(newAvailabilityEndInput, element);
                         populateAvailabilityEndDropdown();
                     }
                 }
@@ -144,11 +140,7 @@ export default class ResourceLabelHandler extends CommandInterceptor {
                     } else if (!this._dropdownContainer.contains(event.target)) {
                         return false;
                     } else if (event.target.classList.contains('dd-dropdown-entry')) {
-                        this._nameDropdown.clearInput();
-                        this._capacityDropdown.clearInput();
                         this._rolesDropdown.clearInput();
-                        this._availabilityStartDropdown.clearInput();
-                        this._availabilityEndDropdown.clearInput();
                     } else if (event.target.tagName !== 'INPUT' || !event.target.value) {
                         this._dropdownContainer.confirm();
                     }
@@ -192,9 +184,6 @@ export default class ResourceLabelHandler extends CommandInterceptor {
         this._eventBus.fire('element.changed', {
             element
         });
-        this._eventBus.fire(CommonEvents.OBJECTIVE_RENAMED, {
-            objective: element
-        });
     }
 
     updateCapacity(newCapacity, element) {
@@ -211,10 +200,9 @@ export default class ResourceLabelHandler extends CommandInterceptor {
     }
 
     updateRoles(newRole, element) {
-        if((element.businessObject.roles?.find(role => role === newRole)))
-        {
+        if ((element.businessObject.roles?.find(role => role === newRole))) {
             element.businessObject.roles = without(element.businessObject.roles, newRole);
-        } else if(element.businessObject.roles){
+        } else if (element.businessObject.roles) {
             element.businessObject.roles.push(newRole);
         } else {
             element.businessObject.roles = [newRole];

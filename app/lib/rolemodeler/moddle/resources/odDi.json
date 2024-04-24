@@ -20,7 +20,9 @@
           "isMany": true
         }
       ],
-      "superClass": ["Board"]
+      "superClass": [
+        "Board"
+      ]
     },
     {
       "name": "OdPlane",
@@ -33,7 +35,9 @@
           "redefines": "BoardElement#modelElement"
         }
       ],
-      "superClass": ["Plane"]
+      "superClass": [
+        "Plane"
+      ]
     },
     {
       "name": "OdShape",
@@ -50,7 +54,9 @@
           "type": "OdLabel"
         }
       ],
-      "superClass": ["LabeledShape"]
+      "superClass": [
+        "LabeledShape"
+      ]
     },
     {
       "name": "Link",
@@ -102,7 +108,9 @@
           "redefines": "BoardElement#style"
         }
       ],
-      "superClass": ["Label"]
+      "superClass": [
+        "Label"
+      ]
     },
     {
       "name": "OdLabelStyle",
@@ -112,7 +120,9 @@
           "type": "dc:Font"
         }
       ],
-      "superClass": ["Style"]
+      "superClass": [
+        "Style"
+      ]
     },
     {
       "name": "BoardElement",
@@ -157,7 +167,9 @@
     {
       "name": "Node",
       "isAbstract": true,
-      "superClass": ["BoardElement"]
+      "superClass": [
+        "BoardElement"
+      ]
     },
     {
       "name": "Edge",
@@ -229,7 +241,9 @@
     {
       "name": "Shape",
       "isAbstract": true,
-      "superClass": ["Node"],
+      "superClass": [
+        "Node"
+      ],
       "properties": [
         {
           "name": "bounds",
@@ -240,7 +254,9 @@
     {
       "name": "Plane",
       "isAbstract": true,
-      "superClass": ["Node"],
+      "superClass": [
+        "Node"
+      ],
       "properties": [
         {
           "name": "planeElement",
@@ -253,7 +269,9 @@
     {
       "name": "LabeledEdge",
       "isAbstract": true,
-      "superClass": ["Edge"],
+      "superClass": [
+        "Edge"
+      ],
       "properties": [
         {
           "name": "ownedLabel",
@@ -268,7 +286,9 @@
     {
       "name": "LabeledShape",
       "isAbstract": true,
-      "superClass": ["Shape"],
+      "superClass": [
+        "Shape"
+      ],
       "properties": [
         {
           "name": "ownedLabel",
@@ -283,7 +303,9 @@
     {
       "name": "Label",
       "isAbstract": true,
-      "superClass": ["Node"],
+      "superClass": [
+        "Node"
+      ],
       "properties": [
         {
           "name": "bounds",

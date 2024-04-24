@@ -8,17 +8,17 @@ import OverlaysModule from 'diagram-js/lib/features/overlays';
 import BaseViewer from './BaseViewer';
 
 export default function Viewer(options) {
-  BaseViewer.call(this, options);
+    BaseViewer.call(this, options);
 }
 
 inherits(Viewer, BaseViewer);
 
 // modules the viewer is composed of
 Viewer.prototype._modules = [
-  CoreModule,
-  TranslateModule,
-  SelectionModule,
-  OverlaysModule
+    CoreModule,
+    TranslateModule,
+    SelectionModule,
+    OverlaysModule
 ];
 
 // default moddle extensions the viewer is composed of

@@ -1,3 +1,6 @@
+import PaletteProvider from './PaletteProvider';
+import DepContextPadProvider from './DepContextPadProvider';
+
 import PaletteModule from 'diagram-js/lib/features/palette';
 import ContextPadModule from 'diagram-js/lib/features/context-pad';
 import CreateModule from 'diagram-js/lib/features/create';
@@ -7,24 +10,21 @@ import HandToolModule from 'diagram-js/lib/features/hand-tool';
 import translate from 'diagram-js/lib/i18n/translate';
 import GlobalConnectModule from 'diagram-js/lib/features/global-connect';
 
-import PaletteProvider from './PaletteProvider';
-import DepContextPadProvider from './DepContextPadProvider';
-
 export default {
-  __depends__: [
-    PaletteModule,
-    ContextPadModule,
-    CreateModule,
-    SpaceToolModule,
-    LassoToolModule,
-    HandToolModule,
-    GlobalConnectModule,
-    translate
-  ],
-  __init__: [ 
-    'depContextPadProvider',
-    'paletteProvider'
-  ],
-  paletteProvider: [ 'type', PaletteProvider ],
-  depContextPadProvider: [ 'type', DepContextPadProvider ]
+    __depends__: [
+        PaletteModule,
+        ContextPadModule,
+        CreateModule,
+        SpaceToolModule,
+        LassoToolModule,
+        HandToolModule,
+        GlobalConnectModule,
+        translate
+    ],
+    __init__: [
+        'depContextPadProvider',
+        'paletteProvider'
+    ],
+    paletteProvider: ['type', PaletteProvider],
+    depContextPadProvider: ['type', DepContextPadProvider]
 };

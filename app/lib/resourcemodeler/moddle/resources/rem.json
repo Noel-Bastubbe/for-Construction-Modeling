@@ -45,7 +45,7 @@
           "isMany": true,
           "type": "rom:Role",
           "isReference": true
-        }, 
+        },
         {
           "name": "availabilityStart",
           "isAttr": true,

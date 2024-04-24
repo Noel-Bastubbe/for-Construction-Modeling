@@ -1,20 +1,15 @@
 import inherits from 'inherits';
-
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
-
 import {remove as collectionRemove} from 'diagram-js/lib/util/Collections';
 
-
 export default function DepUpdater(eventBus, connectionDocking) {
-
     CommandInterceptor.call(this, eventBus);
     this._connectionDocking = connectionDocking;
     self = this;
 
-    // connection cropping //////////////////////
+    // connection cropping 
     // crop connection ends during create/update
     function cropConnection(e) {
-
         var context = e.context,
             hints = context.hints || {},
             connection = context.connection;
@@ -58,7 +53,7 @@ export default function DepUpdater(eventBus, connectionDocking) {
         'connection.create'
     ], (event) => {
         var context = event.context,
-            element = context.connection;            
+            element = context.connection;
 
         element.businessObject.sourceObjective = element.source.businessObject;
         element.businessObject.targetObjective = element.target.businessObject;
@@ -77,21 +72,20 @@ export default function DepUpdater(eventBus, connectionDocking) {
 }
 
 function reflectiveEdge(element) {
-    var { x, y, width, height } = element;
+    var {x, y, width, height} = element;
     var centerP = center(element);
-    var topRight = { x: x + width, y: y };
+    var topRight = {x: x + width, y: y};
     var dx = width / 10, dy = height / 10;
     return [
-        { x: centerP.x - dx, y: centerP.y - dy },
-        { x: topRight.x - dx, y: topRight.y - dy },
-        { x: topRight.x + dx, y: topRight.y + dy },
-        { x: centerP.x + dx, y: centerP.y + dy }
+        {x: centerP.x - dx, y: centerP.y - dy},
+        {x: topRight.x - dx, y: topRight.y - dy},
+        {x: topRight.x + dx, y: topRight.y + dy},
+        {x: centerP.x + dx, y: centerP.y + dy}
     ];
 }
 
 function linkToBusinessObjectParent(element) {
     var parentShape = element.parent;
-
     var businessObject = element.businessObject,
         parentBusinessObject = parentShape && parentShape.businessObject;
 
@@ -114,15 +108,14 @@ DepUpdater.$inject = [
     'connectionDocking'
 ];
 
-//TODO move to common utils
 function center(shape) {
     return {
-      x: shape.x + shape.width / 2,
-      y: shape.y + shape.height / 2
+        x: shape.x + shape.width / 2,
+        y: shape.y + shape.height / 2
     };
 }
 
-DepUpdater.prototype.connectionWaypoints = function(source, target) {
+DepUpdater.prototype.connectionWaypoints = function (source, target) {
     var connection = {source, target};
     if (connection.source === connection.target) {
         connection.waypoints = reflectiveEdge(connection.source);

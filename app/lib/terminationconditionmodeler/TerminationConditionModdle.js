@@ -7,14 +7,14 @@ import {Reader, Writer} from 'moddle-xml';
 import Descriptor from './tc.json';
 
 export default function TerminationConditionModdle() {
-    Moddle.call(this, {tc : Descriptor});
+    Moddle.call(this, {tc: Descriptor});
 }
 
 TerminationConditionModdle.prototype = Object.create(Moddle.prototype);
 
 TerminationConditionModdle.prototype.fromXML = function (xmlStr, options) {
     var typeName = 'tc:Disjunction';
-    var reader = new Reader(assign({ model: this, lax: false }, options));
+    var reader = new Reader(assign({model: this, lax: false}, options));
     var rootHandler = reader.handler(typeName);
 
     return reader.fromXML(xmlStr, rootHandler);

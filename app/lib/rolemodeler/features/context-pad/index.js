@@ -7,13 +7,13 @@ import CreateModule from 'diagram-js/lib/features/create';
 import ContextPadProvider from './ContextPadProvider';
 
 export default {
-  __depends__: [
-    DirectEditingModule,
-    ContextPadModule,
-    SelectionModule,
-    ConnectModule,
-    CreateModule,
-  ],
-  __init__: [ 'contextPadProvider' ],
-  contextPadProvider: [ 'type', ContextPadProvider ]
+    __depends__: [
+        DirectEditingModule,
+        ContextPadModule,
+        SelectionModule,
+        ConnectModule,
+        CreateModule,
+    ],
+    __init__: ['contextPadProvider'],
+    contextPadProvider: ['type', ContextPadProvider]
 };

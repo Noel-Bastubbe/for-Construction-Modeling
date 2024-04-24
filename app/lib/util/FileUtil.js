@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-export function download(name, data, encoding='charset=UTF-8') {
+export function download(name, data, encoding = 'charset=UTF-8') {
     var encodedData = encodeURIComponent(data);
     var link = document.createElement("a");
     document.body.appendChild(link);
@@ -9,17 +9,17 @@ export function download(name, data, encoding='charset=UTF-8') {
 
     $(link).attr({
         'href': 'data:application/' + fileType + ';' + encoding + ',' + encodedData,
-        'download': name 
-    }); 
-    link.click(); 
+        'download': name
+    });
+    link.click();
     document.body.removeChild(link);
 }
 
-export function upload(callback, encoding='UTF-8') {
+export function upload(callback, encoding = 'UTF-8') {
     var fileInput = document.createElement("input");
     document.body.appendChild(fileInput);
 
-    $(fileInput).attr({ 'type': 'file' }).on('change', function (e) {
+    $(fileInput).attr({'type': 'file'}).on('change', function (e) {
         var file = e.target.files[0];
         var title = e.target.files[0].name;
         var reader = new FileReader();

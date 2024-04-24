@@ -7,10 +7,10 @@ import BaseRenderer from 'diagram-js/lib/draw/BaseRenderer';
 
 import {getLabel} from '../features/label-editing/LabelUtil';
 
-import {getBusinessObject, is} from '../util/ModelUtil';
+import {getBusinessObject, is} from '../../common/util/ModelUtil';
 import {query as domQuery} from 'min-dom';
 
-import {getFillColor, getRectPath, getSemantic, getStrokeColor} from './ROMRendererUtil';
+import {getFillColor, getRectPath, getSemantic, getStrokeColor} from '../../common/draw/RendererUtil';
 import Ids from 'ids';
 
 var RENDERER_IDS = new Ids();
@@ -230,18 +230,18 @@ export default function ROMRenderer(
 
     function createMarker(id, fill, stroke) {
 
-            var inheritance = svgCreate('path');
-            svgAttr(inheritance, {d: 'M 11 5 L 1 10 L 11 15 Z'});
+        var inheritance = svgCreate('path');
+        svgAttr(inheritance, {d: 'M 11 5 L 1 10 L 11 15 Z'});
 
-            addMarker(id, {
-                element: inheritance,
-                ref: {x: 1, y: 10},
-                scale: 0.8,
-                attrs: {
-                    fill: fill,
-                    stroke: stroke
-                }
-            });
+        addMarker(id, {
+            element: inheritance,
+            ref: {x: 1, y: 10},
+            scale: 0.8,
+            attrs: {
+                fill: fill,
+                stroke: stroke
+            }
+        });
     }
 
     this.handlers = {

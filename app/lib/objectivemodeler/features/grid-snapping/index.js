@@ -1,13 +1,13 @@
-import BpmnGridSnapping from './BpmnGridSnapping';
+import BpmnGridSnapping from '../../../common/features/grid-snapping/BpmnGridSnapping';
 import GridSnappingModule from 'diagram-js/lib/features/grid-snapping';
 
 import GridSnappingBehaviorModule from './behavior';
 
 export default {
-  __depends__: [
-    GridSnappingModule,
-    GridSnappingBehaviorModule
-  ],
-  __init__: [ 'bpmnGridSnapping' ],
-  bpmnGridSnapping: [ 'type', BpmnGridSnapping ]
+    __depends__: [
+        GridSnappingModule,
+        GridSnappingBehaviorModule
+    ],
+    __init__: ['bpmnGridSnapping'],
+    bpmnGridSnapping: ['type', BpmnGridSnapping]
 };

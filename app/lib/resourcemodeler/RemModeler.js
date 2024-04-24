@@ -143,7 +143,7 @@ RemModeler.prototype.deleteResource = function (resource) {
     this.get('modeling').removeShape(resource);
 }
 
-RemModeler.prototype.handleRoleListChanged = function (roles, dryRun=false) {
+RemModeler.prototype.handleRoleListChanged = function (roles, dryRun = false) {
     this._roles = roles;
 }
 

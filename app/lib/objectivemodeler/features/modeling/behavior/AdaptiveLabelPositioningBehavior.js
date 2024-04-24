@@ -9,10 +9,10 @@ import {hasExternalLabel} from '../../../util/LabelUtil';
 import CommandInterceptor from 'diagram-js/lib/command/CommandInterceptor';
 
 var ALIGNMENTS = [
-  'top',
-  'bottom',
-  'left',
-  'right'
+    'top',
+    'bottom',
+    'left',
+    'right'
 ];
 
 var ELEMENT_LABEL_DISTANCE = 10;
@@ -27,134 +27,134 @@ var ELEMENT_LABEL_DISTANCE = 10;
  */
 export default function AdaptiveLabelPositioningBehavior(eventBus, modeling) {
 
-  CommandInterceptor.call(this, eventBus);
+    CommandInterceptor.call(this, eventBus);
 
-  this.postExecuted([
-    'connection.create',
-    'connection.layout',
-    'connection.updateWaypoints'
-  ], function(event) {
-    var context = event.context,
-        connection = context.connection,
-        source = connection.source,
-        target = connection.target,
-        hints = context.hints || {};
+    this.postExecuted([
+        'connection.create',
+        'connection.layout',
+        'connection.updateWaypoints'
+    ], function (event) {
+        var context = event.context,
+            connection = context.connection,
+            source = connection.source,
+            target = connection.target,
+            hints = context.hints || {};
 
-    if (hints.createElementsBehavior !== false) {
-      checkLabelAdjustment(source);
-      checkLabelAdjustment(target);
-    }
-  });
-
-
-  this.postExecuted([
-    'label.create'
-  ], function(event) {
-    var context = event.context,
-        shape = context.shape,
-        hints = context.hints || {};
-
-    if (hints.createElementsBehavior !== false) {
-      checkLabelAdjustment(shape.labelTarget);
-    }
-  });
+        if (hints.createElementsBehavior !== false) {
+            checkLabelAdjustment(source);
+            checkLabelAdjustment(target);
+        }
+    });
 
 
-  this.postExecuted([
-    'elements.create'
-  ], function(event) {
-    var context = event.context,
-        elements = context.elements,
-        hints = context.hints || {};
+    this.postExecuted([
+        'label.create'
+    ], function (event) {
+        var context = event.context,
+            shape = context.shape,
+            hints = context.hints || {};
 
-    if (hints.createElementsBehavior !== false) {
-      elements.forEach(function(element) {
-        checkLabelAdjustment(element);
-      });
-    }
-  });
+        if (hints.createElementsBehavior !== false) {
+            checkLabelAdjustment(shape.labelTarget);
+        }
+    });
 
-  function checkLabelAdjustment(element) {
 
-    // skip non-existing labels
-    if (!hasExternalLabel(element)) {
-      return;
-    }
+    this.postExecuted([
+        'elements.create'
+    ], function (event) {
+        var context = event.context,
+            elements = context.elements,
+            hints = context.hints || {};
 
-    var optimalPosition = getOptimalPosition(element);
+        if (hints.createElementsBehavior !== false) {
+            elements.forEach(function (element) {
+                checkLabelAdjustment(element);
+            });
+        }
+    });
 
-    // no optimal position found
-    if (!optimalPosition) {
-      return;
-    }
+    function checkLabelAdjustment(element) {
 
-    adjustLabelPosition(element, optimalPosition);
-  }
+        // skip non-existing labels
+        if (!hasExternalLabel(element)) {
+            return;
+        }
 
-  function adjustLabelPosition(element, orientation) {
+        var optimalPosition = getOptimalPosition(element);
 
-    var elementMid = getMid(element),
-        label = element.label,
-        labelMid = getMid(label);
+        // no optimal position found
+        if (!optimalPosition) {
+            return;
+        }
 
-    // ignore labels that are being created
-    if (!label.parent) {
-      return;
+        adjustLabelPosition(element, optimalPosition);
     }
 
-    var elementTrbl = asTRBL(element);
+    function adjustLabelPosition(element, orientation) {
 
-    var newLabelMid;
+        var elementMid = getMid(element),
+            label = element.label,
+            labelMid = getMid(label);
 
-    switch (orientation) {
-    case 'top':
-      newLabelMid = {
-        x: elementMid.x,
-        y: elementTrbl.top - ELEMENT_LABEL_DISTANCE - label.height / 2
-      };
+        // ignore labels that are being created
+        if (!label.parent) {
+            return;
+        }
 
-      break;
+        var elementTrbl = asTRBL(element);
 
-    case 'left':
+        var newLabelMid;
 
-      newLabelMid = {
-        x: elementTrbl.left - ELEMENT_LABEL_DISTANCE - label.width / 2,
-        y: elementMid.y
-      };
+        switch (orientation) {
+            case 'top':
+                newLabelMid = {
+                    x: elementMid.x,
+                    y: elementTrbl.top - ELEMENT_LABEL_DISTANCE - label.height / 2
+                };
 
-      break;
+                break;
 
-    case 'bottom':
+            case 'left':
 
-      newLabelMid = {
-        x: elementMid.x,
-        y: elementTrbl.bottom + ELEMENT_LABEL_DISTANCE + label.height / 2
-      };
+                newLabelMid = {
+                    x: elementTrbl.left - ELEMENT_LABEL_DISTANCE - label.width / 2,
+                    y: elementMid.y
+                };
 
-      break;
+                break;
 
-    case 'right':
+            case 'bottom':
 
-      newLabelMid = {
-        x: elementTrbl.right + ELEMENT_LABEL_DISTANCE + label.width / 2,
-        y: elementMid.y
-      };
+                newLabelMid = {
+                    x: elementMid.x,
+                    y: elementTrbl.bottom + ELEMENT_LABEL_DISTANCE + label.height / 2
+                };
 
-      break;
+                break;
+
+            case 'right':
+
+                newLabelMid = {
+                    x: elementTrbl.right + ELEMENT_LABEL_DISTANCE + label.width / 2,
+                    y: elementMid.y
+                };
+
+                break;
+        }
+
+        var delta = substract(newLabelMid, labelMid);
+
+        modeling.moveShape(label, delta);
     }
-
-    var delta = substract(newLabelMid, labelMid);
-
-    modeling.moveShape(label, delta);
-  }
 
 }
 
 inherits(AdaptiveLabelPositioningBehavior, CommandInterceptor);
 
 AdaptiveLabelPositioningBehavior.$inject = [
-  'eventBus',
-  'modeling'
+    'eventBus',
+    'modeling'
 ];
 
 
@@ -169,25 +169,25 @@ AdaptiveLabelPositioningBehavior.$inject = [
  */
 function getTakenHostAlignments(element) {
 
-  var hostElement = element.host,
-      elementMid = getMid(element),
-      hostOrientation = getOrientation(elementMid, hostElement);
+    var hostElement = element.host,
+        elementMid = getMid(element),
+        hostOrientation = getOrientation(elementMid, hostElement);
 
-  var freeAlignments;
+    var freeAlignments;
 
-  // check whether there is a multi-orientation, e.g. 'top-left'
-  if (hostOrientation.indexOf('-') >= 0) {
-    freeAlignments = hostOrientation.split('-');
-  } else {
-    freeAlignments = [ hostOrientation ];
-  }
+    // check whether there is a multi-orientation, e.g. 'top-left'
+    if (hostOrientation.indexOf('-') >= 0) {
+        freeAlignments = hostOrientation.split('-');
+    } else {
+        freeAlignments = [hostOrientation];
+    }
 
-  var takenAlignments = ALIGNMENTS.filter(function(alignment) {
+    var takenAlignments = ALIGNMENTS.filter(function (alignment) {
 
-    return freeAlignments.indexOf(alignment) === -1;
-  });
+        return freeAlignments.indexOf(alignment) === -1;
+    });
 
-  return takenAlignments;
+    return takenAlignments;
 
 }
 
@@ -200,20 +200,20 @@ function getTakenHostAlignments(element) {
  */
 function getTakenConnectionAlignments(element) {
 
-  var elementMid = getMid(element);
+    var elementMid = getMid(element);
 
-  var takenAlignments = [].concat(
-    element.incoming.map(function(c) {
-      return c.waypoints[c.waypoints.length - 2 ];
-    }),
-    element.outgoing.map(function(c) {
-      return c.waypoints[1];
-    })
-  ).map(function(point) {
-    return getApproximateOrientation(elementMid, point);
-  });
+    var takenAlignments = [].concat(
+        element.incoming.map(function (c) {
+            return c.waypoints[c.waypoints.length - 2];
+        }),
+        element.outgoing.map(function (c) {
+            return c.waypoints[1];
+        })
+    ).map(function (point) {
+        return getApproximateOrientation(elementMid, point);
+    });
 
-  return takenAlignments;
+    return takenAlignments;
 }
 
 /**
@@ -226,41 +226,41 @@ function getTakenConnectionAlignments(element) {
  */
 function getOptimalPosition(element) {
 
-  var labelMid = getMid(element.label);
+    var labelMid = getMid(element.label);
 
-  var elementMid = getMid(element);
+    var elementMid = getMid(element);
 
-  var labelOrientation = getApproximateOrientation(elementMid, labelMid);
+    var labelOrientation = getApproximateOrientation(elementMid, labelMid);
 
-  if (!isAligned(labelOrientation)) {
-    return;
-  }
+    if (!isAligned(labelOrientation)) {
+        return;
+    }
 
-  var takenAlignments = getTakenConnectionAlignments(element);
+    var takenAlignments = getTakenConnectionAlignments(element);
 
-  if (element.host) {
-    var takenHostAlignments = getTakenHostAlignments(element);
+    if (element.host) {
+        var takenHostAlignments = getTakenHostAlignments(element);
 
-    takenAlignments = takenAlignments.concat(takenHostAlignments);
-  }
+        takenAlignments = takenAlignments.concat(takenHostAlignments);
+    }
 
-  var freeAlignments = ALIGNMENTS.filter(function(alignment) {
+    var freeAlignments = ALIGNMENTS.filter(function (alignment) {
 
-    return takenAlignments.indexOf(alignment) === -1;
-  });
+        return takenAlignments.indexOf(alignment) === -1;
+    });
 
-  // NOTHING TO DO; label already aligned a.O.K.
-  if (freeAlignments.indexOf(labelOrientation) !== -1) {
-    return;
-  }
+    // NOTHING TO DO; label already aligned a.O.K.
+    if (freeAlignments.indexOf(labelOrientation) !== -1) {
+        return;
+    }
 
-  return freeAlignments[0];
+    return freeAlignments[0];
 }
 
 function getApproximateOrientation(p0, p1) {
-  return getOrientation(p1, p0, 5);
+    return getOrientation(p1, p0, 5);
 }
 
 function isAligned(orientation) {
-  return ALIGNMENTS.indexOf(orientation) !== -1;
+    return ALIGNMENTS.indexOf(orientation) !== -1;
 }

@@ -1,5 +1,5 @@
 import inherits from 'inherits';
-import {findIndex} from 'min-dash'
+import {findIndex, without} from 'min-dash'
 
 import BaseModeler from './BaseModeler';
 
@@ -36,7 +36,6 @@ import SnappingModule from './features/snapping';
 import SpaceToolBehaviorModule from './behavior';
 import {nextPosition} from '../util/Util';
 import {is} from "bpmn-js/lib/util/ModelUtil";
-import {without} from 'min-dash';
 
 var initialDiagram =
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -313,7 +312,7 @@ OmModeler.prototype.getVisualsInState = function (olcState) {
     return this.get('elementRegistry').filter(element =>
         is(element, 'om:Object') &&
         olcState.id &&
-        element.businessObject.states.some(state => state.id === olcState.id)
+        element.businessObject.states?.some(state => state.id === olcState.id)
     );
 }
 
@@ -322,7 +321,7 @@ OmModeler.prototype.getObjectsInState = function (olcState) {
     let objects = objectives.map(objective => objective.get('boardElements')).flat(1).filter((element) =>
         is(element, 'om:Object') &&
         olcState.id &&
-        element.states.some(state => state.id === olcState.id));
+        element.states?.some(state => state.id === olcState.id));
     return objects;
 }
 

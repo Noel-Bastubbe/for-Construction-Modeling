@@ -19,7 +19,7 @@ export default function TerminationConditionModeler(container) {
     this.moddle = new TerminationConditionModdle();
 
     this._propagateEvent = event => {
-        this.eventBus.fire('element.' + event.type, { originalEvent : event, element : {} });
+        this.eventBus.fire('element.' + event.type, {originalEvent: event, element: {}});
     }
     container.addEventListener('click', this._propagateEvent, true);
     container.addEventListener('mouseup', this._propagateEvent, true);
@@ -61,7 +61,7 @@ TerminationConditionModeler.prototype.createDisjunctionElement = function (paren
     var addConjunctionButton = document.createElement('button');
     addConjunctionButton.innerHTML = '+';
     addConjunctionButton.addEventListener('click', event => {
-        var newConjunction = this.moddle.create('tc:Conjunction', {operands: [] });
+        var newConjunction = this.moddle.create('tc:Conjunction', {operands: []});
         disjunction.operands.push(newConjunction);
         element.addOperand(newConjunction);
         this.addLiteral(newConjunction);
@@ -80,7 +80,7 @@ TerminationConditionModeler.prototype.createConjunctionElement = function (paren
 }
 
 TerminationConditionModeler.prototype.addLiteral = function (parentStatement) {
-    var newLiteral = this.moddle.create('tc:Literal', {class: this.getClassList()[0], states: [] });
+    var newLiteral = this.moddle.create('tc:Literal', {class: this.getClassList()[0], states: []});
     parentStatement.operands.push(newLiteral);
     parentStatement.element.addOperand(newLiteral);
 }
@@ -138,7 +138,7 @@ TerminationConditionModeler.prototype.createLiteralElement = function (parentEle
 }
 
 TerminationConditionModeler.prototype.populateLiteral = function (literal, element) {
-    var { classElement, stateElement } = element;
+    var {classElement, stateElement} = element;
 
     classElement.innerText = literal.class.name;
     classElement.dropdown.innerHTML = '';
@@ -149,7 +149,7 @@ TerminationConditionModeler.prototype.populateLiteral = function (literal, eleme
         );
         classElement.dropdown.addCreateElementInput(event => {
             const clazz = this.eventBus.fire(CommonEvents.DATACLASS_CREATION_REQUESTED, {
-                name: classElement.dropdown.getInputValue()
+                name: classElement.dropdown.getInputValue().trim()
             });
             const olc = this.getClassList().filter(olc => olc.classRef === clazz)[0];
             this.changeClass(olc, literal);
@@ -162,7 +162,7 @@ TerminationConditionModeler.prototype.populateLiteral = function (literal, eleme
     });
     classElement.appendChild(classElement.dropdown);
 
-    stateElement.innerText = formatStates(literal.states);    
+    stateElement.innerText = formatStates(literal.states);
     stateElement.dropdown.innerHTML = '';
     const openStateDropdown = (event) => {
         const updateStateSelection = () => {
@@ -177,7 +177,7 @@ TerminationConditionModeler.prototype.populateLiteral = function (literal, eleme
         );
         stateElement.dropdown.addCreateElementInput(event => {
             const state = this.eventBus.fire(CommonEvents.STATE_CREATION_REQUESTED, {
-                name: stateElement.dropdown.getInputValue(),
+                name: stateElement.dropdown.getInputValue().trim(),
                 olc: literal.class
             });
             this.toggleState(state, literal);
@@ -252,7 +252,7 @@ TerminationConditionModeler.prototype.handleOlcListChanged = function (classes) 
         literalsToDelete.forEach(literal => this.deleteStatement(literal));
         return {literalsToDelete};
     } else {
-        return {literalsToDelete : []};
+        return {literalsToDelete: []};
     }
 }
 
@@ -293,7 +293,7 @@ TerminationConditionModeler.prototype.handleStateDeleted = function (state) {
     });
 }
 
-TerminationConditionModeler.prototype.getLiterals = function() {
+TerminationConditionModeler.prototype.getLiterals = function () {
     //TODO refactor to use getStatements
     if (!this._terminationCondition) return undefined;
     const statementsToVisit = [this._terminationCondition];
@@ -309,7 +309,7 @@ TerminationConditionModeler.prototype.getLiterals = function() {
     return visitedLiterals;
 }
 
-TerminationConditionModeler.prototype.getStatements = function() {
+TerminationConditionModeler.prototype.getStatements = function () {
     if (!this._terminationCondition) return undefined;
     const statementsToVisit = [this._terminationCondition];
     const visitedStatements = [];
@@ -323,7 +323,7 @@ TerminationConditionModeler.prototype.getStatements = function() {
     return visitedStatements;
 }
 
-TerminationConditionModeler.prototype.forEachLiteral = function(consumer) {
+TerminationConditionModeler.prototype.forEachLiteral = function (consumer) {
     return this.getLiterals().forEach(consumer);
 }
 
@@ -342,14 +342,14 @@ TerminationConditionModeler.prototype.getTerminationCondition = function () {
 TerminationConditionModeler.prototype.createNew = function () {
     this.showTerminationCondition(this.moddle.create(
         'tc:Disjunction',
-        { operands: [] }
+        {operands: []}
     ));
 }
 
 TerminationConditionModeler.prototype.saveXML = function (options = {}) {
     return new Promise((resolve, reject) => {
         this.moddle.toXML(this._terminationCondition, options).then(function (result) {
-            return resolve({ xml: result.xml });
+            return resolve({xml: result.xml});
         }).catch(function (err) {
             return reject(err);
         });
@@ -358,16 +358,16 @@ TerminationConditionModeler.prototype.saveXML = function (options = {}) {
 
 TerminationConditionModeler.prototype.importXML = function (xml) {
     return new Promise((resolve, reject) => {
-      this.moddle.fromXML(xml).then((result) => {
-        this.eventBus.fire('import.parse.complete', result);
-        this.showTerminationCondition(result.rootElement);
-        resolve();
-      }).catch(function (err) {  
-        return reject(err);
-      });
-  
+        this.moddle.fromXML(xml).then((result) => {
+            this.eventBus.fire('import.parse.complete', result);
+            this.showTerminationCondition(result.rootElement);
+            resolve();
+        }).catch(function (err) {
+            return reject(err);
+        });
+
     });
-  };
+};
 
 
 function makeDiv(text, ...classes) {
