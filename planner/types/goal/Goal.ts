@@ -20,4 +20,17 @@ export class Goal {
         }
         return true;
     }
+
+    filterNodes(nodes: ExecutionState[]) {
+        return nodes.filter(node => this.isFulfillableBy(node));
+    }
+
+    private isFulfillableBy(node: ExecutionState): boolean {
+        for (let i = 0; i < this.objectives.length; i++) {
+            if (!node.objectives[i] && this.objectives[i].deadline != null && node.time > this.objectives[i].deadline!) {
+                return false
+            }
+        }
+        return true;
+    }
 }
